@@ -14,13 +14,15 @@ project; create it with a command like ``createdb -T template_postgis mlt``.
 See the `GeoDjango installation documentation`_ for more details on setting
 up PostGIS and a PostGIS template database.
 
-You may need to create an ``mlt/settings_local.py`` file with some details
-of your local configuration, including database name and user.  See
+You'll probably need to create an ``mlt/settings_local.py`` file with some
+details of your local configuration, including, most likely, your database
+name and user (unless they are both named "mlt").  See
 ``mlt/settings_local.sample.py`` for a sample that can be copied to
 ``mlt/settings_local.py`` and modified.
 
 Once this configuration is done, you should be able to run ``./manage.py
-runserver`` and access the MLT in your browser at ``http://localhost:8000``.
+syncdb``, then ``./manage.py runserver`` and access the MLT in your browser
+at ``http://localhost:8000``.
 
 .. _virtualenv: http://www.virtualenv.org
 .. _GeoDjango installation documentation: http://docs.djangoproject.com/en/1.3/ref/contrib/gis/install/
