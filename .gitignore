@@ -1,0 +1,6 @@
+TAGS
+collected-assets/
+*.DS_Store
+.sass-cache/
+mlt/settings_local.py
+.livereload

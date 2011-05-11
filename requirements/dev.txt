@@ -1,0 +1,6 @@
+# Additional requirements useful for development.
+
+-r base.txt
+
+mock==0.7.0rc1
+coverage==3.4

@@ -1,0 +1,35 @@
+// Imports -------------------------------------------------------------------
+
+@import defaults
+
+// 992 Grid ------------------------------------------------------------------
+// (24*2em + 23*1em + 2em) = 73em = 1168px
+// 48px + 16px x 24px
+
+$total-cols         : 24
+$col-width          : 2em
+$gutter-width       : 1em
+$side-gutter-width  : $gutter-width
+
+/* Layout --------------------------------------------------------------
+
+body > div
+  +container
+  +susy-grid-background
+
+header[role="banner"]
+  +full
+  +padding-leader
+
+div[role="main"]
+  +full
+  +pie-clearfix
+  +h-borders(1px,1,$base-font-size,dotted)
+
+footer[role="contentinfo"]
+  +full
+  +adjust-font-size-to(12px)
+  +trailer(1,12px)
+  font-style: italic
+  small
+    font: inherit

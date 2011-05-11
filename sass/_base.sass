@@ -1,0 +1,87 @@
+// Imports -------------------------------------------------------------------
+
+@import compass
+@import compass/layout
+@import susy
+
+// Settings ------------------------------------------------------------------
+
+$legacy-support-for-ie6         : false
+
+$show-column-grid-backgrounds   : true
+$show-baseline-grid-backgrounds : true
+$show-grid-backgrounds          : true
+
+// Font Sizes ----------------------------------------------------------------
+
+$base-font-size   : 16px
+$base-line-height : $base-font-size*1.5
+
+// Colors --------------------------------------------------------------------
+
+$dark       : #4c4c4c
+$light      : #ddd
+$mid        : mix($dark,$light)
+$mid-light  : mix($dark,$light,25%)
+$mid-dark   : mix($dark,$light,75%)
+
+$base   : $dark
+$alt    : #005498
+$accent : complement($alt)
+
+$contrasted-dark-default  : $base
+$contrasted-light-default : $light
+
+$grid-background-baseline-color : rgba(0,0,0,.125)
+$grid-background-column-color   : rgba(120, 120, 225, 0.125)
+$grid-background-gutter-color   : rgba(0, 0, 0, 0)
+
+// ---------------------------------------------------------------------------
+
+  dark        : #{$dark}
+  mid-dark    : #{$mid-dark}
+  mid         : #{$mid}
+  mid-light   : #{$mid-light}
+  light       : #{$light}
+
+  base        : #{$base}
+  alt         : #{$alt}
+  accent      : #{$accent}
+
+// Fonts ---------------------------------------------------------------------
+
+=sans-family
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+
+=serif-family
+  font-family: Cambria, Georgia, serif
+
+=monospace-family
+  font-family: "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, Courier, monospace, sans-serif
+
+// Mixins --------------------------------------------------------------------
+
+=hpadding($l:rhythm(),$r:$l)
+  padding:
+    left: $l
+    right: $r
+
+=gone
+  position: absolute
+  clip: rect(0 0 0 0)
+  overflow: hidden
+  margin: -1px
+  padding: 0
+  height: 1px
+  width: 1px
+  border: 0
+
+=oncall
+  +gone
+  &:active, &:focus
+    position: static
+    clip: auto
+    overflow: visible
+    height: auto
+    margin: 0
+    width: auto

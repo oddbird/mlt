@@ -1,0 +1,208 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0; padding: 0; border: 0; font-size: 100%; font: inherit; vertical-align: baseline; }
+
+body { line-height: 1; }
+
+ol, ul { list-style: none; }
+
+table { border-collapse: collapse; border-spacing: 0; }
+
+caption, th, td { text-align: left; font-weight: normal; vertical-align: middle; }
+
+q, blockquote { quotes: none; }
+q:before, q:after, blockquote:before, blockquote:after { content: ""; content: none; }
+
+a img { border: none; }
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
+
+/* Typography ---------------------------------------------------------------- */
+.serif, body { font-family: Cambria, Georgia, serif; }
+
+.sans { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+.mono, pre, code, tt { font-family: "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, Courier, monospace, sans-serif; }
+
+.caps, .allcaps, h1, h2, caption, .button, button, input[type="reset"], input[type="submit"], input[type="button"], .smallcaps, h4 { letter-spacing: 0.1em; }
+
+.allcaps, h1, h2, caption, .button, button, input[type="reset"], input[type="submit"], input[type="button"] { text-transform: uppercase; }
+
+.smallcaps, h4 { font-variant: small-caps; }
+
+/* Helpers ------------------------------------------------------------------- */
+.full { display: block; float: none; width: auto; }
+
+.half { max-width: 50%; }
+
+.left { display: inline; float: left; margin-right: 1em; margin-bottom: 0.5em; }
+
+.right { display: inline; float: right; margin-left: 1em; margin-bottom: 0.5em; }
+
+/* Root ---------------------------------------------------------------------- */
+body { font-size: 100%; line-height: 1.5em; }
+
+html > body { font-size: 16px; }
+
+html { text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+
+body { background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(5%, rgba(0, 0, 0, 0.125)), color-stop(5%, rgba(0, 0, 0, 0))); background-image: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0.125) 5%, rgba(0, 0, 0, 0) 5%); background-image: -moz-linear-gradient(bottom, rgba(0, 0, 0, 0.125) 5%, rgba(0, 0, 0, 0) 5%); background-image: -o-linear-gradient(bottom, rgba(0, 0, 0, 0.125) 5%, rgba(0, 0, 0, 0) 5%); background-image: linear-gradient(bottom, rgba(0, 0, 0, 0.125) 5%, rgba(0, 0, 0, 0) 5%); -moz-background-size: 100% 1.5em; -webkit-background-size: 100% 1.5em; -o-background-size: 100% 1.5em; background-size: 100% 1.5em; background-position: left top; color: #4c4c4c; }
+
+/* Selected Text ------------------------------------------------------------- */
+::-webkit-selection { color: #dddddd; background: #005498; text-shadow: none; }
+
+::-moz-selection { color: #dddddd; background: #005498; text-shadow: none; }
+
+::selection { color: #dddddd; background: #005498; text-shadow: none; }
+
+/* Links --------------------------------------------------------------------- */
+a:hover, a:active { outline: none; }
+a:link, a:visited { color: #005498; text-decoration: none; }
+a:focus, a:hover, a:active { color: #984400; }
+
+/* Headings ------------------------------------------------------------------ */
+h1 { font-size: 1.313em; line-height: 1.143em; }
+
+h3 { font-weight: bold; }
+
+h5, h6 { font-style: italic; }
+
+/* Inline -------------------------------------------------------------------- */
+cite, em, dfn, address, i { font-style: italic; }
+
+strong, dfn, b { font-weight: bold; }
+
+sup, sub { position: relative; font-size: smaller; line-height: 0; }
+
+sup { top: -0.5em; }
+
+sub { bottom: -0.25em; }
+
+abbr, acronym { border-bottom: 1px dotted; cursor: help; }
+
+ins { text-decoration: underline; }
+
+del { text-decoration: line-through; }
+
+mark { background: #ffff99; background-color: rgba(255, 255, 0, 0.5); text-shadow: none; }
+
+small { font-size: 0.75em; line-height: 2em; }
+
+q { font-style: italic; }
+q em { font-style: normal; }
+
+/* Block --------------------------------------------------------------------- */
+p { margin-bottom: 1.5em; }
+
+pre { padding: 1.5em; white-space: pre; white-space: pre-wrap; white-space: pre-line; word-wrap: break-word; }
+
+blockquote { padding: 1.5em; font-style: italic; }
+
+/* Interactive --------------------------------------------------------------- */
+details { margin-bottom: 1.5em; }
+
+summary { display: inline; cursor: pointer; }
+summary:focus { outline: thin dotted #984400; }
+
+.no-details details > * { display: none; }
+.no-details details summary { display: inline; }
+
+/* Replaced ------------------------------------------------------------------ */
+figure img, figure object, figure embed { vertical-align: top; max-width: 100%; }
+
+.ie7 img { -ms-interpolation-mode: bicubic; }
+
+/* Lists --------------------------------------------------------------------- */
+ol, ul, dd { margin-left: 1.5em; }
+
+ol { list-style-type: decimal; }
+
+ul { list-style-type: disc; }
+nav ul { margin: 0; padding: 0; border: 0; list-style: none; }
+nav ul li { list-style-image: none; list-style-type: none; margin-left: 0px; }
+
+dt { margin-top: 1.5em; }
+
+/* Tables -------------------------------------------------------------------- */
+table { margin-bottom: 1.5em; width: 100%; border-collapse: separate; border-spacing: 0; }
+
+table, td, th { vertical-align: top; }
+
+th, thead th { font-weight: bold; }
+
+th, td, caption { padding: 0.75em; text-align: left; font-weight: normal; }
+
+table, th { border-bottom-style: solid; border-bottom-width: 0.063em; padding-bottom: 0.688em; }
+
+tfoot { font-size: 0.875em; line-height: 1.714em; }
+
+/* Forms --------------------------------------------------------------------- */
+/* Form Resets --------------------------------------------------------------- */
+input[type="button"], input[type="submit"], input[type="image"], label, button { cursor: pointer; }
+
+input[type="search"] { -webkit-appearance: none; }
+input[type="search"]::-webkit-search-decoration { display: none; }
+input[type="radio"], input[type="checkbox"] { vertical-align: baseline; }
+
+textarea { overflow: auto; resize: vertical; }
+
+button, input[type="select"], select, textarea { -moz-border-radius: 0; -webkit-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; -khtml-border-radius: 0; border-radius: 0; }
+
+optgroup { margin: 0; padding: 0; border: 0; }
+
+optgroup { color: #4c4c4c; font-style: normal; font-weight: normal; }
+
+.iem7 legend { margin-left: -7px; }
+
+::-moz-focus-inner { border: 0; }
+
+/* Placeholders -------------------------------------------------------------- */
+/* Basic --------------------------------------------------------------------- */
+form > ul { margin: 0; padding: 0; border: 0; list-style: none; }
+form > ul li { list-style-image: none; list-style-type: none; margin-left: 0px; }
+form > ul > li { *zoom: 1; }
+form > ul > li:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
+
+/* Text Inputs --------------------------------------------------------------- */
+.textinput, textarea, select:not([multiple]), input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="tel"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="time"], input[type="number"], input[type="search"], input[type="color"] { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 0.875em; line-height: 1.714em; border-style: solid; border-width: 0.071em; padding: 0.357em; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; width: 100%; height: 2.571em; vertical-align: top; outline: 0; }
+
+.input[disabled], textarea[disabled], select[disabled] { background-color: #eeeeee; color: #727272; }
+.input:valid, textarea:valid, select:valid { -moz-box-shadow: inset rgba(0, 0, 255, 0.25) 0 0 0.375em; -webkit-box-shadow: inset rgba(0, 0, 255, 0.25) 0 0 0.375em; -o-box-shadow: inset rgba(0, 0, 255, 0.25) 0 0 0.375em; box-shadow: inset rgba(0, 0, 255, 0.25) 0 0 0.375em; }
+.input:valid:focus, textarea:valid:focus, select:valid:focus, .input:valid.hadfocus, textarea:valid.hadfocus, select:valid.hadfocus { -moz-box-shadow: inset rgba(0, 128, 0, 0.25) 0 0 0.375em; -webkit-box-shadow: inset rgba(0, 128, 0, 0.25) 0 0 0.375em; -o-box-shadow: inset rgba(0, 128, 0, 0.25) 0 0 0.375em; box-shadow: inset rgba(0, 128, 0, 0.25) 0 0 0.375em; }
+.no-boxshadow .input:valid:focus, .no-boxshadow textarea:valid:focus, .no-boxshadow select:valid:focus, .no-boxshadow .input:valid.hadfocus, .no-boxshadow textarea:valid.hadfocus, .no-boxshadow select:valid.hadfocus { background-color: rgba(0, 128, 0, 0.25); }
+.input:invalid, textarea:invalid, select:invalid { -moz-box-shadow: inset rgba(0, 0, 255, 0.25) 0 0 0.375em; -webkit-box-shadow: inset rgba(0, 0, 255, 0.25) 0 0 0.375em; -o-box-shadow: inset rgba(0, 0, 255, 0.25) 0 0 0.375em; box-shadow: inset rgba(0, 0, 255, 0.25) 0 0 0.375em; }
+.input:invalid:focus, textarea:invalid:focus, select:invalid:focus, .input:invalid.hadfocus, textarea:invalid.hadfocus, select:invalid.hadfocus { -moz-box-shadow: inset rgba(255, 0, 0, 0.25) 0 0 0.375em; -webkit-box-shadow: inset rgba(255, 0, 0, 0.25) 0 0 0.375em; -o-box-shadow: inset rgba(255, 0, 0, 0.25) 0 0 0.375em; box-shadow: inset rgba(255, 0, 0, 0.25) 0 0 0.375em; }
+.no-boxshadow .input:invalid:focus, .no-boxshadow textarea:invalid:focus, .no-boxshadow select:invalid:focus, .no-boxshadow .input:invalid.hadfocus, .no-boxshadow textarea:invalid.hadfocus, .no-boxshadow select:invalid.hadfocus { background-color: rgba(255, 0, 0, 0.25); }
+.ie7 .input, .ie7 textarea, .ie7 select { height: auto; }
+
+textarea { height: auto; min-height: 8.571em; }
+textarea::-webkit-input-placeholder { color: #949494; }
+textarea:-moz-placeholder { color: #949494; }
+textarea.placeholder { color: #949494; }
+
+input[type="text"]::-webkit-input-placeholder, input[type="password"]::-webkit-input-placeholder, input[type="email"]::-webkit-input-placeholder, input[type="url"]::-webkit-input-placeholder, input[type="tel"]::-webkit-input-placeholder, input[type="date"]::-webkit-input-placeholder, input[type="datetime"]::-webkit-input-placeholder, input[type="datetime-local"]::-webkit-input-placeholder, input[type="month"]::-webkit-input-placeholder, input[type="week"]::-webkit-input-placeholder, input[type="time"]::-webkit-input-placeholder, input[type="number"]::-webkit-input-placeholder, input[type="search"]::-webkit-input-placeholder, input[type="color"]::-webkit-input-placeholder { color: #949494; }
+input[type="text"]:-moz-placeholder, input[type="password"]:-moz-placeholder, input[type="email"]:-moz-placeholder, input[type="url"]:-moz-placeholder, input[type="tel"]:-moz-placeholder, input[type="date"]:-moz-placeholder, input[type="datetime"]:-moz-placeholder, input[type="datetime-local"]:-moz-placeholder, input[type="month"]:-moz-placeholder, input[type="week"]:-moz-placeholder, input[type="time"]:-moz-placeholder, input[type="number"]:-moz-placeholder, input[type="search"]:-moz-placeholder, input[type="color"]:-moz-placeholder { color: #949494; }
+input[type="text"].placeholder, input[type="password"].placeholder, input[type="email"].placeholder, input[type="url"].placeholder, input[type="tel"].placeholder, input[type="date"].placeholder, input[type="datetime"].placeholder, input[type="datetime-local"].placeholder, input[type="month"].placeholder, input[type="week"].placeholder, input[type="time"].placeholder, input[type="number"].placeholder, input[type="search"].placeholder, input[type="color"].placeholder { color: #949494; }
+
+/* Buttons ------------------------------------------------------------------- */
+button, input[type="reset"], input[type="submit"], input[type="button"], input[type="image"] { margin: 0; padding: 0; border: 0; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; -moz-border-radius: 0; -webkit-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; -khtml-border-radius: 0; border-radius: 0; text-shadow: none; overflow: visible; width: auto; vertical-align: baseline; background: none; color: inherit; font: inherit; }
+button, input[type="reset"], input[type="submit"], input[type="button"], input[type="image"] { *display: inline; }
+
+.button, button, input[type="reset"], input[type="submit"], input[type="button"] { -moz-transition-property: box-shadow; -webkit-transition-property: box-shadow; -o-transition-property: box-shadow; transition-property: box-shadow; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; font-size: 0.75em; line-height: 1em; -moz-border-radius: 1em; -webkit-border-radius: 1em; -o-border-radius: 1em; -ms-border-radius: 1em; -khtml-border-radius: 1em; border-radius: 1em; background: #005498; background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(221, 221, 221, 0.25)), color-stop(100%, rgba(221, 221, 221, 0))), #005498; background: -webkit-linear-gradient(top, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; background: -moz-linear-gradient(top, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; background: -o-linear-gradient(top, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; background: linear-gradient(top, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; border-style: solid; border-width: 0.083em; padding: 0.417em; padding-left: 1.5em; padding-right: 1.5em; text-shadow: #4c4c4c 1px 1px 0; border-color: #4c4c4c; vertical-align: top; cursor: pointer; color: #dddddd; font-weight: bold; }
+.button:hover, button:hover, input[type="reset"]:hover, input[type="submit"]:hover, input[type="button"]:hover, .button:focus, button:focus, input[type="reset"]:focus, input[type="submit"]:focus, input[type="button"]:focus { -moz-box-shadow: #984400 0 0 0.5em; -webkit-box-shadow: #984400 0 0 0.5em; -o-box-shadow: #984400 0 0 0.5em; box-shadow: #984400 0 0 0.5em; }
+.button:active, button:active, input[type="reset"]:active, input[type="submit"]:active, input[type="button"]:active { -moz-transition-property: none; -webkit-transition-property: none; -o-transition-property: none; transition-property: none; -moz-transition-duration: 1s; -webkit-transition-duration: 1s; -o-transition-duration: 1s; transition-duration: 1s; -moz-box-shadow: #984400 0 0 0.25em, inset #4c4c4c 1px 1px 1px; -webkit-box-shadow: #984400 0 0 0.25em, inset #4c4c4c 1px 1px 1px; -o-box-shadow: #984400 0 0 0.25em, inset #4c4c4c 1px 1px 1px; box-shadow: #984400 0 0 0.25em, inset #4c4c4c 1px 1px 1px; background: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, rgba(221, 221, 221, 0.25)), color-stop(100%, rgba(221, 221, 221, 0))), #005498; background: -webkit-linear-gradient(bottom, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; background: -moz-linear-gradient(bottom, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; background: -o-linear-gradient(bottom, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; background: linear-gradient(bottom, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; }
+.button[disabled], button[disabled], input[disabled][type="reset"], input[disabled][type="submit"], input[disabled][type="button"] { color: #888888; }
+
+/* Form Helpers -------------------------------------------------------------- */
+.errorlist { margin: 0; padding: 0; border: 0; list-style: none; color: red; }
+.errorlist li { list-style-image: none; list-style-type: none; margin-left: 0px; }
+
+/* Layout -------------------------------------------------------------- */
+body > div { *zoom: 1; margin: auto; width: 73em; max-width: 100%; background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(1.37%, rgba(0, 0, 0, 0)), color-stop(1.37%, rgba(120, 120, 225, 0.125)), color-stop(4.11%, rgba(120, 120, 225, 0.125)), color-stop(4.11%, rgba(0, 0, 0, 0)), color-stop(5.479%, rgba(0, 0, 0, 0)), color-stop(5.479%, rgba(120, 120, 225, 0.125)), color-stop(8.219%, rgba(120, 120, 225, 0.125)), color-stop(8.219%, rgba(0, 0, 0, 0)), color-stop(9.589%, rgba(0, 0, 0, 0)), color-stop(9.589%, rgba(120, 120, 225, 0.125)), color-stop(12.329%, rgba(120, 120, 225, 0.125)), color-stop(12.329%, rgba(0, 0, 0, 0)), color-stop(13.699%, rgba(0, 0, 0, 0)), color-stop(13.699%, rgba(120, 120, 225, 0.125)), color-stop(16.438%, rgba(120, 120, 225, 0.125)), color-stop(16.438%, rgba(0, 0, 0, 0)), color-stop(17.808%, rgba(0, 0, 0, 0)), color-stop(17.808%, rgba(120, 120, 225, 0.125)), color-stop(20.548%, rgba(120, 120, 225, 0.125)), color-stop(20.548%, rgba(0, 0, 0, 0)), color-stop(21.918%, rgba(0, 0, 0, 0)), color-stop(21.918%, rgba(120, 120, 225, 0.125)), color-stop(24.658%, rgba(120, 120, 225, 0.125)), color-stop(24.658%, rgba(0, 0, 0, 0)), color-stop(26.027%, rgba(0, 0, 0, 0)), color-stop(26.027%, rgba(120, 120, 225, 0.125)), color-stop(28.767%, rgba(120, 120, 225, 0.125)), color-stop(28.767%, rgba(0, 0, 0, 0)), color-stop(30.137%, rgba(0, 0, 0, 0)), color-stop(30.137%, rgba(120, 120, 225, 0.125)), color-stop(32.877%, rgba(120, 120, 225, 0.125)), color-stop(32.877%, rgba(0, 0, 0, 0)), color-stop(34.247%, rgba(0, 0, 0, 0)), color-stop(34.247%, rgba(120, 120, 225, 0.125)), color-stop(36.986%, rgba(120, 120, 225, 0.125)), color-stop(36.986%, rgba(0, 0, 0, 0)), color-stop(38.356%, rgba(0, 0, 0, 0)), color-stop(38.356%, rgba(120, 120, 225, 0.125)), color-stop(41.096%, rgba(120, 120, 225, 0.125)), color-stop(41.096%, rgba(0, 0, 0, 0)), color-stop(42.466%, rgba(0, 0, 0, 0)), color-stop(42.466%, rgba(120, 120, 225, 0.125)), color-stop(45.205%, rgba(120, 120, 225, 0.125)), color-stop(45.205%, rgba(0, 0, 0, 0)), color-stop(46.575%, rgba(0, 0, 0, 0)), color-stop(46.575%, rgba(120, 120, 225, 0.125)), color-stop(49.315%, rgba(120, 120, 225, 0.125)), color-stop(49.315%, rgba(0, 0, 0, 0)), color-stop(50.685%, rgba(0, 0, 0, 0)), color-stop(50.685%, rgba(120, 120, 225, 0.125)), color-stop(53.425%, rgba(120, 120, 225, 0.125)), color-stop(53.425%, rgba(0, 0, 0, 0)), color-stop(54.795%, rgba(0, 0, 0, 0)), color-stop(54.795%, rgba(120, 120, 225, 0.125)), color-stop(57.534%, rgba(120, 120, 225, 0.125)), color-stop(57.534%, rgba(0, 0, 0, 0)), color-stop(58.904%, rgba(0, 0, 0, 0)), color-stop(58.904%, rgba(120, 120, 225, 0.125)), color-stop(61.644%, rgba(120, 120, 225, 0.125)), color-stop(61.644%, rgba(0, 0, 0, 0)), color-stop(63.014%, rgba(0, 0, 0, 0)), color-stop(63.014%, rgba(120, 120, 225, 0.125)), color-stop(65.753%, rgba(120, 120, 225, 0.125)), color-stop(65.753%, rgba(0, 0, 0, 0)), color-stop(67.123%, rgba(0, 0, 0, 0)), color-stop(67.123%, rgba(120, 120, 225, 0.125)), color-stop(69.863%, rgba(120, 120, 225, 0.125)), color-stop(69.863%, rgba(0, 0, 0, 0)), color-stop(71.233%, rgba(0, 0, 0, 0)), color-stop(71.233%, rgba(120, 120, 225, 0.125)), color-stop(73.973%, rgba(120, 120, 225, 0.125)), color-stop(73.973%, rgba(0, 0, 0, 0)), color-stop(75.342%, rgba(0, 0, 0, 0)), color-stop(75.342%, rgba(120, 120, 225, 0.125)), color-stop(78.082%, rgba(120, 120, 225, 0.125)), color-stop(78.082%, rgba(0, 0, 0, 0)), color-stop(79.452%, rgba(0, 0, 0, 0)), color-stop(79.452%, rgba(120, 120, 225, 0.125)), color-stop(82.192%, rgba(120, 120, 225, 0.125)), color-stop(82.192%, rgba(0, 0, 0, 0)), color-stop(83.562%, rgba(0, 0, 0, 0)), color-stop(83.562%, rgba(120, 120, 225, 0.125)), color-stop(86.301%, rgba(120, 120, 225, 0.125)), color-stop(86.301%, rgba(0, 0, 0, 0)), color-stop(87.671%, rgba(0, 0, 0, 0)), color-stop(87.671%, rgba(120, 120, 225, 0.125)), color-stop(90.411%, rgba(120, 120, 225, 0.125)), color-stop(90.411%, rgba(0, 0, 0, 0)), color-stop(91.781%, rgba(0, 0, 0, 0)), color-stop(91.781%, rgba(120, 120, 225, 0.125)), color-stop(94.521%, rgba(120, 120, 225, 0.125)), color-stop(94.521%, rgba(0, 0, 0, 0)), color-stop(95.89%, rgba(0, 0, 0, 0)), color-stop(95.89%, rgba(120, 120, 225, 0.125)), color-stop(98.63%, rgba(120, 120, 225, 0.125)), color-stop(98.63%, rgba(0, 0, 0, 0)), color-stop(100%, rgba(0, 0, 0, 0))); background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0) 1.37%, rgba(120, 120, 225, 0.125) 1.37%, rgba(120, 120, 225, 0.125) 4.11%, rgba(0, 0, 0, 0) 4.11%, rgba(0, 0, 0, 0) 5.479%, rgba(120, 120, 225, 0.125) 5.479%, rgba(120, 120, 225, 0.125) 8.219%, rgba(0, 0, 0, 0) 8.219%, rgba(0, 0, 0, 0) 9.589%, rgba(120, 120, 225, 0.125) 9.589%, rgba(120, 120, 225, 0.125) 12.329%, rgba(0, 0, 0, 0) 12.329%, rgba(0, 0, 0, 0) 13.699%, rgba(120, 120, 225, 0.125) 13.699%, rgba(120, 120, 225, 0.125) 16.438%, rgba(0, 0, 0, 0) 16.438%, rgba(0, 0, 0, 0) 17.808%, rgba(120, 120, 225, 0.125) 17.808%, rgba(120, 120, 225, 0.125) 20.548%, rgba(0, 0, 0, 0) 20.548%, rgba(0, 0, 0, 0) 21.918%, rgba(120, 120, 225, 0.125) 21.918%, rgba(120, 120, 225, 0.125) 24.658%, rgba(0, 0, 0, 0) 24.658%, rgba(0, 0, 0, 0) 26.027%, rgba(120, 120, 225, 0.125) 26.027%, rgba(120, 120, 225, 0.125) 28.767%, rgba(0, 0, 0, 0) 28.767%, rgba(0, 0, 0, 0) 30.137%, rgba(120, 120, 225, 0.125) 30.137%, rgba(120, 120, 225, 0.125) 32.877%, rgba(0, 0, 0, 0) 32.877%, rgba(0, 0, 0, 0) 34.247%, rgba(120, 120, 225, 0.125) 34.247%, rgba(120, 120, 225, 0.125) 36.986%, rgba(0, 0, 0, 0) 36.986%, rgba(0, 0, 0, 0) 38.356%, rgba(120, 120, 225, 0.125) 38.356%, rgba(120, 120, 225, 0.125) 41.096%, rgba(0, 0, 0, 0) 41.096%, rgba(0, 0, 0, 0) 42.466%, rgba(120, 120, 225, 0.125) 42.466%, rgba(120, 120, 225, 0.125) 45.205%, rgba(0, 0, 0, 0) 45.205%, rgba(0, 0, 0, 0) 46.575%, rgba(120, 120, 225, 0.125) 46.575%, rgba(120, 120, 225, 0.125) 49.315%, rgba(0, 0, 0, 0) 49.315%, rgba(0, 0, 0, 0) 50.685%, rgba(120, 120, 225, 0.125) 50.685%, rgba(120, 120, 225, 0.125) 53.425%, rgba(0, 0, 0, 0) 53.425%, rgba(0, 0, 0, 0) 54.795%, rgba(120, 120, 225, 0.125) 54.795%, rgba(120, 120, 225, 0.125) 57.534%, rgba(0, 0, 0, 0) 57.534%, rgba(0, 0, 0, 0) 58.904%, rgba(120, 120, 225, 0.125) 58.904%, rgba(120, 120, 225, 0.125) 61.644%, rgba(0, 0, 0, 0) 61.644%, rgba(0, 0, 0, 0) 63.014%, rgba(120, 120, 225, 0.125) 63.014%, rgba(120, 120, 225, 0.125) 65.753%, rgba(0, 0, 0, 0) 65.753%, rgba(0, 0, 0, 0) 67.123%, rgba(120, 120, 225, 0.125) 67.123%, rgba(120, 120, 225, 0.125) 69.863%, rgba(0, 0, 0, 0) 69.863%, rgba(0, 0, 0, 0) 71.233%, rgba(120, 120, 225, 0.125) 71.233%, rgba(120, 120, 225, 0.125) 73.973%, rgba(0, 0, 0, 0) 73.973%, rgba(0, 0, 0, 0) 75.342%, rgba(120, 120, 225, 0.125) 75.342%, rgba(120, 120, 225, 0.125) 78.082%, rgba(0, 0, 0, 0) 78.082%, rgba(0, 0, 0, 0) 79.452%, rgba(120, 120, 225, 0.125) 79.452%, rgba(120, 120, 225, 0.125) 82.192%, rgba(0, 0, 0, 0) 82.192%, rgba(0, 0, 0, 0) 83.562%, rgba(120, 120, 225, 0.125) 83.562%, rgba(120, 120, 225, 0.125) 86.301%, rgba(0, 0, 0, 0) 86.301%, rgba(0, 0, 0, 0) 87.671%, rgba(120, 120, 225, 0.125) 87.671%, rgba(120, 120, 225, 0.125) 90.411%, rgba(0, 0, 0, 0) 90.411%, rgba(0, 0, 0, 0) 91.781%, rgba(120, 120, 225, 0.125) 91.781%, rgba(120, 120, 225, 0.125) 94.521%, rgba(0, 0, 0, 0) 94.521%, rgba(0, 0, 0, 0) 95.89%, rgba(120, 120, 225, 0.125) 95.89%, rgba(120, 120, 225, 0.125) 98.63%, rgba(0, 0, 0, 0) 98.63%, rgba(0, 0, 0, 0) 100%); background-image: -moz-linear-gradient(left, rgba(0, 0, 0, 0) 1.37%, rgba(120, 120, 225, 0.125) 1.37%, rgba(120, 120, 225, 0.125) 4.11%, rgba(0, 0, 0, 0) 4.11%, rgba(0, 0, 0, 0) 5.479%, rgba(120, 120, 225, 0.125) 5.479%, rgba(120, 120, 225, 0.125) 8.219%, rgba(0, 0, 0, 0) 8.219%, rgba(0, 0, 0, 0) 9.589%, rgba(120, 120, 225, 0.125) 9.589%, rgba(120, 120, 225, 0.125) 12.329%, rgba(0, 0, 0, 0) 12.329%, rgba(0, 0, 0, 0) 13.699%, rgba(120, 120, 225, 0.125) 13.699%, rgba(120, 120, 225, 0.125) 16.438%, rgba(0, 0, 0, 0) 16.438%, rgba(0, 0, 0, 0) 17.808%, rgba(120, 120, 225, 0.125) 17.808%, rgba(120, 120, 225, 0.125) 20.548%, rgba(0, 0, 0, 0) 20.548%, rgba(0, 0, 0, 0) 21.918%, rgba(120, 120, 225, 0.125) 21.918%, rgba(120, 120, 225, 0.125) 24.658%, rgba(0, 0, 0, 0) 24.658%, rgba(0, 0, 0, 0) 26.027%, rgba(120, 120, 225, 0.125) 26.027%, rgba(120, 120, 225, 0.125) 28.767%, rgba(0, 0, 0, 0) 28.767%, rgba(0, 0, 0, 0) 30.137%, rgba(120, 120, 225, 0.125) 30.137%, rgba(120, 120, 225, 0.125) 32.877%, rgba(0, 0, 0, 0) 32.877%, rgba(0, 0, 0, 0) 34.247%, rgba(120, 120, 225, 0.125) 34.247%, rgba(120, 120, 225, 0.125) 36.986%, rgba(0, 0, 0, 0) 36.986%, rgba(0, 0, 0, 0) 38.356%, rgba(120, 120, 225, 0.125) 38.356%, rgba(120, 120, 225, 0.125) 41.096%, rgba(0, 0, 0, 0) 41.096%, rgba(0, 0, 0, 0) 42.466%, rgba(120, 120, 225, 0.125) 42.466%, rgba(120, 120, 225, 0.125) 45.205%, rgba(0, 0, 0, 0) 45.205%, rgba(0, 0, 0, 0) 46.575%, rgba(120, 120, 225, 0.125) 46.575%, rgba(120, 120, 225, 0.125) 49.315%, rgba(0, 0, 0, 0) 49.315%, rgba(0, 0, 0, 0) 50.685%, rgba(120, 120, 225, 0.125) 50.685%, rgba(120, 120, 225, 0.125) 53.425%, rgba(0, 0, 0, 0) 53.425%, rgba(0, 0, 0, 0) 54.795%, rgba(120, 120, 225, 0.125) 54.795%, rgba(120, 120, 225, 0.125) 57.534%, rgba(0, 0, 0, 0) 57.534%, rgba(0, 0, 0, 0) 58.904%, rgba(120, 120, 225, 0.125) 58.904%, rgba(120, 120, 225, 0.125) 61.644%, rgba(0, 0, 0, 0) 61.644%, rgba(0, 0, 0, 0) 63.014%, rgba(120, 120, 225, 0.125) 63.014%, rgba(120, 120, 225, 0.125) 65.753%, rgba(0, 0, 0, 0) 65.753%, rgba(0, 0, 0, 0) 67.123%, rgba(120, 120, 225, 0.125) 67.123%, rgba(120, 120, 225, 0.125) 69.863%, rgba(0, 0, 0, 0) 69.863%, rgba(0, 0, 0, 0) 71.233%, rgba(120, 120, 225, 0.125) 71.233%, rgba(120, 120, 225, 0.125) 73.973%, rgba(0, 0, 0, 0) 73.973%, rgba(0, 0, 0, 0) 75.342%, rgba(120, 120, 225, 0.125) 75.342%, rgba(120, 120, 225, 0.125) 78.082%, rgba(0, 0, 0, 0) 78.082%, rgba(0, 0, 0, 0) 79.452%, rgba(120, 120, 225, 0.125) 79.452%, rgba(120, 120, 225, 0.125) 82.192%, rgba(0, 0, 0, 0) 82.192%, rgba(0, 0, 0, 0) 83.562%, rgba(120, 120, 225, 0.125) 83.562%, rgba(120, 120, 225, 0.125) 86.301%, rgba(0, 0, 0, 0) 86.301%, rgba(0, 0, 0, 0) 87.671%, rgba(120, 120, 225, 0.125) 87.671%, rgba(120, 120, 225, 0.125) 90.411%, rgba(0, 0, 0, 0) 90.411%, rgba(0, 0, 0, 0) 91.781%, rgba(120, 120, 225, 0.125) 91.781%, rgba(120, 120, 225, 0.125) 94.521%, rgba(0, 0, 0, 0) 94.521%, rgba(0, 0, 0, 0) 95.89%, rgba(120, 120, 225, 0.125) 95.89%, rgba(120, 120, 225, 0.125) 98.63%, rgba(0, 0, 0, 0) 98.63%, rgba(0, 0, 0, 0) 100%); background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0) 1.37%, rgba(120, 120, 225, 0.125) 1.37%, rgba(120, 120, 225, 0.125) 4.11%, rgba(0, 0, 0, 0) 4.11%, rgba(0, 0, 0, 0) 5.479%, rgba(120, 120, 225, 0.125) 5.479%, rgba(120, 120, 225, 0.125) 8.219%, rgba(0, 0, 0, 0) 8.219%, rgba(0, 0, 0, 0) 9.589%, rgba(120, 120, 225, 0.125) 9.589%, rgba(120, 120, 225, 0.125) 12.329%, rgba(0, 0, 0, 0) 12.329%, rgba(0, 0, 0, 0) 13.699%, rgba(120, 120, 225, 0.125) 13.699%, rgba(120, 120, 225, 0.125) 16.438%, rgba(0, 0, 0, 0) 16.438%, rgba(0, 0, 0, 0) 17.808%, rgba(120, 120, 225, 0.125) 17.808%, rgba(120, 120, 225, 0.125) 20.548%, rgba(0, 0, 0, 0) 20.548%, rgba(0, 0, 0, 0) 21.918%, rgba(120, 120, 225, 0.125) 21.918%, rgba(120, 120, 225, 0.125) 24.658%, rgba(0, 0, 0, 0) 24.658%, rgba(0, 0, 0, 0) 26.027%, rgba(120, 120, 225, 0.125) 26.027%, rgba(120, 120, 225, 0.125) 28.767%, rgba(0, 0, 0, 0) 28.767%, rgba(0, 0, 0, 0) 30.137%, rgba(120, 120, 225, 0.125) 30.137%, rgba(120, 120, 225, 0.125) 32.877%, rgba(0, 0, 0, 0) 32.877%, rgba(0, 0, 0, 0) 34.247%, rgba(120, 120, 225, 0.125) 34.247%, rgba(120, 120, 225, 0.125) 36.986%, rgba(0, 0, 0, 0) 36.986%, rgba(0, 0, 0, 0) 38.356%, rgba(120, 120, 225, 0.125) 38.356%, rgba(120, 120, 225, 0.125) 41.096%, rgba(0, 0, 0, 0) 41.096%, rgba(0, 0, 0, 0) 42.466%, rgba(120, 120, 225, 0.125) 42.466%, rgba(120, 120, 225, 0.125) 45.205%, rgba(0, 0, 0, 0) 45.205%, rgba(0, 0, 0, 0) 46.575%, rgba(120, 120, 225, 0.125) 46.575%, rgba(120, 120, 225, 0.125) 49.315%, rgba(0, 0, 0, 0) 49.315%, rgba(0, 0, 0, 0) 50.685%, rgba(120, 120, 225, 0.125) 50.685%, rgba(120, 120, 225, 0.125) 53.425%, rgba(0, 0, 0, 0) 53.425%, rgba(0, 0, 0, 0) 54.795%, rgba(120, 120, 225, 0.125) 54.795%, rgba(120, 120, 225, 0.125) 57.534%, rgba(0, 0, 0, 0) 57.534%, rgba(0, 0, 0, 0) 58.904%, rgba(120, 120, 225, 0.125) 58.904%, rgba(120, 120, 225, 0.125) 61.644%, rgba(0, 0, 0, 0) 61.644%, rgba(0, 0, 0, 0) 63.014%, rgba(120, 120, 225, 0.125) 63.014%, rgba(120, 120, 225, 0.125) 65.753%, rgba(0, 0, 0, 0) 65.753%, rgba(0, 0, 0, 0) 67.123%, rgba(120, 120, 225, 0.125) 67.123%, rgba(120, 120, 225, 0.125) 69.863%, rgba(0, 0, 0, 0) 69.863%, rgba(0, 0, 0, 0) 71.233%, rgba(120, 120, 225, 0.125) 71.233%, rgba(120, 120, 225, 0.125) 73.973%, rgba(0, 0, 0, 0) 73.973%, rgba(0, 0, 0, 0) 75.342%, rgba(120, 120, 225, 0.125) 75.342%, rgba(120, 120, 225, 0.125) 78.082%, rgba(0, 0, 0, 0) 78.082%, rgba(0, 0, 0, 0) 79.452%, rgba(120, 120, 225, 0.125) 79.452%, rgba(120, 120, 225, 0.125) 82.192%, rgba(0, 0, 0, 0) 82.192%, rgba(0, 0, 0, 0) 83.562%, rgba(120, 120, 225, 0.125) 83.562%, rgba(120, 120, 225, 0.125) 86.301%, rgba(0, 0, 0, 0) 86.301%, rgba(0, 0, 0, 0) 87.671%, rgba(120, 120, 225, 0.125) 87.671%, rgba(120, 120, 225, 0.125) 90.411%, rgba(0, 0, 0, 0) 90.411%, rgba(0, 0, 0, 0) 91.781%, rgba(120, 120, 225, 0.125) 91.781%, rgba(120, 120, 225, 0.125) 94.521%, rgba(0, 0, 0, 0) 94.521%, rgba(0, 0, 0, 0) 95.89%, rgba(120, 120, 225, 0.125) 95.89%, rgba(120, 120, 225, 0.125) 98.63%, rgba(0, 0, 0, 0) 98.63%, rgba(0, 0, 0, 0) 100%); background-image: linear-gradient(left, rgba(0, 0, 0, 0) 1.37%, rgba(120, 120, 225, 0.125) 1.37%, rgba(120, 120, 225, 0.125) 4.11%, rgba(0, 0, 0, 0) 4.11%, rgba(0, 0, 0, 0) 5.479%, rgba(120, 120, 225, 0.125) 5.479%, rgba(120, 120, 225, 0.125) 8.219%, rgba(0, 0, 0, 0) 8.219%, rgba(0, 0, 0, 0) 9.589%, rgba(120, 120, 225, 0.125) 9.589%, rgba(120, 120, 225, 0.125) 12.329%, rgba(0, 0, 0, 0) 12.329%, rgba(0, 0, 0, 0) 13.699%, rgba(120, 120, 225, 0.125) 13.699%, rgba(120, 120, 225, 0.125) 16.438%, rgba(0, 0, 0, 0) 16.438%, rgba(0, 0, 0, 0) 17.808%, rgba(120, 120, 225, 0.125) 17.808%, rgba(120, 120, 225, 0.125) 20.548%, rgba(0, 0, 0, 0) 20.548%, rgba(0, 0, 0, 0) 21.918%, rgba(120, 120, 225, 0.125) 21.918%, rgba(120, 120, 225, 0.125) 24.658%, rgba(0, 0, 0, 0) 24.658%, rgba(0, 0, 0, 0) 26.027%, rgba(120, 120, 225, 0.125) 26.027%, rgba(120, 120, 225, 0.125) 28.767%, rgba(0, 0, 0, 0) 28.767%, rgba(0, 0, 0, 0) 30.137%, rgba(120, 120, 225, 0.125) 30.137%, rgba(120, 120, 225, 0.125) 32.877%, rgba(0, 0, 0, 0) 32.877%, rgba(0, 0, 0, 0) 34.247%, rgba(120, 120, 225, 0.125) 34.247%, rgba(120, 120, 225, 0.125) 36.986%, rgba(0, 0, 0, 0) 36.986%, rgba(0, 0, 0, 0) 38.356%, rgba(120, 120, 225, 0.125) 38.356%, rgba(120, 120, 225, 0.125) 41.096%, rgba(0, 0, 0, 0) 41.096%, rgba(0, 0, 0, 0) 42.466%, rgba(120, 120, 225, 0.125) 42.466%, rgba(120, 120, 225, 0.125) 45.205%, rgba(0, 0, 0, 0) 45.205%, rgba(0, 0, 0, 0) 46.575%, rgba(120, 120, 225, 0.125) 46.575%, rgba(120, 120, 225, 0.125) 49.315%, rgba(0, 0, 0, 0) 49.315%, rgba(0, 0, 0, 0) 50.685%, rgba(120, 120, 225, 0.125) 50.685%, rgba(120, 120, 225, 0.125) 53.425%, rgba(0, 0, 0, 0) 53.425%, rgba(0, 0, 0, 0) 54.795%, rgba(120, 120, 225, 0.125) 54.795%, rgba(120, 120, 225, 0.125) 57.534%, rgba(0, 0, 0, 0) 57.534%, rgba(0, 0, 0, 0) 58.904%, rgba(120, 120, 225, 0.125) 58.904%, rgba(120, 120, 225, 0.125) 61.644%, rgba(0, 0, 0, 0) 61.644%, rgba(0, 0, 0, 0) 63.014%, rgba(120, 120, 225, 0.125) 63.014%, rgba(120, 120, 225, 0.125) 65.753%, rgba(0, 0, 0, 0) 65.753%, rgba(0, 0, 0, 0) 67.123%, rgba(120, 120, 225, 0.125) 67.123%, rgba(120, 120, 225, 0.125) 69.863%, rgba(0, 0, 0, 0) 69.863%, rgba(0, 0, 0, 0) 71.233%, rgba(120, 120, 225, 0.125) 71.233%, rgba(120, 120, 225, 0.125) 73.973%, rgba(0, 0, 0, 0) 73.973%, rgba(0, 0, 0, 0) 75.342%, rgba(120, 120, 225, 0.125) 75.342%, rgba(120, 120, 225, 0.125) 78.082%, rgba(0, 0, 0, 0) 78.082%, rgba(0, 0, 0, 0) 79.452%, rgba(120, 120, 225, 0.125) 79.452%, rgba(120, 120, 225, 0.125) 82.192%, rgba(0, 0, 0, 0) 82.192%, rgba(0, 0, 0, 0) 83.562%, rgba(120, 120, 225, 0.125) 83.562%, rgba(120, 120, 225, 0.125) 86.301%, rgba(0, 0, 0, 0) 86.301%, rgba(0, 0, 0, 0) 87.671%, rgba(120, 120, 225, 0.125) 87.671%, rgba(120, 120, 225, 0.125) 90.411%, rgba(0, 0, 0, 0) 90.411%, rgba(0, 0, 0, 0) 91.781%, rgba(120, 120, 225, 0.125) 91.781%, rgba(120, 120, 225, 0.125) 94.521%, rgba(0, 0, 0, 0) 94.521%, rgba(0, 0, 0, 0) 95.89%, rgba(120, 120, 225, 0.125) 95.89%, rgba(120, 120, 225, 0.125) 98.63%, rgba(0, 0, 0, 0) 98.63%, rgba(0, 0, 0, 0) 100%); background-position: left top; }
+body > div:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
+
+header[role="banner"] { clear: both; margin-left: 1.37%; margin-right: 1.37%; padding-top: 1.5em; }
+
+div[role="main"] { clear: both; margin-left: 1.37%; margin-right: 1.37%; *zoom: 1; border-top-style: dotted; border-top-width: 0.063em; padding-top: 1.438em; border-bottom-style: dotted; border-bottom-width: 0.063em; padding-bottom: 1.438em; }
+div[role="main"]:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
+
+footer[role="contentinfo"] { clear: both; margin-left: 1.37%; margin-right: 1.37%; font-size: 0.75em; line-height: 2em; margin-bottom: 2em; font-style: italic; }
+footer[role="contentinfo"] small { font: inherit; }
