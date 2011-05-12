@@ -79,14 +79,51 @@
 {% block page %}
 
   <header role="banner">
-    <h1><a href="/" rel="home">Master Lookup Table</a></h1>
+    <div class="container">
+      <a href="#main">skip to main content</a>
+
+      <h1><a href="/" rel="home">Master Lookup Table</a></h1>
+
+      <nav role="navigation">
+        <h2 class="navhead">Primary Navigation</h2>
+        <ul>
+            <li class="history"><a {% if request.user %}href="/history/"{% else %}href="/"{% endif %}>Revision History</a></li>
+        </ul>
+      </nav>
+
+      <nav class="meta">
+        <h2 class="navhead">Account Navigation</h2>
+        <ul>
+          {% block meta-user %}
+            <li>
+              Welcome {{ request.user.firstName }}
+              [<a href="#">Sign Out</a>]
+            </li>
+          {% endblock %}
+        </ul>
+      </nav>
+
+    </div>
   </header>
 
-  <div role="main">
+  <div id="main" role="main">
     {% block content %}
 
     {% endblock %}
   </div><!-- /~main -->
+
+  <footer role="contentinfo">
+    <div id="hcard-client-name" class="author vcard">
+      <small>copyright &copy; 2011</small>
+      <strong class="fn org">The Providence Plan</strong>
+      <div class="adr">
+        <span class="street-address">10 Davol Square Suite 300</span>,
+        <span class="locality">Providence</span>,
+        <span class="region">RI</span>
+        <span class="postal-code">02903</span>
+      </div>
+    </div>
+  </footer>
 
 {% endblock page %}
 </div>

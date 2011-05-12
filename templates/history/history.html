@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section id="historytable">
+  <h2>Revision History</h2>
+  <a href="#" class="revertselected">revert selected changes</a>
+  <a href="#" class="selectall">select all</a>
+  <a href="#" class="selectnone">select none</a>
+
+  {% include "includes/filter.html" %}
+
+  <form method="POST" class="historytable">
+    <nav class="listordering">
+      <h3 class="navhead">List Ordering</h3>
+      <ul>
+        <li class="byrow">
+          <a href="#">row</a>
+        </li>
+        <li class="bystreet">
+          <a href="#">street</a>
+        </li>
+        <li class="bycity">
+          <a href="#">city</a>
+        </li>
+        <li class="bystate">
+          <a href="#">state</a>
+        </li>
+        <li class="bychangedfield">
+          <a href="#">changed field</a>
+        </li>
+      </ul>
+    </nav>
+
+    <article id="address-history-id" class="details address">
+      <header class="summary">
+        <p class="selected">
+          <input type="checkbox" name="selected" value="">
+        </p>
+        <p class="row">1</p>
+        <p class="street">10 Davol Sq</p>
+        <p class="city">Providence</p>
+        <p class="state">RI</p>
+        <p class="changed_field">property ID</p>
+        <div class="controls">
+          <a href="#" title="revert">revert this change</a>
+        </div>
+      </header>
+      <div class="content">
+        <div class="description">
+          <p class="previous_value">111-222-3333</p>
+          <p class="new_value">444-555-6666</p>
+          <p class="byline hcard">
+            Changed by [username]
+            on <time>[timestamp]</time>
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- include "includes/listnav.html" -->
+
+  </form>
+</section>
+
+{% endblock content %}

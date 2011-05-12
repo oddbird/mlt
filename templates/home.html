@@ -1,1 +1,154 @@
 {% extends "base.html" %}
+
+{% block content %}
+
+<section id="adresstable">
+  <h2>Master Lookup Table</h2>
+  <a href="#" class="create">add address</a>
+  <a href="#" class="selectall">select all</a>
+  <a href="#" class="selectnone">select none</a>
+
+  {% include "includes/filter.html" %}
+
+  <form method="POST" class="addresstable">
+    <nav class="listordering">
+      <h3 class="navhead">List Ordering</h3>
+      <ul>
+        <li class="byrow">
+          <a href="#">row</a>
+        </li>
+        <li class="bystreet">
+          <a href="#">street</a>
+        </li>
+        <li class="bycity">
+          <a href="#">city</a>
+        </li>
+        <li class="bystate">
+          <a href="#">state</a>
+        </li>
+        <li class="byzip">
+          <a href="#">zip</a>
+        </li>
+        <li class="bymultipleunits">
+          <a href="#">multiple units</a>
+        </li>
+        <li class="bycomplex">
+          <a href="#">complex</a>
+        </li>
+        <li class="bypropertyID">
+          <a href="#">property ID</a>
+        </li>
+        <li class="byneedsreview">
+          <a href="#">needs review</a>
+        </li>
+      </ul>
+    </nav>
+
+    <article id="address-id" class="details address">
+      <header class="summary">
+        <p class="selected">
+          <input type="checkbox" name="selected" value="">
+        </p>
+        <p class="row">1</p>
+        <p class="street">10 Davol Sq</p>
+        <p class="city">Providence</p>
+        <p class="state">RI</p>
+        <p class="zip">02909</p>
+        <p class="multiple_units">
+          <input type="checkbox" name="multiple_units" value="">
+        </p>
+        <p class="complex"></p>
+        <p class="propertyID">111-222-3333</p>
+        <p class="needs_review">
+          <input type="checkbox" name="needs_review" value="">
+        </p>
+        <div class="controls">
+          <a href="#" title="edit">edit</a>
+          <a href="#" title="history">revision history</a>
+          <button title="delete" type="submit" name="action-delete" value="">delete</button>
+        </div>
+      </header>
+      <div class="content">
+        <div class="description">
+          <p class="byline hcard">
+            <!-- if imported -->
+            Imported by [username] from [source]
+            on <time pubdate>[timestamp]</time>
+            <!-- end if -->
+            <!-- if created manually -->
+            Created by [username]
+            on <time pubdate>[timestamp]</time>
+            <!-- end if -->
+            <!-- if mapped -->
+            Mapped by [username]
+            on <time class="mapped">[timestamp]</time>
+            <!-- end if -->
+          </p>
+          <p class="notes">Notes about this address</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- include "includes/listnav.html" -->
+
+  </form>
+</section>
+
+<section id="street_map">
+  <figure class="street_map"><img src="http://dummyimage.com/320x192/ccc/666&text=street_map"></figure>
+</section>
+
+<section id="parcel_layer">
+  <figure class="parcel_layer"><img src="http://dummyimage.com/320x192/ccc/666&text=parcel_layer"></figure>
+    <!-- on hover over parcel -->
+    <div class="parcel_description">
+      <ul>
+        <li class="parcelID">parcel ID: [parcel ID]</li>
+        <li class="nominal_address">nominal address: [nominal address]</li>
+        <li class="plat_lot">plat-lot: [plat-lot]</li>
+        <li class="owner">owner: [owner]</li>
+        <li class="land_use">land use: [land use]</li>
+      </ul>
+    </div>
+</section>
+
+<section id="import_export">
+
+  <article id="import_addresses" class="details">
+    <header class="summary">
+      <a href="#" title="import_addresses">import addresses (CSV)</a>
+    </header>
+    <div class="content">
+      <input type="file" name="import_addresses" value="">
+      <button title="import_addresses" type="submit" name="action-import" value="">import</button>
+    </div>
+  </article>
+
+  <article id="import_parcel_layer" class="details">
+    <header class="summary">
+      <a href="#" title="import_parcel_layer">import parcel layer (shapefile/geojson)</a>
+    </header>
+    <div class="content">
+      <input type="file" name="input_parcel_layer" value="">
+      <button title="import_parcel_layer" type="submit" name="action-import" value="">import</button>
+    </div>
+  </article>
+
+  <article id="export_addresses" class="details">
+    <header class="summary">
+      <a href="#" title="export_addresses">export</a>
+    </header>
+    <div class="content">
+      <select name="export_addresses">
+        <option value="XLS">XLS</option>
+        <option value="KML">KML</option>
+        <option value="CSV">CSV</option>
+        <option value="SHP">SHP</option>
+      </select>
+      <button title="export_addresses" type="submit" name="action-export" value="">export addresses</button>
+    </div>
+  </article>
+
+</section>
+
+{% endblock content %}

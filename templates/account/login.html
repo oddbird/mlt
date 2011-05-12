@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section id="login">
+  <h2>Welcome to ProvPlan's Master Lookup Table!</h2>
+  <form method="POST">
+    <ul>
+      <li>
+        <label for="id_username">username</label>
+        <input type="username" name="username" required placeholder="username" id="id_username" maxlength="255">
+      </li>
+      <li>
+        <label for="id_password">password</label>
+        <input type="password" name="password" required placeholder="password" id="id_password" maxlength="255">
+      </li>
+    </ul>
+    <div class="form-actions">
+      <button type="submit">login</button>
+    </div>
+  </form>
+</section>
+
+{% endblock content %}
