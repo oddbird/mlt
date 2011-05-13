@@ -1,0 +1,55 @@
+<section class="controls">
+  <h3>Controls</h3>
+  <ul class="manageform">
+    <li class="create"><a href="#">add address</a></li>
+    <li class="selectall"><a href="#">select all</a></li>
+    <li class="selectnone"><a href="#">select none</a></li>
+  </ul>
+  <ul class="import_export">
+    <li class="import_addresses" class="details">
+      <a href="#">import addresses</a>
+      {% block import_addresses %}
+      <div class="content" id="import_addresses">
+        <p class="note">import a CSV file of addresses.</p>
+        <input type="file" name="import_addresses" value="">
+        <p class="control">
+          <a href="#">cancel</a> or
+          <button title="import_addresses" type="submit" name="action-import" value="">import</button>
+        </p>
+      </div>
+      {% endblock import_addresses %}
+    </li>
+
+    <li class="import_parcel_layer" class="details">
+      <a href="#" class="summary">import parcel layer</a>
+      {% block import_parcel_layer %}
+      <div class="content" id="import_parcel_layer">
+        <p class="note">Import a shapefile or geojson parcel layer</p>
+        <input type="file" name="input_parcel_layer" value="">
+        <p class="control">
+          <a href="#">cancel</a> or
+          <button title="import_parcel_layer" type="submit" name="action-import" value="">import</button>
+        </p>
+      </div>
+      {% endblock import_parcel_layer %}
+    </li>
+
+    <li id="export_addresses" class="details">
+      <a href="#" class="summary">export addresses</a>
+      {% block export_addresses %}
+      <div class="content" id="export_addresses">
+        <select name="export_addresses">
+          <option value="XLS">XLS</option>
+          <option value="KML">KML</option>
+          <option value="CSV">CSV</option>
+          <option value="SHP">SHP</option>
+        </select>
+        <p class="control">
+          <a href="#">cancel</a> or
+          <button title="export_addresses" type="submit" name="action-export" value="">export addresses</button>
+        </p>
+      </div>
+      {% endblock export_addresses %}
+    </li>
+  </ul>
+</section>

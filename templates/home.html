@@ -1,16 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
+<section id="addresstable">
+  <h2>Address Table</h2>
+  <form method="POST" id="addressform">
 
-<section id="adresstable">
-  <h2>Master Lookup Table</h2>
-  <a href="#" class="create">add address</a>
-  <a href="#" class="selectall">select all</a>
-  <a href="#" class="selectnone">select none</a>
+    {% include "includes/filter.html" %}
+    {% include "includes/controls.html" %}
 
-  {% include "includes/filter.html" %}
-
-  <form method="POST" class="addresstable">
     <nav class="listordering">
       <h3 class="navhead">List Ordering</h3>
       <ul>
@@ -89,66 +86,33 @@
       </div>
     </article>
 
-    <!-- include "includes/listnav.html" -->
+    {% include "includes/listnav.html" %}
+    {% include "includes/controls_redux.html" %}
 
   </form>
 </section>
+<figure id="street_map">
+  <figcaption>street map</figcaption>
+  <img src="http://dummyimage.com/320x192/ccc/666&text=street_map">
+</figure>
 
-<section id="street_map">
-  <figure class="street_map"><img src="http://dummyimage.com/320x192/ccc/666&text=street_map"></figure>
+<figure class="parcel_layer">
+  <figcaption>parcel layer</figcaption>
+  <img src="http://dummyimage.com/320x192/ccc/666&text=parcel_layer">
+</figure>
+
+<section id="parcels">
+  <h2>Parcels</h2>
+  <article class="parcel_description">
+    <h3 class="adr">[nominal address]</h3>
+    <ul>
+      <li class="parcelID">parcel ID: [parcel ID]</li>
+      <li class="plat_lot">plat-lot: [plat-lot]</li>
+      <li class="owner">owner: [owner]</li>
+      <li class="land_use">land use: [land use]</li>
+    </ul>
+  </article>
 </section>
 
-<section id="parcel_layer">
-  <figure class="parcel_layer"><img src="http://dummyimage.com/320x192/ccc/666&text=parcel_layer"></figure>
-    <!-- on hover over parcel -->
-    <div class="parcel_description">
-      <ul>
-        <li class="parcelID">parcel ID: [parcel ID]</li>
-        <li class="nominal_address">nominal address: [nominal address]</li>
-        <li class="plat_lot">plat-lot: [plat-lot]</li>
-        <li class="owner">owner: [owner]</li>
-        <li class="land_use">land use: [land use]</li>
-      </ul>
-    </div>
-</section>
-
-<section id="import_export">
-
-  <article id="import_addresses" class="details">
-    <header class="summary">
-      <a href="#" title="import_addresses">import addresses (CSV)</a>
-    </header>
-    <div class="content">
-      <input type="file" name="import_addresses" value="">
-      <button title="import_addresses" type="submit" name="action-import" value="">import</button>
-    </div>
-  </article>
-
-  <article id="import_parcel_layer" class="details">
-    <header class="summary">
-      <a href="#" title="import_parcel_layer">import parcel layer (shapefile/geojson)</a>
-    </header>
-    <div class="content">
-      <input type="file" name="input_parcel_layer" value="">
-      <button title="import_parcel_layer" type="submit" name="action-import" value="">import</button>
-    </div>
-  </article>
-
-  <article id="export_addresses" class="details">
-    <header class="summary">
-      <a href="#" title="export_addresses">export</a>
-    </header>
-    <div class="content">
-      <select name="export_addresses">
-        <option value="XLS">XLS</option>
-        <option value="KML">KML</option>
-        <option value="CSV">CSV</option>
-        <option value="SHP">SHP</option>
-      </select>
-      <button title="export_addresses" type="submit" name="action-export" value="">export addresses</button>
-    </div>
-  </article>
-
-</section>
 
 {% endblock content %}
