@@ -66,10 +66,11 @@ form
   height: rhythm(1.5,14px)
   vertical-align: top
   outline: 0
+  border-color: $mid
 
 .input
   &[disabled]
-    background-color: #eee
+    background-color: $light
     color: lighten($base,15)
 
   &:valid
@@ -172,6 +173,7 @@ input
     +trailer(.5)
   label
     +columns($l,$c)
+    +padding-leader(.25)
   input
     +columns($i,$c)
     +omega($c)

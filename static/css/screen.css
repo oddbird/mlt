@@ -166,9 +166,9 @@ form > ul > li { *zoom: 1; }
 form > ul > li:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
 /* Text Inputs --------------------------------------------------------------- */
-.textinput, textarea, select:not([multiple]), input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="tel"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="time"], input[type="number"], input[type="search"], input[type="color"] { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 1em; line-height: 1.618em; border-style: solid; border-width: 0.071em; padding: 0.333em; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; width: 100%; height: 2.427em; vertical-align: top; outline: 0; }
+.textinput, textarea, select:not([multiple]), input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="tel"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="time"], input[type="number"], input[type="search"], input[type="color"] { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 1em; line-height: 1.618em; border-style: solid; border-width: 0.071em; padding: 0.333em; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; width: 100%; height: 2.427em; vertical-align: top; outline: 0; border-color: #949494; }
 
-.input[disabled], textarea[disabled], select[disabled] { background-color: #eeeeee; color: #727272; }
+.input[disabled], textarea[disabled], select[disabled] { background-color: #dddddd; color: #727272; }
 .input:valid, textarea:valid, select:valid { -moz-box-shadow: inset rgba(0, 0, 255, 0.25) 0 0 0.375em; -webkit-box-shadow: inset rgba(0, 0, 255, 0.25) 0 0 0.375em; -o-box-shadow: inset rgba(0, 0, 255, 0.25) 0 0 0.375em; box-shadow: inset rgba(0, 0, 255, 0.25) 0 0 0.375em; }
 .input:valid:focus, textarea:valid:focus, select:valid:focus, .input:valid.hadfocus, textarea:valid.hadfocus, select:valid.hadfocus { -moz-box-shadow: inset rgba(0, 128, 0, 0.25) 0 0 0.375em; -webkit-box-shadow: inset rgba(0, 128, 0, 0.25) 0 0 0.375em; -o-box-shadow: inset rgba(0, 128, 0, 0.25) 0 0 0.375em; box-shadow: inset rgba(0, 128, 0, 0.25) 0 0 0.375em; }
 .no-boxshadow .input:valid:focus, .no-boxshadow textarea:valid:focus, .no-boxshadow select:valid:focus, .no-boxshadow .input:valid.hadfocus, .no-boxshadow textarea:valid.hadfocus, .no-boxshadow select:valid.hadfocus { background-color: rgba(0, 128, 0, 0.25); }
@@ -221,10 +221,9 @@ h1 { display: inline; float: left; width: 36.842%; margin-right: 1.053%; }
 
 /* Login --------------------------------------------------------------------- */
 #login { clear: both; padding-left: 25.263%; padding-right: 25.263%; }
-#login li { overflow: hidden; *zoom: 1; margin-bottom: 0.809em; }
-#login label { display: inline; float: left; width: 31.915%; margin-right: 2.128%; }
-#login input { display: inline; float: left; width: 65.957%; margin-right: 2.128%; display: inline; float: right; margin-right: 0; #margin-left: -1em; }
 #login form { margin-top: 1.618em; }
+#login label { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
+#login li { margin-bottom: 0.809em; }
 
 /* Modules ------------------------------------------------------------------- */
 /* Filtering ----------------------------------------------------------------- */
