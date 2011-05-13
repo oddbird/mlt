@@ -162,3 +162,17 @@ input
 .errorlist
   +no-style-list
   color: red
+
+.form-actions
+  text-align: right
+
+=inline-form($l,$i,$c:false)
+  li
+    +clearfix
+    +trailer(.5)
+  label
+    +columns($l,$c)
+  input
+    +columns($i,$c)
+    +omega($c)
+

@@ -2,12 +2,12 @@
 
 @import defaults
 
-// 992 Grid ------------------------------------------------------------------
-// (24*2em + 23*1em + 2em) = 73em = 1168px
+// 1382 Grid -----------------------------------------------------------------
+// (24*3em + 23*1em + 2em) = 97em = 1552px
 // 48px + 16px x 24px
 
 $total-cols         : 24
-$col-width          : 2em
+$col-width          : 3em
 $gutter-width       : 1em
 $side-gutter-width  : $gutter-width
 
@@ -46,7 +46,16 @@ h1
   small
     font: inherit
 
-/* Modules --------------------------------------------------------------
+/* Login ---------------------------------------------------------------------
+
+#login
+  +full(24)
+  +pad(6,6,24)
+  +inline-form(4,8,12)
+  form
+    +leader
+
+/* Modules -------------------------------------------------------------------
 
 @import modules/filter
 @import modules/managelists
