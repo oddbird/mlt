@@ -17,19 +17,36 @@ body > div
   +container
   +susy-grid-background
 
-header[role="banner"]
+[role="banner"]
   +full
+  +clearfix
   +padding-leader
 
-div[role="main"]
+h1
+  +columns(9,24)
+
+[role="navigation"]
+  +columns(6,24)
+
+.meta
+  +columns(9,24)
+  +omega(24)
+  text-align: right
+
+[role="main"]
   +full
   +pie-clearfix
   +h-borders(1px,1,$base-font-size,dotted)
 
-footer[role="contentinfo"]
+[role="contentinfo"]
   +full
   +adjust-font-size-to(12px)
   +trailer(1,12px)
   font-style: italic
   small
     font: inherit
+
+/* Modules --------------------------------------------------------------
+
+@import modules/filter
+@import modules/managelists

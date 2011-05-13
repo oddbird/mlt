@@ -79,31 +79,19 @@
 {% block page %}
 
   <header role="banner">
-    <div class="container">
-      <a href="#main">skip to main content</a>
+    <h1><a href="/" rel="home">Master Lookup Table</a></h1>
 
-      <h1><a href="/" rel="home">Master Lookup Table</a></h1>
+    <nav role="navigation">
+      <h2 class="navhead">Primary Navigation</h2>
+      <ul>
+          <li class="history"><a href="/history/">Revision History</a></li>
+      </ul>
+    </nav>
 
-      <nav role="navigation">
-        <h2 class="navhead">Primary Navigation</h2>
-        <ul>
-            <li class="history"><a {% if request.user %}href="/history/"{% else %}href="/"{% endif %}>Revision History</a></li>
-        </ul>
-      </nav>
-
-      <nav class="meta">
-        <h2 class="navhead">Account Navigation</h2>
-        <ul>
-          {% block meta-user %}
-            <li>
-              Welcome {{ request.user.firstName }}
-              [<a href="#">Sign Out</a>]
-            </li>
-          {% endblock %}
-        </ul>
-      </nav>
-
-    </div>
+    <nav class="meta">
+      <h2 class="navhead">Account Navigation</h2>
+      <p>Welcome firstName [<a href="#">Sign Out</a>]</p>
+    </nav>
   </header>
 
   <div id="main" role="main">

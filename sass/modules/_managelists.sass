@@ -1,0 +1,100 @@
+/* Lists --------------------------------------------------------------
+
+.managelist
+  +full(21)
+  margin: 0
+  button
+    +button-reset
+  .item
+    +clearfix
+    clear: both
+
+  .summary, .content
+    +pie-clearfix
+    +padding-leader(.25)
+    +padding-trailer(.25)
+  .summary
+    p, h3, h4
+      margin-bottom: 0
+    #{$focus}
+      outline: 0
+      background: rgba($light,.5)
+  .open
+    > .summary
+      background: $light
+  .content
+    background: $light
+  .id
+    text-align: right
+
+.sortlinks
+  #{$link}
+    display: block
+    position: relative
+    &::after
+      +replace-text-with-dimensions('ui/angle_up.png')
+      +inline-block
+      content: " "
+      margin-left: .4em
+      background-image: none
+      vertical-align: baseline
+  #{$focus}
+    color: $accent
+    &::after
+      background-image: image-url('ui/angle_up.png')
+  &.asc
+    #{$link}
+      &::after
+        background-image: image-url('ui/angle_up.png')
+    #{$focus}
+      &::after
+        background-image: image-url('ui/angle_down.png')
+  &.desc
+    #{$link}
+      &::after
+        background-image: image-url('ui/angle_down.png')
+    #{$focus}
+      &::after
+        background-image: image-url('ui/angle_up.png')
+
+.listordering
+  +clearfix
+  +rhythm(0,.25,.25,0)
+  background: $light
+  font-weight: bold
+  ul
+    +no-style-list
+  a
+    @extend .sortlinks
+
+.listnav
+  +pie-clearfix
+  +rhythm(0,.25,.25,.5)
+  +hpadding(.5em)
+  clear: both
+  margin-top: -1px
+  background: $light
+  white-space: nowrap
+  p, ul
+    +reset-box-model
+  .location, .perpage
+    +columns(6,24)
+  .perpage
+    +omega(24)
+    text-align: right
+    strong
+      font-weight: normal
+  .perpage ul, .pagination
+    +inline-block-list
+    display: inline
+    font-style: normal
+    li
+      vertical-align: baseline
+      + li::before
+        content: "| "
+        color: #ccc
+  .pagination
+    +columns(12,24)
+    text-align: center
+  .current
+    font-weight: bold

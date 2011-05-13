@@ -58,7 +58,7 @@ html
   -ms-text-size-adjust: 100%
 
 body
-  @extend .serif
+  @extend .sans
   +baseline-grid-background
   color: $base
 
@@ -177,6 +177,13 @@ pre
 blockquote
   padding: rhythm()
   font-style: italic
+
+nav
+  p
+    margin: 0
+
+.navhead
+  +gone
 
 /* Interactive ---------------------------------------------------------------
 
