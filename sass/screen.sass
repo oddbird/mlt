@@ -38,6 +38,7 @@ h1
   +full
   +pie-clearfix
   +h-borders(1px,1,$base-font-size,dotted)
+  position: relative
 
 [role="contentinfo"]
   +full
@@ -61,5 +62,43 @@ h1
 
 /* Modules -------------------------------------------------------------------
 
-@import modules/filter
-@import modules/managelists
+//@import modules/filter
+//@import modules/managelists
+
+#filter, .actions
+  display: none
+
+/* Address Table -------------------------------------------------------------
+
+#addresstable
+  h2
+    +gone
+
+  &.list
+    +columns(6,24)
+  &.table
+    +columns(12,24)
+
+
+/* Map -----------------------------------------------------------------------
+
+#map
+  background: $dark
+  color: $light
+  min-height: rhythm(12)
+
+  &.list
+    position: absolute
+    top: 0
+    right: 0
+    bottom: 0
+    left: columns(6,24) + gutter(24)
+    width: columns(18,24)
+
+  &.table
+    position: absolute
+    top: 0
+    right: 0
+    bottom: 0
+    left: columns(12,24) + gutter(24)
+    width: columns(12,24)

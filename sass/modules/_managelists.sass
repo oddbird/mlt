@@ -1,31 +1,11 @@
 /* Lists --------------------------------------------------------------
 
 .managelist
-  +full(21)
+  +full(24)
   margin: 0
-  button
-    +button-reset
   .item
     +clearfix
     clear: both
-
-  .summary, .content
-    +pie-clearfix
-    +padding-leader(.25)
-    +padding-trailer(.25)
-  .summary
-    p, h3, h4
-      margin-bottom: 0
-    #{$focus}
-      outline: 0
-      background: rgba($light,.5)
-  .open
-    > .summary
-      background: $light
-  .content
-    background: $light
-  .id
-    text-align: right
 
 .sortlinks
   #{$link}
@@ -98,3 +78,6 @@
     text-align: center
   .current
     font-weight: bold
+
+.actions
+  display: none

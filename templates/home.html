@@ -1,19 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section id="addresstable">
+<section id="addresstable" class="{% block listview %}{% endblock listview %}">
   <h2>Address Table</h2>
   <form method="POST" id="addressform">
 
     {% include "includes/filter.html" %}
-    {% include "includes/controls.html" %}
+    {% include "includes/actions.html" %}
+    {% include "includes/listnav.html" %}
 
     <nav class="listordering">
-      <h3 class="navhead">List Ordering</h3>
+      <h3>sort by</h3>
       <ul>
-        <li class="byrow">
-          <a href="#">row</a>
-        </li>
         <li class="bystreet">
           <a href="#">street</a>
         </li>
@@ -41,78 +39,67 @@
       </ul>
     </nav>
 
-    <article id="address-id" class="details address">
-      <header class="summary">
-        <p class="selected">
-          <input type="checkbox" name="selected" value="">
-        </p>
-        <p class="row">1</p>
-        <p class="street">10 Davol Sq</p>
-        <p class="city">Providence</p>
-        <p class="state">RI</p>
-        <p class="zip">02909</p>
-        <p class="multiple_units">
-          <input type="checkbox" name="multiple_units" value="">
-        </p>
-        <p class="complex"></p>
+    <div class="managelist">
+      <article id="address-id" class="details address">
+        <input type="checkbox" id="select_id" name="select" value="">
+        <h3 class="adr">
+          <label for="select_id">
+            <span class="street-address">10 Davol Sq</span>
+            <span class="locality">Providence</span>,
+            <abbr class="region" title ="rhode island">RI</abbr>
+            <span class="postal-code">02909</span>
+          </label>
+        </h3>
         <p class="propertyID">111-222-3333</p>
-        <p class="needs_review">
-          <input type="checkbox" name="needs_review" value="">
+
+        <p class="complex">
+          <input type="checkbox" id="complex_id" name="complex_id" value="">
+          <label for="complex_id">multiple units</label>
+          <span class="name">name of complex</span>
         </p>
-        <div class="controls">
-          <a href="#" title="edit">edit</a>
-          <a href="#" title="history">revision history</a>
-          <button title="delete" type="submit" name="action-delete" value="">delete</button>
-        </div>
-      </header>
-      <div class="content">
-        <div class="description">
-          <p class="byline hcard">
-            <!-- if imported -->
-            Imported by [username] from [source]
-            on <time pubdate>[timestamp]</time>
-            <!-- end if -->
-            <!-- if created manually -->
-            Created by [username]
-            on <time pubdate>[timestamp]</time>
-            <!-- end if -->
-            <!-- if mapped -->
-            Mapped by [username]
-            on <time class="mapped">[timestamp]</time>
-            <!-- end if -->
+
+        <div class="byline">
+          <!-- if imported -->
+          <p class="hcard">
+            Imported by <cite class="fn">[username]</cite> from [source]
+            on <time pubdate>[timestamp]</time>.
+            <!-- elseif created manually
+              Created by <cite class="fn">[username]</cite>
+              on <time pubdate>[timestamp]</time>
+            -->
           </p>
-          <p class="notes">Notes about this address</p>
+          <!-- end if -->
+          <!-- if mapped -->
+          <p class="hcard">
+            Mapped by [username]
+            on <time class="mapped">[timestamp]</time>.
+          </p>
+          <!-- end if -->
         </div>
-      </div>
-    </article>
+
+        <p class="notes">Notes about this address</p>
+
+        <ul class="controls">
+          <li><a href="#" title="history">view history</a></li>
+          <li><a href="#" title="edit">edit</a></li>
+          <li><button title="delete" type="submit" name="action-delete" value="">delete</button></li>
+          <li class="approve">
+            <input type="checkbox" id="approve" name="approve" value="">
+            <label id="approved" for="approve">approve</label>
+          </li>
+        </ul>
+      </article>
+    </div>
 
     {% include "includes/listnav.html" %}
-    {% include "includes/controls_redux.html" %}
+    {% include "includes/actions_redux.html" %}
 
   </form>
 </section>
-<figure id="street_map">
-  <figcaption>street map</figcaption>
-  <img src="http://dummyimage.com/320x192/ccc/666&text=street_map">
+
+<figure id="map" class="{% block mapview %}{% endblock mapview %}">
+  <figcaption>map</figcaption>
+  <div class="content"></div>
 </figure>
-
-<figure class="parcel_layer">
-  <figcaption>parcel layer</figcaption>
-  <img src="http://dummyimage.com/320x192/ccc/666&text=parcel_layer">
-</figure>
-
-<section id="parcels">
-  <h2>Parcels</h2>
-  <article class="parcel_description">
-    <h3 class="adr">[nominal address]</h3>
-    <ul>
-      <li class="parcelID">parcel ID: [parcel ID]</li>
-      <li class="plat_lot">plat-lot: [plat-lot]</li>
-      <li class="owner">owner: [owner]</li>
-      <li class="land_use">land use: [land use]</li>
-    </ul>
-  </article>
-</section>
-
 
 {% endblock content %}
