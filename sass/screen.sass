@@ -90,6 +90,8 @@ h1
       +clearfix
       +padding-leader(.5)
       +trailing-border(1px,.5)
+      margin-right: - $gutter-width
+      padding-right: $gutter-width
       border-color: $light
 
   .controls
@@ -98,7 +100,7 @@ h1
   [id^="select_"]
     +gone
     &:checked + .content
-      background: $light
+      background: rgba($light,.5)
 
   .header
     +clearfix
@@ -149,5 +151,6 @@ h1
   right: 0
   bottom: 0
   left: fixed(8) + $gutter-width
+  padding: rhythm(.5)
   background: $dark
   color: $light

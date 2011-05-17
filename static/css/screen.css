@@ -354,18 +354,20 @@ h1 a:link, h1 a:visited { display: block; }
 .actions { display: none; }
 
 /* List ---------------------------------------------------------------------- */
-.managelist { clear: both; margin: 0; }
+.managelist { clear: both; *zoom: 1; overflow: visible; margin: 0; }
+.managelist:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
-.address { overflow: hidden; *zoom: 1; clear: both; }
+.address { *zoom: 1; clear: both; }
+.address:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
 /* Address Table ------------------------------------------------------------- */
 #addresstable { display: inline; float: left; width: 31em; margin-right: 1em; counter-reset: address; }
 #addresstable h2 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #addresstable .address { counter-increment: address; }
-#addresstable .address .content { overflow: hidden; *zoom: 1; padding-top: 0.809em; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 0.726em; border-color: #dddddd; }
+#addresstable .address .content { overflow: hidden; *zoom: 1; padding-top: 0.809em; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 0.726em; margin-right: -1em; padding-right: 1em; border-color: #dddddd; }
 #addresstable .controls { display: none; }
 #addresstable [id^="select_"] { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
-#addresstable [id^="select_"]:checked + .content { background: #dddddd; }
+#addresstable [id^="select_"]:checked + .content { background: rgba(221, 221, 221, 0.5); }
 #addresstable .header { overflow: hidden; *zoom: 1; display: block; }
 #addresstable .adr { display: inline; float: left; width: 48.387%; margin-right: 3.226%; padding-left: 12.903%; margin-bottom: 0.809em; position: relative; }
 #addresstable .street-address { font-size: 1.618em; line-height: 1em; display: block; }
@@ -377,4 +379,4 @@ h1 a:link, h1 a:visited { display: block; }
 #addresstable summary { display: inline; float: left; width: 35.484%; margin-right: 3.226%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; }
 
 /* Map ----------------------------------------------------------------------- */
-#map { position: absolute; top: 0; right: 0; bottom: 0; left: 32em; background: #4c4c4c; color: #dddddd; }
+#map { position: absolute; top: 0; right: 0; bottom: 0; left: 32em; padding: 0.809em; background: #4c4c4c; color: #dddddd; }
