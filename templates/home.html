@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section id="addresstable" class="{% block listview %}{% endblock listview %}">
+<section id="addresstable">
   <h2>Address Table</h2>
   <form method="POST" id="addressform">
 
@@ -98,7 +98,7 @@
   </form>
 </section>
 
-<figure id="map" class="{% block mapview %}{% endblock mapview %}">
+<figure id="map">
   <figcaption>map</figcaption>
   <div class="content"></div>
 </figure>
