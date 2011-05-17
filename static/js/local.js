@@ -7,6 +7,5 @@ $(function() {
             return false;
         }
     );
-    // $('details').html5accordion('summary');
-    // $('.details').html5accordion('.summary');
+    $('details').html5accordion('summary');
 });
