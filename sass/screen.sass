@@ -82,20 +82,49 @@ h1
 
   h2
     +gone
+  button
+    +no-style-button
 
   .address
     counter-increment: address
+    position: relative
+    #{$focus}
+      .controls
+        +opacity(1)
 
     .content
       +clearfix
-      +padding-leader(.5)
-      +trailing-border(1px,.5)
+      +padding-leader(1)
+      +trailing-border(1px,1.5)
       margin-right: - $gutter-width
       padding-right: $gutter-width
       border-color: $light
 
   .controls
-    display: none
+    +opacity(0)
+    +no-style-list
+    +pie-clearfix
+    position: absolute
+    right: 0
+    bottom: 0
+    left: 0
+    margin-right: - $gutter-width
+    padding-right: $gutter-width
+    background: rgba($light,.5)
+    border-top: 1px solid rgba($light,.75)
+    li
+      +columns(2,8)
+      &:nth-child(4n)
+        +omega(8)
+
+    [title="history"]
+      +icon('ui/clock.png')
+    [title="edit"]
+      +icon('ui/pencil.png')
+    [title="delete"]
+      +icon('ui/trash.png')
+    [title="approve"]
+      +icon('ui/check.png')
 
   [id^="select_"]
     +gone
@@ -128,7 +157,6 @@ h1
     font-weight: bold
 
   .complex
-    +no-style-button
     +box-sizing(border-box)
     +columns(4,8)
     margin:
@@ -141,6 +169,27 @@ h1
     +columns(3,8)
     +omega(8)
     text-align: right
+    &::before
+      content: "view "
+    &::after
+      content: " »"
+
+  .open
+    summary
+      +trailer(.5)
+      &::before
+        content: "« hide "
+      &::after
+        content: ""
+
+  .byline, .notes
+    +full(8)
+    +prefix(1,8)
+    +trailer(.5)
+    p
+      margin: 0
+    &:last-child
+      margin: 0
 
 
 /* Map -----------------------------------------------------------------------

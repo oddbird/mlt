@@ -56,7 +56,7 @@
           <button class="complex" title="multiple units">single unit</button>
 
           <details>
-            <summary>view details &raquo;</summary>
+            <summary>details</summary>
             <div class="byline">
               <!-- if imported -->
               <p class="hcard">
@@ -70,7 +70,7 @@
               <!-- end if -->
               <!-- if mapped -->
               <p class="hcard">
-                Mapped by [username]
+                Mapped by <cite class="fn">[username]</cite>
                 on <time class="mapped">[timestamp]</time>.
               </p>
               <!-- end if -->
@@ -80,13 +80,10 @@
           </details>
 
           <ul class="controls">
-            <li><a href="#" title="history">view history</a></li>
+            <li><a href="#" title="history">history</a></li>
             <li><a href="#" title="edit">edit</a></li>
             <li><button title="delete" type="submit" name="action-delete" value="">delete</button></li>
-            <li class="approve">
-              <input type="checkbox" id="approve" name="approve" value="">
-              <label id="approved" for="approve">approve</label>
-            </li>
+            <li><button title="approve" type="submit" name="action-approve" value="">approve</button></li>
           </ul>
         </div>
       </article>

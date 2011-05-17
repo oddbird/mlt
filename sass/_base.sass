@@ -93,3 +93,10 @@ $grid-background-gutter-color   : rgba(0, 0, 0, 0)
   +float(left)
   width: fixed($n)
   margin-right: $gutter-width
+
+=icon($image)
+  background:
+    image: image-url($image)
+    position: $smallpx/2
+    repeat: no-repeat
+  padding-left: image-width($image) + $smallpx
