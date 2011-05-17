@@ -3,11 +3,11 @@
 @import defaults
 
 // 1452px Grid -----------------------------------------------------------------
-// (24*5em + 23*1em + 2em) = 127em = 1524px
+// (29*3em + 28*1em + 2em) = 117em = 1404px
 // 60px + 12px x 20px
 
-$total-cols         : 21
-$col-width          : 5em
+$total-cols         : 29
+$col-width          : 3em
 $gutter-width       : 1em
 $side-gutter-width  : $gutter-width
 
@@ -23,16 +23,22 @@ body > div
   +padding-leader(.5)
 
 h1
-  +columns(6,21)
+  +fixed-columns(8)
+  a
+    #{$link}
+      display: block
+
+.nav
+  +clearfix
+  margin-left: fixed(8) + gutter-width()
 
 [role="navigation"]
-  +columns(3,21)
+  +columns(11,21)
   +omega(21)
   text-align: right
 
 .meta
-  +columns(12,21)
-  text-align: right
+  +columns(10,21)
 
 [role="main"]
   +full
@@ -53,8 +59,8 @@ h1
 /* Login ---------------------------------------------------------------------
 
 #login
-  +full(21)
-  +pad(6,6,21)
+  +full(29)
+  +pad(6,6,29)
   form
     +leader
   label
@@ -70,29 +76,21 @@ h1
 /* Address Table -------------------------------------------------------------
 
 #addresstable
+  +fixed-columns(8)
+  +column-grid-background(8,$col-width,$gutter-width,0em,$force-fluid:true)
+  counter-reset: address
+
   h2
     +gone
 
-  &.table
-    +columns(12,21)
-  &.list
-    +fixed-columns(5)
-    max-width: columns(10,21)
-
-.list
-  counter-reset: address
   .address
     counter-increment: address
 
     .content
       +clearfix
-      +leading-border(1px,1)
-      +padding-trailer(.5)
+      +padding-leader(.5)
+      +trailing-border(1px,.5)
       border-color: $light
-
-    &:last-child
-      .content
-        +trailing-border(1px,.5)
 
   .controls
     display: none
@@ -102,72 +100,54 @@ h1
     &:checked + .content
       background: $light
 
+  .header
+    +clearfix
+    display: block
+
   .adr
-    +box-sizing(border-box)
-    +columns(3,5)
+    +columns(4,8)
+    +prefix(1,8)
     +trailer(.5)
-    padding-left: rhythm($med)
+    position: relative
   .street-address
     +adjust-font-size-to($medpx)
     display: block
     &::before
-      +inline-block
+      position: absolute
+      left: 0
       content: counter(address, upper-latin) "."
-      width: rhythm($med,$medpx)
-      margin-left: - rhythm($med,$medpx)
-      vertical-align: baseline
+      width: columns(1,5)
+      text-align: right
 
   .id
-    +columns(2,5)
-    +omega(5)
+    +columns(3,8)
+    +omega(8)
     text-align: right
     font-weight: bold
 
   .complex
+    +no-style-button
     +box-sizing(border-box)
-    +columns(3,5)
-    padding-left: rhythm($med)
-    label
-      +inline-block
-      padding-left: 1.5em
-      background: image-url('ui/house.png') no-repeat scroll left
-      vertical-align: baseline
-    input
-      +gone
-      &:not(:checked)
-        ~ span
-          display: none
-      &:checked
-        + label
-          +hide-text
-          width: 1.5em
-          padding: 0
-          background: image-url('ui/bldg.png') no-repeat scroll left
-        ~ span
-          +inline-block
+    +columns(4,8)
+    margin:
+      left: columns(1,8) + gutter(8)
+      bottom: 0
+    padding-left: 1.5em
+    background: image-url('ui/house.png') no-repeat scroll left
 
   summary
-    +columns(2,5)
-    +omega(5)
+    +columns(3,8)
+    +omega(8)
     text-align: right
 
 
 /* Map -----------------------------------------------------------------------
 
 #map
+  position: absolute
+  top: 0
+  right: 0
+  bottom: 0
+  left: fixed(8) + $gutter-width
   background: $dark
   color: $light
-
-  &.list
-    position: absolute
-    top: 0
-    right: 0
-    bottom: 0
-    left: fixed(5) + $gutter-width
-
-  &.table
-    position: absolute
-    top: 0
-    right: 0
-    bottom: 0
-    left: columns(12,21) + gutter(21)

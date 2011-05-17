@@ -124,12 +124,17 @@ input
   color: inherit
   font: inherit
 
+=no-style-button
+  +button-reset
+  text-align: left
+  &:hover, &:focus
+    +box-shadow(none)
+
+
 button,  input[type="reset"], input[type="submit"], input[type="button"], input[type="image"]
   +button-reset
 
 .button
-  @extend .allcaps
-  +transition((box-shadow),300ms)
   +adjust-font-size-to(12px,.5)
   +border-radius(1em)
   +background($alt)

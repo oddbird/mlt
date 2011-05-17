@@ -22,9 +22,9 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 
 .mono, pre, code, tt { font-family: "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, Courier, monospace, sans-serif; }
 
-.caps, .allcaps, h1, h2, caption, .button, button, input[type="reset"], input[type="submit"], input[type="button"], .smallcaps, #filter h5 { letter-spacing: 0.1em; }
+.caps, .allcaps, h1, h2, caption, .smallcaps, #filter h5 { letter-spacing: 0.1em; }
 
-.allcaps, h1, h2, caption, .button, button, input[type="reset"], input[type="submit"], input[type="button"] { text-transform: uppercase; }
+.allcaps, h1, h2, caption { text-transform: uppercase; }
 
 .smallcaps, #filter h5 { font-variant: small-caps; }
 
@@ -74,7 +74,7 @@ sup { top: -0.5em; }
 
 sub { bottom: -0.25em; }
 
-abbr, acronym { border-bottom: 1px dotted; cursor: help; }
+abbr[title], acronym[title] { border-bottom: 1px dotted; cursor: help; }
 
 ins { text-decoration: underline; }
 
@@ -188,7 +188,7 @@ input[type="text"].placeholder, input[type="password"].placeholder, input[type="
 button, input[type="reset"], input[type="submit"], input[type="button"], input[type="image"] { margin: 0; padding: 0; border: 0; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; -moz-border-radius: 0; -webkit-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; -khtml-border-radius: 0; border-radius: 0; text-shadow: none; overflow: visible; width: auto; vertical-align: baseline; background: none; color: inherit; font: inherit; }
 button, input[type="reset"], input[type="submit"], input[type="button"], input[type="image"] { *display: inline; }
 
-.button, button, input[type="reset"], input[type="submit"], input[type="button"] { -moz-transition-property: box-shadow; -webkit-transition-property: box-shadow; -o-transition-property: box-shadow; transition-property: box-shadow; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; font-size: 1em; line-height: 0.809em; -moz-border-radius: 1em; -webkit-border-radius: 1em; -o-border-radius: 1em; -ms-border-radius: 1em; -khtml-border-radius: 1em; border-radius: 1em; background: #005498; background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(221, 221, 221, 0.25)), color-stop(100%, rgba(221, 221, 221, 0))), #005498; background: -webkit-linear-gradient(top, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; background: -moz-linear-gradient(top, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; background: -o-linear-gradient(top, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; background: linear-gradient(top, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; border-style: solid; border-width: 0.083em; padding: 0.321em; padding-left: 1.618em; padding-right: 1.618em; text-shadow: #4c4c4c 1px 1px 0; border-color: #4c4c4c; vertical-align: top; cursor: pointer; color: #dddddd; font-weight: bold; }
+.button, button, input[type="reset"], input[type="submit"], input[type="button"] { font-size: 1em; line-height: 0.809em; -moz-border-radius: 1em; -webkit-border-radius: 1em; -o-border-radius: 1em; -ms-border-radius: 1em; -khtml-border-radius: 1em; border-radius: 1em; background: #005498; background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(221, 221, 221, 0.25)), color-stop(100%, rgba(221, 221, 221, 0))), #005498; background: -webkit-linear-gradient(top, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; background: -moz-linear-gradient(top, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; background: -o-linear-gradient(top, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; background: linear-gradient(top, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; border-style: solid; border-width: 0.083em; padding: 0.321em; padding-left: 1.618em; padding-right: 1.618em; text-shadow: #4c4c4c 1px 1px 0; border-color: #4c4c4c; vertical-align: top; cursor: pointer; color: #dddddd; font-weight: bold; }
 .button:hover, button:hover, input[type="reset"]:hover, input[type="submit"]:hover, input[type="button"]:hover, .button:focus, button:focus, input[type="reset"]:focus, input[type="submit"]:focus, input[type="button"]:focus { -moz-box-shadow: #984400 0 0 0.5em; -webkit-box-shadow: #984400 0 0 0.5em; -o-box-shadow: #984400 0 0 0.5em; box-shadow: #984400 0 0 0.5em; }
 .button:active, button:active, input[type="reset"]:active, input[type="submit"]:active, input[type="button"]:active { -moz-transition-property: none; -webkit-transition-property: none; -o-transition-property: none; transition-property: none; -moz-transition-duration: 1s; -webkit-transition-duration: 1s; -o-transition-duration: 1s; transition-duration: 1s; -moz-box-shadow: #984400 0 0 0.25em, inset #4c4c4c 1px 1px 1px; -webkit-box-shadow: #984400 0 0 0.25em, inset #4c4c4c 1px 1px 1px; -o-box-shadow: #984400 0 0 0.25em, inset #4c4c4c 1px 1px 1px; box-shadow: #984400 0 0 0.25em, inset #4c4c4c 1px 1px 1px; background: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, rgba(221, 221, 221, 0.25)), color-stop(100%, rgba(221, 221, 221, 0))), #005498; background: -webkit-linear-gradient(bottom, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; background: -moz-linear-gradient(bottom, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; background: -o-linear-gradient(bottom, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; background: linear-gradient(bottom, rgba(221, 221, 221, 0.25), rgba(221, 221, 221, 0) 100%), #005498; }
 .button[disabled], button[disabled], input[disabled][type="reset"], input[disabled][type="submit"], input[disabled][type="button"] { color: #888888; }
@@ -200,25 +200,28 @@ button, input[type="reset"], input[type="submit"], input[type="button"], input[t
 .form-actions { text-align: right; }
 
 /* Layout -------------------------------------------------------------- */
-body > div { *zoom: 1; margin: auto; width: 127em; max-width: 100%; min-width: 60em; }
+body > div { *zoom: 1; margin: auto; width: 117em; max-width: 100%; min-width: 60em; }
 body > div:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
-[role="banner"] { clear: both; margin-left: 0.787%; margin-right: 0.787%; overflow: hidden; *zoom: 1; padding-top: 0.809em; }
+[role="banner"] { clear: both; margin-left: 0.855%; margin-right: 0.855%; overflow: hidden; *zoom: 1; padding-top: 0.809em; }
 
-h1 { display: inline; float: left; width: 28.0%; margin-right: 0.8%; }
+h1 { display: inline; float: left; width: 31em; margin-right: 1em; }
+h1 a:link, h1 a:visited { display: block; }
 
-[role="navigation"] { display: inline; float: left; width: 13.6%; margin-right: 0.8%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; }
+.nav { overflow: hidden; *zoom: 1; margin-left: 31emgutter-width(); }
 
-.meta { display: inline; float: left; width: 56.8%; margin-right: 0.8%; text-align: right; }
+[role="navigation"] { display: inline; float: left; width: 51.807%; margin-right: 1.205%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; }
 
-[role="main"] { clear: both; margin-left: 0.787%; margin-right: 0.787%; *zoom: 1; border-top-style: solid; border-top-width: 0.083em; padding-top: 1.535em; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 1.535em; position: relative; min-height: 38.832em; border-color: #dddddd; }
+.meta { display: inline; float: left; width: 46.988%; margin-right: 1.205%; }
+
+[role="main"] { clear: both; margin-left: 0.855%; margin-right: 0.855%; *zoom: 1; border-top-style: solid; border-top-width: 0.083em; padding-top: 1.535em; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 1.535em; position: relative; min-height: 38.832em; border-color: #dddddd; }
 [role="main"]:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
-[role="contentinfo"] { clear: both; margin-left: 0.787%; margin-right: 0.787%; font-size: 1em; line-height: 1.618em; margin-bottom: 1.618em; font-style: italic; }
+[role="contentinfo"] { clear: both; margin-left: 0.855%; margin-right: 0.855%; font-size: 1em; line-height: 1.618em; margin-bottom: 1.618em; font-style: italic; }
 [role="contentinfo"] small { font: inherit; }
 
 /* Login --------------------------------------------------------------------- */
-#login { clear: both; padding-left: 28.8%; padding-right: 28.8%; }
+#login { clear: both; padding-left: 20.87%; padding-right: 20.87%; }
 #login form { margin-top: 1.618em; }
 #login label { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #login li { margin-bottom: 0.809em; }
@@ -228,7 +231,7 @@ h1 { display: inline; float: left; width: 28.0%; margin-right: 0.8%; }
 #filter { clear: both; display: none; }
 #filter ul { margin: 0; padding: 0; border: 0; list-style: none; }
 #filter ul li { list-style-image: none; list-style-type: none; margin-left: 0px; }
-#filter .textual { display: inline; float: left; width: 49.65%; margin-right: 0.699%; margin-bottom: 1.618em; position: relative; }
+#filter .textual { display: inline; float: left; width: 49.474%; margin-right: 1.053%; margin-bottom: 1.618em; position: relative; }
 #filter .textual label { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #filter .textual input { clear: both; margin: 0; }
 #filter .suggest { display: none; position: absolute; left: 0; right: 0; top: 2.427em; background: white; z-index: 900; }
@@ -239,7 +242,7 @@ h1 { display: inline; float: left; width: 28.0%; margin-right: 0.8%; }
 #filter .suggest i { display: inline; float: right; padding-left: 1em; font-style: normal; color: #949494; }
 #filter #filter:focus + .suggest { display: block; }
 #filter h5 { margin: 0; padding: 0 0.25em; font-weight: normal; }
-#filter .toggle { display: inline; float: left; width: 49.65%; margin-right: 0.699%; display: inline; float: right; margin-right: 0; #margin-left: -1em; margin-top: 0.405em; font-style: italic; text-transform: lowercase; }
+#filter .toggle { display: inline; float: left; width: 49.474%; margin-right: 1.053%; display: inline; float: right; margin-right: 0; #margin-left: -1em; margin-top: 0.405em; font-style: italic; text-transform: lowercase; }
 #filter .content { clear: both; font-size: 1em; line-height: 1.214em; *zoom: 1; }
 #filter .content:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 #filter small { color: #949494; }
@@ -278,7 +281,7 @@ h1 { display: inline; float: left; width: 28.0%; margin-right: 0.8%; }
 #filter .expanded .toggle a:link::before, #filter .expanded .toggle a:visited::before { content: "« hide "; }
 #filter .expanded .toggle a:link::after, #filter .expanded .toggle a:visited::after { content: ""; }
 #filter .expanded .content { margin-bottom: 0.809em; }
-#filter .expanded .content [class^="filter-"] { display: inline; float: left; width: 11.888%; margin-right: 0.699%; margin-bottom: 0.809em; }
+#filter .expanded .content [class^="filter-"] { display: inline; float: left; width: 11.579%; margin-right: 1.053%; margin-bottom: 0.809em; }
 #filter .expanded .content [class^="filter-"]:nth-of-type(8n) { display: inline; float: right; margin-right: 0; #margin-left: -1em; }
 #filter .expanded .content [class^="filter-"]:nth-of-type(8n+1) { clear: left; }
 #filter .expanded .content [class^="filter-"]:nth-of-type(24n-1) h3 { background-color: #005498; }
@@ -343,8 +346,8 @@ h1 { display: inline; float: left; width: 28.0%; margin-right: 0.8%; }
 .listnav .perpage ul li + li::before, .listnav .pagination li + li::before { content: "| "; color: #cccccc; }
 .listnav .pagination { text-align: center; }
 .listnav .current { font-weight: bold; }
-.table .listnav .pagination { display: inline; float: left; width: 56.8%; margin-right: 0.8%; }
-.table .listnav .location, .table .listnav .perpage { display: inline; float: left; width: 28.0%; margin-right: 0.8%; }
+.table .listnav .pagination { display: inline; float: left; width: 56.627%; margin-right: 1.205%; }
+.table .listnav .location, .table .listnav .perpage { display: inline; float: left; width: 27.711%; margin-right: 1.205%; }
 .table .listnav .perpage { text-align: right; }
 .table .listnav .perpage { display: inline; float: right; margin-right: 0; #margin-left: -1em; }
 
@@ -356,33 +359,22 @@ h1 { display: inline; float: left; width: 28.0%; margin-right: 0.8%; }
 .address { overflow: hidden; *zoom: 1; clear: both; }
 
 /* Address Table ------------------------------------------------------------- */
+#addresstable { display: inline; float: left; width: 31em; margin-right: 1em; counter-reset: address; }
 #addresstable h2 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
-#addresstable.table { display: inline; float: left; width: 56.8%; margin-right: 0.8%; }
-#addresstable.list { width: 29em; margin-right: 1em; max-width: 47.2%; }
-
-.list { counter-reset: address; }
-.list .address { counter-increment: address; }
-.list .address .content { overflow: hidden; *zoom: 1; border-top-style: solid; border-top-width: 0.083em; padding-top: 1.535em; padding-bottom: 0.809em; border-color: #dddddd; }
-.list .address:last-child .content { border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 0.726em; }
-.list .controls { display: none; }
-.list [id^="select_"] { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
-.list [id^="select_"]:checked + .content { background: #dddddd; }
-.list .adr { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; display: inline; float: left; width: 58.621%; margin-right: 3.448%; margin-bottom: 0.809em; padding-left: 2.618em; }
-.list .street-address { font-size: 1.618em; line-height: 1em; display: block; }
-.list .street-address::before { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; content: counter(address, upper-latin) "."; width: 1.618em; margin-left: -1.618em; vertical-align: baseline; }
-.list .street-address::before { *display: inline; }
-.list .id { display: inline; float: left; width: 37.931%; margin-right: 3.448%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; font-weight: bold; }
-.list .complex { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; display: inline; float: left; width: 58.621%; margin-right: 3.448%; padding-left: 2.618em; }
-.list .complex label { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; padding-left: 1.5em; background: url('../images/ui/house.png?1305609492') no-repeat scroll left; vertical-align: baseline; }
-.list .complex label { *display: inline; }
-.list .complex input { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
-.list .complex input:not(:checked) ~ span { display: none; }
-.list .complex input:checked + label { text-indent: -119988px; overflow: hidden; text-align: left; width: 1.5em; padding: 0; background: url('../images/ui/bldg.png?1305610086') no-repeat scroll left; }
-.list .complex input:checked ~ span { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; }
-.list .complex input:checked ~ span { *display: inline; }
-.list summary { display: inline; float: left; width: 37.931%; margin-right: 3.448%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; }
+#addresstable .address { counter-increment: address; }
+#addresstable .address .content { overflow: hidden; *zoom: 1; padding-top: 0.809em; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 0.726em; border-color: #dddddd; }
+#addresstable .controls { display: none; }
+#addresstable [id^="select_"] { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
+#addresstable [id^="select_"]:checked + .content { background: #dddddd; }
+#addresstable .header { overflow: hidden; *zoom: 1; display: block; }
+#addresstable .adr { display: inline; float: left; width: 48.387%; margin-right: 3.226%; padding-left: 12.903%; margin-bottom: 0.809em; position: relative; }
+#addresstable .street-address { font-size: 1.618em; line-height: 1em; display: block; }
+#addresstable .street-address::before { position: absolute; left: 0; content: counter(address, upper-latin) "."; width: 15.789%; text-align: right; }
+#addresstable .id { display: inline; float: left; width: 35.484%; margin-right: 3.226%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; font-weight: bold; }
+#addresstable .complex { margin: 0; padding: 0; border: 0; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; -moz-border-radius: 0; -webkit-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; -khtml-border-radius: 0; border-radius: 0; text-shadow: none; overflow: visible; width: auto; vertical-align: baseline; background: none; color: inherit; font: inherit; text-align: left; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; display: inline; float: left; width: 48.387%; margin-right: 3.226%; margin-left: 12.903%; margin-bottom: 0; padding-left: 1.5em; background: url('../images/ui/house.png?1305609492') no-repeat scroll left; }
+#addresstable .complex { *display: inline; }
+#addresstable .complex:hover, #addresstable .complex:focus { -moz-box-shadow: none; -webkit-box-shadow: none; -o-box-shadow: none; box-shadow: none; }
+#addresstable summary { display: inline; float: left; width: 35.484%; margin-right: 3.226%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; }
 
 /* Map ----------------------------------------------------------------------- */
-#map { background: #4c4c4c; color: #dddddd; }
-#map.list { position: absolute; top: 0; right: 0; bottom: 0; left: 30em; }
-#map.table { position: absolute; top: 0; right: 0; bottom: 0; left: 57.6%; }
+#map { position: absolute; top: 0; right: 0; bottom: 0; left: 32em; background: #4c4c4c; color: #dddddd; }
