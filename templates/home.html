@@ -43,17 +43,21 @@
       <article id="address-id" class="address">
         <input type="checkbox" id="select_01" name="select" value="">
         <div class="content">
-          <label for="select_01" class="header">
+          <label for="select_01">
             <h3 class="adr">
               <span class="street-address">10 Davol Sq</span>
               <span class="locality">Providence</span>,
               <abbr class="region">RI</abbr>
               <span class="postal-code">02909</span>
             </h3>
-            <p class="id">111-222-3333</p>
           </label>
 
-          <button class="complex" title="multiple units">single unit</button>
+          <div class="id">
+            <button name="approve" title="approve" type="submit" value="">approve</button>
+            <label for="select_01">111-222-3333</label>
+          </div>
+
+          <button name="complex" title="multiple units" type="submit">single unit</button>
 
           <details>
             <summary>details</summary>
@@ -80,10 +84,9 @@
           </details>
 
           <ul class="controls">
-            <li><a href="#" title="history">history</a></li>
             <li><a href="#" title="edit">edit</a></li>
+            <li><a href="#" title="history">history</a></li>
             <li><button title="delete" type="submit" name="action-delete" value="">delete</button></li>
-            <li><button title="approve" type="submit" name="action-approve" value="">approve</button></li>
           </ul>
         </div>
       </article>

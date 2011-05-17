@@ -351,46 +351,43 @@ h1 a:link, h1 a:visited { display: block; }
 
 .actions { display: none; }
 
-/* List ---------------------------------------------------------------------- */
-.managelist { clear: both; *zoom: 1; overflow: visible; margin: 0; }
-.managelist:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
-
-.address { *zoom: 1; clear: both; }
-.address:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
-
 /* Address Table ------------------------------------------------------------- */
 #addresstable { display: inline; float: left; width: 31em; margin-right: 1em; counter-reset: address; }
 #addresstable h2 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #addresstable button { margin: 0; padding: 0; border: 0; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; -moz-border-radius: 0; -webkit-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; -khtml-border-radius: 0; border-radius: 0; text-shadow: none; overflow: visible; width: auto; vertical-align: baseline; background: none; color: inherit; font: inherit; text-align: left; }
 #addresstable button { *display: inline; }
 #addresstable button:hover, #addresstable button:focus { -moz-box-shadow: none; -webkit-box-shadow: none; -o-box-shadow: none; box-shadow: none; }
-#addresstable .address { counter-increment: address; position: relative; }
+#addresstable .address { *zoom: 1; clear: both; counter-increment: address; position: relative; }
+#addresstable .address:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 #addresstable .address:focus .controls, #addresstable .address:hover .controls, #addresstable .address:active .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
-#addresstable .address .content { overflow: hidden; *zoom: 1; padding-top: 1.618em; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 2.344em; margin-right: -1em; padding-right: 1em; border-color: #dddddd; }
-#addresstable .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; margin: 0; padding: 0; border: 0; list-style: none; *zoom: 1; position: absolute; right: 0; bottom: 0; left: 0; margin-right: -1em; padding-right: 1em; background: rgba(221, 221, 221, 0.5); border-top: 1px solid rgba(221, 221, 221, 0.75); }
+#addresstable .address .content { overflow: hidden; *zoom: 1; padding-top: 1.214em; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 1.939em; margin-right: -1em; padding-right: 1em; border-color: #dddddd; }
+#addresstable [title="history"]::before { content: url('../images/ui/clock.png?1303974200') " "; vertical-align: middle; }
+#addresstable [title="edit"]::before { content: url('../images/ui/pencil.png?1299181367') " "; vertical-align: middle; }
+#addresstable [title="delete"]::before { content: url('../images/ui/trash.png?1299181339') " "; vertical-align: middle; }
+#addresstable [title="approve"] { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/warning.png?1303974218'); background-repeat: no-repeat; background-position: 50% 50%; min-width: 14px; }
+#addresstable [title="approve"]:focus, #addresstable [title="approve"]:hover, #addresstable [title="approve"]:active { background-image: url('../images/ui/check.png?1299276480'); }
+#addresstable .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; margin: 0; padding: 0; border: 0; list-style: none; *zoom: 1; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; position: absolute; right: 0; bottom: 0; left: 0; margin-right: -1em; padding-right: 1em; background: rgba(221, 221, 221, 0.5); border-top: 1px solid rgba(221, 221, 221, 0.75); }
 #addresstable .controls li { list-style-image: none; list-style-type: none; margin-left: 0px; }
 #addresstable .controls:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
-#addresstable .controls li { display: inline; float: left; width: 22.581%; margin-right: 3.226%; }
-#addresstable .controls li:nth-child(4n) { display: inline; float: right; margin-right: 0; #margin-left: -1em; }
-#addresstable .controls [title="history"] { background-image: url('../images/ui/clock.png?1303974200'); background-position: 3.708px; background-repeat: no-repeat; padding-left: 21.417px; }
-#addresstable .controls [title="edit"] { background-image: url('../images/ui/pencil.png?1299181367'); background-position: 3.708px; background-repeat: no-repeat; padding-left: 21.417px; }
-#addresstable .controls [title="delete"] { background-image: url('../images/ui/trash.png?1299181339'); background-position: 3.708px; background-repeat: no-repeat; padding-left: 21.417px; }
-#addresstable .controls [title="approve"] { background-image: url('../images/ui/check.png?1299276480'); background-position: 3.708px; background-repeat: no-repeat; padding-left: 21.417px; }
+#addresstable .controls li { display: inline; float: left; width: 33.333%; text-align: center; }
+#addresstable .controls li:nth-child(3n) { display: inline; float: right; }
 #addresstable [id^="select_"] { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #addresstable [id^="select_"]:checked + .content { background: rgba(221, 221, 221, 0.5); }
-#addresstable .header { overflow: hidden; *zoom: 1; display: block; }
-#addresstable .adr { display: inline; float: left; width: 48.387%; margin-right: 3.226%; padding-left: 12.903%; margin-bottom: 0.809em; position: relative; }
+#addresstable .adr { display: inline; float: left; width: 48.387%; margin-right: 3.226%; padding-left: 12.903%; margin-bottom: 0.405em; position: relative; }
 #addresstable .street-address { font-size: 1.618em; line-height: 1em; display: block; }
 #addresstable .street-address::before { position: absolute; left: 0; content: counter(address, upper-latin) "."; width: 15.789%; text-align: right; }
 #addresstable .id { display: inline; float: left; width: 35.484%; margin-right: 3.226%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; font-weight: bold; }
-#addresstable .complex { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; display: inline; float: left; width: 48.387%; margin-right: 3.226%; margin-left: 12.903%; margin-bottom: 0; padding-left: 1.5em; background: url('../images/ui/house.png?1305609492') no-repeat scroll left; }
+#addresstable .id * { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; margin: 0; }
+#addresstable .id * { *display: inline; }
+#addresstable [name="complex"] { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; display: inline; float: left; width: 48.387%; margin-right: 3.226%; margin-left: 12.903%; margin-bottom: 0; }
+#addresstable [name="complex"]::before { content: url('../images/ui/house.png?1305609492') " "; vertical-align: middle; }
 #addresstable summary { display: inline; float: left; width: 35.484%; margin-right: 3.226%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; }
 #addresstable summary::before { content: "view "; }
 #addresstable summary::after { content: " »"; }
 #addresstable .open summary { margin-bottom: 0.809em; }
 #addresstable .open summary::before { content: "« hide "; }
 #addresstable .open summary::after { content: ""; }
-#addresstable .byline, #addresstable .notes { clear: both; padding-left: 12.903%; margin-bottom: 0.809em; }
+#addresstable .byline, #addresstable .notes { clear: both; padding-left: 12.903%; margin-bottom: 0.405em; }
 #addresstable .byline p, #addresstable .notes p { margin: 0; }
 #addresstable .byline:last-child, #addresstable .notes:last-child { margin: 0; }
 
