@@ -41,54 +41,115 @@
 
     <div class="managelist">
       <article id="address-id" class="details address">
-        <input type="checkbox" id="select_id" name="select" value="">
-        <h3 class="adr">
-          <label for="select_id">
-            <span class="street-address">10 Davol Sq</span>
-            <span class="locality">Providence</span>,
-            <abbr class="region" title ="rhode island">RI</abbr>
-            <span class="postal-code">02909</span>
-          </label>
-        </h3>
-        <p class="propertyID">111-222-3333</p>
+        <input type="checkbox" id="select_01" name="select" value="">
+        <div class="content">
+          <h3 class="adr">
+            <label for="select_01">
+              <span class="street-address">10 Davol Sq</span>
+              <span class="locality">Providence</span>,
+              <abbr class="region" title ="rhode island">RI</abbr>
+              <span class="postal-code">02909</span>
+            </label>
+          </h3>
+          <p class="id">111-222-3333</p>
 
-        <p class="complex">
-          <input type="checkbox" id="complex_id" name="complex_id" value="">
-          <label for="complex_id">multiple units</label>
-          <span class="name">name of complex</span>
-        </p>
+          <p class="complex">
+            <input type="checkbox" id="complex_01" name="complex_01" value="">
+            <label for="complex_01">multiple units?</label>
+            <span class="name">name of complex</span>
+          </p>
 
-        <div class="byline">
-          <!-- if imported -->
-          <p class="hcard">
-            Imported by <cite class="fn">[username]</cite> from [source]
-            on <time pubdate>[timestamp]</time>.
-            <!-- elseif created manually
-              Created by <cite class="fn">[username]</cite>
-              on <time pubdate>[timestamp]</time>
-            -->
-          </p>
-          <!-- end if -->
-          <!-- if mapped -->
-          <p class="hcard">
-            Mapped by [username]
-            on <time class="mapped">[timestamp]</time>.
-          </p>
-          <!-- end if -->
+          <details>
+            <summary>view details &raquo;</summary>
+            <div class="byline">
+              <!-- if imported -->
+              <p class="hcard">
+                Imported by <cite class="fn">[username]</cite> from [source]
+                on <time pubdate>[timestamp]</time>.
+                <!-- elseif created manually
+                  Created by <cite class="fn">[username]</cite>
+                  on <time pubdate>[timestamp]</time>
+                -->
+              </p>
+              <!-- end if -->
+              <!-- if mapped -->
+              <p class="hcard">
+                Mapped by [username]
+                on <time class="mapped">[timestamp]</time>.
+              </p>
+              <!-- end if -->
+            </div>
+
+            <p class="notes">Notes about this address</p>
+          </details>
+
+          <ul class="controls">
+            <li><a href="#" title="history">view history</a></li>
+            <li><a href="#" title="edit">edit</a></li>
+            <li><button title="delete" type="submit" name="action-delete" value="">delete</button></li>
+            <li class="approve">
+              <input type="checkbox" id="approve" name="approve" value="">
+              <label id="approved" for="approve">approve</label>
+            </li>
+          </ul>
         </div>
-
-        <p class="notes">Notes about this address</p>
-
-        <ul class="controls">
-          <li><a href="#" title="history">view history</a></li>
-          <li><a href="#" title="edit">edit</a></li>
-          <li><button title="delete" type="submit" name="action-delete" value="">delete</button></li>
-          <li class="approve">
-            <input type="checkbox" id="approve" name="approve" value="">
-            <label id="approved" for="approve">approve</label>
-          </li>
-        </ul>
       </article>
+
+      <article id="address-id" class="details address">
+        <input type="checkbox" id="select_02" name="select" value="">
+        <div class="content">
+          <h3 class="adr">
+            <label for="select_02">
+              <span class="street-address">10 Davol Sq</span>
+              <span class="locality">Providence</span>,
+              <abbr class="region" title ="rhode island">RI</abbr>
+              <span class="postal-code">02909</span>
+            </label>
+          </h3>
+          <p class="id">111-222-3333</p>
+
+          <p class="complex">
+            <input type="checkbox" id="complex_02" name="complex_02" value="">
+            <label for="complex_02">multiple units?</label>
+            <span class="name">name of complex</span>
+          </p>
+
+          <details>
+            <summary>view details &raquo;</summary>
+            <div class="byline">
+              <!-- if imported -->
+              <p class="hcard">
+                Imported by <cite class="fn">[username]</cite> from [source]
+                on <time pubdate>[timestamp]</time>.
+                <!-- elseif created manually
+                  Created by <cite class="fn">[username]</cite>
+                  on <time pubdate>[timestamp]</time>
+                -->
+              </p>
+              <!-- end if -->
+              <!-- if mapped -->
+              <p class="hcard">
+                Mapped by [username]
+                on <time class="mapped">[timestamp]</time>.
+              </p>
+              <!-- end if -->
+            </div>
+
+            <p class="notes">Notes about this address</p>
+          </details>
+
+          <ul class="controls">
+            <li><a href="#" title="history">view history</a></li>
+            <li><a href="#" title="edit">edit</a></li>
+            <li><button title="delete" type="submit" name="action-delete" value="">delete</button></li>
+            <li class="approve">
+              <input type="checkbox" id="approve" name="approve" value="">
+              <label id="approved" for="approve">approve</label>
+            </li>
+          </ul>
+        </div>
+      </article>
+
     </div>
 
     {% include "includes/listnav.html" %}

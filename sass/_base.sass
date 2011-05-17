@@ -10,7 +10,7 @@
 $legacy-support-for-ie6         : false
 
 $show-column-grid-backgrounds   : true
-$show-baseline-grid-backgrounds : true
+$show-baseline-grid-backgrounds : false
 $show-grid-backgrounds          : false
 
 // Colors --------------------------------------------------------------------
@@ -72,12 +72,23 @@ $grid-background-gutter-color   : rgba(0, 0, 0, 0)
   width: 1px
   border: 0
 
+=back
+  position: static
+  clip: auto
+  overflow: visible
+  height: auto
+  margin: 0
+  width: auto
+
 =oncall
   +gone
   &:active, &:focus
-    position: static
-    clip: auto
-    overflow: visible
-    height: auto
-    margin: 0
-    width: auto
+    +back
+
+@function fixed($n)
+  $width: $col-width*$n + $gutter-width*($n - 1)
+  @return $width
+
+=fixed-columns($n)
+  width: fixed($n)
+  margin-right: $gutter-width

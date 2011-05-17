@@ -1,11 +1,4 @@
-/* Lists --------------------------------------------------------------
-
-.managelist
-  +full(24)
-  margin: 0
-  .item
-    +clearfix
-    clear: both
+/* List Navigation --------------------------------------------------------------
 
 .sortlinks
   #{$link}
@@ -38,30 +31,28 @@
         background-image: image-url('ui/angle_up.png')
 
 .listordering
+  display: none
   +clearfix
   +rhythm(0,.25,.25,0)
-  background: $light
   font-weight: bold
+  h3
+    text-transform: capitalize
+    &::after
+      content: ": "
   ul
-    +no-style-list
+    +inline-block-list
   a
     @extend .sortlinks
 
 .listnav
+  display: none
   +pie-clearfix
   +rhythm(0,.25,.25,.5)
   +hpadding(.5em)
   clear: both
-  margin-top: -1px
-  background: $light
   white-space: nowrap
   p, ul
     +reset-box-model
-  .location, .perpage
-    +columns(6,24)
-  .perpage
-    +omega(24)
-    text-align: right
     strong
       font-weight: normal
   .perpage ul, .pagination
@@ -74,10 +65,29 @@
         content: "| "
         color: #ccc
   .pagination
-    +columns(12,24)
     text-align: center
   .current
     font-weight: bold
 
+  .table &
+    .pagination
+      +columns(12,21)
+    .location, .perpage
+      +columns(6,21)
+    .perpage
+      text-align: right
+    .perpage
+      +omega(24)
+
 .actions
   display: none
+
+/* List ----------------------------------------------------------------------
+
+.managelist
+  +full(21)
+  margin: 0
+
+.address
+  +clearfix
+  clear: both

@@ -3,11 +3,11 @@
 @import defaults
 
 // 1452px Grid -----------------------------------------------------------------
-// (24*4em + 23*1em + 2em) = 121em = 1452px
-// 48px + 12px x 20px
+// (24*5em + 23*1em + 2em) = 127em = 1524px
+// 60px + 12px x 20px
 
-$total-cols         : 24
-$col-width          : 4em
+$total-cols         : 21
+$col-width          : 5em
 $gutter-width       : 1em
 $side-gutter-width  : $gutter-width
 
@@ -15,7 +15,7 @@ $side-gutter-width  : $gutter-width
 
 body > div
   +container
-  +susy-grid-background
+  min-width: 60em
 
 [role="banner"]
   +full
@@ -23,22 +23,24 @@ body > div
   +padding-leader(.5)
 
 h1
-  +columns(6,24)
+  +columns(6,21)
 
 [role="navigation"]
-  +columns(3,24)
-  +omega(24)
+  +columns(3,21)
+  +omega(21)
   text-align: right
 
 .meta
-  +columns(15,24)
+  +columns(12,21)
   text-align: right
 
 [role="main"]
   +full
   +pie-clearfix
-  +h-borders(1px,1,$base-font-size,dotted)
+  +h-borders(1px,1)
   position: relative
+  min-height: rhythm(24)
+  border-color: $light
 
 [role="contentinfo"]
   +full
@@ -51,8 +53,8 @@ h1
 /* Login ---------------------------------------------------------------------
 
 #login
-  +full(24)
-  +pad(6,6,24)
+  +full(21)
+  +pad(6,6,21)
   form
     +leader
   label
@@ -62,11 +64,8 @@ h1
 
 /* Modules -------------------------------------------------------------------
 
-//@import modules/filter
-//@import modules/managelists
-
-#filter, .actions
-  display: none
+@import modules/filter
+@import modules/managelists
 
 /* Address Table -------------------------------------------------------------
 
@@ -74,10 +73,83 @@ h1
   h2
     +gone
 
-  &.list
-    +columns(6,24)
   &.table
-    +columns(12,24)
+    +columns(12,21)
+  &.list
+    +fixed-columns(5)
+    max-width: columns(10,21)
+
+.list
+  counter-reset: address
+  .address
+    counter-increment: address
+
+    .content
+      +clearfix
+      +leading-border(1px,1)
+      +padding-trailer(.5)
+      border-color: $light
+
+    &:last-child
+      .content
+        +trailing-border(1px,.5)
+
+  .controls
+    display: none
+
+  [id^="select_"]
+    +gone
+    &:checked + .content
+      background: $light
+
+  .adr
+    +box-sizing(border-box)
+    +columns(3,5)
+    +trailer(.5)
+    padding-left: rhythm($med)
+  .street-address
+    +adjust-font-size-to($medpx)
+    display: block
+    &::before
+      +inline-block
+      content: counter(address, upper-latin) "."
+      width: rhythm($med,$medpx)
+      margin-left: - rhythm($med,$medpx)
+      vertical-align: baseline
+
+  .id
+    +columns(2,5)
+    +omega(5)
+    text-align: right
+    font-weight: bold
+
+  .complex
+    +box-sizing(border-box)
+    +columns(3,5)
+    padding-left: rhythm($med)
+    label
+      +inline-block
+      padding-left: 1.5em
+      background: image-url('ui/house.png') no-repeat scroll left
+      vertical-align: baseline
+    input
+      +gone
+      &:not(:checked)
+        ~ span
+          display: none
+      &:checked
+        + label
+          +hide-text
+          width: 1.5em
+          padding: 0
+          background: image-url('ui/bldg.png') no-repeat scroll left
+        ~ span
+          +inline-block
+
+  summary
+    +columns(2,5)
+    +omega(5)
+    text-align: right
 
 
 /* Map -----------------------------------------------------------------------
@@ -85,20 +157,17 @@ h1
 #map
   background: $dark
   color: $light
-  min-height: rhythm(12)
 
   &.list
     position: absolute
     top: 0
     right: 0
     bottom: 0
-    left: columns(6,24) + gutter(24)
-    width: columns(18,24)
+    left: fixed(5) + $gutter-width
 
   &.table
     position: absolute
     top: 0
     right: 0
     bottom: 0
-    left: columns(12,24) + gutter(24)
-    width: columns(12,24)
+    left: columns(12,21) + gutter(21)
