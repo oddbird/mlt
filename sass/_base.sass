@@ -94,11 +94,18 @@ $grid-background-gutter-color   : rgba(0, 0, 0, 0)
   width: fixed($n)
   margin-right: $gutter-width
 
-=icon($image,$replace:false)
+=icon($image,$hover:false,$replace:false)
   @if not $replace
     &::before
       content: image-url($image) " "
       vertical-align: middle
+    @if $hover
+      #{$focus}
+        &::before
+          content: image-url($hover) " "
   @else
     +replace-text($image)
-    min-width: image-width($image)
+    width: image-width($image) + $smallpx
+    @if $hover
+      #{$focus}
+        background-image: image-url($hover)

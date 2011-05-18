@@ -99,7 +99,7 @@ nav p { margin: 0; }
 .navhead { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 
 /* Interactive --------------------------------------------------------------- */
-summary { display: inline; cursor: pointer; }
+summary { -moz-appearance: none; -webkit-appearance: none; appearance: none; display: inline; cursor: pointer; }
 summary:focus { outline: thin dotted #984400; }
 
 .no-details details > * { display: none; }
@@ -361,11 +361,11 @@ h1 a:link, h1 a:visited { display: block; }
 #addresstable .address:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 #addresstable .address:focus .controls, #addresstable .address:hover .controls, #addresstable .address:active .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 #addresstable .address .content { overflow: hidden; *zoom: 1; padding-top: 1.214em; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 1.939em; margin-right: -1em; padding-right: 1em; border-color: #dddddd; }
-#addresstable [title="history"]::before { content: url('../images/ui/clock.png?1303974200') " "; vertical-align: middle; }
-#addresstable [title="edit"]::before { content: url('../images/ui/pencil.png?1299181367') " "; vertical-align: middle; }
-#addresstable [title="delete"]::before { content: url('../images/ui/trash.png?1299181339') " "; vertical-align: middle; }
-#addresstable [title="approve"] { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/warning.png?1303974218'); background-repeat: no-repeat; background-position: 50% 50%; min-width: 14px; }
-#addresstable [title="approve"]:focus, #addresstable [title="approve"]:hover, #addresstable [title="approve"]:active { background-image: url('../images/ui/check.png?1299276480'); }
+#addresstable [title="history"]::before { content: url('../images/ui/history.png?1305749879') " "; vertical-align: middle; }
+#addresstable [title="edit"]::before { content: url('../images/ui/pencil.png?1305749898') " "; vertical-align: middle; }
+#addresstable [name="delete"]::before { content: url('../images/ui/trash.png?1305749914') " "; vertical-align: middle; }
+#addresstable [name="approve"] { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/warning.png?1305750015'); background-repeat: no-repeat; background-position: 50% 50%; width: 19.417px; }
+#addresstable [name="approve"]:focus, #addresstable [name="approve"]:hover, #addresstable [name="approve"]:active { background-image: url('../images/ui/check.png?1305749988'); }
 #addresstable .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; margin: 0; padding: 0; border: 0; list-style: none; *zoom: 1; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; position: absolute; right: 0; bottom: 0; left: 0; margin-right: -1em; padding-right: 1em; background: rgba(221, 221, 221, 0.5); border-top: 1px solid rgba(221, 221, 221, 0.75); }
 #addresstable .controls li { list-style-image: none; list-style-type: none; margin-left: 0px; }
 #addresstable .controls:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
@@ -373,20 +373,20 @@ h1 a:link, h1 a:visited { display: block; }
 #addresstable .controls li:nth-child(3n) { display: inline; float: right; }
 #addresstable [id^="select_"] { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #addresstable [id^="select_"]:checked + .content { background: rgba(221, 221, 221, 0.5); }
-#addresstable .adr { display: inline; float: left; width: 48.387%; margin-right: 3.226%; padding-left: 12.903%; margin-bottom: 0.405em; position: relative; }
+#addresstable .adr { display: inline; float: left; width: 48.387%; margin-right: 3.226%; padding-left: 12.903%; position: relative; }
 #addresstable .street-address { font-size: 1.618em; line-height: 1em; display: block; }
 #addresstable .street-address::before { position: absolute; left: 0; content: counter(address, upper-latin) "."; width: 15.789%; text-align: right; }
 #addresstable .id { display: inline; float: left; width: 35.484%; margin-right: 3.226%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; font-weight: bold; }
 #addresstable .id * { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; margin: 0; }
 #addresstable .id * { *display: inline; }
-#addresstable [name="complex"] { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; display: inline; float: left; width: 48.387%; margin-right: 3.226%; margin-left: 12.903%; margin-bottom: 0; }
-#addresstable [name="complex"]::before { content: url('../images/ui/house.png?1305609492') " "; vertical-align: middle; }
+#addresstable .complex { display: inline; float: left; width: 48.387%; margin-right: 3.226%; margin-left: 12.903%; margin-bottom: 0; }
+#addresstable [name="complex"] { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/house.png?1305749944'); background-repeat: no-repeat; background-position: 50% 50%; width: 19.417px; }
+#addresstable [name="complex"]:focus, #addresstable [name="complex"]:hover, #addresstable [name="complex"]:active { background-image: url('../images/ui/bldg.png?1305749849'); }
+#addresstable [name="complex"].single { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/bldg.png?1305749849'); background-repeat: no-repeat; background-position: 50% 50%; width: 19.417px; }
+#addresstable [name="complex"].single:focus, #addresstable [name="complex"].single:hover, #addresstable [name="complex"].single:active { background-image: url('../images/ui/house.png?1305749944'); }
 #addresstable summary { display: inline; float: left; width: 35.484%; margin-right: 3.226%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; }
-#addresstable summary::before { content: "view "; }
-#addresstable summary::after { content: " »"; }
+.no-details #addresstable summary::before { content: url('../images/ui/angle_right.png?1305749969'); }
 #addresstable .open summary { margin-bottom: 0.809em; }
-#addresstable .open summary::before { content: "« hide "; }
-#addresstable .open summary::after { content: ""; }
 #addresstable .byline, #addresstable .notes { clear: both; padding-left: 12.903%; margin-bottom: 0.405em; }
 #addresstable .byline p, #addresstable .notes p { margin: 0; }
 #addresstable .byline:last-child, #addresstable .notes:last-child { margin: 0; }
