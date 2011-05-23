@@ -41,7 +41,6 @@
             }
 
             // Hide content unless the `open` attribute is truthy
-            // (in Chrome 10 beta it will be false, other browsers undefined)
             if ($details.attr('open')) {
                 $details.addClass('open');
                 $detailsNotSummary.slideDown('fast');

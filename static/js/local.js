@@ -7,5 +7,7 @@ $(function() {
             return false;
         }
     );
-    $('details').html5accordion('summary');
+    if ($('html').hasClass('no-details')) {
+        $('details').html5accordion('summary');
+    }
 });
