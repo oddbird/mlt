@@ -85,9 +85,15 @@
 /* Address Table -------------------------------------------------------------
 
 #addresstable
-  +fixed-columns(8)
   +column-grid-background(8,$col-width,$gutter-width,0em,$force-fluid:true)
+  position: absolute
+  top: 0
+  bottom: 0
+  left: 0
+  width: fixed(8) + $gutter-width
   counter-reset: address
+  overflow-y: scroll
+  overflow-x: hidden
 
   h2
     +gone
@@ -99,6 +105,7 @@
     clear: both
     counter-increment: address
     position: relative
+    padding-right: $gutter-width
     #{$focus}
       .controls
         +opacity(1)

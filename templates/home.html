@@ -5,39 +5,42 @@
   <h2>Address Table</h2>
   <form method="POST" id="addressform">
 
-    {% include "includes/filter.html" %}
-    {% include "includes/actions.html" %}
-    {% include "includes/listnav.html" %}
+    {# include "includes/filter.html" #}
+    {# include "includes/actions.html" #}
+    {# include "includes/listnav.html" #}
 
-    <nav class="listordering">
-      <h3>sort by</h3>
-      <ul>
-        <li class="bystreet">
-          <a href="#">street</a>
-        </li>
-        <li class="bycity">
-          <a href="#">city</a>
-        </li>
-        <li class="bystate">
-          <a href="#">state</a>
-        </li>
-        <li class="byzip">
-          <a href="#">zip</a>
-        </li>
-        <li class="bymultipleunits">
-          <a href="#">multiple units</a>
-        </li>
-        <li class="bycomplex">
-          <a href="#">complex</a>
-        </li>
-        <li class="bypropertyID">
-          <a href="#">property ID</a>
-        </li>
-        <li class="byneedsreview">
-          <a href="#">needs review</a>
-        </li>
-      </ul>
-    </nav>
+    <!--
+      <nav class="listordering">
+        <h3>sort by</h3>
+        <ul>
+          <li class="bystreet">
+            <a href="#">street</a>
+          </li>
+          <li class="bycity">
+            <a href="#">city</a>
+          </li>
+          <li class="bystate">
+            <a href="#">state</a>
+          </li>
+          <li class="byzip">
+            <a href="#">zip</a>
+          </li>
+          <li class="bymultipleunits">
+            <a href="#">multiple units</a>
+          </li>
+          <li class="bycomplex">
+            <a href="#">complex</a>
+          </li>
+          <li class="bypropertyID">
+            <a href="#">property ID</a>
+          </li>
+          <li class="byneedsreview">
+            <a href="#">needs review</a>
+          </li>
+        </ul>
+      </nav>
+
+    -->
 
     <div class="managelist">
       <article id="address-id" class="address">
@@ -95,8 +98,8 @@
       </article>
     </div>
 
-    {% include "includes/listnav.html" %}
-    {% include "includes/actions_redux.html" %}
+    {# include "includes/listnav.html" #}
+    {# include "includes/actions_redux.html" #}
 
   </form>
 </section>

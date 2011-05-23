@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 {% load compress %}
 
-<!--[if lt IE 7 ]>              <html class="no-js ie6" lang="en" dir="ltr">   <![endif]-->
-<!--[if IE 7 ]>                 <html class="no-js ie7" lang="en" dir="ltr">   <![endif]-->
-<!--[if IE 8 ]>                 <html class="no-js ie8" lang="en" dir="ltr">   <![endif]-->
+<!--[if lte IE 8 ]>                 <html class="no-js lteie8" lang="en" dir="ltr">   <![endif]-->
 <!--[if IE 9 ]>                 <html class="no-js ie9" lang="en" dir="ltr">   <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!-->  <html class="no-js" lang="en" dir="ltr">       <!--<![endif]-->
 
@@ -74,50 +72,51 @@
 </head>
 
 <body id="client-url" class="{% block bodyclasses %}{% endblock %}">
-
 {% block body %}
-<div>
-{% block page %}
 
   <header role="banner">
-    <h1><a href="/" rel="home">Master Lookup Table</a></h1>
+    <div>
+      <h1><a href="/" rel="home">Master Lookup Table</a></h1>
 
-    <div class="nav">
-      <nav role="navigation">
-        <h2 class="navhead">Primary Navigation</h2>
-        <ul>
-            <li class="history"><a href="/history/">Revision History</a></li>
-        </ul>
-      </nav>
+      <div class="nav">
+        <nav role="navigation">
+          <h2 class="navhead">Primary Navigation</h2>
+          <ul>
+              <li class="history"><a href="/history/">Revision History</a></li>
+          </ul>
+        </nav>
 
-      <nav class="meta">
-        <h2 class="navhead">Account Navigation</h2>
-        <p>Welcome firstName [<a href="#">Sign Out</a>]</p>
-      </nav>
+        <nav class="meta">
+          <h2 class="navhead">Account Navigation</h2>
+          <p>Welcome firstName [<a href="#">Sign Out</a>]</p>
+        </nav>
+      </div>
     </div>
   </header>
 
   <div id="main" role="main">
-    {% block content %}
+    <div>
+      {% block content %}
 
-    {% endblock %}
+      {% endblock %}
+    </div>
   </div><!-- /~main -->
 
   <footer role="contentinfo">
+    <div>
     <div id="hcard-client-name" class="author vcard">
       <small>copyright &copy; 2011</small>
-      <strong class="fn org">The Providence Plan</strong>
-      <div class="adr">
+      <strong class="fn org">The Providence Plan</strong> |
+      <span class="adr">
         <span class="street-address">10 Davol Square Suite 300</span>,
         <span class="locality">Providence</span>,
         <span class="region">RI</span>
         <span class="postal-code">02903</span>
-      </div>
+      </span>
+    </div>
     </div>
   </footer>
 
-{% endblock page %}
-</div>
 {% endblock body %}
 
 <!-- JavaScript -->
