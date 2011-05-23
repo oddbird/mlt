@@ -10,4 +10,5 @@ $(function() {
     if ($('html').hasClass('no-details')) {
         $('details').html5accordion('summary');
     }
+    $('.details:not(html)').html5accordion('.summary');
 });
