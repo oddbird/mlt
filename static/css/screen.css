@@ -94,16 +94,18 @@ pre { padding: 1.618em; white-space: pre; white-space: pre-wrap; white-space: pr
 
 blockquote { padding: 1.618em; font-style: italic; }
 
-nav p { margin: 0; }
+nav ul, nav ol, nav h2, nav p { margin: 0; }
 
 .navhead { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 
 /* Interactive --------------------------------------------------------------- */
-summary { -moz-appearance: none; -webkit-appearance: none; appearance: none; display: inline; cursor: pointer; }
+summary { -moz-appearance: none; -webkit-appearance: none; appearance: none; display: inline; cursor: pointer; color: #005498; }
 summary:focus { outline: thin dotted #984400; }
 
 .no-details details > * { display: none; }
 .no-details details summary { display: inline; }
+.no-details details summary::before { font-size: 0.75em; line-height: 2.157em; content: "▶"; }
+.no-details details.open summary::before { content: "▼"; }
 
 /* Replaced ------------------------------------------------------------------ */
 figure img, figure object, figure embed { vertical-align: top; max-width: 100%; }
@@ -198,18 +200,19 @@ button, input[type="reset"], input[type="submit"], input[type="button"], input[t
 .form-actions { text-align: right; }
 
 /* Layout -------------------------------------------------------------- */
-.container, [role="banner"] > div, [role="main"] > div, [role="contentinfo"] > div { *zoom: 1; margin: auto; width: 117em; max-width: 100%; margin-left: 0; min-width: 65em; }
+.container, [role="banner"] > div, [role="main"] > div, [role="contentinfo"] > div { *zoom: 1; width: 100%; min-width: 65em; }
 .container:after, [role="banner"] > div:after, [role="main"] > div:after, [role="contentinfo"] > div:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
 [role="banner"] { padding-top: 0.809em; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 0.726em; border-color: #dddddd; }
 [role="banner"] > div { overflow: hidden; *zoom: 1; }
 
-h1 { display: inline; float: left; width: 31em; margin-right: 1em; margin-left: 0.855%; }
+h1 { display: inline; float: left; width: 31em; margin-right: 1em; margin-left: 1em; }
 h1 a:link, h1 a:visited { display: block; }
 
-.nav { overflow: hidden; *zoom: 1; margin-left: 31emgutter-width(); margin-right: 0.855%; }
+.nav { *zoom: 1; padding-left: 32em; margin-right: 1em; }
+.nav:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
-[role="navigation"] { display: inline; float: left; width: 51.807%; margin-right: 1.205%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; }
+[role="navigation"] { display: inline; float: left; width: 46.988%; margin-right: 1.205%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; }
 
 .meta { display: inline; float: left; width: 46.988%; margin-right: 1.205%; }
 
@@ -217,8 +220,8 @@ h1 a:link, h1 a:visited { display: block; }
 [role="main"] > div { *zoom: 1; position: absolute; top: 0; bottom: 0; }
 [role="main"] > div:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
-[role="contentinfo"] { position: absolute; bottom: 0; left: 0; right: 0; border-top-style: solid; border-top-width: 0.083em; padding-top: 0.726em; padding-bottom: 0.809em; border-color: #dddddd; }
-[role="contentinfo"] .author { clear: both; margin-left: 0.855%; margin-right: 0.855%; }
+[role="contentinfo"] { position: fixed; bottom: 0; left: 0; right: 0; border-top-style: solid; border-top-width: 0.083em; padding-top: 0.726em; padding-bottom: 0.809em; border-color: #dddddd; }
+[role="contentinfo"] .author { margin: 0 1em; }
 [role="contentinfo"] small { font: inherit; }
 
 /* Login --------------------------------------------------------------------- */
@@ -265,44 +268,47 @@ h1 a:link, h1 a:visited { display: block; }
 .actions { display: none; }
 
 /* Address Table ------------------------------------------------------------- */
-#addresstable { position: absolute; top: 0; bottom: 0; left: 0; width: 32em; counter-reset: address; overflow-y: scroll; overflow-x: hidden; }
+#addresstable { position: absolute; top: 0; bottom: 0; left: 0; width: 33em; counter-reset: address; overflow-y: scroll; overflow-x: hidden; }
 #addresstable h2 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #addresstable button { margin: 0; padding: 0; border: 0; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; -moz-border-radius: 0; -webkit-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; -khtml-border-radius: 0; border-radius: 0; text-shadow: none; overflow: visible; width: auto; vertical-align: baseline; background: none; color: inherit; font: inherit; text-align: left; }
 #addresstable button { *display: inline; }
 #addresstable button:hover, #addresstable button:focus { -moz-box-shadow: none; -webkit-box-shadow: none; -o-box-shadow: none; box-shadow: none; }
-#addresstable .address { *zoom: 1; clear: both; counter-increment: address; position: relative; padding-right: 1em; }
+#addresstable .address { *zoom: 1; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; clear: both; counter-increment: address; position: relative; padding-right: 1em; }
 #addresstable .address:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
-#addresstable .address:focus .controls, #addresstable .address:hover .controls, #addresstable .address:active .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
-#addresstable .address .content { overflow: hidden; *zoom: 1; padding-top: 1.214em; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 1.939em; margin-right: -1em; padding-right: 1em; border-color: #dddddd; }
+#addresstable .address .content { overflow: hidden; *zoom: 1; padding-bottom: 1.618em; background: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, rgba(221, 221, 221, 0.382)), color-stop(100%, rgba(221, 221, 221, 0))); background: -webkit-linear-gradient(bottom, rgba(221, 221, 221, 0.382), rgba(221, 221, 221, 0)); background: -moz-linear-gradient(bottom, rgba(221, 221, 221, 0.382), rgba(221, 221, 221, 0)); background: -o-linear-gradient(bottom, rgba(221, 221, 221, 0.382), rgba(221, 221, 221, 0)); background: linear-gradient(bottom, rgba(221, 221, 221, 0.382), rgba(221, 221, 221, 0)); margin-right: -1em; padding-right: 1em; border-color: #dddddd; }
 #addresstable [title="history"]::before { content: url('../images/ui/history.png?1305749879') " "; vertical-align: middle; }
 #addresstable [title="edit"]::before { content: url('../images/ui/pencil.png?1305749898') " "; vertical-align: middle; }
 #addresstable [name="delete"]::before { content: url('../images/ui/trash.png?1305749914') " "; vertical-align: middle; }
 #addresstable [name="approve"] { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/warning.png?1305750015'); background-repeat: no-repeat; background-position: 50% 50%; width: 19.417px; }
 #addresstable [name="approve"]:focus, #addresstable [name="approve"]:hover, #addresstable [name="approve"]:active { background-image: url('../images/ui/check.png?1305749988'); }
-#addresstable .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; margin: 0; padding: 0; border: 0; list-style: none; *zoom: 1; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; position: absolute; right: 0; bottom: 0; left: 0; margin-right: -1em; padding-right: 1em; background: rgba(221, 221, 221, 0.5); border-top: 1px solid rgba(221, 221, 221, 0.75); }
+#addresstable .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; margin: 0; padding: 0; border: 0; list-style: none; *zoom: 1; position: absolute; right: 0; bottom: 0; left: 0; margin-right: -1em; padding-right: 1em; background: rgba(148, 148, 148, 0.236); }
 #addresstable .controls li { list-style-image: none; list-style-type: none; margin-left: 0px; }
 #addresstable .controls:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 #addresstable .controls li { display: inline; float: left; width: 33.333%; text-align: center; }
 #addresstable .controls li:nth-child(3n) { display: inline; float: right; }
 #addresstable [id^="select_"] { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
-#addresstable [id^="select_"]:checked + .content { background: rgba(221, 221, 221, 0.5); }
-#addresstable .adr { display: inline; float: left; width: 48.387%; margin-right: 3.226%; padding-left: 12.903%; position: relative; }
+#addresstable [id^="select_"]:checked + .content { padding-bottom: 2.427em; background: rgba(221, 221, 221, 0.382) -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, rgba(221, 221, 221, 0.618)), color-stop(100%, rgba(221, 221, 221, 0))); background: rgba(221, 221, 221, 0.382) -webkit-linear-gradient(bottom, rgba(221, 221, 221, 0.618), rgba(221, 221, 221, 0)); background: rgba(221, 221, 221, 0.382) -moz-linear-gradient(bottom, rgba(221, 221, 221, 0.618), rgba(221, 221, 221, 0)); background: rgba(221, 221, 221, 0.382) -o-linear-gradient(bottom, rgba(221, 221, 221, 0.618), rgba(221, 221, 221, 0)); background: rgba(221, 221, 221, 0.382) linear-gradient(bottom, rgba(221, 221, 221, 0.618), rgba(221, 221, 221, 0)); }
+#addresstable [id^="select_"]:checked + .content details[open] { margin-bottom: 0em; }
+#addresstable [id^="select_"]:checked + .content .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
+#addresstable .adr { display: inline; float: left; width: 48.387%; margin-right: 3.226%; padding-left: 12.903%; padding-top: 1.618em; position: relative; }
 #addresstable .street-address { font-size: 1.618em; line-height: 1em; display: block; }
 #addresstable .street-address::before { position: absolute; left: 0; content: counter(address, upper-latin) "."; width: 15.789%; text-align: right; }
 #addresstable .id { display: inline; float: left; width: 35.484%; margin-right: 3.226%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; font-weight: bold; }
-#addresstable .id * { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; margin: 0; }
-#addresstable .id * { *display: inline; }
-#addresstable .complex { display: inline; float: left; width: 48.387%; margin-right: 3.226%; margin-left: 12.903%; margin-bottom: 0; }
+#addresstable .id > * { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; margin: 0; }
+#addresstable .id > * { *display: inline; }
+#addresstable .id > *[for] { padding-top: 1.618em; }
+#addresstable .id > *:not([for]) { margin-top: 1.618em; }
+#addresstable .complex { display: inline; float: left; width: 48.387%; margin-right: 3.226%; margin-bottom: 1.618em; margin-left: 12.903%; }
 #addresstable [name="complex"] { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/house.png?1305749944'); background-repeat: no-repeat; background-position: 50% 50%; width: 19.417px; }
 #addresstable [name="complex"]:focus, #addresstable [name="complex"]:hover, #addresstable [name="complex"]:active { background-image: url('../images/ui/bldg.png?1305749849'); }
 #addresstable [name="complex"].single { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/bldg.png?1305749849'); background-repeat: no-repeat; background-position: 50% 50%; width: 19.417px; }
 #addresstable [name="complex"].single:focus, #addresstable [name="complex"].single:hover, #addresstable [name="complex"].single:active { background-image: url('../images/ui/house.png?1305749944'); }
+#addresstable details[open] { margin-bottom: 0.809em; }
+#addresstable details[open] + .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 #addresstable summary { display: inline; float: left; width: 35.484%; margin-right: 3.226%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; }
-.no-details #addresstable summary::before { content: url('../images/ui/angle_right.png?1305749969'); }
-#addresstable .open summary { margin-bottom: 0.809em; }
-#addresstable .byline, #addresstable .notes { clear: both; padding-left: 12.903%; margin-bottom: 0.405em; }
+#addresstable .byline, #addresstable .notes { clear: both; padding-left: 12.903%; margin: 0; }
 #addresstable .byline p, #addresstable .notes p { margin: 0; }
-#addresstable .byline:last-child, #addresstable .notes:last-child { margin: 0; }
+#addresstable .byline { margin-bottom: 1.618em; }
 
 /* Map ----------------------------------------------------------------------- */
-#map { position: absolute; top: 0; right: 0; bottom: 0; left: 32em; padding: 0.809em; background: #4c4c4c; color: #dddddd; }
+#map { position: absolute; top: 0; right: 0; bottom: 0; left: 33em; padding: 0.809em; background: #dddddd; }

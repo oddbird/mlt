@@ -174,7 +174,7 @@ blockquote
   font-style: italic
 
 nav
-  p
+  ul, ol, h2, p
     margin: 0
 
 .navhead
@@ -188,6 +188,7 @@ summary
   +appearance(none)
   display: $summary-display
   cursor: pointer
+  color: $alt
   &:focus
     +focus-default
 
@@ -197,6 +198,13 @@ summary
       display: none
     summary
       display: $summary-display
+      &::before
+        +adjust-font-size-to(9px)
+        content: "▶"
+    &.open
+      summary
+        &::before
+          content: "▼"
 
 /* Replaced ------------------------------------------------------------------
 

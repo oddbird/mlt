@@ -14,8 +14,8 @@ $side-gutter-width  : $gutter-width
 /* Layout --------------------------------------------------------------
 
 .container
-  +container
-  margin-left: 0
+  +pie-clearfix
+  width: 100%
   min-width: 65em
 
 [role="banner"]
@@ -28,18 +28,18 @@ $side-gutter-width  : $gutter-width
 
 h1
   +fixed-columns(8)
-  margin-left: side-gutter()
+  margin-left: $side-gutter-width
   a
     #{$link}
       display: block
 
 .nav
-  +clearfix
-  margin-left: fixed(8) + gutter-width()
-  margin-right: side-gutter()
+  +pie-clearfix
+  padding-left: fixed(8) + $side-gutter-width
+  margin-right: $side-gutter-width
 
 [role="navigation"]
-  +columns(11,21)
+  +columns(10,21)
   +omega(21)
   text-align: right
 
@@ -60,7 +60,7 @@ h1
     bottom: 0
 
 [role="contentinfo"]
-  position: absolute
+  position: fixed
   bottom: 0
   left: 0
   right: 0
@@ -70,7 +70,7 @@ h1
   > div
     @extend .container
   .author
-    +full
+    margin: 0 $side-gutter-width
   small
     font: inherit
 
@@ -98,7 +98,6 @@ h1
   top: 0
   right: 0
   bottom: 0
-  left: fixed(8) + $gutter-width
+  left: fixed(8) + $gutter-width + $side-gutter-width
   padding: rhythm(.5)
-  background: $dark
-  color: $light
+  background: $light

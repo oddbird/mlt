@@ -60,33 +60,34 @@
             <label for="select_01">111-222-3333</label>
           </div>
 
-          <div class="complex">
-            <button name="complex" type="submit" class="multiple">multiple units</button>
-            <span class="name">single unit</span>
-          </div>
-
           <details>
             <summary>details</summary>
-            <div class="byline">
-              <!-- if imported -->
-              <p class="hcard">
-                Imported by <cite class="fn">[username]</cite> from [source]
-                on <time pubdate>[timestamp]</time>.
-                <!-- elseif created manually
-                  Created by <cite class="fn">[username]</cite>
-                  on <time pubdate>[timestamp]</time>
-                -->
-              </p>
-              <!-- end if -->
-              <!-- if mapped -->
-              <p class="hcard">
-                Mapped by <cite class="fn">[username]</cite>
-                on <time class="mapped">[timestamp]</time>.
-              </p>
-              <!-- end if -->
-            </div>
+            <div class="more">
+              <div class="complex">
+                <button name="complex" type="submit" class="multiple">multiple units</button>
+                <span class="name">single unit</span>
+              </div>
+              <div class="byline">
+                <!-- if imported -->
+                <p class="hcard">
+                  Imported by <cite class="fn">[username]</cite> from [source]
+                  on <time pubdate>[timestamp]</time>.
+                  <!-- elseif created manually
+                    Created by <cite class="fn">[username]</cite>
+                    on <time pubdate>[timestamp]</time>
+                  -->
+                </p>
+                <!-- end if -->
+                <!-- if mapped -->
+                <p class="hcard">
+                  Mapped by <cite class="fn">[username]</cite>
+                  on <time class="mapped">[timestamp]</time>.
+                </p>
+                <!-- end if -->
+              </div>
 
-            <p class="notes">Notes about this address</p>
+              <p class="notes">Notes about this address</p>
+            </div>
           </details>
 
           <ul class="controls">
