@@ -1,4 +1,8 @@
-/* List Navigation --------------------------------------------------------------
+// Imports ------------------------------------------------------------------
+
+@import lightbox
+
+/* List Navigation -----------------------------------------------------------
 
 .sortlinks
   #{$link}
@@ -79,8 +83,72 @@
     .perpage
       +omega(24)
 
+/* Actions -------------------------------------------------------------------
+
+=hbuttons($n)
+  +float(left)
+  width: percentage(1/$n)
+  text-align: center
+
 .actions
-  display: none
+  h3
+    +gone
+  ul
+    +no-style-list
+  .import_export
+    display: none
+
+  .manageform
+    +pie-clearfix
+    background: $mid
+    color: $light
+    li
+      +hbuttons(3)
+      &:last-child
+        a
+          #{$link}
+            border: 0
+    a
+      #{$link}
+        +padding-leader(.25)
+        +padding-trailer(.25)
+        +text-shadow(rgba($base,$xsmall) 0 1px 0)
+        display: block
+        color: $light
+        font-weight: bold
+        border-right: 1px solid $mid-dark
+        &::before
+          padding-right: $xsmallem
+      #{$focus}
+        +background-image(linear-gradient(top,rgba($base,$xxsmall),rgba($base,0)))
+      &.selectall
+        +icon('ui/check_circle.png')
+      &.selectnone
+        +icon('ui/minus_circle.png')
+      &.create
+        +icon('ui/plus.png')
+
+#add-address-form
+  label
+    +gone
+  li
+    +trailer(.5)
+  [name="complex"]
+    +float(left)
+    width: 5%
+    ~ input
+      +float(right)
+      width: 92%
+    &:not(:checked)
+      + label
+        +back
+        +float(right)
+        width: 92%
+      ~ input
+        display: none
+    &:checked
+      ~ input
+        display: block
 
 /* Address Table -------------------------------------------------------------
 
@@ -92,13 +160,20 @@
   left: 0
   width: fixed(8) + $gutter-width + $side-gutter-width
   counter-reset: address
-  overflow-y: scroll
-  overflow-x: hidden
 
   h2
     +gone
   button
     +no-style-button
+
+  .managelist
+    position: absolute
+    top: rhythm(1.5)
+    right: 0
+    bottom: 0
+    left: 0
+    overflow-y: scroll
+    overflow-x: hidden
 
   .address
     +pie-clearfix
@@ -110,11 +185,10 @@
 
     .content
       +clearfix
-      +padding-trailer(1)
-      +background(linear-gradient(bottom,rgba($light,$xsmall), rgba($light,0)))
+      +padding-trailer(.5)
+      +background-image(linear-gradient(bottom,rgba($light,$xsmall), rgba($light,0) 50%))
       margin-right: - $gutter-width
       padding-right: $gutter-width
-      border-color: $light
 
   [title="history"]
     +icon('ui/history.png')
@@ -129,6 +203,7 @@
     +opacity(0)
     +no-style-list
     +pie-clearfix
+    visibility: hidden
     position: absolute
     right: 0
     bottom: 0
@@ -137,26 +212,23 @@
     padding-right: $gutter-width
     background: rgba($mid,$xxsmall)
     li
-      +float(left)
-      width: percentage(1/3)
-      text-align: center
-      &:nth-child(3n)
-        +float(right)
+      +hbuttons(3)
 
   [id^="select_"]
     +gone
     &:checked + .content
       +padding-trailer(1.5)
-      +background(rgba($light,$xsmall) linear-gradient(bottom,rgba($light,$small), rgba($light,0)))
+      +background(rgba($light,$xsmall) linear-gradient(bottom,rgba($mid,$small), rgba($mid,0)))
       details[open]
         +trailer(0)
       .controls
         +opacity(1)
+        visibility: visible
 
   .adr
     +columns(4,8)
     +prefix(1,8)
-    +padding-leader(1)
+    +padding-leader(.5)
     position: relative
   .street-address
     +adjust-font-size-to($medpx)
@@ -177,9 +249,9 @@
       +inline-block
       margin: 0
       &[for]
-        +padding-leader(1)
+        +padding-leader(.5)
       &:not([for])
-        +leader(1)
+        +leader(.5)
 
   .complex
     +columns(4,8)
@@ -195,6 +267,7 @@
     +trailer(.5)
     + .controls
       +opacity(1)
+      visibility: visible
 
   summary
     +columns(3,8)

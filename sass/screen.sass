@@ -20,7 +20,7 @@ $side-gutter-width  : $gutter-width
 
 [role="banner"]
   +padding-leader(.5)
-  +trailing-border(1px,.5)
+  +padding-trailer(.5)
   border-color: $light
   > div
     @extend .container
@@ -52,6 +52,8 @@ h1
   right: 0
   bottom: rhythm(2)
   left: 0
+  border: 1px solid $light
+    width: 1px 0
   > div
     @extend .container
     +pie-clearfix
@@ -64,7 +66,7 @@ h1
   bottom: 0
   left: 0
   right: 0
-  +leading-border(1px,.5)
+  +padding-leader(.5)
   +padding-trailer(.5)
   border-color: $light
   > div

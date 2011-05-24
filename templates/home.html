@@ -3,11 +3,10 @@
 {% block content %}
 <section id="addresstable">
   <h2>Address Table</h2>
-  <form method="POST" id="addressform">
+  <form id="addressform">
 
     {# include "includes/filter.html" #}
-    {# include "includes/actions.html" #}
-    {# include "includes/listnav.html" #}
+    {% include "includes/actions.html" %}
 
     <!--
       <nav class="listordering">
@@ -43,6 +42,7 @@
     -->
 
     <div class="managelist">
+
       <article id="address-id" class="address">
         <input type="checkbox" id="select_01" name="select" value="">
         <div class="content">
@@ -100,7 +100,6 @@
     </div>
 
     {# include "includes/listnav.html" #}
-    {# include "includes/actions_redux.html" #}
 
   </form>
 </section>

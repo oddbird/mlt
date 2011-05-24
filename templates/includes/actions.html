@@ -1,14 +1,15 @@
 <section class="actions">
   <h3>List Actions</h3>
+
   <ul class="manageform">
-    <li class="create"><a href="#">add address</a></li>
-    <li class="selectall"><a href="#">select all</a></li>
-    <li class="selectnone"><a href="#">select none</a></li>
+    <li><a href="#" class="selectall">select all</a></li>
+    <li><a href="#" class="selectnone">select none</a></li>
+    <li class="lightbox"><a href="#lightbox-add-address" class="create summary">add address</a></li>
   </ul>
+
   <ul class="import_export">
-    <li class="import_addresses" class="details">
-      <a href="#">import addresses</a>
-      {% block import_addresses %}
+    <li class="import_addresses" class="lightbox">
+      <a href="#" class="summary">import addresses</a>
       <div class="content" id="import_addresses">
         <p class="note">import a CSV file of addresses.</p>
         <input type="file" name="import_addresses" value="">
@@ -17,12 +18,10 @@
           <button title="import_addresses" type="submit" name="action-import" value="">import</button>
         </p>
       </div>
-      {% endblock import_addresses %}
     </li>
 
-    <li class="import_parcel_layer" class="details">
+    <li class="import_parcel_layer" class="lightbox">
       <a href="#" class="summary">import parcel layer</a>
-      {% block import_parcel_layer %}
       <div class="content" id="import_parcel_layer">
         <p class="note">Import a shapefile or geojson parcel layer</p>
         <input type="file" name="input_parcel_layer" value="">
@@ -31,12 +30,10 @@
           <button title="import_parcel_layer" type="submit" name="action-import" value="">import</button>
         </p>
       </div>
-      {% endblock import_parcel_layer %}
     </li>
 
-    <li id="export_addresses" class="details">
+    <li id="export_addresses" class="lightbox">
       <a href="#" class="summary">export addresses</a>
-      {% block export_addresses %}
       <div class="content" id="export_addresses">
         <select name="export_addresses">
           <option value="XLS">XLS</option>
@@ -49,7 +46,6 @@
           <button title="export_addresses" type="submit" name="action-export" value="">export addresses</button>
         </p>
       </div>
-      {% endblock export_addresses %}
     </li>
   </ul>
 </section>

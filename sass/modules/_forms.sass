@@ -107,6 +107,7 @@ input
   &[type="date"], &[type="datetime"], &[type="datetime-local"],
   &[type="month"], &[type="week"], &[type="time"],
   &[type="number"], &[type="search"], &[type="color"]
+    @extend .input
     @extend .textinput
     +apply-placeholders
 
@@ -135,15 +136,14 @@ button,  input[type="reset"], input[type="submit"], input[type="button"], input[
   +button-reset
 
 .button
-  +adjust-font-size-to(12px,.5)
   +border-radius(1em)
   +background($alt)
   +background(linear-gradient(top, rgba($light,.25), rgba($light,0) 100%), $alt)
-  +rhythm-borders(1px,.25,12px)
+  +rhythm-borders(1px,.25)
   +hpadding
   +text-shadow(contrast-color(contrast-color($alt)) 1px 1px 0)
   border-color: $dark
-  vertical-align: top
+  vertical-align: baseline
   cursor: pointer
   color: contrast-color($alt)
   font-weight: bold
