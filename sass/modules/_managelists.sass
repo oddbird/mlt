@@ -87,7 +87,7 @@
 
 =hbuttons($n)
   +float(left)
-  width: percentage(1/$n)
+  width: 1/$n*100%
   text-align: center
 
 .actions
@@ -103,7 +103,9 @@
     background: $mid
     color: $light
     li
-      +hbuttons(3)
+      +float(left)
+      width: 11em
+      text-align: center
       &:last-child
         a
           #{$link}
@@ -154,10 +156,6 @@
 
 #addresstable
   +column-grid-background(8,$col-width,$gutter-width,0em,$force-fluid:true)
-  position: absolute
-  top: 0
-  bottom: 0
-  left: 0
   width: fixed(8) + $gutter-width + $side-gutter-width
   counter-reset: address
 
@@ -167,11 +165,7 @@
     +no-style-button
 
   .managelist
-    position: absolute
-    top: rhythm(1.5)
-    right: 0
-    bottom: 0
-    left: 0
+    height: rhythm(25)
     overflow-y: scroll
     overflow-x: hidden
 
@@ -224,6 +218,8 @@
       .controls
         +opacity(1)
         visibility: visible
+      .notes
+        margin: 0
 
   .adr
     +columns(4,8)
@@ -277,9 +273,6 @@
   .byline, .notes
     +full(8)
     +prefix(1,8)
-    margin: 0
+    +trailer
     p
       margin: 0
-
-  .byline
-    +trailer

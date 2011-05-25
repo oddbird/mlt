@@ -19,13 +19,4 @@ urlpatterns = patterns(
     url(r"^history/$",
         "django.views.generic.simple.direct_to_template",
         {"template": "history/history.html"}),
-
-    # temp
-    url(r"^list/$",
-        "django.views.generic.simple.direct_to_template",
-        {"template": "wireframe/list.html"}),
-    url(r"^table/$",
-        "django.views.generic.simple.direct_to_template",
-        {"template": "wireframe/table.html"}),
-
 )

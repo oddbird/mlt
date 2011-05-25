@@ -200,32 +200,32 @@ button, input[type="reset"], input[type="submit"], input[type="button"], input[t
 .form-actions { text-align: right; }
 
 /* Layout -------------------------------------------------------------- */
-.container, [role="banner"] > div, [role="main"] > div, [role="contentinfo"] > div { *zoom: 1; width: 100%; min-width: 65em; }
-.container:after, [role="banner"] > div:after, [role="main"] > div:after, [role="contentinfo"] > div:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
+.container, [role="banner"], [role="main"], [role="contentinfo"] { *zoom: 1; width: 100%; min-width: 65em; }
+.container:after, [role="banner"]:after, [role="main"]:after, [role="contentinfo"]:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
-[role="banner"] { padding-top: 0.809em; padding-bottom: 0.809em; border-color: #dddddd; }
-[role="banner"] > div { overflow: hidden; *zoom: 1; }
+[role="banner"] { overflow: hidden; *zoom: 1; padding-top: 0.405em; padding-bottom: 0.405em; border-color: #dddddd; }
 
-h1 { display: inline; float: left; width: 31em; margin-right: 1em; margin-left: 1em; }
+h1 { display: inline; float: left; width: 31em; margin-right: 1em; padding-top: 0.405em; padding-bottom: 0.405em; margin-left: 1em; }
 h1 a:link, h1 a:visited { display: block; }
 
 .nav { *zoom: 1; padding-left: 32em; margin-right: 1em; }
 .nav:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
-[role="navigation"] { display: inline; float: left; width: 46.988%; margin-right: 1.205%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; }
+[role="navigation"] { display: inline; float: right; }
+[role="navigation"] a:link, [role="navigation"] a:visited { display: inline; float: right; -moz-border-radius: 0.382em; -webkit-border-radius: 0.382em; -o-border-radius: 0.382em; -ms-border-radius: 0.382em; -khtml-border-radius: 0.382em; border-radius: 0.382em; padding-top: 0.405em; padding-bottom: 0.405em; text-align: center; padding-left: 28.584px; padding-right: 12px; white-space: nowrap; background: rgba(221, 221, 221, 0.382) url('../images/ui/history.png?1305749879') no-repeat scroll 12px; }
+[role="navigation"] a:focus, [role="navigation"] a:hover, [role="navigation"] a:active, [role="navigation"] a.active { background-color: rgba(221, 221, 221, 0.618); }
 
-.meta { display: inline; float: left; width: 46.988%; margin-right: 1.205%; }
+.meta { display: inline; float: right; padding-top: 0.405em; padding-bottom: 0.405em; padding-right: 12px; }
 
-[role="main"] { position: absolute; top: 3.236em; right: 0; bottom: 3.236em; left: 0; border: 1px solid #dddddd; border-width: 1px 0; }
-[role="main"] > div { *zoom: 1; position: absolute; top: 0; bottom: 0; }
-[role="main"] > div:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
+[role="main"] { *zoom: 1; position: relative; border: 1px solid #dddddd; border-width: 1px 0; }
+[role="main"]:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
-[role="contentinfo"] { position: fixed; bottom: 0; left: 0; right: 0; padding-top: 0.809em; padding-bottom: 0.809em; border-color: #dddddd; }
+[role="contentinfo"] { padding-top: 0.809em; padding-bottom: 0.809em; }
 [role="contentinfo"] .author { margin: 0 1em; }
 [role="contentinfo"] small { font: inherit; }
 
 /* Login --------------------------------------------------------------------- */
-#login { clear: both; padding-left: 20.87%; padding-right: 20.87%; }
+#login { clear: both; padding-left: 27.826%; padding-right: 27.826%; padding-top: 1.618em; padding-bottom: 1.618em; max-width: 47em; }
 #login form { margin-top: 1.618em; }
 #login label { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #login li { margin-bottom: 0.809em; }
@@ -278,7 +278,7 @@ h1 a:link, h1 a:visited { display: block; }
 .actions .import_export { display: none; }
 .actions .manageform { *zoom: 1; background: #949494; color: #dddddd; }
 .actions .manageform:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
-.actions .manageform li { display: inline; float: left; width: 33.333%; text-align: center; }
+.actions .manageform li { display: inline; float: left; width: 11em; text-align: center; }
 .actions .manageform li:last-child a:link, .actions .manageform li:last-child a:visited { border: 0; }
 .actions .manageform a:link, .actions .manageform a:visited { padding-top: 0.405em; padding-bottom: 0.405em; text-shadow: rgba(76, 76, 76, 0.382) 0 1px 0; display: block; color: #dddddd; font-weight: bold; border-right: 1px solid #707070; }
 .actions .manageform a:link::before, .actions .manageform a:visited::before { padding-right: 0.382em; }
@@ -296,12 +296,12 @@ h1 a:link, h1 a:visited { display: block; }
 #add-address-form [name="complex"]:checked ~ input { display: block; }
 
 /* Address Table ------------------------------------------------------------- */
-#addresstable { position: absolute; top: 0; bottom: 0; left: 0; width: 33em; counter-reset: address; }
+#addresstable { width: 33em; counter-reset: address; }
 #addresstable h2 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #addresstable button { margin: 0; padding: 0; border: 0; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; -moz-border-radius: 0; -webkit-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; -khtml-border-radius: 0; border-radius: 0; text-shadow: none; overflow: visible; width: auto; vertical-align: baseline; background: none; color: inherit; font: inherit; text-align: left; }
 #addresstable button { *display: inline; }
 #addresstable button:hover, #addresstable button:focus { -moz-box-shadow: none; -webkit-box-shadow: none; -o-box-shadow: none; box-shadow: none; }
-#addresstable .managelist { position: absolute; top: 2.427em; right: 0; bottom: 0; left: 0; overflow-y: scroll; overflow-x: hidden; }
+#addresstable .managelist { height: 40.45em; overflow-y: scroll; overflow-x: hidden; }
 #addresstable .address { *zoom: 1; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; clear: both; counter-increment: address; position: relative; padding-right: 1em; }
 #addresstable .address:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 #addresstable .address .content { overflow: hidden; *zoom: 1; padding-bottom: 0.809em; background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, rgba(221, 221, 221, 0.382)), color-stop(50%, rgba(221, 221, 221, 0))); background-image: -webkit-linear-gradient(bottom, rgba(221, 221, 221, 0.382), rgba(221, 221, 221, 0) 50%); background-image: -moz-linear-gradient(bottom, rgba(221, 221, 221, 0.382), rgba(221, 221, 221, 0) 50%); background-image: -o-linear-gradient(bottom, rgba(221, 221, 221, 0.382), rgba(221, 221, 221, 0) 50%); background-image: linear-gradient(bottom, rgba(221, 221, 221, 0.382), rgba(221, 221, 221, 0) 50%); margin-right: -1em; padding-right: 1em; }
@@ -318,6 +318,7 @@ h1 a:link, h1 a:visited { display: block; }
 #addresstable [id^="select_"]:checked + .content { padding-bottom: 2.427em; background: rgba(221, 221, 221, 0.382) -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, rgba(148, 148, 148, 0.618)), color-stop(100%, rgba(148, 148, 148, 0))); background: rgba(221, 221, 221, 0.382) -webkit-linear-gradient(bottom, rgba(148, 148, 148, 0.618), rgba(148, 148, 148, 0)); background: rgba(221, 221, 221, 0.382) -moz-linear-gradient(bottom, rgba(148, 148, 148, 0.618), rgba(148, 148, 148, 0)); background: rgba(221, 221, 221, 0.382) -o-linear-gradient(bottom, rgba(148, 148, 148, 0.618), rgba(148, 148, 148, 0)); background: rgba(221, 221, 221, 0.382) linear-gradient(bottom, rgba(148, 148, 148, 0.618), rgba(148, 148, 148, 0)); }
 #addresstable [id^="select_"]:checked + .content details[open] { margin-bottom: 0em; }
 #addresstable [id^="select_"]:checked + .content .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; visibility: visible; }
+#addresstable [id^="select_"]:checked + .content .notes { margin: 0; }
 #addresstable .adr { display: inline; float: left; width: 48.387%; margin-right: 3.226%; padding-left: 12.903%; padding-top: 0.809em; position: relative; }
 #addresstable .street-address { font-size: 1.618em; line-height: 1em; display: block; }
 #addresstable .street-address::before { position: absolute; left: 0; content: counter(address, upper-latin) "."; width: 15.789%; text-align: right; }
@@ -334,9 +335,8 @@ h1 a:link, h1 a:visited { display: block; }
 #addresstable details[open] { margin-bottom: 0.809em; }
 #addresstable details[open] + .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; visibility: visible; }
 #addresstable summary { display: inline; float: left; width: 35.484%; margin-right: 3.226%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; }
-#addresstable .byline, #addresstable .notes { clear: both; padding-left: 12.903%; margin: 0; }
+#addresstable .byline, #addresstable .notes { clear: both; padding-left: 12.903%; margin-bottom: 1.618em; }
 #addresstable .byline p, #addresstable .notes p { margin: 0; }
-#addresstable .byline { margin-bottom: 1.618em; }
 
 /* Map ----------------------------------------------------------------------- */
-#map { position: absolute; top: 0; right: 0; bottom: 0; left: 33em; padding: 0.809em; background: #dddddd; }
+#map { position: absolute; top: 0; right: 0; bottom: 0; left: 33em; padding: 0.405em 0.809em; background: #dddddd; }

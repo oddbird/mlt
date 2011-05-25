@@ -19,15 +19,16 @@ $side-gutter-width  : $gutter-width
   min-width: 65em
 
 [role="banner"]
-  +padding-leader(.5)
-  +padding-trailer(.5)
+  @extend .container
+  +clearfix
+  +padding-leader(.25)
+  +padding-trailer(.25)
   border-color: $light
-  > div
-    @extend .container
-    +clearfix
 
 h1
   +fixed-columns(8)
+  +padding-leader(.25)
+  +padding-trailer(.25)
   margin-left: $side-gutter-width
   a
     #{$link}
@@ -39,38 +40,39 @@ h1
   margin-right: $side-gutter-width
 
 [role="navigation"]
-  +columns(10,21)
-  +omega(21)
-  text-align: right
+  +float(right)
+  a
+    #{$link}
+      +float(right)
+      +border-radius($xsmallem)
+      +padding-leader(.25)
+      +padding-trailer(.25)
+      text-align: center
+      padding:
+        left: $normpx + image-width('ui/history.png') + $xsmallpx
+        right: $normpx
+      white-space: nowrap
+      background: rgba($light,$xsmall) image-url('ui/history.png') no-repeat scroll $normpx
+    #{$focus}, &.active
+      background-color: rgba($light,$small)
 
 .meta
-  +columns(10,21)
+  +float(right)
+  +padding-leader(.25)
+  +padding-trailer(.25)
+  padding-right: $normpx
 
 [role="main"]
-  position: absolute
-  top: rhythm(2)
-  right: 0
-  bottom: rhythm(2)
-  left: 0
+  @extend .container
+  +pie-clearfix
+  position: relative
   border: 1px solid $light
     width: 1px 0
-  > div
-    @extend .container
-    +pie-clearfix
-    position: absolute
-    top: 0
-    bottom: 0
 
 [role="contentinfo"]
-  position: fixed
-  bottom: 0
-  left: 0
-  right: 0
+  @extend .container
   +padding-leader(.5)
   +padding-trailer(.5)
-  border-color: $light
-  > div
-    @extend .container
   .author
     margin: 0 $side-gutter-width
   small
@@ -80,7 +82,10 @@ h1
 
 #login
   +full(29)
-  +pad(6,6,29)
+  +pad(8,8,29)
+  +padding-leader
+  +padding-trailer
+  max-width: fixed(12)
   form
     +leader
   label
@@ -101,5 +106,5 @@ h1
   right: 0
   bottom: 0
   left: fixed(8) + $gutter-width + $side-gutter-width
-  padding: rhythm(.5)
+  padding: rhythm(.25) rhythm(.5)
   background: $light
