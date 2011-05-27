@@ -1,4 +1,4 @@
-(function($) {
+(function() {
 
     if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i)) {
         var viewportmeta = document.querySelectorAll('meta[name="viewport"]')[0];
@@ -10,4 +10,4 @@
         }
     }
 
-})(jQuery);
+})();

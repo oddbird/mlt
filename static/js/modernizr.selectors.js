@@ -1,55 +1,59 @@
 // selectorSupported lovingly lifted from the mad italian genius, diego perini
 // http://javascript.nwbox.com/CSSSupport/
-function selectorSupported(selector){
+(function() {
 
-    var support, link, sheet, doc = document,
-    root = doc.documentElement,
-    head = root.getElementsByTagName('head')[0],
+    function selectorSupported(selector){
 
-    impl = doc.implementation || {
-        hasFeature: function() {
-            return false;
-        }
-    },
+        var support, link, sheet, doc = document,
+        root = doc.documentElement,
+        head = root.getElementsByTagName('head')[0],
 
-    link = doc.createElement("style");
-    link.type = 'text/css';
+        impl = doc.implementation || {
+            hasFeature: function() {
+                return false;
+            }
+        },
 
-    (head || root).insertBefore(link, (head || root).firstChild);
+        link = doc.createElement("style");
+        link.type = 'text/css';
 
-    sheet = link.sheet || link.styleSheet;
+        (head || root).insertBefore(link, (head || root).firstChild);
 
-    if (!(sheet && selector)) return false;
+        sheet = link.sheet || link.styleSheet;
 
-    support = impl.hasFeature('CSS2', '') ?
+        if (!(sheet && selector)) return false;
 
-    function(selector) {
-        try {
-            sheet.insertRule(selector + '{ }', 0);
-            sheet.deleteRule(sheet.cssRules.length - 1);
-        } catch (e) {
-            return false;
-        }
-        return true;
+        support = impl.hasFeature('CSS2', '') ?
 
-    } : function(selector) {
+        function(selector) {
+            try {
+                sheet.insertRule(selector + '{ }', 0);
+                sheet.deleteRule(sheet.cssRules.length - 1);
+            } catch (e) {
+                return false;
+            }
+            return true;
 
-        sheet.cssText = selector + ' { }';
-        return sheet.cssText.length !== 0 && !(/unknown/i).test(sheet.cssText) && sheet.cssText.indexOf(selector) === 0;
+        } : function(selector) {
+
+            sheet.cssText = selector + ' { }';
+            return sheet.cssText.length !== 0 && !(/unknown/i).test(sheet.cssText) && sheet.cssText.indexOf(selector) === 0;
+        };
+
+        return support(selector);
+
     };
 
-    return support(selector);
+    Modernizr.addTest('target',function(){
+        return selectorSupported(':target');
+    }).addTest('not',function(){
+        return selectorSupported(':not(p)');
+    }).addTest('last-child',function(){
+        return selectorSupported(':last-child');
+    }).addTest('nth-child',function(){
+        return selectorSupported(':nth-child(2)');
+    }).addTest('nth-of-type',function(){
+        return selectorSupported(':nth-of-type(2)');
+    })
 
-};
-
-Modernizr.addTest('target',function(){
-    return selectorSupported(':target');
-}).addTest('not',function(){
-    return selectorSupported(':not(p)');
-}).addTest('last-child',function(){
-    return selectorSupported(':last-child');
-}).addTest('nth-child',function(){
-    return selectorSupported(':nth-child(2)');
-}).addTest('nth-of-type',function(){
-    return selectorSupported(':nth-of-type(2)');
-})
+})();
