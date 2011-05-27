@@ -12,6 +12,20 @@
         });
     };
 
+    var lightboxBootstrap = function() {
+        var update = function() {
+            if ($('#lightbox-add-address #complex').is(':checked')) {
+                $('#lightbox-add-address #complex_name').show();
+            } else {
+                $('#lightbox-add-address #complex_name').hide();
+            }
+        };
+        $('#lightbox-add-address #complex').change(function() {
+            update();
+        });
+        update();
+    };
+
     $(function() {
         $('#hcard-client-name .email').defuscate();
         $('input[placeholder], textarea[placeholder]').placeholder();
@@ -26,6 +40,7 @@
         }
         $('.details:not(html)').html5accordion('.summary');
         addressListHeight();
+        lightboxBootstrap();
     });
 
 })(jQuery);
