@@ -18,7 +18,7 @@ Copy settings_local.sample.py to settings_local.py and modify as needed.
 
 # This email address will get emailed on 500 server errors.
 #ADMINS = [
-#    ("Some One", "someone@mozilla.com"),
+#    ("Some One", "someone@example.com"),
 #]
 
 
