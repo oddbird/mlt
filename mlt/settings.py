@@ -8,6 +8,3 @@ local_settings = os.path.abspath(
 if os.path.exists(local_settings):
     exec(open(local_settings).read())
 
-
-COMPRESS_ROOT = STATIC_ROOT
-COMPRESS_URL = STATIC_URL

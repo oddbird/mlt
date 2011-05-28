@@ -59,6 +59,7 @@ STATICFILES_DIRS = [join(BASE_PATH, "static")]
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "compressor.finders.CompressorFinder",
 ]
 
 # Make this unique, and don't share it with anybody.
@@ -144,6 +145,6 @@ LOGGING = {
 
 INSTALLED_APPS += ["compressor"]
 COMPRESS_CSS_FILTERS = ["compressor.filters.css_default.CssAbsoluteFilter",
-                        "tcmui.compressor_filters.SlimmerCSSFilter"]
+                        "mlt.compressor_filters.SlimmerCSSFilter"]
 
 SESSION_COOKIE_HTTPONLY = True
