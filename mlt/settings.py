@@ -8,3 +8,6 @@ local_settings = os.path.abspath(
 if os.path.exists(local_settings):
     exec(open(local_settings).read())
 
+COMPRESS_OFFLINE_CONTEXT = {
+    "STATIC_URL": STATIC_URL
+    }

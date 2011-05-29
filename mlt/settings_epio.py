@@ -16,8 +16,11 @@ DEBUG = False
 TEMPLATE_DEBUG = False
 
 COMPRESS = True
+COMPRESS_OFFLINE = True
+COMPRESS_OUTPUT_DIR = "cache"
 
-SECRET_KEY = "41a7373225837c9b55c22b49016d015fb6e18c5be41ca289ffeb082035689cde"
+# nice long randomish string epio gives us
+SECRET_KEY = config["redis"]["password"]
 
 CACHES = {
     "default": {
