@@ -6,3 +6,4 @@ def deploy():
     # ensure the compress cache dir exists
     local("epio run_command mkdir -- -p ../data/compress-cache")
     local("epio django compress")
+    local("epio django checksecure")
