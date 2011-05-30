@@ -34,3 +34,5 @@ SERVER_EMAIL = "server@provplan.ep.io"
 EMAIL_HOST = "mail.threepines.org"
 EMAIL_PORT = "587"
 EMAIL_USE_TLS = True
+
+SECURE_SSL_HOST = "provplan.ep.io"
