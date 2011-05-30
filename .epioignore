@@ -1,0 +1,6 @@
+requirements/dist/
+sass/
+static/
+extensions/
+bin/
+mlt/settings/local.py
