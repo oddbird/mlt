@@ -14,9 +14,6 @@ DATABASES = {
 
 COMPRESS_OUTPUT_DIR = "cache"
 
-# nice long randomish string epio gives us
-SECRET_KEY = config["redis"]["password"]
-
 CACHES = {
     "default": {
         "BACKEND": "redis_cache.RedisCache",
