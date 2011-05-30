@@ -1,4 +1,4 @@
-from .default_settings import *
+from .prod import *
 
 from bundle_config import config
 
@@ -12,11 +12,6 @@ DATABASES = {
     }
 }
 
-DEBUG = False
-TEMPLATE_DEBUG = False
-
-COMPRESS = True
-COMPRESS_OFFLINE = True
 COMPRESS_OUTPUT_DIR = "cache"
 
 # nice long randomish string epio gives us
@@ -35,6 +30,7 @@ CACHES = {
     },
 }
 
+SERVER_EMAIL = "server@provplan.ep.io"
 EMAIL_HOST = "mail.threepines.org"
 EMAIL_PORT = "587"
 EMAIL_USE_TLS = True

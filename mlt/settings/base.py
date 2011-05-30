@@ -147,4 +147,18 @@ INSTALLED_APPS += ["compressor"]
 COMPRESS_CSS_FILTERS = ["compressor.filters.css_default.CssAbsoluteFilter",
                         "mlt.compressor_filters.SlimmerCSSFilter"]
 
+INSTALLED_APPS += ["djangosecure"]
+MIDDLEWARE_CLASSES.insert(0, "djangosecure.middleware.SecurityMiddleware")
 SESSION_COOKIE_HTTPONLY = True
+
+import os
+
+local_settings = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "local.py"))
+
+if os.path.exists(local_settings):
+    exec(open(local_settings).read())
+
+COMPRESS_OFFLINE_CONTEXT = {
+    "STATIC_URL": STATIC_URL
+    }

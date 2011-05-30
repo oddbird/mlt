@@ -2,5 +2,5 @@ TAGS
 collected-assets/
 *.DS_Store
 .sass-cache/
-mlt/settings_local.py
+mlt/settings/local.py
 .livereload
