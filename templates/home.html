@@ -43,7 +43,7 @@
 
     <div class="managelist">
 
-      <article id="address-id" class="address">
+      <article id="address-id-01" class="address">
         <input type="checkbox" id="select_01" name="select" value="">
         <div class="content">
           <label for="select_01">
@@ -56,8 +56,8 @@
           </label>
 
           <div class="id">
-            <button name="approve" type="submit" value="">approve</button>
-            <label for="select_01">111-222-3333</label>
+            <button name="approve" type="submit" value="" class="approval">approve</button>
+            <label for="select_01" class="value">111-222-3333</label>
           </div>
 
           <details>
@@ -98,7 +98,7 @@
         </div>
       </article>
 
-      <article id="address-id" class="address">
+      <article id="address-id-02" class="address">
         <input type="checkbox" id="select_02" name="select" value="">
         <div class="content">
           <label for="select_02">
@@ -111,8 +111,8 @@
           </label>
 
           <div class="id">
-            <button name="approve" type="submit" value="">approve</button>
-            <label for="select_02">444-555-6666</label>
+            <button name="approve" type="submit" value="" class="approval">approve</button>
+            <label for="select_02" class="value">444-555-6666</label>
           </div>
 
           <details>
@@ -153,7 +153,7 @@
         </div>
       </article>
 
-      <article id="address-id" class="address">
+      <article id="address-id-03" class="address">
         <input type="checkbox" id="select_03" name="select" value="">
         <div class="content">
           <label for="select_03">
@@ -165,9 +165,9 @@
             </h3>
           </label>
 
-          <div class="id">
-            <!-- <button name="approve" type="submit" value="">approve</button>
-            <label for="select_03">111-222-3333</label> -->
+          <div class="id unmapped">
+            <button name="approve" type="submit" value="" class="approval" disabled>approve</button>
+            <label for="select_03" class="value">not mapped</label>
           </div>
 
           <details>
@@ -208,7 +208,7 @@
         </div>
       </article>
 
-      <article id="address-id" class="address">
+      <article id="address-id-04" class="address">
         <input type="checkbox" id="select_04" name="select" value="">
         <div class="content">
           <label for="select_04">
@@ -220,9 +220,9 @@
             </h3>
           </label>
 
-          <div class="id">
-            <!-- <button name="approve" type="submit" value="">approve</button>
-            <label for="select_04">111-222-3333</label> -->
+          <div class="id unmapped">
+            <button name="approve" type="submit" value="" class="approval" disabled>approve</button>
+            <label for="select_04" class="value">not mapped</label>
           </div>
 
           <details>
@@ -263,7 +263,7 @@
         </div>
       </article>
 
-      <article id="address-id" class="address">
+      <article id="address-id-05" class="address">
         <input type="checkbox" id="select_05" name="select" value="">
         <div class="content">
           <label for="select_05">
@@ -275,9 +275,284 @@
             </h3>
           </label>
 
-          <div class="id">
-            <button name="approve" type="submit" value="">approve</button>
-            <label for="select_05">777-888-9999</label>
+          <div class="id approved">
+            <button name="unapprove" type="submit" value="" class="approval">unapprove</button>
+            <label for="select_05" class="value">777-888-9999</label>
+          </div>
+
+          <details>
+            <summary>details</summary>
+            <div class="more">
+              <div class="complex">
+                <button name="complex" type="submit" class="multiple">multiple units</button>
+                <span class="name">single unit</span>
+              </div>
+              <div class="byline">
+                <!-- if imported -->
+                <p class="hcard">
+                  Imported by <cite class="fn">[username]</cite> from [source]
+                  on <time pubdate>[timestamp]</time>.
+                  <!-- elseif created manually
+                    Created by <cite class="fn">[username]</cite>
+                    on <time pubdate>[timestamp]</time>
+                  -->
+                </p>
+                <!-- end if -->
+                <!-- if mapped -->
+                <p class="hcard">
+                  Mapped by <cite class="fn">[username]</cite>
+                  on <time class="mapped">[timestamp]</time>.
+                </p>
+                <!-- end if -->
+              </div>
+
+              <p class="notes">Notes about this address</p>
+            </div>
+          </details>
+
+          <ul class="controls">
+            <li><a href="#" title="edit">edit</a></li>
+            <li><a href="#" title="history">history</a></li>
+            <li><button type="submit" name="delete" value="">delete</button></li>
+          </ul>
+        </div>
+      </article>
+
+      <article id="address-id-06" class="address">
+        <input type="checkbox" id="select_06" name="select" value="">
+        <div class="content">
+          <label for="select_06">
+            <h3 class="adr">
+              <span class="street-address">14 Davol Sq</span>
+              <span class="locality">Providence</span>,
+              <abbr class="region">RI</abbr>
+              <span class="postal-code">02909</span>
+            </h3>
+          </label>
+
+          <div class="id approved">
+            <button name="unapprove" type="submit" value="" class="approval">unapprove</button>
+            <label for="select_06" class="value">777-888-9999</label>
+          </div>
+
+          <details>
+            <summary>details</summary>
+            <div class="more">
+              <div class="complex">
+                <button name="complex" type="submit" class="multiple">multiple units</button>
+                <span class="name">single unit</span>
+              </div>
+              <div class="byline">
+                <!-- if imported -->
+                <p class="hcard">
+                  Imported by <cite class="fn">[username]</cite> from [source]
+                  on <time pubdate>[timestamp]</time>.
+                  <!-- elseif created manually
+                    Created by <cite class="fn">[username]</cite>
+                    on <time pubdate>[timestamp]</time>
+                  -->
+                </p>
+                <!-- end if -->
+                <!-- if mapped -->
+                <p class="hcard">
+                  Mapped by <cite class="fn">[username]</cite>
+                  on <time class="mapped">[timestamp]</time>.
+                </p>
+                <!-- end if -->
+              </div>
+
+              <p class="notes">Notes about this address</p>
+            </div>
+          </details>
+
+          <ul class="controls">
+            <li><a href="#" title="edit">edit</a></li>
+            <li><a href="#" title="history">history</a></li>
+            <li><button type="submit" name="delete" value="">delete</button></li>
+          </ul>
+        </div>
+      </article>
+
+      <article id="address-id-07" class="address">
+        <input type="checkbox" id="select_07" name="select" value="">
+        <div class="content">
+          <label for="select_07">
+            <h3 class="adr">
+              <span class="street-address">14 Davol Sq</span>
+              <span class="locality">Providence</span>,
+              <abbr class="region">RI</abbr>
+              <span class="postal-code">02909</span>
+            </h3>
+          </label>
+
+          <div class="id approved">
+            <button name="unapprove" type="submit" value="" class="approval">unapprove</button>
+            <label for="select_07" class="value">777-888-9999</label>
+          </div>
+
+          <details>
+            <summary>details</summary>
+            <div class="more">
+              <div class="complex">
+                <button name="complex" type="submit" class="multiple">multiple units</button>
+                <span class="name">single unit</span>
+              </div>
+              <div class="byline">
+                <!-- if imported -->
+                <p class="hcard">
+                  Imported by <cite class="fn">[username]</cite> from [source]
+                  on <time pubdate>[timestamp]</time>.
+                  <!-- elseif created manually
+                    Created by <cite class="fn">[username]</cite>
+                    on <time pubdate>[timestamp]</time>
+                  -->
+                </p>
+                <!-- end if -->
+                <!-- if mapped -->
+                <p class="hcard">
+                  Mapped by <cite class="fn">[username]</cite>
+                  on <time class="mapped">[timestamp]</time>.
+                </p>
+                <!-- end if -->
+              </div>
+
+              <p class="notes">Notes about this address</p>
+            </div>
+          </details>
+
+          <ul class="controls">
+            <li><a href="#" title="edit">edit</a></li>
+            <li><a href="#" title="history">history</a></li>
+            <li><button type="submit" name="delete" value="">delete</button></li>
+          </ul>
+        </div>
+      </article>
+
+      <article id="address-id-08" class="address">
+        <input type="checkbox" id="select_08" name="select" value="">
+        <div class="content">
+          <label for="select_08">
+            <h3 class="adr">
+              <span class="street-address">14 Davol Sq</span>
+              <span class="locality">Providence</span>,
+              <abbr class="region">RI</abbr>
+              <span class="postal-code">02909</span>
+            </h3>
+          </label>
+
+          <div class="id approved">
+            <button name="unapprove" type="submit" value="" class="approval">unapprove</button>
+            <label for="select_08" class="value">777-888-9999</label>
+          </div>
+
+          <details>
+            <summary>details</summary>
+            <div class="more">
+              <div class="complex">
+                <button name="complex" type="submit" class="multiple">multiple units</button>
+                <span class="name">single unit</span>
+              </div>
+              <div class="byline">
+                <!-- if imported -->
+                <p class="hcard">
+                  Imported by <cite class="fn">[username]</cite> from [source]
+                  on <time pubdate>[timestamp]</time>.
+                  <!-- elseif created manually
+                    Created by <cite class="fn">[username]</cite>
+                    on <time pubdate>[timestamp]</time>
+                  -->
+                </p>
+                <!-- end if -->
+                <!-- if mapped -->
+                <p class="hcard">
+                  Mapped by <cite class="fn">[username]</cite>
+                  on <time class="mapped">[timestamp]</time>.
+                </p>
+                <!-- end if -->
+              </div>
+
+              <p class="notes">Notes about this address</p>
+            </div>
+          </details>
+
+          <ul class="controls">
+            <li><a href="#" title="edit">edit</a></li>
+            <li><a href="#" title="history">history</a></li>
+            <li><button type="submit" name="delete" value="">delete</button></li>
+          </ul>
+        </div>
+      </article>
+
+      <article id="address-id-09" class="address">
+        <input type="checkbox" id="select_09" name="select" value="">
+        <div class="content">
+          <label for="select_09">
+            <h3 class="adr">
+              <span class="street-address">14 Davol Sq</span>
+              <span class="locality">Providence</span>,
+              <abbr class="region">RI</abbr>
+              <span class="postal-code">02909</span>
+            </h3>
+          </label>
+
+          <div class="id approved">
+            <button name="unapprove" type="submit" value="" class="approval">unapprove</button>
+            <label for="select_09" class="value">777-888-9999</label>
+          </div>
+
+          <details>
+            <summary>details</summary>
+            <div class="more">
+              <div class="complex">
+                <button name="complex" type="submit" class="multiple">multiple units</button>
+                <span class="name">single unit</span>
+              </div>
+              <div class="byline">
+                <!-- if imported -->
+                <p class="hcard">
+                  Imported by <cite class="fn">[username]</cite> from [source]
+                  on <time pubdate>[timestamp]</time>.
+                  <!-- elseif created manually
+                    Created by <cite class="fn">[username]</cite>
+                    on <time pubdate>[timestamp]</time>
+                  -->
+                </p>
+                <!-- end if -->
+                <!-- if mapped -->
+                <p class="hcard">
+                  Mapped by <cite class="fn">[username]</cite>
+                  on <time class="mapped">[timestamp]</time>.
+                </p>
+                <!-- end if -->
+              </div>
+
+              <p class="notes">Notes about this address</p>
+            </div>
+          </details>
+
+          <ul class="controls">
+            <li><a href="#" title="edit">edit</a></li>
+            <li><a href="#" title="history">history</a></li>
+            <li><button type="submit" name="delete" value="">delete</button></li>
+          </ul>
+        </div>
+      </article>
+
+      <article id="address-id-10" class="address">
+        <input type="checkbox" id="select_10" name="select" value="">
+        <div class="content">
+          <label for="select_10">
+            <h3 class="adr">
+              <span class="street-address">14 Davol Sq</span>
+              <span class="locality">Providence</span>,
+              <abbr class="region">RI</abbr>
+              <span class="postal-code">02909</span>
+            </h3>
+          </label>
+
+          <div class="id approved">
+            <button name="unapprove" type="submit" value="" class="approval">unapprove</button>
+            <label for="select_10" class="value">777-888-9999</label>
           </div>
 
           <details>

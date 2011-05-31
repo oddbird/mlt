@@ -165,7 +165,6 @@
     +no-style-button
 
   .managelist
-    height: rhythm(25)
     overflow-y: scroll
     overflow-x: hidden
 
@@ -180,7 +179,7 @@
     .content
       +clearfix
       +padding-trailer(.5)
-      +background-image(linear-gradient(bottom,rgba($light,$xsmall), rgba($light,0) 50%))
+      +background-image(linear-gradient(bottom, rgba($light,$norm), rgba($light,$xsmall) 2%, rgba($light,0) 50%, rgba($light,0) 98%, rgba($light,$small)))
       margin-right: - $gutter-width
       padding-right: $gutter-width
 
@@ -192,6 +191,8 @@
     +icon('ui/trash.png')
   [name="approve"]
     +icon('ui/warning.png','ui/check.png',replace)
+  [name="unapprove"]
+    +icon('ui/check.png','ui/warning.png',replace)
 
   .controls
     +opacity(0)
@@ -212,7 +213,7 @@
     +gone
     &:checked + .content
       +padding-trailer(1.5)
-      +background(rgba($light,$xsmall) linear-gradient(bottom,rgba($mid,$small), rgba($mid,0)))
+      +background-image(linear-gradient(bottom, rgba($mid,$norm), rgba($mid,$xsmall) 2%, rgba($mid,$xsmall) 98%, rgba($mid,$small)))
       details[open]
         +trailer(0)
       .controls
@@ -241,13 +242,23 @@
     +omega(8)
     text-align: right
     font-weight: bold
-    > *
+    .approval, .value
       +inline-block
       margin: 0
-      &[for]
-        +padding-leader(.5)
-      &:not([for])
-        +leader(.5)
+    .value
+      +padding-leader(.5)
+    .approval
+      +leader(.5)
+
+    &.unmapped
+      .approval
+        +gone
+      .value
+        display: block
+        color: $accent
+
+    &.approved
+      color: green
 
   .complex
     +columns(4,8)

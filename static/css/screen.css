@@ -44,7 +44,7 @@ html > body { font-size: 12px; }
 
 html { text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
 
-body { color: #4c4c4c; }
+body { text-shadow: rgba(255, 255, 255, 0.618) 0 1px 0; color: #4c4c4c; }
 
 /* Selected Text ------------------------------------------------------------- */
 ::-webkit-selection { color: #dddddd; background: #005498; text-shadow: none; }
@@ -301,21 +301,23 @@ h1 a:link, h1 a:visited { display: block; }
 #addresstable button { margin: 0; padding: 0; border: 0; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; -moz-border-radius: 0; -webkit-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; -khtml-border-radius: 0; border-radius: 0; text-shadow: none; overflow: visible; width: auto; vertical-align: baseline; background: none; color: inherit; font: inherit; text-align: left; }
 #addresstable button { *display: inline; }
 #addresstable button:hover, #addresstable button:focus { -moz-box-shadow: none; -webkit-box-shadow: none; -o-box-shadow: none; box-shadow: none; }
-#addresstable .managelist { height: 40.45em; overflow-y: scroll; overflow-x: hidden; }
+#addresstable .managelist { overflow-y: scroll; overflow-x: hidden; }
 #addresstable .address { *zoom: 1; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; clear: both; counter-increment: address; position: relative; padding-right: 1em; }
 #addresstable .address:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
-#addresstable .address .content { overflow: hidden; *zoom: 1; padding-bottom: 0.809em; background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, rgba(221, 221, 221, 0.382)), color-stop(50%, rgba(221, 221, 221, 0))); background-image: -webkit-linear-gradient(bottom, rgba(221, 221, 221, 0.382), rgba(221, 221, 221, 0) 50%); background-image: -moz-linear-gradient(bottom, rgba(221, 221, 221, 0.382), rgba(221, 221, 221, 0) 50%); background-image: -o-linear-gradient(bottom, rgba(221, 221, 221, 0.382), rgba(221, 221, 221, 0) 50%); background-image: linear-gradient(bottom, rgba(221, 221, 221, 0.382), rgba(221, 221, 221, 0) 50%); margin-right: -1em; padding-right: 1em; }
+#addresstable .address .content { overflow: hidden; *zoom: 1; padding-bottom: 0.809em; background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #dddddd), color-stop(2%, rgba(221, 221, 221, 0.382)), color-stop(50%, rgba(221, 221, 221, 0)), color-stop(98%, rgba(221, 221, 221, 0)), color-stop(100%, rgba(221, 221, 221, 0.618))); background-image: -webkit-linear-gradient(bottom, #dddddd, rgba(221, 221, 221, 0.382) 2%, rgba(221, 221, 221, 0) 50%, rgba(221, 221, 221, 0) 98%, rgba(221, 221, 221, 0.618)); background-image: -moz-linear-gradient(bottom, #dddddd, rgba(221, 221, 221, 0.382) 2%, rgba(221, 221, 221, 0) 50%, rgba(221, 221, 221, 0) 98%, rgba(221, 221, 221, 0.618)); background-image: -o-linear-gradient(bottom, #dddddd, rgba(221, 221, 221, 0.382) 2%, rgba(221, 221, 221, 0) 50%, rgba(221, 221, 221, 0) 98%, rgba(221, 221, 221, 0.618)); background-image: linear-gradient(bottom, #dddddd, rgba(221, 221, 221, 0.382) 2%, rgba(221, 221, 221, 0) 50%, rgba(221, 221, 221, 0) 98%, rgba(221, 221, 221, 0.618)); margin-right: -1em; padding-right: 1em; }
 #addresstable [title="history"]::before { content: url('../images/ui/history.png?1305749879') " "; vertical-align: middle; }
 #addresstable [title="edit"]::before { content: url('../images/ui/pencil.png?1305749898') " "; vertical-align: middle; }
 #addresstable [name="delete"]::before { content: url('../images/ui/trash.png?1305749914') " "; vertical-align: middle; }
 #addresstable [name="approve"] { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/warning.png?1305750015'); background-repeat: no-repeat; background-position: 50% 50%; width: 19.417px; }
 #addresstable [name="approve"]:focus, #addresstable [name="approve"]:hover, #addresstable [name="approve"]:active { background-image: url('../images/ui/check.png?1305749988'); }
+#addresstable [name="unapprove"] { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/check.png?1305749988'); background-repeat: no-repeat; background-position: 50% 50%; width: 19.417px; }
+#addresstable [name="unapprove"]:focus, #addresstable [name="unapprove"]:hover, #addresstable [name="unapprove"]:active { background-image: url('../images/ui/warning.png?1305750015'); }
 #addresstable .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; margin: 0; padding: 0; border: 0; list-style: none; *zoom: 1; visibility: hidden; position: absolute; right: 0; bottom: 0; left: 0; margin-right: -1em; padding-right: 1em; background: rgba(148, 148, 148, 0.236); }
 #addresstable .controls li { list-style-image: none; list-style-type: none; margin-left: 0px; }
 #addresstable .controls:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 #addresstable .controls li { display: inline; float: left; width: 33.333%; text-align: center; }
 #addresstable [id^="select_"] { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
-#addresstable [id^="select_"]:checked + .content { padding-bottom: 2.427em; background: rgba(221, 221, 221, 0.382) -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, rgba(148, 148, 148, 0.618)), color-stop(100%, rgba(148, 148, 148, 0))); background: rgba(221, 221, 221, 0.382) -webkit-linear-gradient(bottom, rgba(148, 148, 148, 0.618), rgba(148, 148, 148, 0)); background: rgba(221, 221, 221, 0.382) -moz-linear-gradient(bottom, rgba(148, 148, 148, 0.618), rgba(148, 148, 148, 0)); background: rgba(221, 221, 221, 0.382) -o-linear-gradient(bottom, rgba(148, 148, 148, 0.618), rgba(148, 148, 148, 0)); background: rgba(221, 221, 221, 0.382) linear-gradient(bottom, rgba(148, 148, 148, 0.618), rgba(148, 148, 148, 0)); }
+#addresstable [id^="select_"]:checked + .content { padding-bottom: 2.427em; background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #949494), color-stop(2%, rgba(148, 148, 148, 0.382)), color-stop(98%, rgba(148, 148, 148, 0.382)), color-stop(100%, rgba(148, 148, 148, 0.618))); background-image: -webkit-linear-gradient(bottom, #949494, rgba(148, 148, 148, 0.382) 2%, rgba(148, 148, 148, 0.382) 98%, rgba(148, 148, 148, 0.618)); background-image: -moz-linear-gradient(bottom, #949494, rgba(148, 148, 148, 0.382) 2%, rgba(148, 148, 148, 0.382) 98%, rgba(148, 148, 148, 0.618)); background-image: -o-linear-gradient(bottom, #949494, rgba(148, 148, 148, 0.382) 2%, rgba(148, 148, 148, 0.382) 98%, rgba(148, 148, 148, 0.618)); background-image: linear-gradient(bottom, #949494, rgba(148, 148, 148, 0.382) 2%, rgba(148, 148, 148, 0.382) 98%, rgba(148, 148, 148, 0.618)); }
 #addresstable [id^="select_"]:checked + .content details[open] { margin-bottom: 0em; }
 #addresstable [id^="select_"]:checked + .content .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; visibility: visible; }
 #addresstable [id^="select_"]:checked + .content .notes { margin: 0; }
@@ -323,10 +325,13 @@ h1 a:link, h1 a:visited { display: block; }
 #addresstable .street-address { font-size: 1.618em; line-height: 1em; display: block; }
 #addresstable .street-address::before { position: absolute; left: 0; content: counter(address, upper-latin) "."; width: 15.789%; text-align: right; }
 #addresstable .id { display: inline; float: left; width: 35.484%; margin-right: 3.226%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; font-weight: bold; }
-#addresstable .id > * { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; margin: 0; }
-#addresstable .id > * { *display: inline; }
-#addresstable .id > *[for] { padding-top: 0.809em; }
-#addresstable .id > *:not([for]) { margin-top: 0.809em; }
+#addresstable .id .approval, #addresstable .id .value { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; margin: 0; }
+#addresstable .id .approval, #addresstable .id .value { *display: inline; }
+#addresstable .id .value { padding-top: 0.809em; }
+#addresstable .id .approval { margin-top: 0.809em; }
+#addresstable .id.unmapped .approval { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
+#addresstable .id.unmapped .value { display: block; color: #984400; }
+#addresstable .id.approved { color: green; }
 #addresstable .complex { display: inline; float: left; width: 48.387%; margin-right: 3.226%; margin-bottom: 1.618em; margin-left: 12.903%; }
 #addresstable [name="complex"] { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/house.png?1305749944'); background-repeat: no-repeat; background-position: 50% 50%; width: 19.417px; }
 #addresstable [name="complex"]:focus, #addresstable [name="complex"]:hover, #addresstable [name="complex"]:active { background-image: url('../images/ui/bldg.png?1305749849'); }
