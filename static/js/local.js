@@ -4,11 +4,16 @@
         var headerHeight = $('header[role="banner"]').outerHeight(),
             actionsHeight = $('.actions').outerHeight(),
             footerHeight = $('footer[role="contentinfo"]').outerHeight(),
-            addressListHeight = $(window).height() - headerHeight - actionsHeight - footerHeight;
-            $('.managelist').css('height', addressListHeight + 'px');
+            addressListHeight,
+            updateHeight = function() {
+                addressListHeight = $(window).height() - headerHeight - actionsHeight - footerHeight - 2;
+                $('.managelist').css('height', addressListHeight + 'px');
+            };
+        updateHeight();
         $(window).resize(function() {
-            addressListHeight = $(window).height() - headerHeight - actionsHeight - footerHeight;
-            $('.managelist').css('height', addressListHeight + 'px');
+            $.doTimeout(250, function() {
+                updateHeight();
+            });
         });
     };
 
