@@ -1,0 +1,68 @@
+<article id="address-id-{{ id }}" class="address">
+  <input type="checkbox" id="select_{{ id }}" name="select" value="">
+
+  <div class="content">
+    <label for="select_{{ id }}">
+      <h3 class="adr" title="3635 Van Gordon St., Providence, RI 02909">
+        <span class="street-address">3635 Van Gordon St.</span>
+        <span class="locality">Providence</span>
+        <abbr class="region">RI</abbr>
+        <span class="postal-code">02909</span>
+      </h3>
+    </label>
+
+    <div class="id{% if not mapped %} unmapped{% else %}{% if mapped != "blametern" %} approved{% endif %}{% endif %}">
+      {% if mapped %}
+        {% if mapped == "blametern" %}
+          <button name="approve" type="submit" value="" class="approval">approve</button>
+        {% else %}
+          <button name="unapprove" type="submit" value="" class="approval">approve</button>
+        {% endif %}
+        <label for="select_{{ id }}" class="value">111-222-3333</label>
+      {% else %}
+        <label for="select_{{ id }}" class="value">not mapped</label>
+      {% endif %}
+    </div>
+
+    <ul class="controls">
+      <li><a href="#" title="edit">edit</a></li>
+      <li><a href="#" title="history">history</a></li>
+      <li><button type="submit" name="delete" value="">delete</button></li>
+    </ul>
+
+    <div class="details">
+      <p class="summary">details</p>
+      <div class="more">
+        <div class="complex">
+          <button name="complex" type="submit" class="multiple">multiple units</button>
+          <span class="name">single unit</span>
+        </div>
+
+        {% if origin or mapped %}
+          <div class="byline">
+            {% if origin %}
+              <p class="hcard">
+                {% if origin == "imported"  %}Imported{% endif %}
+                {% if origin == "created" %}Created{% endif %}
+                by <cite class="fn">[username]</cite> from [source]
+                on <time pubdate>[timestamp]</time>.
+              </p>
+            {% endif %}
+
+            {% if mapped %}
+              <p class="hcard">
+                Mapped by <cite class="fn">{{ mapped }}</cite>
+                on <time class="mapped">[timestamp]</time>.
+              </p>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if notes %}
+          <p class="notes">Notes about this address</p>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</article>
