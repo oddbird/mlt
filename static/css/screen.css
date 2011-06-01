@@ -242,13 +242,13 @@ h1 a:link, h1 a:visited { display: block; }
 .actions ul { margin: 0; padding: 0; border: 0; list-style: none; }
 .actions ul li { list-style-image: none; list-style-type: none; margin-left: 0px; }
 .actions .import_export { display: none; }
-.actions .manageform { *zoom: 1; background: #949494; color: #dddddd; }
+.actions .manageform { *zoom: 1; background: rgba(148, 148, 148, 0.618); }
 .actions .manageform:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 .actions .manageform li { display: inline; float: left; width: 33.333%; text-align: center; }
 .actions .manageform li:last-child a:link, .actions .manageform li:last-child a:visited { border: 0; }
-.actions .manageform a:link, .actions .manageform a:visited { padding-top: 0.405em; padding-bottom: 0.405em; text-shadow: rgba(76, 76, 76, 0.382) 0 1px 0; display: block; color: #dddddd; font-weight: bold; border-right: 1px solid #707070; }
+.actions .manageform a:link, .actions .manageform a:visited { padding-top: 0.405em; padding-bottom: 0.405em; display: block; color: #4c4c4c; font-weight: bold; border-right: 1px solid #949494; }
 .actions .manageform a:link::before, .actions .manageform a:visited::before { padding-right: 0.382em; }
-.actions .manageform a:focus, .actions .manageform a:hover, .actions .manageform a:active { background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(76, 76, 76, 0.236)), color-stop(100%, rgba(76, 76, 76, 0))); background-image: -webkit-linear-gradient(top, rgba(76, 76, 76, 0.236), rgba(76, 76, 76, 0)); background-image: -moz-linear-gradient(top, rgba(76, 76, 76, 0.236), rgba(76, 76, 76, 0)); background-image: -o-linear-gradient(top, rgba(76, 76, 76, 0.236), rgba(76, 76, 76, 0)); background-image: linear-gradient(top, rgba(76, 76, 76, 0.236), rgba(76, 76, 76, 0)); }
+.actions .manageform a:focus, .actions .manageform a:hover, .actions .manageform a:active { background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, rgba(221, 221, 221, 0)), color-stop(50%, rgba(221, 221, 221, 0.382)), color-stop(100%, rgba(221, 221, 221, 0))); background-image: -webkit-linear-gradient(left, rgba(221, 221, 221, 0), rgba(221, 221, 221, 0.382), rgba(221, 221, 221, 0)); background-image: -moz-linear-gradient(left, rgba(221, 221, 221, 0), rgba(221, 221, 221, 0.382), rgba(221, 221, 221, 0)); background-image: -o-linear-gradient(left, rgba(221, 221, 221, 0), rgba(221, 221, 221, 0.382), rgba(221, 221, 221, 0)); background-image: linear-gradient(left, rgba(221, 221, 221, 0), rgba(221, 221, 221, 0.382), rgba(221, 221, 221, 0)); }
 .actions .manageform a.selectall::before { content: url('../images/ui/check_circle.png?1306192224') " "; vertical-align: middle; }
 .actions .manageform a.selectall::before { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; }
 .actions .manageform a.selectall::before:focus, .actions .manageform a.selectall::before:hover, .actions .manageform a.selectall::before:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
@@ -322,4 +322,4 @@ h1 a:link, h1 a:visited { display: block; }
 #addresstable .complex, #addresstable .byline { margin-bottom: 0.809em; }
 
 /* Map ----------------------------------------------------------------------- */
-#map { position: absolute; top: 0; right: 0; bottom: 0; left: 33em; padding: 0.405em 0.809em; background: #dddddd; }
+#map { position: absolute; top: 0; right: 0; bottom: 0; left: 33em; padding: 0.405em 0.809em; background: rgba(0, 128, 0, 0.146); }

@@ -19,8 +19,7 @@
 
   .manageform
     +pie-clearfix
-    background: $mid
-    color: $light
+    background: rgba($mid,$small)
     li
       +hbuttons(3)
       &:last-child
@@ -31,15 +30,14 @@
       #{$link}
         +padding-leader(.25)
         +padding-trailer(.25)
-        +text-shadow(rgba($base,$xsmall) 0 1px 0)
         display: block
-        color: $light
+        color: $base
         font-weight: bold
-        border-right: 1px solid $mid-dark
+        border-right: 1px solid $mid
         &::before
           padding-right: $xsmallem
       #{$focus}
-        +background-image(linear-gradient(top,rgba($base,$xxsmall),rgba($base,0)))
+        +background-image(linear-gradient(left,rgba($light,0),rgba($light,$xsmall),rgba($light,0)))
       &.selectall
         +icon('ui/check_circle.png')
       &.selectnone
