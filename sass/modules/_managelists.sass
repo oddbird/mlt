@@ -2,87 +2,6 @@
 
 @import lightbox
 
-/* List Navigation -----------------------------------------------------------
-
-.sortlinks
-  #{$link}
-    display: block
-    position: relative
-    &::after
-      +replace-text-with-dimensions('ui/angle_up.png')
-      +inline-block
-      content: " "
-      margin-left: .4em
-      background-image: none
-      vertical-align: baseline
-  #{$focus}
-    color: $accent
-    &::after
-      background-image: image-url('ui/angle_up.png')
-  &.asc
-    #{$link}
-      &::after
-        background-image: image-url('ui/angle_up.png')
-    #{$focus}
-      &::after
-        background-image: image-url('ui/angle_down.png')
-  &.desc
-    #{$link}
-      &::after
-        background-image: image-url('ui/angle_down.png')
-    #{$focus}
-      &::after
-        background-image: image-url('ui/angle_up.png')
-
-.listordering
-  display: none
-  +clearfix
-  +rhythm(0,.25,.25,0)
-  font-weight: bold
-  h3
-    text-transform: capitalize
-    &::after
-      content: ": "
-  ul
-    +inline-block-list
-  a
-    @extend .sortlinks
-
-.listnav
-  display: none
-  +pie-clearfix
-  +rhythm(0,.25,.25,.5)
-  +hpadding(.5em)
-  clear: both
-  white-space: nowrap
-  p, ul
-    +reset-box-model
-    strong
-      font-weight: normal
-  .perpage ul, .pagination
-    +inline-block-list
-    display: inline
-    font-style: normal
-    li
-      vertical-align: baseline
-      + li::before
-        content: "| "
-        color: #ccc
-  .pagination
-    text-align: center
-  .current
-    font-weight: bold
-
-  .table &
-    .pagination
-      +columns(12,21)
-    .location, .perpage
-      +columns(6,21)
-    .perpage
-      text-align: right
-    .perpage
-      +omega(24)
-
 /* Actions -------------------------------------------------------------------
 
 =hbuttons($n)
@@ -103,9 +22,7 @@
     background: $mid
     color: $light
     li
-      +float(left)
-      width: 11em
-      text-align: center
+      +hbuttons(3)
       &:last-child
         a
           #{$link}
@@ -163,6 +80,27 @@
     +gone
   button
     +no-style-button
+  p, ul
+    margin: 0
+
+  [title="history"]
+    +icon('ui/history.png',$replace:true)
+  [title="edit"]
+    +icon('ui/pencil.png',$replace:true)
+  [name="delete"]
+    +icon('ui/trash.png',$replace:true)
+  [name="approve"]
+    +icon('ui/warning.png','ui/check.png',replace)
+  [name="unapprove"]
+    +icon('ui/check.png','ui/warning.png',replace)
+  [name="complex"]
+    +icon('ui/house.png','ui/bldg.png',replace)
+    +inline-block
+    vertical-align: baseline
+    &.single
+      +icon('ui/bldg.png','ui/house.png',replace)
+  .summary
+    +icon('ui/info.png',$replace:true)
 
   .managelist
     overflow: hidden
@@ -175,72 +113,25 @@
     clear: both
     counter-increment: address
     position: relative
+
+  .content
+    +clearfix
+    +trailing-border(1px,.25)
     padding-right: $gutter-width
-
-    .content
-      +clearfix
-      +padding-trailer(.5)
-      +background-image(linear-gradient(bottom, rgba($light,$norm), rgba($light,$xsmall) 2%, rgba($light,0) 50%, rgba($light,0) 98%, rgba($light,$small)))
-      margin-right: - $gutter-width
-      padding-right: $gutter-width
-
-  [title="history"]
-    +icon('ui/history.png')
-  [title="edit"]
-    +icon('ui/pencil.png')
-  [name="delete"]
-    +icon('ui/trash.png')
-  [name="approve"]
-    +icon('ui/warning.png','ui/check.png',replace)
-  [name="unapprove"]
-    +icon('ui/check.png','ui/warning.png',replace)
-
-  .controls
-    +opacity(0)
-    +no-style-list
-    +pie-clearfix
-    visibility: hidden
-    position: absolute
-    right: 0
-    bottom: 0
-    left: 0
-    margin-right: - $gutter-width
-    padding-right: $gutter-width
-    background: rgba($mid,$xxsmall)
-    li
-      +hbuttons(3)
-
-  details
-    display: none
+    border-color: $light
 
   [id^="select_"]
     +gone
     &:checked + .content
-      +background-image(linear-gradient(bottom, rgba($mid,$norm), rgba($mid,$xxsmall) 2%, rgba($mid,$xxsmall) 98%, rgba($mid,$xsmall)))
-      details
-        display: block
-        &[open]
-          +trailer(0)
-      .street-address
-        display: block
-      .region, .postal-code
-        display: inline
-      .locality::after
-        content: ","
-      &:hover
-        +padding-trailer(1.5)
-        .controls
-          +opacity(1)
-          visibility: visible
-      .notes
-        margin: 0
+      background-color: rgba($alt,$xxxsmall)
 
   .adr
     +columns(4,8)
     +prefix(1,8)
-    +padding-leader(.5)
+    +padding-leader(.25)
     position: relative
   .street-address
+    display: block
     &::before
       +adjust-font-size-to($medpx)
       position: absolute
@@ -248,11 +139,9 @@
       content: counter(address, upper-latin) "."
       width: columns(1,5)
       text-align: right
+  .locality
     &::after
-      content: ", "
-
-  .region, .postal-code
-    display: none
+      content: ","
 
   .id
     +columns(3,8)
@@ -263,9 +152,9 @@
       +inline-block
       margin: 0
     .value
-      +padding-leader(.5)
+      +padding-leader(.25)
     .approval
-      +leader(.5)
+      +leader(.25)
 
     &.unmapped
       .approval
@@ -277,27 +166,19 @@
     &.approved
       color: green
 
-  .complex
-    +columns(4,8)
-    +trailer
-    margin-left: columns(1,8) + gutter(8)
+  .controls
+    +no-style-list
+    +float(right)
+    li
+      +float(left)
 
-  [name="complex"]
-    +icon('ui/house.png','ui/bldg.png',replace)
-    &.single
-      +icon('ui/bldg.png','ui/house.png',replace)
+  .summary
+    +float(right)
+    margin: 0
 
-  details[open]
+  .more
+    clear: both
+    padding-left: columns(1,8) + gutter(8)
+
+  .complex, .byline
     +trailer(.5)
-
-  summary
-    +columns(3,8)
-    +omega(8)
-    text-align: right
-
-  .byline, .notes
-    +full(8)
-    +prefix(1,8)
-    +trailer
-    p
-      margin: 0

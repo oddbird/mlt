@@ -103,9 +103,28 @@ $grid-background-gutter-color   : rgba(0, 0, 0, 0)
       #{$focus}
         &::before
           content: image-url($hover) " "
+    @else
+      &::before
+        +opacity(.75)
+        #{$focus}
+          +opacity(1)
+
   @else
     +replace-text($image)
+    display: block
     width: image-width($image) + $smallpx
     @if $hover
       #{$focus}
         background-image: image-url($hover)
+    @else
+      +opacity(.75)
+      #{$focus}
+        +opacity(1)
+
+=ellipsis($r:1)
+  overflow: hidden
+  max-height: rhythm($r)
+  white-space: nowrap
+  word-wrap: break-word
+  -o-text-overflow: ellipsis
+  text-overflow: ellipsis
