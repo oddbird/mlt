@@ -93,6 +93,7 @@
     +icon('ui/warning.png','ui/check.png',replace)
   [name="unapprove"]
     +icon('ui/check.png','ui/warning.png',replace)
+
   [name="complex"]
     +icon('ui/house.png','ui/bldg.png',replace)
     +inline-block
@@ -133,7 +134,7 @@
       background-color: rgba($alt,$xxxsmall)
       .street-address
         &::before
-          color: $accent
+          color: $alt
 
   .adr
     +columns(4,8)
@@ -194,6 +195,7 @@
   .more
     clear: both
     padding-left: columns(1,8) + gutter(8)
+    color: $mid
 
   .complex, .byline
     +trailer(.5)
