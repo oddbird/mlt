@@ -43,62 +43,27 @@
 
     <div class="managelist">
 
-      <article id="address-id-01" class="address">
-        <input type="checkbox" id="select_01" name="select" value="">
-
-        <div class="content">
-          <label for="select_01">
-            <h3 class="adr" title="3635 Van Gordon St., Providence, RI 02909">
-              <span class="street-address">3635 Van Gordon St.</span>
-              <span class="locality">Providence</span>
-              <abbr class="region">RI</abbr>
-              <span class="postal-code">02909</span>
-            </h3>
-          </label>
-
-          <div class="id">
-            <button name="approve" type="submit" value="" class="approval">approve</button>
-            <label for="select_01" class="value">111-222-3333</label>
-          </div>
-
-          <ul class="controls">
-            <li><a href="#" title="edit">edit</a></li>
-            <li><a href="#" title="history">history</a></li>
-            <li><button type="submit" name="delete" value="">delete</button></li>
-          </ul>
-
-          <div class="details">
-            <p class="summary">details</p>
-            <div class="more">
-              <div class="complex">
-                <button name="complex" type="submit" class="multiple">multiple units</button>
-                <span class="name">single unit</span>
-              </div>
-              <div class="byline">
-                <!-- if imported -->
-                <p class="hcard">
-                  Imported by <cite class="fn">[username]</cite> from [source]
-                  on <time pubdate>[timestamp]</time>.
-                  <!-- elseif created manually
-                    Created by <cite class="fn">[username]</cite>
-                    on <time pubdate>[timestamp]</time>
-                  -->
-                </p>
-                <!-- end if -->
-                <!-- if mapped -->
-                <p class="hcard">
-                  Mapped by <cite class="fn">[username]</cite>
-                  on <time class="mapped">[timestamp]</time>.
-                </p>
-                <!-- end if -->
-              </div>
-
-              <p class="notes">Notes about this address</p>
-            </div>
-          </div>
-
-        </div>
-      </article>
+      {% include "includes/address.html" with id="01" origin="created" notes="true" %}
+      {% include "includes/address.html" with id="02" origin="imported" mapped="Eric" notes="true" %}
+      {% include "includes/address.html" with id="03" origin="imported" mapped="blametern" %}
+      {% include "includes/address.html" with id="04" origin="created" %}
+      {% include "includes/address.html" with id="05" origin="created" %}
+      {% include "includes/address.html" with id="06" origin="imported" mapped="blametern" %}
+      {% include "includes/address.html" with id="07" origin="created" %}
+      {% include "includes/address.html" with id="08" origin="imported" mapped="blametern" %}
+      {% include "includes/address.html" with id="09" origin="imported" mapped="blametern" %}
+      {% include "includes/address.html" with id="10" origin="imported" mapped="blametern" %}
+      {% include "includes/address.html" with id="11" origin="created" %}
+      {% include "includes/address.html" with id="12" origin="imported" %}
+      {% include "includes/address.html" with id="13" origin="imported" %}
+      {% include "includes/address.html" with id="14" origin="imported" %}
+      {% include "includes/address.html" with id="15" origin="imported" %}
+      {% include "includes/address.html" with id="16" origin="imported" %}
+      {% include "includes/address.html" with id="17" origin="imported" %}
+      {% include "includes/address.html" with id="18" origin="imported" %}
+      {% include "includes/address.html" with id="19" origin="imported" %}
+      {% include "includes/address.html" with id="20" origin="imported" %}
+      {% include "includes/address.html" with id="21" origin="imported" %}
 
     </div>
 

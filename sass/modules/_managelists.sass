@@ -113,6 +113,13 @@
     clear: both
     counter-increment: address
     position: relative
+    &:hover
+      .controls
+        +opacity(1)
+      .summary
+        +opacity(.75)
+        #{$focus}
+          +opacity(1)
 
   .content
     +clearfix
@@ -124,6 +131,9 @@
     +gone
     &:checked + .content
       background-color: rgba($alt,$xxxsmall)
+      .street-address
+        &::before
+          color: $accent
 
   .adr
     +columns(4,8)
@@ -139,6 +149,9 @@
       content: counter(address, upper-latin) "."
       width: columns(1,5)
       text-align: right
+  .locality, .region, .postal-code
+    color: $mid
+    font-weight: normal
   .locality
     &::after
       content: ","
@@ -157,14 +170,16 @@
       +leader(.25)
 
     &.unmapped
-      .approval
-        +gone
       .value
         display: block
         color: $accent
 
     &.approved
       color: green
+
+  .controls, .summary
+    +opacity(0)
+    +transition(opacity,.3s)
 
   .controls
     +no-style-list

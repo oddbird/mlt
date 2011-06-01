@@ -294,21 +294,26 @@ h1 a:link, h1 a:visited { display: block; }
 #addresstable .managelist { overflow: hidden; overflow-y: scroll; overflow-x: hidden; }
 #addresstable .address { *zoom: 1; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; clear: both; counter-increment: address; position: relative; }
 #addresstable .address:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
+#addresstable .address:hover .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
+#addresstable .address:hover .summary { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; }
+#addresstable .address:hover .summary:focus, #addresstable .address:hover .summary:hover, #addresstable .address:hover .summary:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 #addresstable .content { overflow: hidden; *zoom: 1; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 0.321em; padding-right: 1em; border-color: #dddddd; }
 #addresstable [id^="select_"] { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #addresstable [id^="select_"]:checked + .content { background-color: rgba(0, 84, 152, 0.146); }
+#addresstable [id^="select_"]:checked + .content .street-address::before { color: #984400; }
 #addresstable .adr { display: inline; float: left; width: 48.387%; margin-right: 3.226%; padding-left: 12.903%; padding-top: 0.405em; position: relative; }
 #addresstable .street-address { display: block; }
 #addresstable .street-address::before { font-size: 1.618em; line-height: 1em; position: absolute; left: 0; content: counter(address, upper-latin) "."; width: 15.789%; text-align: right; }
+#addresstable .locality, #addresstable .region, #addresstable .postal-code { color: #949494; font-weight: normal; }
 #addresstable .locality::after { content: ","; }
 #addresstable .id { display: inline; float: left; width: 35.484%; margin-right: 3.226%; display: inline; float: right; margin-right: 0; #margin-left: -1em; text-align: right; font-weight: bold; }
 #addresstable .id .approval, #addresstable .id .value { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; margin: 0; }
 #addresstable .id .approval, #addresstable .id .value { *display: inline; }
 #addresstable .id .value { padding-top: 0.405em; }
 #addresstable .id .approval { margin-top: 0.405em; }
-#addresstable .id.unmapped .approval { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #addresstable .id.unmapped .value { display: block; color: #984400; }
 #addresstable .id.approved { color: green; }
+#addresstable .controls, #addresstable .summary { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; -moz-transition-property: opacity; -webkit-transition-property: opacity; -o-transition-property: opacity; transition-property: opacity; -moz-transition-duration: 0.3s; -webkit-transition-duration: 0.3s; -o-transition-duration: 0.3s; transition-duration: 0.3s; }
 #addresstable .controls { margin: 0; padding: 0; border: 0; list-style: none; display: inline; float: right; }
 #addresstable .controls li { list-style-image: none; list-style-type: none; margin-left: 0px; }
 #addresstable .controls li { display: inline; float: left; }
