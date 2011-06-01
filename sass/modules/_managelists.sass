@@ -165,6 +165,7 @@
     +no-style-button
 
   .managelist
+    overflow: hidden
     overflow-y: scroll
     overflow-x: hidden
 
@@ -209,16 +210,28 @@
     li
       +hbuttons(3)
 
+  details
+    display: none
+
   [id^="select_"]
     +gone
     &:checked + .content
-      +padding-trailer(1.5)
-      +background-image(linear-gradient(bottom, rgba($mid,$norm), rgba($mid,$xsmall) 2%, rgba($mid,$xsmall) 98%, rgba($mid,$small)))
-      details[open]
-        +trailer(0)
-      .controls
-        +opacity(1)
-        visibility: visible
+      +background-image(linear-gradient(bottom, rgba($mid,$norm), rgba($mid,$xxsmall) 2%, rgba($mid,$xxsmall) 98%, rgba($mid,$xsmall)))
+      details
+        display: block
+        &[open]
+          +trailer(0)
+      .street-address
+        display: block
+      .region, .postal-code
+        display: inline
+      .locality::after
+        content: ","
+      &:hover
+        +padding-trailer(1.5)
+        .controls
+          +opacity(1)
+          visibility: visible
       .notes
         margin: 0
 
@@ -228,14 +241,18 @@
     +padding-leader(.5)
     position: relative
   .street-address
-    +adjust-font-size-to($medpx)
-    display: block
     &::before
+      +adjust-font-size-to($medpx)
       position: absolute
       left: 0
       content: counter(address, upper-latin) "."
       width: columns(1,5)
       text-align: right
+    &::after
+      content: ", "
+
+  .region, .postal-code
+    display: none
 
   .id
     +columns(3,8)
@@ -272,9 +289,6 @@
 
   details[open]
     +trailer(.5)
-    + .controls
-      +opacity(1)
-      visibility: visible
 
   summary
     +columns(3,8)
