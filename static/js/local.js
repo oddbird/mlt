@@ -46,6 +46,9 @@
         $('.details:not(html)').html5accordion('.summary');
         addressListHeight();
         lightboxBootstrap();
+        $('#addresstable .managelist .address .content .details .summary').click(function() {
+            $(this).blur();
+        });
     });
 
 })(jQuery);
