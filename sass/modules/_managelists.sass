@@ -161,6 +161,7 @@
   .id
     +columns(3,8)
     +omega(8)
+    color: orange
     text-align: right
     font-weight: bold
     .approval, .value
@@ -177,7 +178,7 @@
         color: $accent
 
     &.approved
-      color: green
+      color: $base
       .approval
         +opacity(0)
         +transition(all,300ms)

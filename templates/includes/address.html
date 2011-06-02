@@ -45,7 +45,8 @@
               <p class="hcard">
                 {% if origin == "imported"  %}Imported{% endif %}
                 {% if origin == "created" %}Created{% endif %}
-                by <cite class="fn">[username]</cite> from [source]
+                by <cite class="fn">[username]</cite>
+                {% if origin == "imported"  %}from [source]{% endif %}
                 on <time pubdate>[timestamp]</time>.
               </p>
             {% endif %}
