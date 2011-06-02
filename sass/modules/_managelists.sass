@@ -119,6 +119,9 @@
         +opacity(.75)
         #{$focus}
           +opacity(1)
+      .approved
+        .approval
+          +opacity(1)
 
   .content
     +clearfix
@@ -175,6 +178,9 @@
 
     &.approved
       color: green
+      .approval
+        +opacity(0)
+        +transition(all,300ms)
 
   .controls, .summary
     +opacity(0)
