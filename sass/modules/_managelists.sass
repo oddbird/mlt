@@ -83,14 +83,20 @@
 
   [title="history"]
     +icon('ui/history.png',$replace:true)
-  [title="edit"]
-    +icon('ui/pencil.png',$replace:true)
   [name="delete"]
     +icon('ui/trash.png',$replace:true)
   [name="approve"]
     +icon('ui/warning.png','ui/check.png',replace)
   [name="unapprove"]
     +icon('ui/check.png','ui/warning.png',replace)
+
+
+  [title="edit"]
+    +icon('ui/pencil.png',$replace:true)
+  .editing
+    background: rgba(mix(yellow,#eee), $xxxsmall)
+    [title="edit"]
+      background-image: image-url('ui/lock.png')
 
   [name="complex"]
     +icon('ui/house.png','ui/bldg.png',replace)
@@ -168,7 +174,7 @@
       +inline-block
       margin: 0
     .value
-      +padding-leader(.25)
+      +leader(.25)
     .approval
       +leader(.25)
 

@@ -1,15 +1,19 @@
 <article id="address-id-{{ id }}" class="address">
   <input type="checkbox" id="select_{{ id }}" name="select" value="">
 
-  <div class="content">
+  <div class="content{% if edit %} editing{% endif %}">
+    {% if not edit %}
     <label for="select_{{ id }}">
-      <h3 class="adr" title="3635 Van Gordon St., Providence, RI 02909">
-        <span class="street-address">3635 Van Gordon St.</span>
-        <span class="locality">Providence</span>
-        <abbr class="region">RI</abbr>
-        <span class="postal-code">02909</span>
+    {% endif %}
+      <h3 class="adr">
+        <span class="street-address" {% if edit %}contenteditable{% endif %}>3635 Van Gordon St.</span>
+        <span class="locality" {% if edit %}contenteditable{% endif %}>Providence</span>
+        <abbr class="region" {% if edit %}contenteditable{% endif %}>RI</abbr>
+        <span class="postal-code" {% if edit %}contenteditable{% endif %}>02909</span>
       </h3>
+    {% if not edit %}
     </label>
+    {% endif %}
 
     <div class="id{% if not mapped %} unmapped{% else %}{% if mapped != "blametern" %} approved{% endif %}{% endif %}">
       {% if mapped %}
@@ -18,9 +22,18 @@
         {% else %}
           <button name="unapprove" type="submit" value="" class="approval">approve</button>
         {% endif %}
-        <label for="select_{{ id }}" class="value">111-222-3333</label>
+
+        {% if edit %}
+          <span class="value" contenteditable>111-222-3333</span>
+        {% else %}
+          <label for="select_{{ id }}" class="value">111-222-3333</label>
+        {% endif %}
       {% else %}
-        <label for="select_{{ id }}" class="value">not mapped</label>
+        {% if edit %}
+          <span class="value" contenteditable>not mapped</span>
+        {% else %}
+          <label for="select_{{ id }}" class="value">not mapped</label>
+        {% endif %}
       {% endif %}
     </div>
 
@@ -61,7 +74,7 @@
         {% endif %}
 
         {% if notes %}
-          <p class="notes">Notes about this address</p>
+          <p class="notes" {% if edit %}contenteditable{% endif %}>Notes about this address</p>
         {% endif %}
       </div>
     </div>
