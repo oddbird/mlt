@@ -96,7 +96,7 @@
   .editing
     background: rgba(mix(yellow,#eee), $xxxsmall)
     [title="edit"]
-      background-image: image-url('ui/lock.png')
+      background-image: image-url('ui/disk.png')
 
   [name="complex"]
     +icon('ui/house.png','ui/bldg.png',replace)
@@ -148,21 +148,20 @@
     +prefix(1,8)
     +padding-leader(.25)
     position: relative
-  .street-address
-    display: block
     &::before
       +adjust-font-size-to($medpx)
+      +transition(all,300ms)
+      +opacity(1)
       position: absolute
       left: 0
       content: counter(address, upper-latin) "."
       width: columns(1,5)
       text-align: right
+
   .locality, .region, .postal-code
+    +inline-block
     color: $mid
     font-weight: normal
-  .locality
-    &::after
-      content: ","
 
   .id
     +columns(3,8)
@@ -210,3 +209,18 @@
 
   .complex, .byline
     +trailer(.5)
+
+  .savechanges
+    +icon('ui/disk_l.png',$replace:true)
+    +opacity(0)
+    +transition(all,300ms)
+    position: absolute
+    top: rhythm(.5)
+    right: columns(7,8) + gutter(8)
+
+  .editing:hover
+    .adr
+      &::before
+        +opacity(0)
+    .savechanges
+      +opacity(1)

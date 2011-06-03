@@ -6,10 +6,10 @@
     <label for="select_{{ id }}">
     {% endif %}
       <h3 class="adr">
-        <span class="street-address" {% if edit %}contenteditable{% endif %}>3635 Van Gordon St.</span>
-        <span class="locality" {% if edit %}contenteditable{% endif %}>Providence</span>
-        <abbr class="region" {% if edit %}contenteditable{% endif %}>RI</abbr>
-        <span class="postal-code" {% if edit %}contenteditable{% endif %}>02909</span>
+        <div class="street-address" {% if edit %}contenteditable{% endif %}>3635 Van Gordon St.</div>
+        <div class="locality" {% if edit %}contenteditable{% endif %}>Providence</div>,
+        <div class="region" {% if edit %}contenteditable{% endif %}>RI</div>
+        <div class="postal-code" {% if edit %}contenteditable{% endif %}>02909</div>
       </h3>
     {% if not edit %}
     </label>
@@ -24,13 +24,13 @@
         {% endif %}
 
         {% if edit %}
-          <span class="value" contenteditable>111-222-3333</span>
+          <p class="value" contenteditable>111-222-3333</p>
         {% else %}
           <label for="select_{{ id }}" class="value">111-222-3333</label>
         {% endif %}
       {% else %}
         {% if edit %}
-          <span class="value" contenteditable>not mapped</span>
+          <p class="value">not mapped</p>
         {% else %}
           <label for="select_{{ id }}" class="value">not mapped</label>
         {% endif %}
@@ -78,6 +78,10 @@
         {% endif %}
       </div>
     </div>
+
+    {% if edit %}
+      <button class="savechanges">save changes</button>
+    {% endif %}
 
   </div>
 </article>
