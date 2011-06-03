@@ -306,9 +306,10 @@ h1 a:link, h1 a:visited { display: block; }
 #addresstable [id^="select_"] { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #addresstable [id^="select_"]:checked + .content { background-color: rgba(0, 84, 152, 0.146); }
 #addresstable [id^="select_"]:checked + .content .street-address::before { color: #005498; }
-#addresstable .adr { display: inline; float: left; width: 48.387%; margin-right: 3.226%; padding-left: 12.903%; padding-top: 0.405em; position: relative; }
-#addresstable .adr::before { font-size: 1.618em; line-height: 1em; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; position: absolute; left: 0; content: counter(address, upper-latin) "."; width: 15.789%; text-align: right; }
-#addresstable .locality, #addresstable .region, #addresstable .postal-code { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; color: #949494; font-weight: normal; }
+#addresstable .adr { display: inline; float: left; width: 48.387%; margin-right: 3.226%; padding-left: 12.903%; padding-top: 0.405em; position: relative; color: #949494; font-weight: normal; }
+#addresstable .adr::before { font-size: 1.618em; line-height: 1em; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; position: absolute; left: 0; content: counter(address, upper-latin) "."; width: 15.789%; color: #4c4c4c; font-weight: bold; text-align: right; }
+#addresstable .street-address { color: #4c4c4c; font-weight: bold; }
+#addresstable .locality, #addresstable .region, #addresstable .postal-code { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; }
 #addresstable .locality, #addresstable .region, #addresstable .postal-code { *display: inline; }
 #addresstable .id { display: inline; float: left; width: 35.484%; margin-right: 3.226%; display: inline; float: right; margin-right: 0; #margin-left: -1em; color: orange; text-align: right; font-weight: bold; }
 #addresstable .id .approval, #addresstable .id .value { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; margin: 0; }
@@ -325,10 +326,12 @@ h1 a:link, h1 a:visited { display: block; }
 #addresstable .summary { display: inline; float: right; margin: 0; }
 #addresstable .more { clear: both; padding-left: 12.903%; color: #949494; }
 #addresstable .complex, #addresstable .byline { margin-bottom: 0.809em; }
+#addresstable .complex .name, #addresstable .complex .multiple, #addresstable .complex .single { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; }
+#addresstable .complex .name, #addresstable .complex .multiple, #addresstable .complex .single { *display: inline; }
 #addresstable .savechanges { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/disk_l.png?1307136904'); background-repeat: no-repeat; background-position: 50% 50%; display: block; width: 27.417px; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; position: absolute; top: 0.809em; right: 90.323%; }
 #addresstable .savechanges:focus, #addresstable .savechanges:hover, #addresstable .savechanges:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
-#addresstable .editing:hover .adr::before { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; }
-#addresstable .editing:hover .savechanges { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
+#addresstable .editing .adr::before { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; }
+#addresstable .editing .savechanges { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 
 /* Map ----------------------------------------------------------------------- */
 #map { position: absolute; top: 0; right: 0; bottom: 0; left: 33em; padding: 0.405em 0.809em; background: rgba(0, 128, 0, 0.146); }

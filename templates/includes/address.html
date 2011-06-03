@@ -48,8 +48,13 @@
       <div class="more">
 
         <div class="complex">
-          <button name="complex" type="submit" class="multiple">multiple units</button>
-          <span class="name">single unit</span>
+          {% if complex %}
+            <button name="complex" type="submit" class="single">single unit</button>
+            <p class="name" {% if edit %}contenteditable{% endif %}>{{ complex }}</p>
+          {% else %}
+            <button name="complex" type="submit" class="multiple">multiple units</button>
+            <p class="name">single unit</p>
+          {% endif %}
         </div>
 
         {% if origin or mapped %}
