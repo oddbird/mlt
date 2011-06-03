@@ -276,6 +276,7 @@ h1 a:link, h1 a:visited { display: block; }
 #addresstable button { *display: inline; }
 #addresstable button:hover, #addresstable button:focus { -moz-box-shadow: none; -webkit-box-shadow: none; -o-box-shadow: none; box-shadow: none; }
 #addresstable p, #addresstable ul { margin: 0; }
+#addresstable .editing { background: rgba(246, 246, 119, 0.146); }
 #addresstable [title="history"] { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/history.png?1305749879'); background-repeat: no-repeat; background-position: 50% 50%; display: block; width: 19.417px; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; }
 #addresstable [title="history"]:focus, #addresstable [title="history"]:hover, #addresstable [title="history"]:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 #addresstable [name="delete"] { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/trash.png?1305749914'); background-repeat: no-repeat; background-position: 50% 50%; display: block; width: 19.417px; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; height: 1.618em; }
@@ -286,8 +287,8 @@ h1 a:link, h1 a:visited { display: block; }
 #addresstable [name="unapprove"]:focus, #addresstable [name="unapprove"]:hover, #addresstable [name="unapprove"]:active { background-image: url('../images/ui/warning.png?1305750015'); }
 #addresstable [title="edit"] { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/pencil.png?1305749898'); background-repeat: no-repeat; background-position: 50% 50%; display: block; width: 19.417px; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; }
 #addresstable [title="edit"]:focus, #addresstable [title="edit"]:hover, #addresstable [title="edit"]:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
-#addresstable .editing { background: rgba(246, 246, 119, 0.146); }
-#addresstable .editing [title="edit"] { background-image: url('../images/ui/disk.png?1307135673'); }
+#addresstable [title="save"] { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/disk.png?1307135673'); background-repeat: no-repeat; background-position: 50% 50%; display: block; width: 19.417px; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; }
+#addresstable [title="save"]:focus, #addresstable [title="save"]:hover, #addresstable [title="save"]:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 #addresstable [name="complex"] { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/house.png?1305749944'); background-repeat: no-repeat; background-position: 50% 50%; display: block; width: 19.417px; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; vertical-align: baseline; }
 #addresstable [name="complex"]:focus, #addresstable [name="complex"]:hover, #addresstable [name="complex"]:active { background-image: url('../images/ui/bldg.png?1305749849'); }
 #addresstable [name="complex"] { *display: inline; }

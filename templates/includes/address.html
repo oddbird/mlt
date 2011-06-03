@@ -38,7 +38,7 @@
     </div>
 
     <ul class="controls">
-      <li><a href="#" title="edit">edit</a></li>
+      <li><a href="#" title="{% if edit %}save{% else %}edit{% endif %}">edit</a></li>
       <li><a href="#" title="history">history</a></li>
       <li><button type="submit" name="delete" value="">delete</button></li>
     </ul>
@@ -85,7 +85,7 @@
     </div>
 
     {% if edit %}
-      <button class="savechanges">save changes</button>
+      <button class="savechanges" title="save changes">save changes</button>
     {% endif %}
 
   </div>

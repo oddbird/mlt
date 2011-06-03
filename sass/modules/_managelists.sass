@@ -81,6 +81,9 @@
   p, ul
     margin: 0
 
+  .editing
+    background: rgba(mix(yellow,#eee), $xxxsmall)
+
   [title="history"]
     +icon('ui/history.png',$replace:true)
   [name="delete"]
@@ -90,14 +93,10 @@
     +icon('ui/warning.png','ui/check.png',replace)
   [name="unapprove"]
     +icon('ui/check.png','ui/warning.png',replace)
-
-
   [title="edit"]
     +icon('ui/pencil.png',$replace:true)
-  .editing
-    background: rgba(mix(yellow,#eee), $xxxsmall)
-    [title="edit"]
-      background-image: image-url('ui/disk.png')
+  [title="save"]
+    +icon('ui/disk.png',$replace:true)
 
   [name="complex"]
     +icon('ui/house.png','ui/bldg.png',replace)
