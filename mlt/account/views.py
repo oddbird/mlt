@@ -13,15 +13,17 @@ def login(request):
         authentication_form=forms.AuthenticationForm,
         template_name="account/login.html")
 
-    if response.status_code == 302:
-        messages.success(request, "Welcome!")
-
     return response
 
 
 
 def logout(request):
-    return auth_views.logout(request, next_page=DEFAULT_REDIRECT)
+    response = auth_views.logout(request, next_page=DEFAULT_REDIRECT)
+
+    if response.status_code == 302:
+        messages.success(request, "You are signed out.")
+
+    return response
 
 
 
