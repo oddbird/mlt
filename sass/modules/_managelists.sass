@@ -11,10 +11,10 @@
 .iconaction
   +float(left)
   height: rhythm(1.5)
-  background-color: rgba($light,$xxsmall)
 
 .actions
   +pie-clearfix
+  background-color: rgba($light,$xxsmall)
   border-bottom: 1px solid $light
   h3
     +gone
@@ -24,16 +24,21 @@
     +no-style-button
 
   .bulkselect
-    +float(left)
+    +columns(1,8)
+    margin: 0
   [for="select_all_none"]
     +icon('ui/check.png')
     height: rhythm(1.5)
-    width: rhythm(1.5)
+    width: auto
     background-color: $light
   [id="select_all_none"]
     +gone
     &:checked + [for="select_all_none"]
       background-color: desaturate(lighten($alt,50),30)
+
+  .bools
+    +clearfix
+    background-color: rgba($light,$xxsmall)
 
   .addremove
     @extend .actionboolian
@@ -74,19 +79,14 @@
 .listordering
   +float(left)
   position: relative
-  width: fixed(8) + $side-gutter-width + $gutter-width - (rhythm(1.5)*7)
-  border-right: 1px solid $light
-  background: rgba($light,$xxsmall)
+  width: columns(3,8) + gutter(8)*2
+  height: rhythm(1.5)
   h4
-    +adjust-leading-to(1.5)
-    +columns(2,6)
-    text-indent: rhythm(.5)
-    &::after
-      content: ":"
+    +gone
   ul
     position: absolute
-    left: columns(2,6) + gutter(6)
-    width: columns(4,6)
+    left: 0
+    width: 100%
   li
     display: none
     padding: 0 rhythm(.5)
@@ -130,6 +130,13 @@
     &:checked
       ~ input
         display: block
+
+#export-address-form, #import-address-form
+  +leader(1)
+  label
+    display: block
+  .form-actions
+    +leader(1)
 
 /* Address Table -------------------------------------------------------------
 

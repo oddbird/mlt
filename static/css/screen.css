@@ -242,9 +242,9 @@ h1 a:link, h1 a:visited { display: block; }
 /* Actions ------------------------------------------------------------------- */
 .actionboolian:hover, .actions .addremove:hover, .actions .importexport:hover, .actions .approval:hover { background-image: -webkit-gradient(linear, -25deg, -25deg, color-stop(0%, rgba(0, 84, 152, 0.125)), color-stop(52%, rgba(0, 84, 152, 0.125)), color-stop(52%, rgba(0, 84, 152, 0)), color-stop(100%, rgba(0, 84, 152, 0))); background-image: -webkit-linear-gradient(-25deg, rgba(0, 84, 152, 0.125), rgba(0, 84, 152, 0.125) 52%, rgba(0, 84, 152, 0) 52%, rgba(0, 84, 152, 0)); background-image: -moz-linear-gradient(-25deg, rgba(0, 84, 152, 0.125), rgba(0, 84, 152, 0.125) 52%, rgba(0, 84, 152, 0) 52%, rgba(0, 84, 152, 0)); background-image: -o-linear-gradient(-25deg, rgba(0, 84, 152, 0.125), rgba(0, 84, 152, 0.125) 52%, rgba(0, 84, 152, 0) 52%, rgba(0, 84, 152, 0)); background-image: linear-gradient(-25deg, rgba(0, 84, 152, 0.125), rgba(0, 84, 152, 0.125) 52%, rgba(0, 84, 152, 0) 52%, rgba(0, 84, 152, 0)); background-color: #d3e7f7; }
 
-.iconaction, .actions .delete_selected, .actions .create, .actions [title^="import"], .actions [title^="export"], .actions .approve, .actions .flag { display: inline; float: left; height: 2.427em; background-color: rgba(221, 221, 221, 0.236); }
+.iconaction, .actions .delete_selected, .actions .create, .actions [title^="import"], .actions [title^="export"], .actions .approve, .actions .flag { display: inline; float: left; height: 2.427em; }
 
-.actions { *zoom: 1; border-bottom: 1px solid #dddddd; }
+.actions { *zoom: 1; background-color: rgba(221, 221, 221, 0.236); border-bottom: 1px solid #dddddd; }
 .actions:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 .actions h3 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 .actions ul { margin: 0; padding: 0; border: 0; list-style: none; }
@@ -252,11 +252,12 @@ h1 a:link, h1 a:visited { display: block; }
 .actions button { margin: 0; padding: 0; border: 0; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; -moz-border-radius: 0; -webkit-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; -khtml-border-radius: 0; border-radius: 0; text-shadow: none; overflow: visible; width: auto; vertical-align: baseline; background: none; color: inherit; font: inherit; text-align: left; }
 .actions button { *display: inline; }
 .actions button:hover, .actions button:focus { -moz-box-shadow: none; -webkit-box-shadow: none; -o-box-shadow: none; box-shadow: none; }
-.actions .bulkselect { display: inline; float: left; }
-.actions [for="select_all_none"] { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/check.png?1305749988'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 19.417px; height: 2.427em; width: 2.427em; background-color: #dddddd; }
+.actions .bulkselect { display: inline; float: left; width: 9.677%; margin-right: 3.226%; margin: 0; }
+.actions [for="select_all_none"] { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/check.png?1305749988'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 19.417px; height: 2.427em; width: auto; background-color: #dddddd; }
 .actions [for="select_all_none"]:focus, .actions [for="select_all_none"]:hover, .actions [for="select_all_none"]:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .actions [id="select_all_none"] { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 .actions [id="select_all_none"]:checked + [for="select_all_none"] { background-color: #a7cff0; }
+.actions .bools { overflow: hidden; *zoom: 1; background-color: rgba(221, 221, 221, 0.236); }
 .actions .addremove { display: inline; float: right; }
 .actions .delete_selected { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/trash.png?1305749914'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 19.417px; width: 2.427em; }
 .actions .delete_selected:focus, .actions .delete_selected:hover, .actions .delete_selected:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
@@ -273,10 +274,9 @@ h1 a:link, h1 a:visited { display: block; }
 .actions .flag { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/warning.png?1305750015'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 19.417px; width: 2.427em; }
 .actions .flag:focus, .actions .flag:hover, .actions .flag:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 
-.listordering { display: inline; float: left; position: relative; width: 16.011em; border-right: 1px solid #dddddd; background: rgba(221, 221, 221, 0.236); }
-.listordering h4 { line-height: 2.427em; display: inline; float: left; width: 30.435%; margin-right: 4.348%; text-indent: 0.809em; }
-.listordering h4::after { content: ":"; }
-.listordering ul { position: absolute; left: 34.783%; width: 65.217%; }
+.listordering { display: inline; float: left; position: relative; width: 41.935%; height: 2.427em; }
+.listordering h4 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
+.listordering ul { position: absolute; left: 0; width: 100%; }
 .listordering li { display: none; padding: 0 0.809em; }
 .listordering li.asc, .listordering li.desc { display: block; font-weight: bold; }
 .listordering li.asc { background: url('../images/ui/angle_up.png?1306176506') no-repeat scroll 95%; }
@@ -292,6 +292,10 @@ h1 a:link, h1 a:visited { display: block; }
 #add-address-form [name="complex"]:not(:checked) + label { position: static; clip: auto; overflow: visible; height: auto; margin: 0; width: auto; display: inline; float: right; width: 92%; }
 #add-address-form [name="complex"]:not(:checked) ~ input { display: none; }
 #add-address-form [name="complex"]:checked ~ input { display: block; }
+
+#export-address-form, #import-address-form { margin-top: 1.618em; }
+#export-address-form label, #import-address-form label { display: block; }
+#export-address-form .form-actions, #import-address-form .form-actions { margin-top: 1.618em; }
 
 /* Address Table ------------------------------------------------------------- */
 #addresstable { width: 33em; counter-reset: address; }
