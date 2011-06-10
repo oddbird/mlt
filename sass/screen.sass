@@ -108,7 +108,7 @@ h1
 
 /* Login ---------------------------------------------------------------------
 
-#login, #password_change, #password_reset
+#login, #password_change, #password_reset, #password_reset_confirm
   +full(29)
   +pad(8,8,29)
   +padding-leader
@@ -126,6 +126,13 @@ h1
   li
     +trailer(.5)
     position: relative
+
+  .errorlist
+    position: absolute
+    top: rhythm(.25)
+    left: 100% + gutter(13)
+    width: columns(8,13)
+
 
 /* Modules -------------------------------------------------------------------
 
