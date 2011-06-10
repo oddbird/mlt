@@ -81,18 +81,40 @@
     <nav role="navigation">
       <h2 class="navhead">Primary Navigation</h2>
       <ul>
-          <li class="history"><a href="#">{# @@@ /history/ #}Revision History</a></li>
+        {% if user.is_authenticated %}
+        <li class="history">
+          <a href="#">{# @@@ /history/ #}Revision History</a>
+        </li>
+        {% endif %}
       </ul>
     </nav>
 
     <nav class="meta">
       <h2 class="navhead">Account Navigation</h2>
-      <p>Welcome firstName [<a href="#">Sign Out</a>]</p>
+      {% if user.is_authenticated %}
+      <p>
+        Welcome {{ request.user.first_name|default:request.user.username }}
+        [
+        <a href="{% url account_logout %}">Sign Out</a>
+        <a href="{% url account_password_change %}">Change password</a>
+        ]
+      </p>
+      {% endif %}
     </nav>
   </div>
 </header>
 
 <div id="main" role="main">
+  {% if messages %}
+  <aside id="messages">
+    <ul>
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
+      {% endfor %}
+    </ul>
+  </aside>
+  {% endif %}
+
   {% block content %}
 
   {% endblock %}

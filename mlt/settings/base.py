@@ -2,9 +2,9 @@
 Default Django settings for tcmui project.
 
 """
-from os.path import dirname, join
+from os.path import abspath, dirname, exists, join
 
-BASE_PATH = dirname(dirname(dirname(__file__)))
+BASE_PATH = abspath(dirname(dirname(dirname(__file__))))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -82,6 +82,7 @@ TEMPLATE_CONTEXT_PROCESSORS = [
 MIDDLEWARE_CLASSES = [
     "django.middleware.gzip.GZipMiddleware",
     "django.middleware.http.ConditionalGetMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "django.middleware.transaction.TransactionMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -101,16 +102,18 @@ TEMPLATE_DIRS = [
 DATE_FORMAT = "m/d/Y"
 
 INSTALLED_APPS = [
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
     "django.contrib.auth",
     "django.contrib.admin",
     "django.contrib.admindocs",
     "django.contrib.contenttypes",
-    "south",
+    "django.contrib.messages",
+    "django.contrib.sessions",
+    "django.contrib.staticfiles",
     "floppyforms",
+    "south",
 ]
+
+MESSAGE_STORAGE = "django.contrib.messages.storage.fallback.FallbackStorage"
 
 CACHES = {
     'default': {
@@ -151,14 +154,26 @@ INSTALLED_APPS += ["djangosecure"]
 MIDDLEWARE_CLASSES.insert(0, "djangosecure.middleware.SecurityMiddleware")
 SESSION_COOKIE_HTTPONLY = True
 
-import os
+INSTALLED_APPS += ["mlt.account"]
+LOGIN_URL = "/account/login/"
 
-local_settings = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "local.py"))
 
-if os.path.exists(local_settings):
+# import local settings, if they exist
+
+local_settings = abspath(join(dirname(__file__), "local.py"))
+
+if exists(local_settings):
     exec(open(local_settings).read())
+
+# post-local-settings overrides
 
 COMPRESS_OFFLINE_CONTEXT = {
     "STATIC_URL": STATIC_URL
     }
+
+if DEBUG:
+# use console email backend in debug mode, unless overridden in local
+    try:
+        EMAIL_BACKEND
+    except NameError:
+        EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

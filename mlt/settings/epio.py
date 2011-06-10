@@ -28,6 +28,7 @@ CACHES = {
 }
 
 SERVER_EMAIL = "server@provplan.ep.io"
+DEFAULT_FROM_EMAIL = "server@provplan.ep.io"
 EMAIL_HOST = "mail.threepines.org"
 EMAIL_PORT = "587"
 EMAIL_USE_TLS = True
