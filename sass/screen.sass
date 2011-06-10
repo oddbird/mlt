@@ -18,6 +18,18 @@ $side-gutter-width  : $gutter-width
   width: 100%
   min-width: 65em
 
+#messages
+  +rhythm(0,.5,.5,0)
+  background: rgba($alt,.125)
+  font-weight: bold
+  ul
+    @extend .container
+    padding: 0
+    margin: 0 auto
+    list-style: none
+  li
+    +full
+
 [role="banner"]
   @extend .container
   +clearfix
@@ -89,9 +101,15 @@ h1
   form
     +leader
   label
-    +gone
+    position: absolute
+    top: rhythm(.25)
+    right: 100% + gutter(13)
+    width: columns(3,13)
+    text-align: right
+    font-weight: bold
   li
     +trailer(.5)
+    position: relative
 
 /* Modules -------------------------------------------------------------------
 

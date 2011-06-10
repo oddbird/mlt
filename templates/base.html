@@ -74,6 +74,16 @@
 <body id="client-url" class="{% block bodyclasses %}{% endblock %}">
 {% block body %}
 
+{% if messages %}
+<aside id="messages">
+  <ul>
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
+    {% endfor %}
+  </ul>
+</aside>
+{% endif %}
+
 <header role="banner">
   <h1><a href="/" rel="home">Master Lookup Table</a></h1>
 
@@ -95,7 +105,7 @@
       <p>
         Welcome {{ request.user.first_name|default:request.user.username }}
         [
-        <a href="{% url account_logout %}">Sign Out</a>
+        <a href="{% url account_logout %}">Sign Out</a>,
         <a href="{% url account_password_change %}">Change password</a>
         ]
       </p>
@@ -105,16 +115,6 @@
 </header>
 
 <div id="main" role="main">
-  {% if messages %}
-  <aside id="messages">
-    <ul>
-      {% for message in messages %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
-      {% endfor %}
-    </ul>
-  </aside>
-  {% endif %}
-
   {% block content %}
 
   {% endblock %}
