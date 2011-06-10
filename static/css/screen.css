@@ -205,9 +205,12 @@ button, input[type="reset"], input[type="submit"], input[type="button"], input[t
 .container, #messages ul, [role="banner"], [role="main"], [role="contentinfo"] { *zoom: 1; width: 100%; min-width: 65em; }
 .container:after, #messages ul:after, [role="banner"]:after, [role="main"]:after, [role="contentinfo"]:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
-#messages { margin-top: 0em; padding-top: 0.809em; padding-bottom: 0.809em; margin-bottom: 0em; background: rgba(0, 84, 152, 0.125); font-weight: bold; }
-#messages ul { padding: 0; margin: 0 auto; list-style: none; }
-#messages li { clear: both; margin-left: 0.855%; margin-right: 0.855%; }
+#messages { position: absolute; left: 0; right: 0; margin-top: 0em; padding-top: 0.809em; padding-bottom: 0.809em; margin-bottom: 0em; background: rgba(240, 200, 167, 0.9); font-weight: bold; z-index: 900; }
+#messages ul { position: relative; padding: 0; margin: 0 auto; list-style: none; }
+#messages li { font-size: 1.618em; line-height: 2em; clear: both; margin-left: 0.855%; margin-right: 0.855%; }
+#messages .dismiss { position: absolute; top: 0; right: 0; margin: 0; }
+#messages .close { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/x_med.png?1307735152'); background-repeat: no-repeat; background-position: 50% 50%; width: 19px; height: 19px; display: block; padding: 1.618em; }
+#messages .close:focus, #messages .close:hover, #messages .close:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 
 [role="banner"] { overflow: hidden; *zoom: 1; padding-top: 0.405em; padding-bottom: 0.405em; border-color: #dddddd; }
 
@@ -231,10 +234,10 @@ h1 a:link, h1 a:visited { display: block; }
 [role="contentinfo"] small { font: inherit; }
 
 /* Login --------------------------------------------------------------------- */
-#login { clear: both; padding-left: 27.826%; padding-right: 27.826%; padding-top: 1.618em; padding-bottom: 1.618em; max-width: 47em; }
-#login form { margin-top: 1.618em; }
-#login label { position: absolute; top: 0.405em; right: 101.961%; width: 21.569%; text-align: right; font-weight: bold; }
-#login li { margin-bottom: 0.809em; position: relative; }
+#login, #password_change, #password_reset { clear: both; padding-left: 27.826%; padding-right: 27.826%; padding-top: 1.618em; padding-bottom: 1.618em; max-width: 47em; }
+#login form, #password_change form, #password_reset form { margin-top: 1.618em; }
+#login label, #password_change label, #password_reset label { position: absolute; top: 0.405em; right: 101.961%; width: 60.784%; text-align: right; font-weight: bold; }
+#login li, #password_change li, #password_reset li { margin-bottom: 0.809em; position: relative; }
 
 /* Modules ------------------------------------------------------------------- */
 /* Lightboxes -------------------------------------------------------------- */

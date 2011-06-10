@@ -19,16 +19,32 @@ $side-gutter-width  : $gutter-width
   min-width: 65em
 
 #messages
+  +stretch-x
   +rhythm(0,.5,.5,0)
-  background: rgba($alt,.125)
+  background: rgba(desaturate(lighten($accent,50),30),.9)
   font-weight: bold
+  z-index: 900
   ul
     @extend .container
+    position: relative
     padding: 0
     margin: 0 auto
     list-style: none
   li
+    +adjust-font-size-to($medpx,2)
     +full
+  .dismiss
+    position: absolute
+    top: 0
+    right: 0
+    margin: 0
+  .close
+    +opacity(.75)
+    +replace-text-with-dimensions('ui/x_med.png')
+    display: block
+    padding: rhythm(1)
+    #{$focus}
+      +opacity(1)
 
 [role="banner"]
   @extend .container
@@ -92,7 +108,7 @@ h1
 
 /* Login ---------------------------------------------------------------------
 
-#login
+#login, #password_change, #password_reset
   +full(29)
   +pad(8,8,29)
   +padding-leader
@@ -104,7 +120,7 @@ h1
     position: absolute
     top: rhythm(.25)
     right: 100% + gutter(13)
-    width: columns(3,13)
+    width: columns(8,13)
     text-align: right
     font-weight: bold
   li
