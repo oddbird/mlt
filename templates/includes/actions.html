@@ -1,51 +1,56 @@
 <section class="actions">
   <h3>List Actions</h3>
 
-  <ul class="manageform">
-    <li><a href="#" class="selectall">select all</a></li>
-    <li><a href="#" class="selectnone">select none</a></li>
-    <li class="lightbox"><a href="#lightbox-add-address" class="create">add address</a></li>
-  </ul>
-
-  <ul class="import_export">
-    <li class="import_addresses" class="lightbox">
-      <a href="#" class="summary">import addresses</a>
-      <div class="content" id="import_addresses">
-        <p class="note">import a CSV file of addresses.</p>
-        <input type="file" name="import_addresses" value="">
-        <p class="control">
-          <a href="#">cancel</a> or
-          <button title="import_addresses" type="submit" name="action-import" value="">import</button>
-        </p>
-      </div>
+  <ul>
+    <li class="bulkselect">
+      <input type="checkbox" name="select_all_none" value="" id="select_all_none">
+      <label for="select_all_none" title="select all/none">select all/none</label>
     </li>
 
-    <li class="import_parcel_layer" class="lightbox">
-      <a href="#" class="summary">import parcel layer</a>
-      <div class="content" id="import_parcel_layer">
-        <p class="note">Import a shapefile or geojson parcel layer</p>
-        <input type="file" name="input_parcel_layer" value="">
-        <p class="control">
-          <a href="#">cancel</a> or
-          <button title="import_parcel_layer" type="submit" name="action-import" value="">import</button>
-        </p>
-      </div>
+    <li class="addremove">
+      <button class="delete_selected" type="submit" title="delete selected">delete selected</button>
+      <a href="#lightbox-add-address" class="create" title="add addresses">add address</a>
     </li>
 
-    <li id="export_addresses" class="lightbox">
-      <a href="#" class="summary">export addresses</a>
-      <div class="content" id="export_addresses">
-        <select name="export_addresses">
-          <option value="XLS">XLS</option>
-          <option value="KML">KML</option>
-          <option value="CSV">CSV</option>
-          <option value="SHP">SHP</option>
-        </select>
-        <p class="control">
-          <a href="#">cancel</a> or
-          <button title="export_addresses" type="submit" name="action-export" value="">export addresses</button>
-        </p>
-      </div>
+    <li class="importexport">
+      <a href="#lightbox-import-addresses" title="import addresses">import addresses</a>
+      <a href="#lightbox-export-addresses" title="export addresses">export addresses</a>
+    </li>
+
+    <li class="approval">
+      <button class="approve" type="submit" title="approve selected mappings">approve selected mappings</button>
+      <button class="flag" type="submit" title="flag selected mappings">flag selected mappings</button>
     </li>
   </ul>
+
+  <nav class="listordering">
+    <h4>sort by</h4>
+    <ul>
+      <li class="bystreet">
+        <a href="#">street</a>
+      </li>
+      <li class="bycity">
+        <a href="#">city</a>
+      </li>
+      <li class="bystate asc">
+        <a href="#">state</a>
+      </li>
+      <li class="byzip">
+        <a href="#">zip</a>
+      </li>
+      <li class="bymultipleunits">
+        <a href="#">multiple units</a>
+      </li>
+      <li class="bycomplex">
+        <a href="#">complex</a>
+      </li>
+      <li class="bypropertyID">
+        <a href="#">property ID</a>
+      </li>
+      <li class="byneedsreview">
+        <a href="#">needs review</a>
+      </li>
+    </ul>
+  </nav>
+
 </section>

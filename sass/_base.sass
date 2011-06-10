@@ -94,32 +94,15 @@ $grid-background-gutter-color   : rgba(0, 0, 0, 0)
   width: fixed($n)
   margin-right: $gutter-width
 
-=icon($image,$hover:false,$replace:false)
-  @if not $replace
-    &::before
-      content: image-url($image) " "
-      vertical-align: middle
+=icon($image,$hover:false)
+  +replace-text($image)
+  +opacity(.75)
+  display: block
+  width: image-width($image) + $smallpx
+  #{$focus}
+    +opacity(1)
     @if $hover
-      #{$focus}
-        &::before
-          content: image-url($hover) " "
-    @else
-      &::before
-        +opacity(.75)
-        #{$focus}
-          +opacity(1)
-
-  @else
-    +replace-text($image)
-    display: block
-    width: image-width($image) + $smallpx
-    @if $hover
-      #{$focus}
-        background-image: image-url($hover)
-    @else
-      +opacity(.75)
-      #{$focus}
-        +opacity(1)
+      background-image: image-url($hover)
 
 =ellipsis($r:1)
   overflow: hidden

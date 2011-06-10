@@ -4,46 +4,110 @@
 
 /* Actions -------------------------------------------------------------------
 
-=hbuttons($n)
+.actionboolian:hover
+  +background-image(linear-gradient(-25deg,rgba($alt,.125),rgba($alt,.125) 52%,rgba($alt,0) 52%,rgba($alt,0)))
+  background-color: desaturate(lighten($alt,60),30)
+
+.iconaction
   +float(left)
-  width: 1/$n*100%
-  text-align: center
+  height: rhythm(1.5)
+  background-color: rgba($light,$xxsmall)
 
 .actions
+  +pie-clearfix
+  border-bottom: 1px solid $light
   h3
     +gone
   ul
     +no-style-list
-  .import_export
-    display: none
+  button
+    +no-style-button
 
-  .manageform
-    +pie-clearfix
-    background: rgba($mid,$small)
+  .bulkselect
+    +float(left)
+  [for="select_all_none"]
+    +icon('ui/check.png')
+    height: rhythm(1.5)
+    width: rhythm(1.5)
+    background-color: $light
+  [id="select_all_none"]
+    +gone
+    &:checked + [for="select_all_none"]
+      background-color: desaturate(lighten($alt,50),30)
+
+  .addremove
+    @extend .actionboolian
+    +float(right)
+  .delete_selected
+    @extend .iconaction
+    +icon('ui/trash.png')
+    width: rhythm(1.5)
+  .create
+    @extend .iconaction
+    +icon('ui/plus.png')
+    width: rhythm(1.5)
+
+  .importexport
+    @extend .actionboolian
+    +float(right)
+  [title^="import"]
+    @extend .iconaction
+    +icon('ui/import.png')
+    width: rhythm(1.5)
+  [title^="export"]
+    @extend .iconaction
+    +icon('ui/export.png')
+    width: rhythm(1.5)
+
+  .approval
+    @extend .actionboolian
+    +float(right)
+  .approve
+    @extend .iconaction
+    +icon('ui/thumb_up.png')
+    width: rhythm(1.5)
+  .flag
+    @extend .iconaction
+    +icon('ui/warning.png')
+    width: rhythm(1.5)
+
+.listordering
+  +float(left)
+  position: relative
+  width: fixed(8) + $side-gutter-width + $gutter-width - (rhythm(1.5)*7)
+  border-right: 1px solid $light
+  background: rgba($light,$xxsmall)
+  h4
+    +adjust-leading-to(1.5)
+    +columns(2,6)
+    text-indent: rhythm(.5)
+    &::after
+      content: ":"
+  ul
+    position: absolute
+    left: columns(2,6) + gutter(6)
+    width: columns(4,6)
+  li
+    display: none
+    padding: 0 rhythm(.5)
+    &.asc, &.desc
+      display: block
+      font-weight: bold
+    &.asc
+      background: image-url('ui/angle_up.png') no-repeat scroll 95%
+    &.desc
+      background: image-url('ui/angle_down.png') no-repeat scroll 95%
+  &:hover
+    ul
+      +box-shadow($base 0em .25em .25em)
+      background: white
+      z-index: 2
     li
-      +hbuttons(3)
-      &:last-child
-        a
-          #{$link}
-            border: 0
-    a
-      #{$link}
-        +padding-leader(.25)
-        +padding-trailer(.25)
-        display: block
-        color: $base
-        font-weight: bold
-        border-right: 1px solid $mid
-        &::before
-          padding-right: $xsmallem
-      #{$focus}
-        +background-image(linear-gradient(left,rgba($light,0),rgba($light,$xsmall),rgba($light,0)))
-      &.selectall
-        +icon('ui/check_circle.png')
-      &.selectnone
-        +icon('ui/minus_circle.png')
-      &.create
-        +icon('ui/plus.png')
+      display: block
+  a
+    #{$link}
+      +adjust-leading-to(1.5)
+      display: block
 
 #add-address-form
   label
@@ -73,9 +137,14 @@
   +column-grid-background(8,$col-width,$gutter-width,0em,$force-fluid:true)
   width: fixed(8) + $gutter-width + $side-gutter-width
   counter-reset: address
-
   h2
     +gone
+
+.managelist
+  overflow: hidden
+  overflow-y: scroll
+  overflow-x: hidden
+
   button
     +no-style-button
   p, ul
@@ -85,32 +154,23 @@
     background: rgba(mix(yellow,#eee), $xxxsmall)
 
   [title="history"]
-    +icon('ui/history.png',$replace:true)
+    +icon('ui/history.png')
   [name="delete"]
-    +icon('ui/trash.png',$replace:true)
+    +icon('ui/trash.png')
     height: $base-rhythm-unit
-  [name="approve"]
-    +icon('ui/warning.png','ui/check.png',replace)
-  [name="unapprove"]
-    +icon('ui/check.png','ui/warning.png',replace)
   [title="edit"]
-    +icon('ui/pencil.png',$replace:true)
+    +icon('ui/pencil.png')
   [title="save"]
-    +icon('ui/disk.png',$replace:true)
+    +icon('ui/disk.png')
 
   [name="complex"]
-    +icon('ui/house.png','ui/bldg.png',replace)
+    +icon('ui/house.png','ui/bldg.png')
     +inline-block
     vertical-align: baseline
     &.single
-      +icon('ui/bldg.png','ui/house.png',replace)
+      +icon('ui/bldg.png','ui/house.png')
   .summary
-    +icon('ui/info.png',$replace:true)
-
-  .managelist
-    overflow: hidden
-    overflow-y: scroll
-    overflow-x: hidden
+    +icon('ui/info.png')
 
   .address
     +pie-clearfix
@@ -125,8 +185,9 @@
         +opacity(.75)
         #{$focus}
           +opacity(1)
-      .approved
-        .approval
+      [for^="flag_for_review"]
+        +opacity(.5)
+        #{$focus}
           +opacity(1)
 
   .content
@@ -174,24 +235,28 @@
     color: orange
     text-align: right
     font-weight: bold
-    .approval, .value
+    .value, [for^="flag_for_review"]
+      +leader(.25)
       +inline-block
       margin: 0
-    .value
-      +leader(.25)
-    .approval
-      +leader(.25)
 
     &.unmapped
       .value
         display: block
         color: $accent
 
-    &.approved
-      color: $base
-      .approval
-        +opacity(0)
-        +transition(all,300ms)
+  [id^="flag_for_review"]
+    +gone
+    &:checked
+      + [for^="flag_for_review"]
+        +opacity(1)
+        #{$focus}
+          +opacity(.75)
+
+
+  [for^="flag_for_review"]
+    +icon('ui/warning.png')
+    +opacity(0)
 
   .controls, .summary
     +opacity(0)
@@ -220,7 +285,7 @@
       +inline-block
 
   .savechanges
-    +icon('ui/disk_l.png',$replace:true)
+    +icon('ui/disk_l.png')
     +opacity(0)
     +transition(all,300ms)
     height: rhythm(2)

@@ -18,10 +18,11 @@
     <div class="id{% if not mapped %} unmapped{% else %}{% if mapped != "blametern" %} approved{% endif %}{% endif %}">
       {% if mapped %}
         {% if mapped == "blametern" %}
-          <button name="approve" type="submit" value="" class="approval">approve</button>
+          <input type="checkbox" name="flag_for_review_{{ id }}" value="" id="flag_for_review_{{ id }}" checked="checked">
         {% else %}
-          <button name="unapprove" type="submit" value="" class="approval">approve</button>
+          <input type="checkbox" name="flag_for_review_{{ id }}" value="" id="flag_for_review_{{ id }}">
         {% endif %}
+        <label for="flag_for_review_{{ id }}">flag for review</label>
 
         {% if edit %}
           <p class="value" contenteditable>111-222-3333</p>
