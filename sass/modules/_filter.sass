@@ -1,31 +1,18 @@
-// Mixins --------------------------------------------------------------------
-
-=colorwheel($select)
-  @for $i from 1 to 25
-    &:nth-of-type(24n-#{$i})
-      #{$select}
-        $deg: ($i - 1)*15deg
-        background-color: adjust-hue($alt,$deg)
-
 /* Filtering -----------------------------------------------------------------
 
 #filter
-  +full(24)
-  display: none
-  ul
-    +no-style-list
+  position: relative
 
   // Textual -----------------------------------------------------------------
 
   .textual
-    +columns(12,24)
-    +trailer(1)
     position: relative
     label
       +gone
     input
       +full(12)
       margin: 0
+      background: rgba(white,.125)
 
   .suggest
     display: none
@@ -65,105 +52,31 @@
   #filter:focus + .suggest
     display: block
 
-  // Visual ------------------------------------------------------------------
-
-  h5
-    @extend .smallcaps
-    margin: 0
-    padding: 0 .25em
-    font-weight: normal
-
-  .toggle
-    +columns(12,24)
-    +omega(24)
-    +leader(.25)
-    font-style: italic
-    text-transform: lowercase
-
-  .content
-    +full(24)
-    +adjust-font-size-to(12px,.75)
-    +pie-clearfix
-
-  small
-    color: $mid
-
-  .compact
-    .toggle
-      a
-        #{$link}
-          &::before
-            content: "show "
-          &::after
-            content: " »"
-    div[class^="filter-"]
-      +colorwheel(label)
-    .long
-      height: auto !important
-    h5, input, label
+  .visual
+    position: absolute
+    top: 0
+    right: 0
+    width: rhythm(1.5)
+    height: rhythm(1.5)
+    background: image-url('ui/list.png') no-repeat scroll center
+    ul
+      +box-shadow
       display: none
-    li
-      +float(left)
-    input:checked + label
-      +trailer(.5,12px)
-      +border-radius(.25em)
-      display: block
-      margin-right: .5em
-      padding: rhythm(.125,12px) rhythm(.25,12px)
-      background: $light
-      &:hover
-        small
-          +inline-block
-          min-width: image-width('ui/x_sm.png')
-          color: rgba(0,0,0,0)
-          background: image-url('ui/x_sm.png') no-repeat scroll center
-          vertical-align: baseline
-
-  // Expanded --------------------------------------------------------------
-
-  .expanded
-    .toggle
-      a
-        #{$link}
-          &::before
-            content: "« hide "
-          &::after
-            content: ""
-    .content
-      +trailer(.5,12px)
-      [class^="filter-"]
-        +columns(3,24)
-        +trailer(.5)
-        &:nth-of-type(8n)
-          +omega(24)
-        &:nth-of-type(8n+1)
-          clear: left
-        +colorwheel(h3)
-    .long
-      overflow: hidden
-      height: rhythm(5,12px)
-      min-height: rhythm(5,12px)
-      max-height: rhythm(24,12px)
-      border-bottom: 1px solid $light
-      resize: vertical
-      &:hover
-        overflow-y: auto
-    input
-      display: none
+      position: absolute
+      top: 100%
+      right: 0
+      width: fixed(3)
+      background: white
+      z-index: 900
     label
-      +opacity(.375)
-      display: block
-      padding: rhythm(.125) rhythm(.25)
-        left: image-width('ui/check_sm.png') + 6px
-      background: image-url('ui/plus_sm.png') no-repeat scroll 3px
-      font-weight: normal
-      &:hover
-        font-weight: bold
-    small
-      +float(right)
-    input:checked + label
-      +opacity(1)
-      background-image: image-url('ui/check_sm.png')
-      font-weight: bold
-      &:hover
-        background-image: image-url('ui/x_sm.png')
+      display: none
+      padding: rhythm(.25) rhythm(.5)
+      #{$focus}
+        background: image-url('ui/x.png') no-repeat scroll 95% center
+    input
+      +gone
+      &:checked + label
+        display: block
+    &:hover
+      ul
+        display: block

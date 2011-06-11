@@ -37,7 +37,7 @@ legend
 /* Placeholders --------------------------------------------------------------
 
 =placeholder
-  color: $mid
+  color: rgba($mid,.75)
 
 =apply-placeholders
   &::-webkit-input-placeholder
@@ -59,14 +59,15 @@ form
 
 .textinput
   +sans-family
-  +adjust-font-size-to(14px,1)
-  +rhythm-borders(1px,.25,14px)
+  +rhythm-borders(1px,.25)
   +box-sizing(border-box)
   width: 100%
-  height: rhythm(1.5,14px)
+  height: rhythm(1.5)
+  font: inherit
+  color: $mid
   vertical-align: top
   outline: 0
-  border-color: $mid
+  border-color: $light
 
 .input
   &[disabled]
@@ -74,16 +75,16 @@ form
     color: lighten($base,15)
 
   &:valid
-    +box-shadow(inset rgba(blue,.25) 0 0 .375em)
+    +box-shadow(inset rgba(blue,.25) 0 0 .25em)
     &:focus, &.hadfocus
-      +box-shadow(inset rgba(green,.25) 0 0 .375em)
+      +box-shadow(inset rgba(green,.25) 0 0 .25em)
       .no-boxshadow &
         background-color: rgba(green,.25)
 
   &:invalid
-    +box-shadow(inset rgba(blue,.25) 0 0 .375em)
+    +box-shadow(inset rgba(blue,.25) 0 0 .25em)
     &:focus, &.hadfocus
-      +box-shadow(inset rgba(red,.25) 0 0 .375em)
+      +box-shadow(inset rgba(red,.25) 0 0 .25em)
       .no-boxshadow &
         background-color: rgba(red,.25)
 
@@ -99,7 +100,7 @@ textarea, select:not([multiple])
 textarea
   +apply-placeholders
   height: auto
-  min-height: rhythm(5,14px)
+  min-height: rhythm(5)
 
 input
   &[type="text"], &[type="password"],
