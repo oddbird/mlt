@@ -157,7 +157,7 @@ SESSION_COOKIE_HTTPONLY = True
 INSTALLED_APPS += ["mlt.account"]
 LOGIN_URL = "/account/login/"
 
-INSTALLED_APPS += ["mlt.map"]
+INSTALLED_APPS += ["django.contrib.gis", "mlt.map"]
 TEMPLATE_CONTEXT_PROCESSORS += ["mlt.map.context_processors.map"]
 TILE_SERVER_URL = "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 MAP_CREDITS = "Map data and imagery &copy; 2011 OpenStreetMap contributors"
