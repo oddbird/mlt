@@ -15,7 +15,7 @@ Copy settings/local.sample.py to settings/local.py and modify as needed.
 
 # Override tile server URL and attribution (default is OpenStreetMap).
 # For example, to use CloudMade tiles:
-#TILE_SERVER_URL = "http://{s}.tile.cloudmade.com/YOUR-API-KEY/997/256/{z}/{x}/{y}.png"
+#TILE_SERVER_URL = "http://{s}.tile.cloudmade.com/YOUR-API-KEY/29889/256/{z}/{x}/{y}.png"
 #MAP_CREDITS = "Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade"
 
 # Set default initial map coordinates
