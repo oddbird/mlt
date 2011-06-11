@@ -238,7 +238,7 @@ h1 a:link, h1 a:visited { display: block; }
 #login form, #password_change form, #password_reset form, #password_reset_confirm form { margin-top: 1.618em; }
 #login label, #password_change label, #password_reset label, #password_reset_confirm label { position: absolute; top: 0.405em; right: 101.961%; width: 60.784%; text-align: right; font-weight: bold; }
 #login li, #password_change li, #password_reset li, #password_reset_confirm li { margin-bottom: 0.809em; position: relative; }
-#login .errorlist, #password_change .errorlist, #password_reset .errorlist, #password_reset_confirm .errorlist { position: absolute; top: 0.405em; left: 101.961%; width: 60.784%; }
+#login .errorlist:not(.nonfield), #password_change .errorlist:not(.nonfield), #password_reset .errorlist:not(.nonfield), #password_reset_confirm .errorlist:not(.nonfield) { position: absolute; top: 0.405em; left: 101.961%; width: 60.784%; }
 
 /* Modules ------------------------------------------------------------------- */
 /* Lightboxes -------------------------------------------------------------- */
