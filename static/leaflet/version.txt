@@ -1,0 +1,3 @@
+This is a copy of the dist/ directory of the following version of Leaflet:
+
+v0.1-219-g7772651

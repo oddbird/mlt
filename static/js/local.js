@@ -1,5 +1,18 @@
 (function($) {
 
+    var initializeMap = function() {
+        var map = new L.Map(
+            'map',
+            {
+                center: new L.LatLng(MLT.mapDefaultLat, MLT.mapDefaultLon),
+                zoom: MLT.mapDefaultZoom
+            }),
+            layer = new L.TileLayer(
+                MLT.tileServerUrl, {attribution: MLT.mapCredits});
+
+        map.addLayer(layer);
+    };
+
     var addressListHeight = function() {
         var headerHeight = $('header[role="banner"]').outerHeight(),
             actionsHeight = $('.actions').outerHeight(),
@@ -46,6 +59,7 @@
         $('.details:not(html)').html5accordion('.summary');
         addressListHeight();
         lightboxBootstrap();
+        initializeMap();
         $('#addresstable .managelist .address .content .details .summary').click(function() {
             $(this).blur();
         });

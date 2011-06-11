@@ -157,6 +157,14 @@ SESSION_COOKIE_HTTPONLY = True
 INSTALLED_APPS += ["mlt.account"]
 LOGIN_URL = "/account/login/"
 
+INSTALLED_APPS += ["mlt.map"]
+TEMPLATE_CONTEXT_PROCESSORS += ["mlt.map.context_processors.map"]
+TILE_SERVER_URL = "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+MAP_CREDITS = "Map data and imagery &copy; 2011 OpenStreetMap contributors"
+# Currently defaults to centered on Providence, RI
+MAP_DEFAULT_LAT = "41.825393"
+MAP_DEFAULT_LON = "-71.417713"
+MAP_DEFAULT_ZOOM = 13
 
 # import local settings, if they exist
 

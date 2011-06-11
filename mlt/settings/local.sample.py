@@ -13,6 +13,16 @@ Copy settings/local.sample.py to settings/local.py and modify as needed.
 #DATABASES["default"]["NAME"] = "mlt"
 #DATABASES["default"]["USER"] = "mlt"
 
+# Override tile server URL and attribution (default is OpenStreetMap).
+# For example, to use CloudMade tiles:
+#TILE_SERVER_URL = "http://{s}.tile.cloudmade.com/YOUR-API-KEY/997/256/{z}/{x}/{y}.png"
+#MAP_CREDITS = "Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade"
+
+# Set default initial map coordinates
+#MAP_DEFAULT_LAT = "41.825393"
+#MAP_DEFAULT_LON = "-71.417713"
+#MAP_DEFAULT_ZOOM = 13
+
 #DEBUG = False
 #TEMPLATE_DEBUG = False
 
