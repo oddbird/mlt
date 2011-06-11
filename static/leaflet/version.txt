@@ -1,3 +1,9 @@
-This is a copy of the dist/ directory of the following version of Leaflet:
+Leaflet version:
+https://github.com/oddbird/Leaflet/tree/4d5794d54bd8e35f20bb18577f2fc660904b61b1
 
-v0.1-219-g7772651
+Custom build sans:
+EPSG3395
+TileLayerWMS
+TileLayerCanvas
+ImageOverlay
+MapGeolocation
