@@ -10,5 +10,4 @@ pycrypto==2.3
 paramiko==1.7.7.1
 
 epio==0.2.7
-simplejson==2.1.6
 httplib2==0.6.0

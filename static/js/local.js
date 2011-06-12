@@ -1,16 +1,61 @@
+var MLT = MLT || {};
+
 (function($) {
 
     var initializeMap = function() {
-        var map = new L.Map(
+        var layer = new L.TileLayer(
+            MLT.tileServerUrl, {attribution: MLT.mapCredits}),
+        map = new L.Map(
             'map',
             {
                 center: new L.LatLng(MLT.mapDefaultLat, MLT.mapDefaultLon),
-                zoom: MLT.mapDefaultZoom
+                zoom: MLT.mapDefaultZoom,
+                layers: [layer]
             }),
-            layer = new L.TileLayer(
-                MLT.tileServerUrl, {attribution: MLT.mapCredits});
+        mapinfo = $("#mapinfo");
 
-        map.addLayer(layer);
+        $.getJSON(
+            "/map/geojson/",
+            function(data) {
+                var gj = new L.GeoJSON();
+
+                gj.on(
+                    'featureparse',
+                    function(e) {
+                        var info =
+                            '<h3>' + e.properties.pl + '</h3>' +
+                            '<h4>' + e.properties.address + '</h4>' +
+                            '<p>' + e.properties.classcode + '</p>' +
+                            '<p>' + e.properties.first_owner + '</p>';
+                        e.layer.select = function() {
+                            this.selected = true;
+                            this.setStyle({color: "red"});
+                        };
+                        e.layer.unselect = function() {
+                            this.selected = false;
+                            this.setStyle({color: "blue"});
+                        };
+                        e.layer.unselect();
+                        e.layer.on(
+                            'mouseover',
+                            function(ev) {
+                                mapinfo.html(info);
+                            });
+                        e.layer.on(
+                            'click',
+                            function(ev) {
+                                if (ev.target.selected) {
+                                    ev.target.unselect();
+                                } else {
+                                    ev.target.select();
+                                }
+                            });
+                      });
+
+                gj.addGeoJSON(data);
+                map.addLayer(gj);
+            });
+        MLT.map = map; // for playing in Firebug
     };
 
     var addressListHeight = function() {

@@ -18,6 +18,7 @@ urlpatterns = patterns(
         name="home"),
 
     url(r"^account/", include("mlt.account.urls")),
+    url(r"^map/", include("mlt.map.urls")),
 
     url(r"^admin/", include(admin.site.urls)),
 
