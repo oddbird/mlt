@@ -12,49 +12,79 @@ var MLT = MLT || {};
                 zoom: MLT.mapDefaultZoom,
                 layers: [layer]
             }),
-        mapinfo = $("#mapinfo");
+        mapinfo = $("#mapinfo"),
+        geojson = new L.GeoJSON(),
+        selectedIds = [],
+        refreshParcels = function() {
+            var bounds = map.getBounds(),
+            ne = bounds.getNorthEast(),
+            sw = bounds.getSouthWest();
 
-        $.getJSON(
-            "/map/geojson/",
-            function(data) {
-                var gj = new L.GeoJSON();
+            if (map.getZoom() > 16) {
+                $.getJSON(
+                    "/map/geojson/" + sw.lng + "/" + ne.lng +
+                        "/" + sw.lat + "/" + ne.lat + "/",
+                    function(data) {
+                        map.removeLayer(geojson);
+                        geojson = new L.GeoJSON();
 
-                gj.on(
-                    'featureparse',
-                    function(e) {
-                        var info =
-                            '<h3>' + e.properties.pl + '</h3>' +
-                            '<h4>' + e.properties.address + '</h4>' +
-                            '<p>' + e.properties.classcode + '</p>' +
-                            '<p>' + e.properties.first_owner + '</p>';
-                        e.layer.select = function() {
-                            this.selected = true;
-                            this.setStyle({color: "red"});
-                        };
-                        e.layer.unselect = function() {
-                            this.selected = false;
-                            this.setStyle({color: "blue"});
-                        };
-                        e.layer.unselect();
-                        e.layer.on(
-                            'mouseover',
-                            function(ev) {
-                                mapinfo.html(info);
-                            });
-                        e.layer.on(
-                            'click',
-                            function(ev) {
-                                if (ev.target.selected) {
-                                    ev.target.unselect();
+                        geojson.on(
+                            'featureparse',
+                            function(e) {
+                                var info =
+                                    '<h3>' + e.properties.pl + '</h3>' +
+                                    '<h4>' + e.properties.address + '</h4>' +
+                                    '<p>' + e.properties.classcode + '</p>' +
+                                    '<p>' + e.properties.first_owner + '</p>',
+                                id = e.id;
+                                e.layer.select = function() {
+                                    if (selectedIds.indexOf(id) === -1) {
+                                        selectedIds.push(id);
+                                    }
+                                    this.selected = true;
+                                    this.setStyle({color: "red"});
+                                };
+                                e.layer.unselect = function() {
+                                    var idx = selectedIds.indexOf(id);
+                                    if (idx != -1) {
+                                        selectedIds.splice(idx, 1);
+                                    }
+                                    this.selected = false;
+                                    this.setStyle({color: "blue"});
+                                };
+                                if (selectedIds.indexOf(id) != -1) {
+                                    e.layer.select();
                                 } else {
-                                    ev.target.select();
+                                    e.layer.unselect();
                                 }
+                                e.layer.on(
+                                    'mouseover',
+                                    function(ev) {
+                                        mapinfo.html(info);
+                                    });
+                                e.layer.on(
+                                    'click',
+                                    function(ev) {
+                                        if (ev.target.selected) {
+                                            ev.target.unselect();
+                                        } else {
+                                            ev.target.select();
+                                        }
+                                    });
                             });
-                      });
 
-                gj.addGeoJSON(data);
-                map.addLayer(gj);
+                        geojson.addGeoJSON(data);
+                        map.addLayer(geojson);
+                    });
+            } else { map.removeLayer(geojson); };
+        };
+
+        map.on(
+            'moveend',
+            function() {
+                refreshParcels();
             });
+
         MLT.map = map; // for playing in Firebug
     };
 

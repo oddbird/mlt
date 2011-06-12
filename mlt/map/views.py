@@ -6,8 +6,17 @@ from .models import Parcel
 
 
 
-def geojson(request):
-    qs = Parcel.objects.all().transform().geojson()[:100]
+def geojson(request, westlat, eastlat, southlon, northlon):
+    ewkt = (
+        "SRID=4326;POLYGON(("
+        "%(w)s %(s)s, "
+        "%(w)s %(n)s, "
+        "%(e)s %(n)s, "
+        "%(e)s %(s)s, "
+        "%(w)s %(s)s"
+        "))" % {"w": westlat, "e": eastlat, "s": southlon, "n": northlon}
+        )
+    qs = Parcel.objects.filter(geom__intersects=ewkt).transform()
     source = Django.Django(
         geodjango="geom",
         properties=["pl", "address", "first_owner", "classcode"])
