@@ -1,2 +1,2 @@
 Leaflet version:
-https://github.com/oddbird/Leaflet/tree/4d5794d54bd8e35f20bb18577f2fc660904b61b1
+https://github.com/oddbird/Leaflet/tree/7f6e464556550feed7e1b099ae181e507be009a9
