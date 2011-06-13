@@ -146,8 +146,8 @@ LOGGING = {
     }
 }
 
-INSTALLED_APPS += ["literalinclude"]
-LITERAL_INCLUDE_ROOT = join(BASE_PATH, "templates")
+INSTALLED_APPS += ["mlt.icanhaz"]
+ICANHAZ_DIR = join(BASE_PATH, "jstemplates")
 
 INSTALLED_APPS += ["compressor"]
 COMPRESS_CSS_FILTERS = ["compressor.filters.css_default.CssAbsoluteFilter",
