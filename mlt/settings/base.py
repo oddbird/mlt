@@ -111,6 +111,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "floppyforms",
     "south",
+    "mlt.core",
 ]
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.fallback.FallbackStorage"
