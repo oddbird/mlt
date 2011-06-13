@@ -13,7 +13,36 @@ var MLT = MLT || {};
                     zoom: MLT.mapDefaultZoom,
                     layers: [layer]
                 }),
-            mapinfo = $("#mapinfo").hide(),
+            mapinfoHover = false,
+            mapinfo = $("#mapinfo").hide().hover(
+                function() { mapinfoHover = true; },
+                function() { mapinfoHover = false; hideInfo(); }),
+            mapinfoTimeout = null,
+            showInfo = function(newInfo, selected) {
+                if (mapinfoTimeout) {
+                    clearTimeout(mapinfoTimeout);
+                    mapinfoTimeout = null;
+                }
+                mapinfo.empty().prepend(newInfo).show();
+                if (selected) {
+                    mapinfo.addClass("selected");
+                } else {
+                    mapinfo.removeClass("selected");
+                }
+            },
+            hideInfo = function() {
+                if (selectedInfo) {
+                    showInfo(selectedInfo, true);
+                } else {
+                    if (!mapinfoHover) {
+                        mapinfoTimeout = setTimeout(
+                            function() {
+                                mapinfo.empty().hide();
+                            },
+                            100);
+                    }
+                }
+            },
             geojson = new L.GeoJSON(),
             selectedId = null,
             selectedInfo = null,
@@ -66,23 +95,11 @@ var MLT = MLT || {};
                                     e.layer.on(
                                         'mouseover',
                                         function(ev) {
-                                            mapinfo.empty().prepend(info).show();
-                                            if (this.selected) {
-                                                mapinfo.addClass("selected");
-                                            } else {
-                                                mapinfo.removeClass("selected");
-                                            }
+                                            showInfo(info, this.selected);
                                         });
                                     e.layer.on(
                                         'mouseout',
-                                        function(ev) {
-                                            if (selectedInfo) {
-                                                mapinfo.empty().prepend(selectedInfo).show();
-                                                mapinfo.addClass("selected");
-                                            } else {
-                                                mapinfo.empty().hide();
-                                            }
-                                        });
+                                        function(ev) { hideInfo(); });
                                     e.layer.on(
                                         'click',
                                         function(ev) {
