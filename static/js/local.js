@@ -67,12 +67,18 @@ var MLT = MLT || {};
                                         'mouseover',
                                         function(ev) {
                                             mapinfo.empty().prepend(info).show();
+                                            if (this.selected) {
+                                                mapinfo.addClass("selected");
+                                            } else {
+                                                mapinfo.removeClass("selected");
+                                            }
                                         });
                                     e.layer.on(
                                         'mouseout',
                                         function(ev) {
                                             if (selectedInfo) {
                                                 mapinfo.empty().prepend(selectedInfo).show();
+                                                mapinfo.addClass("selected");
                                             } else {
                                                 mapinfo.empty().hide();
                                             }
