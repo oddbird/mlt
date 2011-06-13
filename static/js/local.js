@@ -15,7 +15,9 @@ var MLT = MLT || {};
                 }),
             mapinfo = $("#mapinfo").hide(),
             geojson = new L.GeoJSON(),
-            selectedIds = [],
+            selectedId = null,
+            selectedInfo = null,
+            selectedLayer = null,
             refreshParcels = function() {
                 var bounds = map.getBounds(),
                 ne = bounds.getNorthEast(),
@@ -27,31 +29,34 @@ var MLT = MLT || {};
                             "/" + sw.lat + "/" + ne.lat + "/",
                         function(data) {
                             map.removeLayer(geojson);
+                            selectedLayer = null;
                             geojson = new L.GeoJSON();
 
                             geojson.on(
                                 'featureparse',
                                 function(e) {
-                                    var info = ich.parcelinfo(e.properties);
+                                    var info = ich.parcelinfo(e.properties),
                                     id = e.id;
                                     e.layer.select = function() {
-                                        if (selectedIds.indexOf(id) === -1) {
-                                            selectedIds.push(id);
+                                        if (selectedLayer) {
+                                            selectedLayer.unselect();
                                         }
+                                        selectedId = id;
+                                        selectedInfo = info;
+                                        selectedLayer = this;
                                         this.selected = true;
                                         this.setStyle(
                                             {color: "red", weight: 5});
                                     };
                                     e.layer.unselect = function() {
-                                        var idx = selectedIds.indexOf(id);
-                                        if (idx != -1) {
-                                            selectedIds.splice(idx, 1);
-                                        }
+                                        selectedId = null;
+                                        selectedInfo = null;
+                                        selectedLayer = null;
                                         this.selected = false;
                                         this.setStyle(
                                             {color: "blue", weight: 2});
                                     };
-                                    if (selectedIds.indexOf(id) != -1) {
+                                    if (id === selectedId) {
                                         e.layer.select();
                                     } else {
                                         e.layer.unselect();
@@ -64,7 +69,11 @@ var MLT = MLT || {};
                                     e.layer.on(
                                         'mouseout',
                                         function(ev) {
-                                            mapinfo.empty().hide();
+                                            if (selectedInfo) {
+                                                mapinfo.empty().prepend(selectedInfo).show();
+                                            } else {
+                                                mapinfo.empty().hide();
+                                            }
                                         });
                                     e.layer.on(
                                         'click',
