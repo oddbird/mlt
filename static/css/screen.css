@@ -396,4 +396,4 @@ h1 a:link, h1 a:visited { display: block; }
 #map { position: absolute; top: 0; right: 0; bottom: 0; left: 33em; padding: 0.405em 0.809em; }
 #map .leaflet-control-attribution { font-size: 0.833em; line-height: 1.942em; background: rgba(221, 221, 221, 0.85); }
 
-#mapinfo { -moz-box-shadow: 0px 0px 5px #333333; -webkit-box-shadow: 0px 0px 5px #333333; -o-box-shadow: 0px 0px 5px #333333; box-shadow: 0px 0px 5px #333333; position: absolute; top: 0; right: 0; padding: 0.809em; background: rgba(221, 221, 221, 0.85); }
+#mapinfo { -moz-box-shadow: 0px 0px 5px #333333; -webkit-box-shadow: 0px 0px 5px #333333; -o-box-shadow: 0px 0px 5px #333333; box-shadow: 0px 0px 5px #333333; position: absolute; top: 0; right: 0; padding: 0.809em; background: rgba(221, 221, 221, 0.85); z-index: 500; }
