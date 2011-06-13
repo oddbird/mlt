@@ -166,7 +166,7 @@ form > ul > li { *zoom: 1; }
 form > ul > li:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
 /* Text Inputs --------------------------------------------------------------- */
-.textinput, textarea, select:not([multiple]), input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="tel"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="time"], input[type="number"], input[type="search"], input[type="color"] { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; border-style: solid; border-width: 0.083em; padding: 0.321em; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; width: 100%; height: 2.427em; font: inherit; color: #949494; vertical-align: top; outline: 0; border-color: #dddddd; }
+.textinput, textarea, select:not([multiple]), input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="tel"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="time"], input[type="number"], input[type="search"], input[type="color"] { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; border-style: solid; border-width: 0.083em; padding: 0.321em; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; width: 100%; height: 2.427em; font: inherit; color: #707070; vertical-align: top; outline: 0; border-color: #dddddd; }
 
 .input[disabled], textarea[disabled], select[disabled], input[disabled][type="text"], input[disabled][type="password"], input[disabled][type="email"], input[disabled][type="url"], input[disabled][type="tel"], input[disabled][type="date"], input[disabled][type="datetime"], input[disabled][type="datetime-local"], input[disabled][type="month"], input[disabled][type="week"], input[disabled][type="time"], input[disabled][type="number"], input[disabled][type="search"], input[disabled][type="color"] { background-color: #dddddd; color: #727272; }
 .input:valid, textarea:valid, select:valid, input[type="text"]:valid, input[type="password"]:valid, input[type="email"]:valid, input[type="url"]:valid, input[type="tel"]:valid, input[type="date"]:valid, input[type="datetime"]:valid, input[type="datetime-local"]:valid, input[type="month"]:valid, input[type="week"]:valid, input[type="time"]:valid, input[type="number"]:valid, input[type="search"]:valid, input[type="color"]:valid { -moz-box-shadow: inset rgba(0, 0, 255, 0.25) 0 0 0.25em; -webkit-box-shadow: inset rgba(0, 0, 255, 0.25) 0 0 0.25em; -o-box-shadow: inset rgba(0, 0, 255, 0.25) 0 0 0.25em; box-shadow: inset rgba(0, 0, 255, 0.25) 0 0 0.25em; }
@@ -202,13 +202,18 @@ button, input[type="reset"], input[type="submit"], input[type="button"], input[t
 .form-actions { text-align: right; }
 
 /* Layout -------------------------------------------------------------- */
-.container, #messages ul, [role="banner"], [role="main"], [role="contentinfo"] { *zoom: 1; width: 100%; min-width: 65em; }
-.container:after, #messages ul:after, [role="banner"]:after, [role="main"]:after, [role="contentinfo"]:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
+.container, [role="banner"], [role="main"], [role="contentinfo"] { *zoom: 1; width: 100%; min-width: 65em; }
+.container:after, [role="banner"]:after, [role="main"]:after, [role="contentinfo"]:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
-#messages { position: absolute; left: 0; right: 0; margin-top: 0em; padding-top: 0.809em; padding-bottom: 0.809em; margin-bottom: 0em; -moz-box-shadow: 0px 0px 5px #333333; -webkit-box-shadow: 0px 0px 5px #333333; -o-box-shadow: 0px 0px 5px #333333; box-shadow: 0px 0px 5px #333333; background: rgba(240, 200, 167, 0.9); font-weight: bold; z-index: 900; }
-#messages ul { position: relative; padding: 0; margin: 0 auto; list-style: none; }
-#messages li { font-size: 1.618em; line-height: 2em; clear: both; margin-left: 0.855%; margin-right: 0.855%; }
-#messages .dismiss { position: absolute; top: 0; right: 0; margin: 0; }
+#messages { position: absolute; left: 0; right: 0; -moz-box-shadow: 0px 0px 5px #333333; -webkit-box-shadow: 0px 0px 5px #333333; -o-box-shadow: 0px 0px 5px #333333; box-shadow: 0px 0px 5px #333333; font-weight: bold; z-index: 900; }
+#messages ul { margin: 0; padding: 0; border: 0; list-style: none; }
+#messages ul li { list-style-image: none; list-style-type: none; margin-left: 0px; }
+#messages .message { padding: 1.618em 0; background: rgba(221, 221, 221, 0.95); }
+#messages .success { background: rgba(200, 250, 200, 0.95); }
+#messages .warning { background: rgba(250, 250, 200, 0.95); }
+#messages .error { background: rgba(250, 200, 200, 0.95); }
+#messages .content { font-size: 1.618em; line-height: 1em; clear: both; margin-left: 0.855%; margin-right: 0.855%; }
+#messages .dismiss { position: absolute; top: 0; bottom: 0; right: 0; margin: 0; }
 #messages .close { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/x_med.png?1307735152'); background-repeat: no-repeat; background-position: 50% 50%; width: 19px; height: 19px; display: block; padding: 1.618em; }
 #messages .close:focus, #messages .close:hover, #messages .close:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 

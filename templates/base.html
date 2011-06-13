@@ -83,7 +83,13 @@
 <aside id="messages">
   <ul>
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
+    <li class="message{% if message.tags %} {{ message.tags }}{% endif %}">
+    <div class="container">
+    <div class="content">
+      {{ message|safe }}
+    </div>
+    </div>
+    </li>
     {% endfor %}
   </ul>
   <p class="dismiss"><a href="#" class="close">dismiss this message</a></p>
