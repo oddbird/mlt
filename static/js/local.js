@@ -43,7 +43,8 @@ var MLT = MLT || {};
                                             selectedIds.push(id);
                                         }
                                         this.selected = true;
-                                        this.setStyle({color: "red"});
+                                        this.setStyle(
+                                            {color: "red", weight: 5});
                                     };
                                     e.layer.unselect = function() {
                                         var idx = selectedIds.indexOf(id);
@@ -51,7 +52,8 @@ var MLT = MLT || {};
                                             selectedIds.splice(idx, 1);
                                         }
                                         this.selected = false;
-                                        this.setStyle({color: "blue"});
+                                        this.setStyle(
+                                            {color: "blue", weight: 2});
                                     };
                                     if (selectedIds.indexOf(id) != -1) {
                                         e.layer.select();
