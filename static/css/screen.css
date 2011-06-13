@@ -266,6 +266,7 @@ h1 a:link, h1 a:visited { display: block; }
 #filter .visual:hover ul { display: block; }
 
 /* Lightboxes -------------------------------------------------------------- */
+#lightboxes h2 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #lightboxes aside { margin: 0; padding: 0; border: 0; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; position: absolute; top: 0; right: 0; bottom: 0; left: 0; display: block; z-index: -1; background: rgba(0, 0, 0, 0.125); -moz-transition-property: opacity, z-index; -webkit-transition-property: opacity, z-index; -o-transition-property: opacity, z-index; transition-property: opacity, z-index; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; }
 #lightboxes aside:target { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; z-index: 999; }
 #lightboxes aside.active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; z-index: 999; }
@@ -393,7 +394,9 @@ h1 a:link, h1 a:visited { display: block; }
 .managelist .editing .savechanges { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 
 /* Map ----------------------------------------------------------------------- */
-#map { position: absolute; top: 0; right: 0; bottom: 0; left: 33em; padding: 0.405em 0.809em; }
+#mapping { position: absolute; top: 0; right: 0; bottom: 0; left: 33em; }
+
+#map { position: absolute; top: 0; bottom: 0; left: 0; right: 0; padding: 0.405em 0.809em; }
 #map .leaflet-control-attribution { font-size: 0.833em; line-height: 1.942em; background: rgba(221, 221, 221, 0.85); }
 
 #mapinfo { -moz-box-shadow: 0px 0px 5px #333333; -webkit-box-shadow: 0px 0px 5px #333333; -o-box-shadow: 0px 0px 5px #333333; box-shadow: 0px 0px 5px #333333; position: absolute; top: 0; right: 0; padding: 0.809em; background: rgba(221, 221, 221, 0.85); z-index: 500; }

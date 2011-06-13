@@ -150,12 +150,15 @@ h1
 
 /* Map -----------------------------------------------------------------------
 
-#map
+#mapping
   position: absolute
   top: 0
   right: 0
   bottom: 0
   left: fixed(8) + $gutter-width + $side-gutter-width
+
+#map
+  +stretch
   padding: rhythm(.25) rhythm(.5)
   .leaflet-control-attribution
     +adjust-font-size-to(10px)
