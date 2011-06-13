@@ -112,18 +112,18 @@ h1, h2
   @extend .allcaps
 
 h3, h4
-  font-weight: bold
+  +bold
 
 h5, h6
-  font-style: italic
+  +italic
 
 /* Inline --------------------------------------------------------------------
 
 cite, em, dfn, address, i
-  font-style: italic
+  +italic
 
 strong, dfn, b
-  font-weight: bold
+  +bold
 
 sup, sub
   position: relative
@@ -156,7 +156,7 @@ small
   +adjust-font-size-to($xsmallpx)
 
 q
-  font-style: italic
+  +italic
   em
     font-style: normal
 
@@ -176,8 +176,8 @@ pre
   word-wrap: break-word
 
 blockquote
+  +italic
   padding: rhythm()
-  font-style: italic
 
 nav
   ul, ol, h2, p
@@ -255,7 +255,7 @@ table, td, th
   vertical-align: top
 
 th, thead th
-  font-weight: bold
+  +bold
 
 th, td, caption
   padding: rhythm(.5)

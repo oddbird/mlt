@@ -95,8 +95,8 @@
     display: none
     padding: 0 rhythm(.5)
     &.asc, &.desc
+      +demi
       display: block
-      font-weight: bold
     &.asc
       background: image-url('ui/angle_up.png') no-repeat scroll 95%
     &.desc
@@ -226,26 +226,27 @@
       +adjust-font-size-to($normpx+$xxsmallpx)
       +transition(all,300ms)
       +opacity(1)
+      +cond
+      +demi
       position: absolute
       left: 0
       content: counter(address, upper-latin) "."
       width: columns(1,5)
       color: $base
-      font-weight: bold
       text-align: right
 
   .street-address
+    +demi
     color: $base
-    font-weight: bold
   .locality, .region, .postal-code
     +inline-block
 
   .id
     +columns(3,8)
     +omega(8)
+    +demi
     color: orange
     text-align: right
-    font-weight: bold
     .value, [for^="flag_for_review"]
       +leader(.25)
       +inline-block
