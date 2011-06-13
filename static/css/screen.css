@@ -226,8 +226,7 @@ h1 a:link, h1 a:visited { display: block; }
 
 .meta { display: inline; float: right; padding-top: 0.405em; padding-bottom: 0.405em; padding-right: 12px; }
 
-[role="main"] { *zoom: 1; position: relative; border: 1px solid #dddddd; border-width: 1px 0; }
-[role="main"]:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
+[role="main"] { overflow: hidden; *zoom: 1; position: relative; border: 1px solid #dddddd; border-width: 1px 0; }
 
 [role="contentinfo"] { padding-top: 0.809em; padding-bottom: 0.809em; }
 [role="contentinfo"] .author { margin: 0 1em; }
@@ -253,10 +252,10 @@ h1 a:link, h1 a:visited { display: block; }
 #filter .suggest li:last-child a:link, #filter .suggest li:last-child a:visited { border-bottom-color: #949494; }
 #filter .suggest i { display: inline; float: right; padding-left: 1em; font-style: normal; color: #949494; }
 #filter #filter:focus + .suggest { display: block; }
-#filter .visual { position: absolute; top: 0; right: 0; width: 2.427em; height: 2.427em; background: url('../images/ui/list.png?1307815883') no-repeat scroll center; }
+#filter .visual { position: absolute; top: 0; right: 0; width: 2.427em; height: 2.427em; background: url('../images/ui/list.png?1307817035') no-repeat scroll center; }
 #filter .visual ul { -moz-box-shadow: 0px 0px 5px #333333; -webkit-box-shadow: 0px 0px 5px #333333; -o-box-shadow: 0px 0px 5px #333333; box-shadow: 0px 0px 5px #333333; display: none; position: absolute; top: 100%; right: 0; width: 11em; background: white; z-index: 900; }
 #filter .visual label { display: none; padding: 0.405em 0.809em; }
-#filter .visual label:focus, #filter .visual label:hover, #filter .visual label:active { background: url('../images/ui/x.png?1307816793') no-repeat scroll 95% center; }
+#filter .visual label:focus, #filter .visual label:hover, #filter .visual label:active { background: url('../images/ui/x.png?1307817035') no-repeat scroll 95% center; }
 #filter .visual input { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #filter .visual input:checked + label { display: block; }
 #filter .visual:hover ul { display: block; }
@@ -390,3 +389,6 @@ h1 a:link, h1 a:visited { display: block; }
 
 /* Map ----------------------------------------------------------------------- */
 #map { position: absolute; top: 0; right: 0; bottom: 0; left: 33em; padding: 0.405em 0.809em; }
+#map .leaflet-control-attribution { font-size: 0.833em; line-height: 1.942em; background: rgba(221, 221, 221, 0.85); }
+
+#mapinfo { -moz-box-shadow: 0px 0px 5px #333333; -webkit-box-shadow: 0px 0px 5px #333333; -o-box-shadow: 0px 0px 5px #333333; box-shadow: 0px 0px 5px #333333; position: absolute; top: 0; right: 0; padding: 0.809em; background: rgba(221, 221, 221, 0.85); }

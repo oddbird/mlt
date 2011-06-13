@@ -93,7 +93,7 @@ h1
 
 [role="main"]
   @extend .container
-  +pie-clearfix
+  +clearfix
   position: relative
   border: 1px solid $light
     width: 1px 0
@@ -149,4 +149,14 @@ h1
   bottom: 0
   left: fixed(8) + $gutter-width + $side-gutter-width
   padding: rhythm(.25) rhythm(.5)
+  .leaflet-control-attribution
+    +adjust-font-size-to(10px)
+    background: rgba($light,.85)
 
+#mapinfo
+  +box-shadow
+  position: absolute
+  top: 0
+  right: 0
+  padding: rhythm(.5)
+  background: rgba($light,.85)
