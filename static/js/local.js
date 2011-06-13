@@ -136,7 +136,7 @@ var MLT = MLT || {};
         if (allSuccess === true) {
             $(document).bind('mousedown keydown', function(event) {
                 $.doTimeout(500, function() {
-                    $('#messages').fadeOut('fast');
+                    $('#messages').fadeOut('slow');
                     $(this).unbind(event);
                 });
             });
