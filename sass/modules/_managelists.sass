@@ -90,17 +90,16 @@
   ul
     position: absolute
     left: 0
+    padding: rhythm(.125) 0 rhythm(.5)
     width: 100%
   li
+    +demi
     display: none
+    position: relative
     padding: 0 rhythm(.5)
-    &.asc, &.desc
-      +demi
+    &:first-child
+      +bold
       display: block
-    &.asc
-      background: image-url('ui/angle_up.png') no-repeat scroll 95%
-    &.desc
-      background: image-url('ui/angle_down.png') no-repeat scroll 95%
   &:hover
     ul
       +box-shadow($base 0em .25em .25em)
@@ -108,10 +107,28 @@
       z-index: 2
     li
       display: block
-  a
+  .field
     #{$link}
-      +adjust-leading-to(1.5)
+      +adjust-leading-to(1.25)
       display: block
+  .dir
+    #{$link}
+      +stretch-y
+      right: 0
+      display: block
+      width: rhythm(1.5)
+      #{$focus}
+        +opacity(.5)
+    &.asc
+      #{$link}
+        +replace-text('ui/angle_up.png')
+      #{$focus}
+        +replace-text('ui/angle_down.png')
+    &.desc
+      #{$link}
+        +replace-text('ui/angle_down.png')
+      #{$focus}
+        +replace-text('ui/angle_up.png')
 
 #add-address-form
   label
