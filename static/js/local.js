@@ -49,9 +49,11 @@ var MLT = MLT || {};
                                             {color: "red", weight: 5});
                                     };
                                     e.layer.unselect = function() {
-                                        selectedId = null;
-                                        selectedInfo = null;
-                                        selectedLayer = null;
+                                        if (this.selected) {
+                                            selectedId = null;
+                                            selectedInfo = null;
+                                            selectedLayer = null;
+                                        }
                                         this.selected = false;
                                         this.setStyle(
                                             {color: "blue", weight: 2});
