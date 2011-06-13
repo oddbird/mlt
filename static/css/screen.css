@@ -395,6 +395,7 @@ h1 a:link, h1 a:visited { display: block; }
 
 /* Map ----------------------------------------------------------------------- */
 #mapping { position: absolute; top: 0; right: 0; bottom: 0; left: 33em; }
+#mapping h2 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 
 #map { position: absolute; top: 0; bottom: 0; left: 0; right: 0; padding: 0.405em 0.809em; }
 #map .leaflet-control-attribution { font-size: 0.833em; line-height: 1.942em; background: rgba(221, 221, 221, 0.85); }
