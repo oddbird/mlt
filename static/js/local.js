@@ -62,6 +62,11 @@ var MLT = MLT || {};
                                             mapinfo.empty().prepend(info).show();
                                         });
                                     e.layer.on(
+                                        'mouseout',
+                                        function(ev) {
+                                            mapinfo.empty().hide();
+                                        });
+                                    e.layer.on(
                                         'click',
                                         function(ev) {
                                             if (ev.target.selected) {
