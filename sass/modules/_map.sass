@@ -1,0 +1,55 @@
+/* Map -----------------------------------------------------------------------
+
+#mapping
+  position: absolute
+  top: 0
+  right: 0
+  bottom: 0
+  left: fixed(8) + $gutter-width + $side-gutter-width
+  h2
+    +gone
+
+#map
+  +stretch
+  padding: rhythm(.25) rhythm(.5)
+  .leaflet-control-attribution
+    +adjust-font-size-to(10px)
+    background: rgba($light,.85)
+
+#mapinfo
+  +box-shadow
+  position: absolute
+  top: 0
+  right: 0
+  padding: rhythm(.5) rhythm(1)
+  background: rgba($light,.85)
+  z-index: 500
+  &.selected
+    +box-shadow(red 0 0 1em)
+    background: rgba(white,.85)
+    .mapit
+      display: block
+
+  .id, .street-address
+    display: inline
+  .id
+    color: $accent
+  .street-address
+    &::before
+      content: " | "
+  .code, .owner
+    margin: 0
+
+  .mapped-addresses
+    +leader(.5)
+    ul
+      +no-style-list
+
+  .flagged
+    background: image-url('ui/warning.png') no-repeat scroll right
+    padding-right: image-width('ui/warning.png') + $smallpx
+
+  .mapit
+    +leader(.5)
+    display: none
+    width: 100%
