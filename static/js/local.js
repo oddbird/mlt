@@ -134,9 +134,10 @@ var MLT = MLT || {};
             }
         });
         if (allSuccess === true) {
-            $('#messages .close').focus().blur(function() {
+            $(document).bind('mousedown keydown', function(event) {
                 $.doTimeout(500, function() {
                     $('#messages').fadeOut('fast');
+                    $(this).unbind(event);
                 });
             });
         }
