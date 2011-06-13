@@ -79,7 +79,10 @@ var MLT = MLT || {};
                             geojson.addGeoJSON(data);
                             map.addLayer(geojson);
                         });
-                } else { map.removeLayer(geojson); };
+                } else {
+                    map.removeLayer(geojson);
+                    mapinfo.html("");
+                };
             };
 
             map.on(
