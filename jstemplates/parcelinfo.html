@@ -1,6 +1,16 @@
-  <hgroup class="adr">
-    <h3 class="id">{{ pl }}</h3>
-    <h4 class="street-address">{{ address }}</h4>
-  </hgroup>
-  <p class="code">{{ classcode }}</p>
-  <p class="owner">{{ first_owner }}</p>
+<hgroup class="adr">
+  <h3 class="id">{{ pl }}</h3>
+  <h4 class="street-address">{{ address }}</h4>
+</hgroup>
+<p class="code">{{ classcode }}</p>
+<p class="owner">{{ first_owner }}</p>
+
+<section class="mapped-addresses">
+  <h4>Mapped To:</h4>
+  <ul>
+    <li>3635 Van Gordon St.</li>
+    <li class="flagged">1550 Detroit St.</li>
+    <li>2228 Vine St.</li>
+  </ul>
+  <button class="mapit">map to selected</button>
+</section>

@@ -405,3 +405,8 @@ h1 a:link, h1 a:visited { display: block; }
 #mapinfo .id { color: #984400; }
 #mapinfo .street-address::before { content: " | "; }
 #mapinfo .code, #mapinfo .owner { margin: 0; }
+#mapinfo .mapped-addresses { margin-top: 0.809em; }
+#mapinfo .mapped-addresses ul { margin: 0; padding: 0; border: 0; list-style: none; }
+#mapinfo .mapped-addresses ul li { list-style-image: none; list-style-type: none; margin-left: 0px; }
+#mapinfo .flagged { background: url('../images/ui/warning.png?1305750015') no-repeat scroll right; padding-right: 19.417px; }
+#mapinfo .mapit { margin-top: 0.809em; width: 100%; }
