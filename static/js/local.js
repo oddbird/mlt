@@ -13,7 +13,7 @@ var MLT = MLT || {};
                     zoom: MLT.mapDefaultZoom,
                     layers: [layer]
                 }),
-            mapinfo = $("#mapinfo"),
+            mapinfo = $("#mapinfo").hide(),
             geojson = new L.GeoJSON(),
             selectedIds = [],
             refreshParcels = function() {
@@ -63,7 +63,7 @@ var MLT = MLT || {};
                                     e.layer.on(
                                         'mouseover',
                                         function(ev) {
-                                            mapinfo.html(info);
+                                            mapinfo.html(info).show();
                                         });
                                     e.layer.on(
                                         'click',
@@ -81,7 +81,7 @@ var MLT = MLT || {};
                         });
                 } else {
                     map.removeLayer(geojson);
-                    mapinfo.html("");
+                    mapinfo.hide();
                 };
             };
 
