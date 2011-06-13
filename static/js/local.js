@@ -122,6 +122,26 @@ var MLT = MLT || {};
         update();
     };
 
+    var messages = function() {
+        var allSuccess = true;
+        $('#messages .close').click(function() {
+            $('#messages').fadeOut('fast');
+            return false;
+        });
+        $('#messages li.message').each(function() {
+            if (!($(this).hasClass('success'))) {
+                allSuccess = false;
+            }
+        });
+        if (allSuccess === true) {
+            $('#messages .close').focus().blur(function() {
+                $.doTimeout(500, function() {
+                    $('#messages').fadeOut('fast');
+                });
+            });
+        }
+    };
+
     $(function() {
         $('#hcard-client-name .email').defuscate();
         $('input[placeholder], textarea[placeholder]').placeholder();
@@ -132,10 +152,7 @@ var MLT = MLT || {};
         $('#addresstable .managelist .address .content .details .summary').click(function() {
             $(this).blur();
         });
-        $('#messages .close').click(function() {
-            $('#messages').fadeOut('fast');
-            return false;
-        });
+        messages();
     });
 
 })(jQuery);

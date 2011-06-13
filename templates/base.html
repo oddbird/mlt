@@ -84,11 +84,11 @@
   <ul>
     {% for message in messages %}
     <li class="message{% if message.tags %} {{ message.tags }}{% endif %}">
-    <div class="container">
-    <div class="content">
-      {{ message|safe }}
-    </div>
-    </div>
+      <div class="container">
+        <div class="content">
+          {{ message|safe }}
+        </div>
+      </div>
     </li>
     {% endfor %}
   </ul>
