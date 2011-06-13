@@ -93,13 +93,14 @@
     padding: rhythm(.125) 0 rhythm(.5)
     width: 100%
   li
-    +demi
     display: none
     position: relative
     padding: 0 rhythm(.5)
     &:first-child
       +bold
       display: block
+    &:not(.none)
+      +demi
   &:hover
     ul
       +box-shadow($base 0em .25em .25em)
@@ -114,9 +115,18 @@
   .dir
     #{$link}
       +stretch-y
+      +opacity(.25)
+      +replace-text('ui/x_sm.png')
       right: 0
       display: block
       width: rhythm(1.5)
+    #{$focus}
+      +opacity(.5)
+      +replace-text('ui/angle_up.png')
+    &.asc, &.desc
+      #{$link}
+        +demi
+        +opacity(1)
       #{$focus}
         +opacity(.5)
     &.asc
@@ -128,7 +138,7 @@
       #{$link}
         +replace-text('ui/angle_down.png')
       #{$focus}
-        +replace-text('ui/angle_up.png')
+        +replace-text('ui/x_sm.png')
 
 #add-address-form
   label

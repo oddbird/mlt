@@ -326,17 +326,20 @@ h1 a:link, h1 a:visited { display: block; }
 .listordering { display: inline; float: left; position: relative; width: 41.935%; height: 2.427em; }
 .listordering h4 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 .listordering ul { position: absolute; left: 0; padding: 0.202em 0 0.809em; width: 100%; }
-.listordering li { font-weight: 500; display: none; position: relative; padding: 0 0.809em; }
+.listordering li { display: none; position: relative; padding: 0 0.809em; }
 .listordering li:first-child { font-weight: 700; display: block; }
+.listordering li:not(.none) { font-weight: 500; }
 .listordering:hover ul { -moz-box-shadow: #4c4c4c 0em 0.25em 0.25em; -webkit-box-shadow: #4c4c4c 0em 0.25em 0.25em; -o-box-shadow: #4c4c4c 0em 0.25em 0.25em; box-shadow: #4c4c4c 0em 0.25em 0.25em; background: white; z-index: 2; }
 .listordering:hover li { display: block; }
 .listordering .field:link, .listordering .field:visited { line-height: 2.023em; display: block; }
-.listordering .dir:link, .listordering .dir:visited { position: absolute; top: 0; bottom: 0; right: 0; display: block; width: 2.427em; }
-.listordering .dir:link:focus, .listordering .dir:link:hover, .listordering .dir:link:active, .listordering .dir:visited:focus, .listordering .dir:visited:hover, .listordering .dir:visited:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; }
+.listordering .dir:link, .listordering .dir:visited { position: absolute; top: 0; bottom: 0; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=25)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=25); opacity: 0.25; text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/x_sm.png?1308006098'); background-repeat: no-repeat; background-position: 50% 50%; right: 0; display: block; width: 2.427em; }
+.listordering .dir:focus, .listordering .dir:hover, .listordering .dir:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/angle_up.png?1306176506'); background-repeat: no-repeat; background-position: 50% 50%; }
+.listordering .dir.asc:link, .listordering .dir.asc:visited, .listordering .dir.desc:link, .listordering .dir.desc:visited { font-weight: 500; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
+.listordering .dir.asc:focus, .listordering .dir.asc:hover, .listordering .dir.asc:active, .listordering .dir.desc:focus, .listordering .dir.desc:hover, .listordering .dir.desc:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; }
 .listordering .dir.asc:link, .listordering .dir.asc:visited { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/angle_up.png?1306176506'); background-repeat: no-repeat; background-position: 50% 50%; }
 .listordering .dir.asc:focus, .listordering .dir.asc:hover, .listordering .dir.asc:active { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/angle_down.png?1306176524'); background-repeat: no-repeat; background-position: 50% 50%; }
 .listordering .dir.desc:link, .listordering .dir.desc:visited { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/angle_down.png?1306176524'); background-repeat: no-repeat; background-position: 50% 50%; }
-.listordering .dir.desc:focus, .listordering .dir.desc:hover, .listordering .dir.desc:active { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/angle_up.png?1306176506'); background-repeat: no-repeat; background-position: 50% 50%; }
+.listordering .dir.desc:focus, .listordering .dir.desc:hover, .listordering .dir.desc:active { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/x_sm.png?1308006098'); background-repeat: no-repeat; background-position: 50% 50%; }
 
 #add-address-form label { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #add-address-form li { margin-bottom: 0.809em; }
