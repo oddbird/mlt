@@ -171,6 +171,15 @@ h1
   position: absolute
   top: 0
   right: 0
-  padding: rhythm(.5)
+  padding: rhythm(.5) rhythm(1)
   background: rgba($light,.85)
   z-index: 500
+  .id, .street-address
+    display: inline
+  .id
+    color: $accent
+  .street-address
+    &::before
+      content: " | "
+  .code, .owner
+    margin: 0
