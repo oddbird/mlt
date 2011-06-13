@@ -42,3 +42,10 @@
 </aside>
 
 {% endblock content %}
+
+{% block jstemplates %}
+{% load literalinclude %}
+<script id="parcelinfo" type="text/html">
+  {% literalinclude "includes/js/parcelinfo.html" %}
+</script>
+{% endblock %}

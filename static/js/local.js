@@ -32,11 +32,7 @@ var MLT = MLT || {};
                             geojson.on(
                                 'featureparse',
                                 function(e) {
-                                    var info =
-                                        '<h3>' + e.properties.pl + '</h3>' +
-                                        '<h4>' + e.properties.address + '</h4>' +
-                                        '<p>' + e.properties.classcode + '</p>' +
-                                        '<p>' + e.properties.first_owner + '</p>',
+                                    var info = ich.parcelinfo(e.properties);
                                     id = e.id;
                                     e.layer.select = function() {
                                         if (selectedIds.indexOf(id) === -1) {
@@ -63,7 +59,7 @@ var MLT = MLT || {};
                                     e.layer.on(
                                         'mouseover',
                                         function(ev) {
-                                            mapinfo.html(info).show();
+                                            mapinfo.empty().prepend(info).show();
                                         });
                                     e.layer.on(
                                         'click',

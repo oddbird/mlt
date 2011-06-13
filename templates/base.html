@@ -152,6 +152,9 @@
 
 {% endblock body %}
 
+{% block jstemplates %}
+{% endblock %}
+
 <!-- JavaScript -->
 {% compress js %}
 <script>
@@ -171,6 +174,7 @@
 <script src="{{ STATIC_URL }}js/jquery.ba-dotimeout.js"></script>
 <script src="{{ STATIC_URL }}js/defuscator.js"></script>
 <script src="{{ STATIC_URL }}js/viewport.js"></script>
+<script src="{{ STATIC_URL }}js/ICanHaz.min.js"></script>
 <script src="{{ STATIC_URL }}js/local.js"></script>
 {% endcompress %}
 

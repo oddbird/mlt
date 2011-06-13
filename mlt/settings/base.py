@@ -146,6 +146,9 @@ LOGGING = {
     }
 }
 
+INSTALLED_APPS += ["literalinclude"]
+LITERAL_INCLUDE_ROOT = join(BASE_PATH, "templates")
+
 INSTALLED_APPS += ["compressor"]
 COMPRESS_CSS_FILTERS = ["compressor.filters.css_default.CssAbsoluteFilter",
                         "mlt.compressor_filters.SlimmerCSSFilter"]
