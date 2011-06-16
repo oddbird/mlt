@@ -240,6 +240,15 @@
         +opacity(.5)
         #{$focus}
           +opacity(1)
+      &::before
+        color: rgba($base,.5)
+    &::before
+      +cond
+      content: counter(address, decimal-leading-zero) "."
+      position: absolute
+      right: columns(7,8) + gutter(8)
+      bottom: rhythm(.25)
+      color: rgba($base,0)
 
   .content
     +clearfix
@@ -337,12 +346,12 @@
       +inline-block
 
   .savechanges
-    +icon('ui/disk_l.png')
+    +icon('ui/disk_med.png')
     +opacity(0)
     +transition(all,300ms)
-    height: rhythm(2)
+    height: rhythm(1)
     position: absolute
-    top: 0
+    top: rhythm(.25)
     right: columns(7,8) + gutter(8)
 
   .editing
