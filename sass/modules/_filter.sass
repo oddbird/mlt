@@ -2,12 +2,15 @@
 
 #filter
   +float(left)
-  width: 100% - (columns(4,8)/3)
+  width: 100% - columns(1,8) - gutter(8)
   position: relative
 
   // Textual -----------------------------------------------------------------
 
   .textual
+    +float(left)
+    position: relative
+    width: columns(6,8) + gutter(8)
     label
       +gone
     input
@@ -50,25 +53,30 @@
       padding-left: 1em
       font-style: normal
       color: $mid
-  #filter:focus + .suggest
+  #filter_input:focus + .suggest
     display: block
 
-  .visual
-    position: absolute
-    top: 0
-    right: 0
+  .visual, .bystatus
+    position: relative
     width: rhythm(1.5)
     height: rhythm(1.5)
-    background: image-url('ui/list.png') no-repeat scroll center
     ul
-      +box-shadow
       display: none
       position: absolute
       top: 100%
-      right: 0
       width: fixed(3)
       background: white
       z-index: 900
+    &:hover
+      ul
+        +box-shadow
+        display: block
+
+  .visual
+    +float(left)
+    background: image-url('ui/list.png') no-repeat scroll center
+    ul
+      right: 0
     label
       display: none
       padding: rhythm(.25) rhythm(.5)
@@ -78,6 +86,25 @@
       +gone
       &:checked + label
         display: block
-    &:hover
-      ul
+
+  .bystatus
+    +float(left)
+    background: image-url('ui/filter.png') no-repeat scroll center
+    ul
+      left: 0
+    a
+      #{$link}
         display: block
+        padding: rhythm(.25) rhythm(.5) rhythm(.25) image-width('ui/filter.png') + $smallpx*2
+        background: image-url('ui/filter.png') no-repeat scroll $smallpx
+        &.approved
+          background-image: image-url('ui/thumb_up.png')
+        &.flagged
+          background-image: image-url('ui/warning.png')
+        &.unmapped
+          background-image: image-url('ui/x.png')
+
+  .refresh
+    +float(left)
+    +icon('ui/refresh.png')
+    height: rhythm(1.5)

@@ -1,6 +1,16 @@
 <nav id="filter">
   <h4 class="navhead">List Filtering</h4>
   <form>
+
+    <div class="bystatus">
+      <ul>
+        <li><a href="#" class="none">show all</a></li>
+        <li><a href="#" class="approved">show approved</a></li>
+        <li><a href="#" class="flagged">show flagged</a></li>
+        <li><a href="#" class="unmapped">show unmapped</a></li>
+      </ul>
+    </div>
+
     <div class="textual">
       <label for="filter_input">filter</label>
       <input type="text" name="filter" value="" id="filter_input" placeholder="filter by street, city, state, zip, complex, property ID, etc.">
@@ -27,5 +37,8 @@
         </li>
       </ul>
     </div>
+
+    <button class="refresh">refresh</button>
+
   </form>
 </nav>
