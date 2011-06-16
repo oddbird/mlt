@@ -115,22 +115,26 @@
     #{$link}
       +adjust-leading-to(1.25)
       display: block
+      background: no-repeat scroll left
     #{$focus}
-      background: image-url('ui/x_sm.png') no-repeat scroll left
+      background-image: image-url('ui/x_sm.png')
   .none
-    .field
-      #{$focus}
-        background-image: image-url('ui/chaos_sm.png')
+    &:hover
+      .field
+        #{$link}
+          background-image: image-url('ui/chaos_sm.png')
+      .dir
+        #{$link}
+          background-image: image-url('ui/angle_up.png')
   .dir
     #{$link}
       +stretch-y
-      +opacity(.25)
       +replace-text('ui/x_sm.png')
+      +opacity(.5)
       right: 0
       display: block
       width: rhythm(1.5)
     #{$focus}
-      +opacity(.5)
       +replace-text('ui/angle_up.png')
     &.asc, &.desc
       #{$link}
