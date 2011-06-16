@@ -199,6 +199,9 @@ var MLT = MLT || {};
         });
 
         direction.click(function() {
+            if ($(this).closest('li[class^="by"]').hasClass('none')) {
+                $(this).closest('li[class^="by"]').removeClass('none');
+            }
             if ($(this).hasClass('asc') || $(this).hasClass('desc')) {
                 $(this).toggleClass('asc').toggleClass('desc');
             } else {
