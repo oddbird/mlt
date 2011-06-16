@@ -108,10 +108,19 @@
       z-index: 2
     li
       display: block
+    .field
+      #{$link}
+        padding-left: image-width('ui/x_sm.png') + $xsmallpx
   .field
     #{$link}
       +adjust-leading-to(1.25)
       display: block
+    #{$focus}
+      background: image-url('ui/x_sm.png') no-repeat scroll left
+  .none
+    .field
+      #{$focus}
+        background-image: image-url('ui/chaos_sm.png')
   .dir
     #{$link}
       +stretch-y
