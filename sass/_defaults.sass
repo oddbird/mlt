@@ -198,12 +198,16 @@ summary, .summary
   &:focus
     +focus-default
 
+body
+  .details
+    > :not(.summary)
+      display: none
+
 .no-details
   details
-    > *
+    > :not(summary)
       display: none
     summary
-      display: $summary-display
       &::before
         +adjust-font-size-to(9px)
         content: "▶"

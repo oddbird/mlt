@@ -121,8 +121,9 @@ nav ul, nav ol, nav h2, nav p { margin: 0; }
 summary, .summary { -moz-appearance: none; -webkit-appearance: none; appearance: none; display: inline; cursor: pointer; color: #005498; }
 summary:focus, .summary:focus { outline: thin dotted #984400; }
 
-.no-details details > * { display: none; }
-.no-details details summary { display: inline; }
+body .details > :not(.summary) { display: none; }
+
+.no-details details > :not(summary) { display: none; }
 .no-details details summary::before { font-size: 0.75em; line-height: 2.157em; content: "▶"; }
 .no-details details.open summary::before { content: "▼"; }
 
