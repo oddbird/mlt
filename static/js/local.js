@@ -182,6 +182,34 @@ var MLT = MLT || {};
         }
     };
 
+    var sorting = function() {
+        var list = $('.actions .listordering > ul'),
+            item = list.find('li[class^="by"]'),
+            field = item.find('.field'),
+            direction = item.find('.dir');
+
+        field.click(function() {
+            if (!($(this).closest('li[class^="by"]').hasClass('none'))) {
+                $(this).closest('li[class^="by"]').find('.dir').removeClass('asc').removeClass('desc');
+            } else {
+                $(this).closest('li[class^="by"]').find('.dir').addClass('asc');
+            }
+            $(this).closest('li[class^="by"]').toggleClass('none');
+            return false;
+        });
+
+        direction.click(function() {
+            if ($(this).hasClass('asc') || $(this).hasClass('desc')) {
+                $(this).toggleClass('asc').toggleClass('desc');
+            } else {
+                $(this).addClass('asc');
+            }
+            return false;
+        });
+
+        $('.actions .listordering > ul').sortable();
+    };
+
     $(function() {
         $('#hcard-client-name .email').defuscate();
         $('input[placeholder], textarea[placeholder]').placeholder();
@@ -193,6 +221,7 @@ var MLT = MLT || {};
             $(this).blur();
         });
         messages();
+        sorting();
     });
 
 })(jQuery);
