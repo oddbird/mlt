@@ -80,6 +80,18 @@
     +icon('ui/warning.png')
     width: 50%
 
+  .listlength
+    +box-sizing(border-box)
+    +clearfix
+    margin: 0
+    padding: rhythm(.25)
+    height: rhythm(1.5)
+    text-align: center
+    &::before
+      content: "("
+    &::after
+      content: ")"
+
 .listordering
   +float(left)
   position: relative

@@ -264,8 +264,7 @@ h1 a:link, h1 a:visited { display: block; }
 
 /* Modules ------------------------------------------------------------------- */
 /* Filtering ----------------------------------------------------------------- */
-#filter { position: relative; }
-#filter .textual { position: relative; }
+#filter { display: inline; float: left; width: 83.871%; position: relative; }
 #filter .textual label { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #filter .textual input { clear: both; margin: 0; background: rgba(255, 255, 255, 0.125); }
 #filter .suggest { display: none; position: absolute; left: 0; right: 0; top: 2.427em; background: white; z-index: 900; }
@@ -323,6 +322,9 @@ h1 a:link, h1 a:visited { display: block; }
 .actions .approve:focus, .actions .approve:hover, .actions .approve:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .actions .flag { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/warning.png?1305750015'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 19.417px; width: 50%; }
 .actions .flag:focus, .actions .flag:hover, .actions .flag:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
+.actions .listlength { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; overflow: hidden; *zoom: 1; margin: 0; padding: 0.405em; height: 2.427em; text-align: center; }
+.actions .listlength::before { content: "("; }
+.actions .listlength::after { content: ")"; }
 
 .listordering { display: inline; float: left; position: relative; width: 41.935%; height: 2.427em; }
 .listordering h4 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
