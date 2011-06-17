@@ -7,7 +7,7 @@ class Parcel(models.Model):
     address = models.CharField(max_length=27)
     first_owner = models.CharField(max_length=254)
     classcode = models.CharField(max_length=55)
-    geom = models.MultiPolygonField(srid=3438)
+    geom = models.MultiPolygonField()
 
     objects = models.GeoManager()
 
