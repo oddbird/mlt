@@ -404,7 +404,7 @@ h1 a:link, h1 a:visited { display: block; }
 .managelist .address:hover [for^="flag_for_review"] { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; }
 .managelist .address:hover [for^="flag_for_review"]:focus, .managelist .address:hover [for^="flag_for_review"]:hover, .managelist .address:hover [for^="flag_for_review"]:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .managelist .address:hover::before { color: rgba(76, 76, 76, 0.5); }
-.managelist .address::before { font-family: "CambridgeRoundCond", "Helvetica Neue", Helvetica, Arial, sans-serif; content: counter(address, decimal-leading-zero) "."; position: absolute; right: 90.323%; bottom: 0.405em; color: rgba(76, 76, 76, 0); }
+.managelist .address::before { font-family: "CambridgeRoundCond", "Helvetica Neue", Helvetica, Arial, sans-serif; content: counter(address, decimal-leading-zero) "."; position: absolute; right: 90.323%; top: 2.023em; color: rgba(76, 76, 76, 0); }
 .managelist .content { overflow: hidden; *zoom: 1; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 0.321em; padding-right: 1em; border-color: #dddddd; }
 .managelist [id^="select_"] { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 .managelist [id^="select_"]:checked + .content { background-color: rgba(0, 84, 152, 0.146); }
