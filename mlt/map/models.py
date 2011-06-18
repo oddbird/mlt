@@ -1,10 +1,8 @@
-from datetime import datetime
-
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.contrib.localflavor.us.models import USStateField
 
-from .addresses import SuffixMap, parse_street
+from . import addresses
 
 
 
@@ -24,7 +22,7 @@ class Parcel(models.Model):
 
 
 class StreetSuffix(models.Model):
-    suffix = models.CharField(max_length=20)
+    suffix = models.CharField(max_length=20, unique=True)
 
 
     def __unicode__(self):
@@ -42,13 +40,13 @@ class StreetSuffix(models.Model):
             d[s.suffix] = s.suffix
             for a in s.aliases.all():
                 d[a.alias] = s.suffix
-        return SuffixMap(d)
+        return addresses.SuffixMap(d)
 
 
 
 class StreetSuffixAlias(models.Model):
     suffix = models.ForeignKey(StreetSuffix, related_name="aliases")
-    alias = models.CharField(max_length=20)
+    alias = models.CharField(max_length=20, unique=True)
 
 
     def __unicode__(self):
@@ -84,7 +82,7 @@ class Address(models.Model):
     # import
     imported_by = models.ForeignKey(
         User, on_delete=models.PROTECT, related_name="addresses_imported")
-    import_timestamp = models.DateTimeField(default=datetime.utcnow)
+    import_timestamp = models.DateTimeField()
     import_source = models.CharField(max_length=100, db_index=True)
 
 
@@ -98,13 +96,17 @@ class Address(models.Model):
         verbose_name_plural = "addresses"
 
 
+    StreetNumberError = addresses.StreetNumberError
+    StreetSuffixError = addresses.StreetSuffixError
+
+
     @staticmethod
     def parse_street(street_address):
-        return parse_street(street_address, StreetSuffix.suffix_map())
+        return addresses.parse_street(street_address, StreetSuffix.suffix_map())
 
 
     @staticmethod
     def parse_streets(street_addresses):
         suffixmap = StreetSuffix.suffix_map()
         for street_address in street_addresses:
-            yield parse_street(street_address, suffixmap)
+            yield addresses.parse_street(street_address, suffixmap)

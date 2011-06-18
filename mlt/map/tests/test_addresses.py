@@ -67,7 +67,8 @@ class ParseStreetTest(TestCase):
 
 
     def test_no_number(self):
-        with self.assertRaises(ValueError) as cm:
+        from mlt.map.addresses import StreetNumberError
+        with self.assertRaises(StreetNumberError) as cm:
             self.func("N Main St", {"St": "St"})
 
         self.assertEqual(
@@ -75,7 +76,8 @@ class ParseStreetTest(TestCase):
 
 
     def test_no_suffix(self):
-        with self.assertRaises(ValueError) as cm:
+        from mlt.map.addresses import StreetSuffixError
+        with self.assertRaises(StreetSuffixError) as cm:
             self.func("123 N Main", {"St": "St"})
 
         self.assertEqual(

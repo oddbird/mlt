@@ -3,6 +3,21 @@ import re
 
 
 
+class StreetParsingError(ValueError):
+    pass
+
+
+
+class StreetNumberError(StreetParsingError):
+    pass
+
+
+
+class StreetSuffixError(StreetParsingError):
+    pass
+
+
+
 def parse_street(street_address, suffix_map):
     """
     Parse ``street_address`` (which should be a string like "123 N Main St")
@@ -22,11 +37,11 @@ def parse_street(street_address, suffix_map):
         number = match.group("number")
         sans_number = street_address[match.end():]
     else:
-        raise ValueError("No street number found in %r" % street_address)
+        raise StreetNumberError("No street number found in %r" % street_address)
 
     name, suffix = SuffixMap(suffix_map).match(sans_number)
     if suffix is None:
-        raise ValueError("No valid suffix found in %r" % street_address)
+        raise StreetSuffixError("No valid suffix found in %r" % street_address)
 
     return StreetAddress(number=number, name=name, suffix=suffix)
 
