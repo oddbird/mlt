@@ -4,3 +4,4 @@ collected-assets/
 .sass-cache/
 mlt/settings/local.py
 .livereload
+htmlcov/

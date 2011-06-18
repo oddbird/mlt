@@ -147,18 +147,34 @@ var MLT = MLT || {};
         });
     };
 
-    var lightboxBootstrap = function() {
-        var update = function() {
-            if ($('#lightbox-add-address #complex').is(':checked')) {
-                $('#lightbox-add-address #complex_name').show();
-            } else {
-                $('#lightbox-add-address #complex_name').hide();
-            }
+    var addAddressLightbox = function() {
+        var bootstrapForm = function() {
+            var updateComplexName = function() {
+                if ($('#lightbox-add-address #multi_units').is(':checked')) {
+                    $('#lightbox-add-address #complex_name').show();
+                } else {
+                    $('#lightbox-add-address #complex_name').hide();
+                }
+            },
+            form = $('#lightbox-add-address form').ajaxForm(
+                {
+                    target: "#lightbox-add-address",
+                    success: bootstrapForm
+                });
+            $('#lightbox-add-address #multi_units').change(
+                function() {
+                    updateComplexName();
+                });
+            updateComplexName();
         };
-        $('#lightbox-add-address #complex').change(function() {
-            update();
-        });
-        update();
+
+        $('a[href=#lightbox-add-address]').click(
+            function() {
+                $("#lightbox-add-address").load(
+                    "/map/add_address/",
+                    bootstrapForm
+                );
+            });
     };
 
     var messages = function() {
@@ -218,7 +234,7 @@ var MLT = MLT || {};
         $('input[placeholder], textarea[placeholder]').placeholder();
         $('.details:not(html)').html5accordion('.summary');
         addressListHeight();
-        lightboxBootstrap();
+        addAddressLightbox();
         initializeMap();
         $('#addresstable .managelist .address .content .details .summary').click(function() {
             $(this).blur();

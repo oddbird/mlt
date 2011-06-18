@@ -1,10 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
 
 from . import forms
 
 
+
 DEFAULT_REDIRECT = "/"
+
 
 
 def login(request):
@@ -27,6 +30,7 @@ def logout(request):
 
 
 
+@login_required
 def password_change(request):
     response =  auth_views.password_change(
         request,
