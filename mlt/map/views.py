@@ -1,11 +1,14 @@
 from django.http import HttpResponse
 
+from django.contrib.auth.decorators import login_required
+
 from vectorformats.Formats import Django, GeoJSON
 
 from .models import Parcel
 
 
 
+@login_required
 def geojson(request, westlat, eastlat, southlng, northlng):
     wkt = (
         "POLYGON(("

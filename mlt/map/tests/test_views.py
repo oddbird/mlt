@@ -1,7 +1,8 @@
 import json
 
-from django.test import TestCase
-from django.test.client import RequestFactory
+from django.core.urlresolvers import reverse
+
+from django_webtest import WebTest
 
 from .utils import create_parcel, create_mpolygon
 
@@ -11,19 +12,23 @@ __all__ = ["GeoJSONViewTest"]
 
 
 
-class GeoJSONViewTest(TestCase):
-    @property
-    def view(self):
-        from mlt.map.views import geojson
-        return geojson
+class GeoJSONViewTest(WebTest):
+    def setUp(self):
+        from django.contrib.auth.models import User
+        self.user = User.objects.create_user(
+            "provplan", "provplan@example.com", "sekritplans")
+
+
+    def get(self, **kwargs):
+        return self.app.get(
+            reverse("map_geojson", kwargs=kwargs), user=self.user)
 
 
     def test_content_type(self):
-        req = RequestFactory().get("/map/geojson/")
+        response = self.get(
+            westlat="0.0", eastlat="3.0", southlng="4.0", northlng="7.0")
 
-        response = self.view(req, "0.0", "3.0", "4.0", "7.0")
-
-        self.assertEqual(response["content-type"], "application/json")
+        self.assertEqual(response.headers["content-type"], "application/json")
 
 
     def test_contains(self):
@@ -34,12 +39,11 @@ class GeoJSONViewTest(TestCase):
             geom=create_mpolygon(
                 [(1.0, 8.0), (1.0, 9.0), (2.0, 9.0), (1.0, 8.0)]))
 
-        req = RequestFactory().get("/map/geojson/")
-
-        response = self.view(req, "0.0", "3.0", "4.0", "5.5")
+        response = self.get(
+            westlat="0.0", eastlat="3.0", southlng="4.0", northlng="5.5")
 
         self.assertEqual(
-            json.loads(response.content),
+            json.loads(response.body),
             {
                 "crs": None,
                 "type": "FeatureCollection",
