@@ -202,7 +202,10 @@ var MLT = MLT || {};
         var list = $('.actions .listordering > ul'),
             item = list.find('li[class^="by"]'),
             field = item.find('.field'),
-            direction = item.find('.dir');
+            direction = item.find('.dir'),
+            resetList = function() {
+                $('.actions .listordering > ul > li.none').insertAfter($('.actions .listordering > ul > li:not(.none)').last());
+            };
 
         field.click(function() {
             if (!($(this).closest('li[class^="by"]').hasClass('none'))) {
@@ -211,6 +214,7 @@ var MLT = MLT || {};
                 $(this).closest('li[class^="by"]').find('.dir').addClass('asc');
             }
             $(this).closest('li[class^="by"]').toggleClass('none');
+            resetList();
             return false;
         });
 
@@ -223,10 +227,19 @@ var MLT = MLT || {};
             } else {
                 $(this).addClass('asc');
             }
+            resetList();
             return false;
         });
 
-        $('.actions .listordering > ul').sortable();
+        $('.actions .listordering > ul').sortable({
+            delay: 30,
+            update: function(event, ui) {
+                if (ui.item.hasClass('none')) {
+                    ui.item.removeClass('none').find('.dir').addClass('asc');
+                }
+                resetList();
+            }
+        });
     };
 
     $(function() {
