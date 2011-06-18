@@ -34,7 +34,7 @@ class AddressAdmin(admin.ModelAdmin):
         "mapped_by",
         "imported_by",
         "import_source",
-        "complex",
+        "complex_name",
         "state",
         ]
     date_hierarchy = "import_timestamp"
