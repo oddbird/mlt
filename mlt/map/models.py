@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.contrib.localflavor.us.models import USStateField
 
+from .addresses import SuffixMap, parse_street
+
 
 
 class Parcel(models.Model):
@@ -31,6 +33,16 @@ class StreetSuffix(models.Model):
 
     class Meta:
         verbose_name_plural = "street suffixes"
+
+
+    @classmethod
+    def suffix_map(cls):
+        d = {}
+        for s in cls.objects.all().select_related():
+            d[s.suffix] = s.suffix
+            for a in s.aliases.all():
+                d[a.alias] = s.suffix
+        return SuffixMap(d)
 
 
 
@@ -97,3 +109,15 @@ class Address(models.Model):
 
     class Meta:
         verbose_name_plural = "addresses"
+
+
+    @staticmethod
+    def parse_street(street_address):
+        return parse_street(street_address, StreetSuffix.suffix_map())
+
+
+    @staticmethod
+    def parse_streets(street_addresses):
+        suffixmap = StreetSuffix.suffix_map()
+        for street_address in street_addresses:
+            yield parse_street(street_address, suffixmap)
