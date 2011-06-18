@@ -42,6 +42,7 @@ class LabelPlaceholdersMixin(object):
             field.widget.attrs.setdefault("placeholder", field.label)
 
 
+
 class FloppyWidgetsMixin(object):
     """
     Form mixin class to replace standard Django form widgets with the
@@ -67,3 +68,14 @@ class FloppyWidgetsMixin(object):
             if new is not None:
                 new.is_required = widget.is_required
                 field.widget = new
+
+
+
+class BareTextarea(forms.Textarea):
+    """
+    A Textarea with no rows or cols attributes.
+
+    """
+    def __init__(self, *args, **kwargs):
+        super(BareTextarea, self).__init__(*args, **kwargs)
+        self.attrs = {}

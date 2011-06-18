@@ -96,6 +96,12 @@ class Address(models.Model):
         verbose_name_plural = "addresses"
 
 
+    @property
+    def street(self):
+        return u"%s %s %s" % (
+            self.street_number, self.street_name, self.street_suffix)
+
+
     StreetNumberError = addresses.StreetNumberError
     StreetSuffixError = addresses.StreetSuffixError
 

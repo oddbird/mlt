@@ -50,24 +50,19 @@ def create_parcel(**kwargs):
 
 
 
-def create_suffix(**kwargs):
-    defaults = {"suffix": "St"}
-    defaults.update(kwargs)
-
+def create_suffix(suffix="St"):
     from mlt.map.models import StreetSuffix
-    return StreetSuffix.objects.get_or_create(**defaults)[0]
+    return StreetSuffix.objects.get_or_create(suffix=suffix)[0]
 
 
 
-def create_alias(**kwargs):
-    defaults = {
-        "alias": "Street",
-        "suffix": create_suffix(suffix="St")
-        }
-    defaults.update(kwargs)
+def create_alias(alias="Street", suffix=None):
+    if suffix is None:
+        suffix = create_suffix("St")
 
     from mlt.map.models import StreetSuffixAlias
-    return StreetSuffixAlias.objects.get_or_create(**defaults)[0]
+    return StreetSuffixAlias.objects.get_or_create(
+        alias=alias, suffix=suffix)[0]
 
 
 

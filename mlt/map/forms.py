@@ -2,6 +2,7 @@ from datetime import datetime
 
 import floppyforms as forms
 
+from ..core.forms import BareTextarea
 from . import models
 
 
@@ -16,6 +17,7 @@ class AddressForm(forms.ModelForm):
 
     class Meta:
         model = models.Address
+        widgets = {"notes": BareTextarea}
         fields = [
             "city", "state", "zip", "multi_units", "complex_name", "notes"]
 

@@ -4,6 +4,8 @@ from mock import patch
 
 from django.test import TestCase
 
+from .utils import create_suffix
+
 
 
 __all__ = ["AddressFormTest"]
@@ -22,17 +24,6 @@ class AddressFormTest(TestCase):
         return User.objects.create(username=username)
 
 
-    def _load_suffixes(self):
-        from mlt.map.models import StreetSuffix
-
-        st = StreetSuffix.objects.create(suffix="St")
-        StreetSuffix.objects.create(suffix="Ave")
-
-        st.aliases.create(alias="Street")
-
-        return st
-
-
     def test_fields(self):
         self.assertEqual(
             [f.name for f in self.form()],
@@ -42,7 +33,7 @@ class AddressFormTest(TestCase):
 
 
     def test_save(self):
-        st = self._load_suffixes()
+        st = create_suffix("St")
         u = self.create_user("blametern")
         f = self.form(
             {
@@ -74,7 +65,7 @@ class AddressFormTest(TestCase):
 
 
     def test_save_no_number(self):
-        self._load_suffixes()
+        create_suffix("St")
         f = self.form(
             {
                 "street": "Van Gordon St.",
@@ -93,7 +84,6 @@ class AddressFormTest(TestCase):
 
 
     def test_save_no_suffix(self):
-        self._load_suffixes()
         f = self.form(
             {
                 "street": "3635 Van Gordon Dr.",

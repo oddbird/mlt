@@ -1,5 +1,7 @@
 from django.test import TestCase
 
+from .utils import create_address, create_suffix, create_alias
+
 
 
 __all__ = ["StreetSuffixTest", "AddressTest"]
@@ -13,15 +15,9 @@ class StreetSuffixTest(TestCase):
         return StreetSuffix
 
 
-    def _load(self):
-        st = self.model.objects.create(suffix="St")
-        self.model.objects.create(suffix="Ave")
-
-        st.aliases.create(alias="Street")
-
-
     def test_create_suffix_map(self):
-        self._load()
+        create_alias("Street", create_suffix("St"))
+        create_suffix("Ave")
 
         sm = self.model.suffix_map()
 
@@ -39,17 +35,17 @@ class AddressTest(TestCase):
         return Address
 
 
-    def _load_suffixes(self):
-        from mlt.map.models import StreetSuffix
+    def test_street_property(self):
+        a = create_address(
+            street_number="123",
+            street_name="Main",
+            street_suffix=create_suffix("St"))
 
-        st = StreetSuffix.objects.create(suffix="St")
-        StreetSuffix.objects.create(suffix="Ave")
-
-        st.aliases.create(alias="Street")
+        self.assertEqual(a.street, "123 Main St")
 
 
     def test_parse_street(self):
-        self._load_suffixes()
+        create_suffix("St")
         from mlt.map.addresses import StreetAddress
 
         self.assertEqual(
@@ -59,7 +55,8 @@ class AddressTest(TestCase):
 
 
     def test_parse_streets(self):
-        self._load_suffixes()
+        create_suffix("St")
+        create_suffix("Ave")
         from mlt.map.addresses import StreetAddress
 
         self.assertEqual(

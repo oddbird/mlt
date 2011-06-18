@@ -1,0 +1,49 @@
+{% load mltforms %}
+
+<div>
+  <h3>add an address</h3>
+  <form method="POST" action="{% url map_add_address %}" id="add-address-form">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <ul class="adr">
+      <li>
+        {{ form.street.errors }}
+        {{ form.street|label:"street" }}
+        {{ form.street|placeholder:"street address" }}
+      </li>
+      <li>
+        {{ form.city.errors }}
+        {{ form.city|label:"city" }}
+        {{ form.city|placeholder:"city" }}
+      </li>
+      <li>
+        {{ form.state.errors }}
+        {{ form.state|label:"state" }}
+        {{ form.state }}
+      </li>
+      <li>
+        {{ form.zip.errors }}
+        {{ form.zip|label:"zip code" }}
+        {{ form.zip|placeholder:"zip code" }}
+      </li>
+      <li>
+        {{ form.multi_units.errors }}
+        {{ form.multi_units }}
+        {{ form.multi_units|label:"multi units" }}
+
+        {{ form.complex_name.errors }}
+        {{ form.complex_name|label:"complex name" }}
+        {{ form.complex_name|placeholder:"complex name" }}
+      </li>
+    </ul>
+    <p class="note">
+      {{ form.notes.errors }}
+      {{ form.notes|label:"notes" }}
+      {{ form.notes|placeholder:"optionally add a note" }}
+    </p>
+    <div class="form-actions">
+      <a href="#" title="close the address form lightbox">cancel</a> or
+      <button type="submit">add address</button>
+    </div>
+  </form>
+</div>

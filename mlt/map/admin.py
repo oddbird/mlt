@@ -52,10 +52,9 @@ class AddressAdmin(admin.ModelAdmin):
                         "street_number",
                         "street_name",
                         "street_suffix",
-                        "multi_units"
                         ),
                     ("city", "state", "zip"),
-                    "complex_name",
+                    ("multi_units", "complex_name"),
                     "notes",
                     ]
                 }),

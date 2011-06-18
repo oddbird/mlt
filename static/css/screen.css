@@ -360,11 +360,11 @@ h1 a:link, h1 a:visited { display: block; }
 
 #add-address-form label { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #add-address-form li { margin-bottom: 0.809em; }
-#add-address-form [name="complex"] { display: inline; float: left; width: 5%; }
-#add-address-form [name="complex"] ~ input { display: inline; float: right; width: 92%; }
-#add-address-form [name="complex"]:not(:checked) + label { position: static; clip: auto; overflow: visible; height: auto; margin: 0; width: auto; display: inline; float: right; width: 92%; }
-#add-address-form [name="complex"]:not(:checked) ~ input { display: none; }
-#add-address-form [name="complex"]:checked ~ input { display: block; }
+#add-address-form [name="multi_units"] { display: inline; float: left; width: 5%; }
+#add-address-form [name="multi_units"] ~ input { display: inline; float: right; width: 92%; }
+#add-address-form [name="multi_units"]:not(:checked) + label { position: static; clip: auto; overflow: visible; height: auto; margin: 0; width: auto; display: inline; float: right; width: 92%; }
+#add-address-form [name="multi_units"]:not(:checked) ~ input { display: none; }
+#add-address-form [name="multi_units"]:checked ~ input { display: block; }
 
 #export-address-form, #import-address-form { margin-top: 1.618em; }
 #export-address-form label, #import-address-form label { display: block; }
