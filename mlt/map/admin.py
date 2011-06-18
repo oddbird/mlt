@@ -55,7 +55,7 @@ class AddressAdmin(admin.ModelAdmin):
                         "multi_units"
                         ),
                     ("city", "state", "zip"),
-                    "complex",
+                    "complex_name",
                     "notes",
                     ]
                 }),

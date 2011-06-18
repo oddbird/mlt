@@ -60,19 +60,6 @@ class StreetSuffixAlias(models.Model):
 
 
 
-class Complex(models.Model):
-    name = models.CharField(max_length=250)
-
-
-    def __unicode__(self):
-        return self.name
-
-
-    class Meta:
-        verbose_name_plural = "complexes"
-
-
-
 class Address(models.Model):
     # core address info
     street_number = models.CharField(max_length=50, db_index=True)
@@ -82,7 +69,7 @@ class Address(models.Model):
     city = models.CharField(max_length=200, db_index=True)
     state = USStateField(db_index=True)
     zip = models.CharField(max_length=5, db_index=True)
-    complex = models.ForeignKey(Complex, blank=True, null=True)
+    complex_name = models.CharField(max_length=250, blank=True)
     notes = models.TextField(blank=True)
 
     # mapping
