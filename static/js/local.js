@@ -95,7 +95,9 @@ var MLT = MLT || {};
                                     e.layer.on(
                                         'mouseover',
                                         function(ev) {
-                                            showInfo(info, this.selected);
+                                            if (!selectedInfo) {
+                                                showInfo(info, this.selected);
+                                            }
                                         });
                                     e.layer.on(
                                         'mouseout',
