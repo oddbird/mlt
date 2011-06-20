@@ -87,9 +87,8 @@ class Address(models.Model):
 
 
     def __unicode__(self):
-        return "%s %s %s, %s %s %s" % (
-            self.street_number, self.street_name, self.street_suffix,
-            self.city, self.state, self.zip)
+        return "%s, %s %s %s" % (
+            self.street, self.city, self.state, self.zip)
 
 
     class Meta:
