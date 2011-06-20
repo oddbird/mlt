@@ -44,10 +44,7 @@ class AddressForm(forms.ModelForm):
 
         address.street_number = self.cleaned_data["street_number"]
         address.street_name = self.cleaned_data["street_name"]
-        # @@@ if suffix doesn't become plain text, this lookup should be avoided
-        # by passing the db id through SuffixMap
-        address.street_suffix = models.StreetSuffix.objects.get(
-            suffix=self.cleaned_data["street_suffix"])
+        address.street_suffix = self.cleaned_data["street_suffix"]
 
         address.imported_by = user
         address.import_source = WEB_UI_IMPORT_SOURCE

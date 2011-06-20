@@ -62,7 +62,7 @@ class Address(models.Model):
     # core address info
     street_number = models.CharField(max_length=50, db_index=True)
     street_name = models.CharField(max_length=100, db_index=True)
-    street_suffix = models.ForeignKey(StreetSuffix, on_delete=models.PROTECT)
+    street_suffix = models.CharField(max_length=20, db_index=True)
     multi_units = models.BooleanField(default=False)
     city = models.CharField(max_length=200, db_index=True)
     state = USStateField(db_index=True)

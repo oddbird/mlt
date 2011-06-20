@@ -33,7 +33,7 @@ class AddressFormTest(TestCase):
 
 
     def test_save(self):
-        st = create_suffix("St")
+        create_suffix("St")
         u = self.create_user("blametern")
         f = self.form(
             {
@@ -54,7 +54,7 @@ class AddressFormTest(TestCase):
 
         self.assertEqual(a.street_number, "3635")
         self.assertEqual(a.street_name, "Van Gordon")
-        self.assertEqual(a.street_suffix, st)
+        self.assertEqual(a.street_suffix, "St")
         self.assertEqual(a.zip, "02909")
         self.assertEqual(a.notes, "some notes")
         self.assertEqual(a.complex_name, "The Van Gordon Building")

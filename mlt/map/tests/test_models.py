@@ -39,7 +39,7 @@ class AddressTest(TestCase):
         a = create_address(
             street_number="123",
             street_name="Main",
-            street_suffix=create_suffix("St"))
+            street_suffix="St")
 
         self.assertEqual(a.street, "123 Main St")
 
