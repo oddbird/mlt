@@ -138,7 +138,7 @@ var MLT = MLT || {};
                     lng = $(this).closest('.address').data('longitude');
                 this.popup = new L.Popup({
                     closeButton: false,
-                    closeMapOnClick: false
+                    closePopupOnClick: false
                 });
                 this.popup.setLatLng(new L.LatLng(lat, lng));
                 this.popup.setContent(popupContent);
