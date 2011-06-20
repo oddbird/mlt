@@ -436,6 +436,15 @@ h1 a:link, h1 a:visited { display: block; }
 .managelist .editing .adr::before { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; }
 .managelist .editing .savechanges { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 
+@keyframes loading { 0% { background-position: 0%; }
+  100% { background-position: 100%; } }
+
+@-webkit-keyframes loading { 0% { background-position: 0%; }
+  100% { background-position: 100%; } }
+
+.load { font-weight: 500; padding-top: 1.618em; padding-bottom: 1.618em; padding-left: 4.045em; padding-right: 4.045em; background: rgba(221, 221, 221, 0.25); }
+.load p { -moz-border-radius: 3em; -webkit-border-radius: 3em; -o-border-radius: 3em; -ms-border-radius: 3em; -khtml-border-radius: 3em; border-radius: 3em; -moz-box-shadow: rgba(76, 76, 76, 0.5) 0 0 0.5em inset; -webkit-box-shadow: rgba(76, 76, 76, 0.5) 0 0 0.5em inset; -o-box-shadow: rgba(76, 76, 76, 0.5) 0 0 0.5em inset; box-shadow: rgba(76, 76, 76, 0.5) 0 0 0.5em inset; padding-top: 0.405em; padding-bottom: 0.405em; padding-left: 1.618em; padding-right: 1.618em; -moz-background-size: 0.809em; -webkit-background-size: 0.809em; -o-background-size: 0.809em; background-size: 0.809em; background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, rgba(221, 221, 221, 0)), color-stop(35%, rgba(221, 221, 221, 0)), color-stop(45%, rgba(221, 221, 221, 0.5)), color-stop(95%, rgba(221, 221, 221, 0.5)), color-stop(100%, rgba(221, 221, 221, 0))); background-image: -webkit-linear-gradient(left, rgba(221, 221, 221, 0), rgba(221, 221, 221, 0) 35%, rgba(221, 221, 221, 0.5) 45%, rgba(221, 221, 221, 0.5) 95%, rgba(221, 221, 221, 0) 100%); background-image: -moz-linear-gradient(left, rgba(221, 221, 221, 0), rgba(221, 221, 221, 0) 35%, rgba(221, 221, 221, 0.5) 45%, rgba(221, 221, 221, 0.5) 95%, rgba(221, 221, 221, 0) 100%); background-image: -o-linear-gradient(left, rgba(221, 221, 221, 0), rgba(221, 221, 221, 0) 35%, rgba(221, 221, 221, 0.5) 45%, rgba(221, 221, 221, 0.5) 95%, rgba(221, 221, 221, 0) 100%); background-image: linear-gradient(left, rgba(221, 221, 221, 0), rgba(221, 221, 221, 0) 35%, rgba(221, 221, 221, 0.5) 45%, rgba(221, 221, 221, 0.5) 95%, rgba(221, 221, 221, 0) 100%); background-color: rgba(221, 221, 221, 0.5); text-align: center; -webkit-animation: loading 20s infinite; animation: loading 20s infinite; }
+
 /* Map ----------------------------------------------------------------------- */
 #mapping { position: absolute; top: 0; right: 0; bottom: 0; left: 33.169em; }
 #mapping h2 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
