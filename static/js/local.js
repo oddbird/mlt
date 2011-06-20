@@ -130,6 +130,25 @@ var MLT = MLT || {};
         }
     };
 
+    var mapPopups = function() {
+        $('#addresstable .managelist .address input[id^="select_"]').live('click', function() {
+            if ($(this).is(':checked')) {
+                var popupContent = 'A',
+                    lat = $(this).closest('.address').data('latitude'),
+                    lng = $(this).closest('.address').data('longitude');
+                this.popup = new L.Popup({
+                    closeButton: false,
+                    closeMapOnClick: false
+                });
+                this.popup.setLatLng(new L.LatLng(lat, lng));
+                this.popup.setContent(popupContent);
+                MLT.map.addLayer(this.popup);
+            } else {
+                MLT.map.removeLayer(this.popup);
+            }
+        });
+    };
+
     var addressListHeight = function() {
         var headerHeight = $('header[role="banner"]').outerHeight(),
             actionsHeight = $('.actions').outerHeight(),
@@ -310,6 +329,7 @@ var MLT = MLT || {};
         addressListHeight();
         addAddressLightbox();
         initializeMap();
+        mapPopups();
         $('#addresstable .managelist .address .content .details .summary').live('click', function() {
             $(this).blur();
         });

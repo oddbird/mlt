@@ -1,4 +1,4 @@
-<article id="address-id-{{ id }}" class="address">
+<article id="address-id-{{ id }}" class="address" data-latitude="{{ latitude }}" data-longitude="{{ longitude }}">
   <input type="checkbox" id="select_{{ id }}" name="select" value="">
 
   <div class="content{% if edit %} editing{% endif %}">
@@ -6,10 +6,10 @@
     <label for="select_{{ id }}">
     {% endif %}
       <h3 class="adr">
-        <div class="street-address" {% if edit %}contenteditable{% endif %}>3635 Van Gordon St.</div>
+        <div class="street-address" {% if edit %}contenteditable{% endif %}>{{ address }}</div>
         <div class="locality" {% if edit %}contenteditable{% endif %}>Providence</div>,
         <div class="region" {% if edit %}contenteditable{% endif %}>RI</div>
-        <div class="postal-code" {% if edit %}contenteditable{% endif %}>02909</div>
+        <div class="postal-code" {% if edit %}contenteditable{% endif %}>02903</div>
       </h3>
     {% if not edit %}
     </label>
@@ -24,7 +24,7 @@
         {% endif %}
         <label for="flag_for_review_{{ id }}">flag for review</label>
 
-        <label for="select_{{ id }}" class="value">111 222</label>
+        <label for="select_{{ id }}" class="value">21 313</label>
       {% else %}
         {% if edit %}
           <p class="value">not mapped</p>
