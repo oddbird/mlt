@@ -21,7 +21,7 @@
       {% include "includes/address.html" with id="09" origin="imported" mapped="Carl" %}
       {% include "includes/address.html" with id="10" origin="imported" mapped="blametern" %}
 
-      {% for i in 1|range:200  %}
+      {% for i in 1|range:26  %}
         {% if forloop.counter > 10 %}
           {% include "includes/address.html" with id=i origin="imported" %}
         {% endif %}
