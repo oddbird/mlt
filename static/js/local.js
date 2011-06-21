@@ -11,7 +11,8 @@ var MLT = MLT || {};
                 {
                     center: new L.LatLng(MLT.mapDefaultLat, MLT.mapDefaultLon),
                     zoom: MLT.mapDefaultZoom,
-                    layers: [layer]
+                    layers: [layer],
+                    closePopupOnClick: false
                 }),
             mapinfoHover = false,
             mapinfo = $("#mapinfo").hide().hover(
@@ -138,10 +139,7 @@ var MLT = MLT || {};
                 var popupContent = 'A',
                     lat = $(this).closest('.address').data('latitude'),
                     lng = $(this).closest('.address').data('longitude');
-                this.popup = new L.Popup({
-                    closeButton: false,
-                    closePopupOnClick: false
-                });
+                this.popup = new L.Popup({ closeButton: false });
                 this.popup.setLatLng(new L.LatLng(lat, lng));
                 this.popup.setContent(popupContent);
                 MLT.map.addLayer(this.popup);
