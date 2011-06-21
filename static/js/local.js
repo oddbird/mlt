@@ -264,63 +264,68 @@ var MLT = MLT || {};
     };
 
     var autoLoad = function() {
-        var container = $('.managelist');
+        var container = $('.managelist'),
+            loading = container.find('.load').css('opacity', 0);
         container.scroll(function() {
-            if (container.outerHeight() === (container.get(0).scrollHeight - container.scrollTop())) {
-                // This function mimics an ajax call with a delay of 300ms
-                var fakeAjaxCall = function(number, callback) {
-                    var response =
-                        '<article class="address new" id="address-id-' + number + '">' +
-                            '<input type="checkbox" value="" name="select" id="select_' + number + '">' +
-                            '<div class="content">' +
-                                '<label for="select_' + number + '">' +
-                                    '<h3 class="adr">' +
-                                        '<div class="street-address">3635 Van Gordon St.</div>' +
-                                        '<div class="locality">Providence</div>, ' +
-                                        '<div class="region">RI</div> ' +
-                                        '<div class="postal-code">02909</div>' +
-                                    '</h3>' +
-                                '</label>' +
-                                '<div class="id unmapped">' +
-                                    '<label class="value" for="select_' + number + '">not mapped</label>' +
-                                '</div>' +
-                                '<ul class="controls">' +
-                                    '<li><a title="edit" href="#">edit</a></li>' +
-                                    '<li><a title="history" href="#">history</a></li>' +
-                                    '<li><button value="" name="delete" type="submit">delete</button></li>' +
-                                '</ul>' +
-                                '<div class="details">' +
-                                    '<p class="summary" tabindex="0">details</p>' +
-                                    '<div class="more">' +
-                                        '<div class="complex">' +
-                                            '<button class="multiple" type="submit" name="complex">multiple units</button>' +
-                                            '<p class="name">single unit</p>' +
-                                        '</div>' +
-                                        '<div class="byline">' +
-                                            '<p class="hcard">' +
-                                                'Imported by <cite class="fn">[username]</cite> from [source] on <time pubdate="">[timestamp]</time>.' +
-                                            '</p>' +
+            $.doTimeout('scroll', 250, function() {
+                if ((container.get(0).scrollHeight - container.scrollTop() - container.outerHeight()) <= loading.outerHeight()) {
+                    loading.animate({opacity: 1}, 'fast');
+                    // This function mimics an ajax call with a delay of 300ms
+                    var fakeAjaxCall = function(number, callback) {
+                        var response =
+                            '<article class="address new" id="address-id-' + number + '">' +
+                                '<input type="checkbox" value="" name="select" id="select_' + number + '">' +
+                                '<div class="content">' +
+                                    '<label for="select_' + number + '">' +
+                                        '<h3 class="adr">' +
+                                            '<div class="street-address">3635 Van Gordon St.</div>' +
+                                            '<div class="locality">Providence</div>, ' +
+                                            '<div class="region">RI</div> ' +
+                                            '<div class="postal-code">02909</div>' +
+                                        '</h3>' +
+                                    '</label>' +
+                                    '<div class="id unmapped">' +
+                                        '<label class="value" for="select_' + number + '">not mapped</label>' +
+                                    '</div>' +
+                                    '<ul class="controls">' +
+                                        '<li><a title="edit" href="#">edit</a></li>' +
+                                        '<li><a title="history" href="#">history</a></li>' +
+                                        '<li><button value="" name="delete" type="submit">delete</button></li>' +
+                                    '</ul>' +
+                                    '<div class="details">' +
+                                        '<p class="summary" tabindex="0">details</p>' +
+                                        '<div class="more">' +
+                                            '<div class="complex">' +
+                                                '<button class="multiple" type="submit" name="complex">multiple units</button>' +
+                                                '<p class="name">single unit</p>' +
+                                            '</div>' +
+                                            '<div class="byline">' +
+                                                '<p class="hcard">' +
+                                                    'Imported by <cite class="fn">[username]</cite> from [source] on <time pubdate="">[timestamp]</time>.' +
+                                                '</p>' +
+                                            '</div>' +
                                         '</div>' +
                                     '</div>' +
                                 '</div>' +
-                            '</div>' +
-                        '</article>';
-                    function callbackfn() { callback(response); }
-                    window.setTimeout(callbackfn, 300);
-                };
-                var currentTotal = container.find('article.address').length;
-                for (var i = currentTotal + 1; i < currentTotal + 27; i++) {
-                    // Add returned data
-                    fakeAjaxCall(
-                        i,
-                        function(data) {
-                            container.append(data);
-                            container.find('.address.new .details').html5accordion('.summary');
-                            container.find('.address.new').removeClass('new');
-                        }
-                    );
+                            '</article>';
+                        function callbackfn() { callback(response); }
+                        window.setTimeout(callbackfn, 300);
+                    };
+                    var currentTotal = container.find('article.address').length;
+                    for (var i = currentTotal + 1; i < currentTotal + 27; i++) {
+                        // Add returned data
+                        fakeAjaxCall(
+                            i,
+                            function(data) {
+                                container.find('.load').before(data);
+                                container.find('.address.new .details').html5accordion('.summary');
+                                container.find('.address.new').removeClass('new');
+                                loading.css('opacity', 0);
+                            }
+                        );
+                    }
                 }
-            }
+            });
         });
     };
 
