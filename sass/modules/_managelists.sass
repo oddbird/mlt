@@ -172,19 +172,13 @@
   [name="multi_units"]
     +float(left)
     width: 5%
+    + label
+      +back
+      +float(left)
+      width: 15%
     ~ input
       +float(right)
-      width: 92%
-    &:not(:checked)
-      + label
-        +back
-        +float(right)
-        width: 92%
-      ~ input
-        display: none
-    &:checked
-      ~ input
-        display: block
+      width: 65%
 
 #export-address-form, #import-address-form
   +leader(1)
