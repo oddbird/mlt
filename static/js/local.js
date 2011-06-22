@@ -168,32 +168,18 @@ var MLT = MLT || {};
 
     var addAddressLightbox = function() {
         var bootstrapForm = function() {
-            var updateComplexName = function() {
-                if ($('#lightbox-add-address #multi_units').is(':checked')) {
-                    $('#lightbox-add-address #complex_name').show();
-                } else {
-                    $('#lightbox-add-address #complex_name').hide();
-                }
-            },
-            form = $('#lightbox-add-address form').ajaxForm(
-                {
-                    target: "#lightbox-add-address",
-                    success: bootstrapForm
-                });
-            $('#lightbox-add-address #multi_units').change(
-                function() {
-                    updateComplexName();
-                });
-            updateComplexName();
+            var form = $('#lightbox-add-address form').ajaxForm({
+                target: "#lightbox-add-address",
+                success: bootstrapForm
+            });
         };
 
-        $('a[href=#lightbox-add-address]').click(
-            function() {
-                $("#lightbox-add-address").load(
-                    "/map/add_address/",
-                    bootstrapForm
-                );
-            });
+        $('a[href=#lightbox-add-address]').click(function() {
+            $("#lightbox-add-address").load(
+                "/map/add_address/",
+                bootstrapForm
+            );
+        });
     };
 
     var messages = function() {
