@@ -103,3 +103,11 @@ class Address(models.Model):
             return u"%s %s %s" % (
                 self.street_number, self.street_name, self.street_suffix)
         return self.input_street
+
+
+    @property
+    def parcel(self):
+        try:
+            return Parcel.objects.get(pl=self.pl)
+        except Parcel.DoesNotExist:
+            return None

@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from .utils import create_address, create_suffix, create_alias
+from .utils import create_parcel, create_address, create_suffix, create_alias
 
 
 
@@ -53,3 +53,22 @@ class AddressTest(TestCase):
             )
 
         self.assertEqual(a.street, "123 Main St")
+
+
+    def test_parcel_property(self):
+        a = create_address(pl="11 222")
+        p = create_parcel(pl="11 222")
+
+        self.assertEqual(a.parcel, p)
+
+
+    def test_parcel_property_no_such_pl(self):
+        a = create_address(pl="11 222")
+
+        self.assertEqual(a.parcel, None)
+
+
+    def test_parcel_property_no_pl(self):
+        a = create_address(pl="")
+
+        self.assertEqual(a.parcel, None)

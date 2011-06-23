@@ -94,7 +94,8 @@ class GeoJSONViewTest(AuthenticatedWebTest):
 
 
     def test_contains(self):
-        create_parcel(
+        self.maxDiff = None
+        p = create_parcel(
             geom=create_mpolygon(
                 [(1.0, 5.0), (1.0, 6.0), (2.0, 6.0), (1.0, 5.0)]))
         create_parcel(
@@ -107,26 +108,26 @@ class GeoJSONViewTest(AuthenticatedWebTest):
         self.assertEqual(
             json.loads(response.body),
             {
-                "crs": None,
-                "type": "FeatureCollection",
-                "features": [
+                u"crs": None,
+                u"type": u"FeatureCollection",
+                u"features": [
                     {
-                        "geometry": {
-                            "type": "MultiPolygon",
-                            "coordinates": [[[
+                        u"geometry": {
+                            u"type": u"MultiPolygon",
+                            u"coordinates": [[[
                                         [1.0, 5.0],
                                         [1.0, 6.0],
                                         [2.0, 6.0],
                                         [1.0, 5.0]
                                         ]]]
                             },
-                        "type": "Feature",
-                        "id": 1,
-                        "properties": {
-                            "first_owner": "Van Gordon",
-                            "classcode": "Single Family Residence",
-                            "pl": "111 22",
-                            "address": "3635 Van Gordon St"
+                        u"type": u"Feature",
+                        u"id": p.id,
+                        u"properties": {
+                            u"first_owner": u"Van Gordon",
+                            u"classcode": u"Single Family Residence",
+                            u"pl": u"111 22",
+                            u"address": u"3635 Van Gordon St"
                             }
                         }
                     ]
