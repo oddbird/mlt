@@ -42,3 +42,14 @@ class AddressTest(TestCase):
             street_suffix="St")
 
         self.assertEqual(a.street, "123 Main St")
+
+
+    def test_street_property_unparsed(self):
+        a = create_address(
+            input_street="123 Main St",
+            street_number="",
+            street_name="",
+            street_suffix="",
+            )
+
+        self.assertEqual(a.street, "123 Main St")

@@ -99,8 +99,7 @@ class Address(models.Model):
 
     @property
     def street(self):
-        parsed = u"%s %s %s" % (
-            self.street_number, self.street_name, self.street_suffix)
-        if parsed:
-            return parsed
+        if self.street_number and self.street_name:
+            return u"%s %s %s" % (
+                self.street_number, self.street_name, self.street_suffix)
         return self.input_street
