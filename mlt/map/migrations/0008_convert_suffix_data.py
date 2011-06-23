@@ -8,14 +8,15 @@ class Migration(DataMigration):
 
     def forwards(self, orm):
         for address in orm.Address.objects.all():
-            address.street_suffix = unicode(address.street_suffix_fk)
+            address.street_suffix = address.street_suffix_fk.suffix
             address.save()
 
 
     def backwards(self, orm):
-        for address in orm.Address.all():
+        for address in orm.Address.objects.all():
             try:
-                s = orm.StreetSuffix.get(suffix__iexact=address.street_suffix)
+                s = orm.StreetSuffix.objects.get(
+                    suffix__iexact=address.street_suffix)
             except orm.StreetSuffix.DoesNotExist:
                 continue
 
