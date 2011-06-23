@@ -147,7 +147,7 @@ LOGGING = {
     }
 }
 
-INSTALLED_APPS += ["mlt.icanhaz"]
+INSTALLED_APPS += ["icanhaz"]
 ICANHAZ_DIR = join(BASE_PATH, "jstemplates")
 
 INSTALLED_APPS += ["compressor"]
