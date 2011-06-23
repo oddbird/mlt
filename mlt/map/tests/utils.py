@@ -70,10 +70,9 @@ def create_address(**kwargs):
     defaults = {
         "street_number": "3635",
         "street_name": "Van Gordon",
-        "street_suffix": create_suffix(suffix="St"),
+        "street_suffix": "St",
         "city": "Providence",
         "state": "RI",
-        "zip": "02909",
         "imported_by": create_user(),
         "import_source": "test-created",
         "import_timestamp": datetime(2011, 6, 15, 10, 14, 25),

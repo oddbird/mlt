@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 
 from django_webtest import WebTest
 
-from .utils import create_parcel, create_mpolygon, create_suffix
+from .utils import create_parcel, create_mpolygon
 
 
 
@@ -39,20 +39,21 @@ class AddAddressViewTest(AuthenticatedWebTest):
                 "multi_units",
                 "notes",
                 "state",
-                "street",
-                "zip",
+                "street_name",
+                "street_number",
+                "street_suffix",
                 ]
             )
 
 
     def test_post(self):
-        create_suffix("St")
         response = self.app.get(self.url, user=self.user)
         form = response.form
         form["city"] = "Providence"
         form["state"] = "RI"
-        form["street"] = "3635 Van Gordon St"
-        form["zip"] = "02909"
+        form["street_number"] = "3635"
+        form["street_name"] = "Van Gordon",
+        form["street_suffix"] = "St"
 
         response = form.submit()
 

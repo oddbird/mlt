@@ -39,21 +39,22 @@ class AddressAdmin(admin.ModelAdmin):
         ]
     date_hierarchy = "import_timestamp"
     search_fields = [
+        "input_street",
         "street_number",
         "street_name",
         "city",
         "state",
-        "zip",
         ]
     fieldsets = [
         (None, {
                 "fields": [
+                    "input_street",
                     (
                         "street_number",
                         "street_name",
                         "street_suffix",
                         ),
-                    ("city", "state", "zip"),
+                    ("city", "state"),
                     ("multi_units", "complex_name"),
                     "notes",
                     ]

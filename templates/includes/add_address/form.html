@@ -7,9 +7,19 @@
     {{ form.non_field_errors }}
     <ul class="adr">
       <li>
-        {{ form.street.errors }}
-        {{ form.street|label:"street" }}
-        {{ form.street|placeholder:"street address" }}
+        {{ form.street_number.errors }}
+        {{ form.street_number|label:"number" }}
+        {{ form.street_number|placeholder:"number" }}
+      </li>
+      <li>
+        {{ form.street_name.errors }}
+        {{ form.street_name|label:"street" }}
+        {{ form.street_name|placeholder:"street" }}
+      </li>
+      <li>
+        {{ form.street_suffix.errors }}
+        {{ form.street_suffix|label:"suffix" }}
+        {{ form.street_suffix|placeholder:"suffix" }}
       </li>
       <li>
         {{ form.city.errors }}
@@ -20,11 +30,6 @@
         {{ form.state.errors }}
         {{ form.state|label:"state" }}
         {{ form.state }}
-      </li>
-      <li>
-        {{ form.zip.errors }}
-        {{ form.zip|label:"zip code" }}
-        {{ form.zip|placeholder:"zip code" }}
       </li>
       <li>
         {{ form.multi_units.errors }}

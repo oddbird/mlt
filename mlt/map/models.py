@@ -59,6 +59,9 @@ class StreetSuffixAlias(models.Model):
 
 
 class Address(models.Model):
+    # unmodified input data
+    input_street = models.CharField(max_length=200, db_index=True)
+
     # core address info
     street_number = models.CharField(max_length=50, db_index=True)
     street_name = models.CharField(max_length=100, db_index=True)
@@ -66,7 +69,6 @@ class Address(models.Model):
     multi_units = models.BooleanField(default=False)
     city = models.CharField(max_length=200, db_index=True)
     state = USStateField(db_index=True)
-    zip = models.CharField(max_length=5, db_index=True)
     complex_name = models.CharField(max_length=250, blank=True)
     notes = models.TextField(blank=True)
 
@@ -87,8 +89,8 @@ class Address(models.Model):
 
 
     def __unicode__(self):
-        return "%s, %s %s %s" % (
-            self.street, self.city, self.state, self.zip)
+        return "%s, %s %s" % (
+            self.street, self.city, self.state)
 
 
     class Meta:
@@ -97,21 +99,8 @@ class Address(models.Model):
 
     @property
     def street(self):
-        return u"%s %s %s" % (
+        parsed = u"%s %s %s" % (
             self.street_number, self.street_name, self.street_suffix)
-
-
-    StreetNumberError = addresses.StreetNumberError
-    StreetSuffixError = addresses.StreetSuffixError
-
-
-    @staticmethod
-    def parse_street(street_address):
-        return addresses.parse_street(street_address, StreetSuffix.suffix_map())
-
-
-    @staticmethod
-    def parse_streets(street_addresses):
-        suffixmap = StreetSuffix.suffix_map()
-        for street_address in street_addresses:
-            yield addresses.parse_street(street_address, suffixmap)
+        if parsed:
+            return parsed
+        return self.input_street
