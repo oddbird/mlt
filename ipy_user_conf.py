@@ -16,7 +16,7 @@ def main():
 
     imports = [
         "import datetime",
-        "from mlt.map.models import Parcel",
+        "from mlt.map.models import Parcel, Address",
         "from mlt.map.load import load",
         ]
 
