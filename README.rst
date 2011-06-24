@@ -21,8 +21,8 @@ name and user (unless they are both named "mlt").  See
 ``mlt/settings/local.py`` and modified.
 
 Once this configuration is done, you should be able to run ``./manage.py
-syncdb``, then ``./manage.py runserver`` and access the MLT in your browser
-at ``http://localhost:8000``.
+syncdb --migrate``, then ``./manage.py runserver`` and access the MLT in
+your browser at ``http://localhost:8000``.
 
 .. _virtualenv: http://www.virtualenv.org
 .. _GeoDjango installation documentation: http://docs.djangoproject.com/en/1.3/ref/contrib/gis/install/
