@@ -257,15 +257,15 @@ var MLT = MLT || {};
                     // This function mimics an ajax call with a delay of 300ms
                     var fakeAjaxCall = function(number, callback) {
                         var response =
-                            '<article class="address new" id="address-id-' + number + '">' +
+                            '<article class="address new" id="address-id-' + number + '" data-latitude="41.822001" data-longitude="-71.392436">' +
                                 '<input type="checkbox" value="" name="select" id="select_' + number + '">' +
                                 '<div class="content">' +
                                     '<label for="select_' + number + '">' +
                                         '<h3 class="adr">' +
-                                            '<div class="street-address">3635 Van Gordon St.</div>' +
+                                            '<div class="street-address">27 Fremont St.</div>' +
                                             '<div class="locality">Providence</div>, ' +
                                             '<div class="region">RI</div> ' +
-                                            '<div class="postal-code">02909</div>' +
+                                            '<div class="postal-code">02906</div>' +
                                         '</h3>' +
                                     '</label>' +
                                     '<div class="id unmapped">' +
