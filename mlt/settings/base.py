@@ -170,6 +170,8 @@ MAP_DEFAULT_LAT = "41.825393"
 MAP_DEFAULT_LON = "-71.417713"
 MAP_DEFAULT_ZOOM = 13
 
+INSTALLED_APPS += ["html5accordion"]
+
 # import local settings, if they exist
 
 local_settings = abspath(join(dirname(__file__), "local.py"))
