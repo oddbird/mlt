@@ -71,7 +71,16 @@ class Address(models.Model):
 
 
     def save(self, *args, **kwargs):
-        self.parsed_street = " ".join([
+        self.parsed_street = self._get_parsed_street()
+        return super(Address, self).save(*args, **kwargs)
+
+
+    class Meta:
+        verbose_name_plural = "addresses"
+
+
+    def _get_parsed_street(self):
+        return " ".join([
                 elem for elem in [
                     self.street_prefix,
                     self.street_number,
@@ -81,16 +90,13 @@ class Address(models.Model):
                     ]
                 if elem
                 ])
-        return super(Address, self).save(*args, **kwargs)
-
-
-    class Meta:
-        verbose_name_plural = "addresses"
 
 
     @property
     def street(self):
-        return self.parsed_street or self.input_street
+        # use _get_parsed_street instead of denormalized parsed_street so it
+        # stays up to date even when not saved yet.
+        return self._get_parsed_street() or self.input_street
 
 
     @property

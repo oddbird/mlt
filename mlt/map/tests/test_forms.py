@@ -56,6 +56,8 @@ class AddressFormTest(TestCase):
         self.assertEqual(a.street_number, "3635")
         self.assertEqual(a.street_name, "Van Gordon")
         self.assertEqual(a.street_suffix, "St")
+        self.assertEqual(a.input_street, "3635 Van Gordon St")
+        self.assertEqual(a.parsed_street, "3635 Van Gordon St")
         self.assertEqual(a.notes, "some notes")
         self.assertEqual(a.complex_name, "The Van Gordon Building")
         self.assertEqual(a.multi_units, True)
