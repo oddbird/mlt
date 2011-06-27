@@ -20,6 +20,16 @@ class Parcel(models.Model):
         return self.pl
 
 
+    @property
+    def latitude(self):
+        return self.geom.centroid.y
+
+
+    @property
+    def longitude(self):
+        return self.geom.centroid.x
+
+
 
 class StreetSuffix(models.Model):
     suffix = models.CharField(max_length=20, unique=True)

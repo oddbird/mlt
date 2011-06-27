@@ -1,10 +1,43 @@
 from django.test import TestCase
 
-from .utils import create_parcel, create_address, create_suffix, create_alias
+from .utils import (
+    create_parcel, create_address, create_suffix, create_alias, create_mpolygon)
 
 
 
-__all__ = ["StreetSuffixTest", "AddressTest"]
+__all__ = ["ParcelTest", "StreetSuffixTest", "AddressTest"]
+
+
+
+class ParcelTest(TestCase):
+    @property
+    def model(self):
+        from mlt.map.models import Parcel
+        return Parcel
+
+
+    def test_latitude(self):
+        parcel = create_parcel(
+            geom=create_mpolygon([
+                    (1.0, 5.0),
+                    (1.0, 9.0),
+                    (3.0, 9.0),
+                    (3.0, 5.0),
+                    (1.0, 5.0)]))
+
+        self.assertEqual(parcel.latitude, 7.0)
+
+
+    def test_longitude(self):
+        parcel = create_parcel(
+            geom=create_mpolygon([
+                    (1.0, 5.0),
+                    (1.0, 9.0),
+                    (3.0, 9.0),
+                    (3.0, 5.0),
+                    (1.0, 5.0)]))
+
+        self.assertEqual(parcel.longitude, 2.0)
 
 
 
