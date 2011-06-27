@@ -148,7 +148,7 @@ LOGGING = {
 }
 
 INSTALLED_APPS += ["icanhaz"]
-ICANHAZ_DIR = join(BASE_PATH, "jstemplates")
+ICANHAZ_DIRS = [join(BASE_PATH, "jstemplates")]
 
 INSTALLED_APPS += ["compressor"]
 COMPRESS_CSS_FILTERS = ["compressor.filters.css_default.CssAbsoluteFilter",
@@ -171,6 +171,8 @@ MAP_DEFAULT_LON = "-71.417713"
 MAP_DEFAULT_ZOOM = 13
 
 INSTALLED_APPS += ["html5accordion"]
+
+INSTALLED_APPS += ["messages_ui"]
 
 # import local settings, if they exist
 
