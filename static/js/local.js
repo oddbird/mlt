@@ -255,7 +255,7 @@ var MLT = MLT || {};
                 if ((container.get(0).scrollHeight - container.scrollTop() - container.outerHeight()) <= loading.outerHeight()) {
                     loading.animate({opacity: 1}, 'fast');
                     // This function mimics an ajax call with a delay of 300ms
-                    var fakeAjaxCall = function(number, callback) {
+                    var fakeAjaxCall = function(number, callback) { // @@@ faked ajax
                         var response =
                             '<article class="address new" id="address-id-' + number + '" data-latitude="41.822001" data-longitude="-71.392436">' +
                                 '<input type="checkbox" value="" name="select" id="select_' + number + '">' +
