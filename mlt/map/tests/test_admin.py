@@ -4,7 +4,7 @@ from django_webtest import WebTest
 from .utils import create_address, create_suffix, create_alias, create_parcel
 
 
-__all__ = ["AddressAdminTest", "StreetSuffixAdminTest", "ParcelAdminTest"]
+__all__ = ["AddressAdminTest", "ParcelAdminTest"]
 
 
 
@@ -55,29 +55,6 @@ class AddressAdminTest(AdminTestCase):
 
     def create_instance(self):
         return create_address()
-
-
-
-class StreetSuffixAdminTest(AdminTestCase):
-    @property
-    def model(self):
-        from mlt.map.models import StreetSuffix
-        return StreetSuffix
-
-
-    def create_instance(self):
-        return create_suffix()
-
-
-    def test_inline_alias(self):
-        instance = self.create_instance()
-        alias = create_alias(suffix=instance)
-
-        change_url = reverse(
-            "admin:map_%s_change" %
-            self.model._meta.module_name, args=[instance.pk])
-        response = self.app.get(change_url, user=self.user)
-        response.mustcontain(unicode(alias))
 
 
 

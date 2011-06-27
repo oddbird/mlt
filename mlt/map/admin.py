@@ -4,23 +4,6 @@ from . import models
 
 
 
-class StreetSuffixAliasInline(admin.TabularInline):
-    model = models.StreetSuffixAlias
-    extra = 0
-
-
-
-class StreetSuffixAdmin(admin.ModelAdmin):
-    list_display = ["__unicode__", "joined_aliases"]
-    inlines = [StreetSuffixAliasInline]
-
-
-    def joined_aliases(self, obj):
-        return ", ".join([a.alias for a in obj.aliases.all()])
-    joined_aliases.short_description = "Alternate spellings"
-
-
-
 class AddressAdmin(admin.ModelAdmin):
     list_display = [
         "__unicode__",
@@ -81,6 +64,5 @@ class ParcelAdmin(admin.OSMGeoAdmin):
 
 
 
-admin.site.register(models.StreetSuffix, StreetSuffixAdmin)
 admin.site.register(models.Address, AddressAdmin)
 admin.site.register(models.Parcel, ParcelAdmin)

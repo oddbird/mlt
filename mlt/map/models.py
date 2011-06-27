@@ -2,8 +2,6 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.contrib.localflavor.us.models import USStateField
 
-from . import addresses
-
 
 
 class Parcel(models.Model):
@@ -28,43 +26,6 @@ class Parcel(models.Model):
     @property
     def longitude(self):
         return self.geom.centroid.x
-
-
-
-class StreetSuffix(models.Model):
-    suffix = models.CharField(max_length=20, unique=True)
-
-
-    def __unicode__(self):
-        return self.suffix
-
-
-    class Meta:
-        verbose_name_plural = "street suffixes"
-
-
-    @classmethod
-    def suffix_map(cls):
-        d = {}
-        for s in cls.objects.all().select_related():
-            d[s.suffix] = s.suffix
-            for a in s.aliases.all():
-                d[a.alias] = s.suffix
-        return addresses.SuffixMap(d)
-
-
-
-class StreetSuffixAlias(models.Model):
-    suffix = models.ForeignKey(StreetSuffix, related_name="aliases")
-    alias = models.CharField(max_length=20, unique=True)
-
-
-    def __unicode__(self):
-        return self.alias
-
-
-    class Meta:
-        verbose_name_plural = "street suffix aliases"
 
 
 

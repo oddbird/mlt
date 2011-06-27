@@ -1,11 +1,10 @@
 from django.test import TestCase
 
-from .utils import (
-    create_parcel, create_address, create_suffix, create_alias, create_mpolygon)
+from .utils import create_parcel, create_address, create_mpolygon
 
 
 
-__all__ = ["ParcelTest", "StreetSuffixTest", "AddressTest"]
+__all__ = ["ParcelTest", "AddressTest"]
 
 
 
@@ -38,26 +37,6 @@ class ParcelTest(TestCase):
                     (1.0, 5.0)]))
 
         self.assertEqual(parcel.longitude, 2.0)
-
-
-
-class StreetSuffixTest(TestCase):
-    @property
-    def model(self):
-        from mlt.map.models import StreetSuffix
-        return StreetSuffix
-
-
-    def test_create_suffix_map(self):
-        create_alias("Street", create_suffix("St"))
-        create_suffix("Ave")
-
-        sm = self.model.suffix_map()
-
-        from mlt.map.addresses import SuffixMap
-        self.assertIsInstance(sm, SuffixMap)
-        self.assertEqual(
-            sm._suffixes, {"st": "St", "street": "St", "ave": "Ave"})
 
 
 
