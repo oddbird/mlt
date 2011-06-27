@@ -73,14 +73,20 @@ class Address(models.Model):
     input_street = models.CharField(max_length=200, db_index=True)
 
     # core address info
-    street_number = models.CharField(max_length=50, db_index=True)
-    street_name = models.CharField(max_length=100, db_index=True)
-    street_suffix = models.CharField(max_length=20, db_index=True)
+    street_prefix = models.CharField(max_length=20, blank=True, db_index=True)
+    street_number = models.CharField(max_length=50, blank=True, db_index=True)
+    street_name = models.CharField(max_length=100, blank=True, db_index=True)
+    street_type = models.CharField(max_length=20, blank=True, db_index=True)
+    street_suffix = models.CharField(max_length=20, blank=True, db_index=True)
     multi_units = models.BooleanField(default=False)
     city = models.CharField(max_length=200, db_index=True)
     state = USStateField(db_index=True)
     complex_name = models.CharField(max_length=250, blank=True)
     notes = models.TextField(blank=True)
+
+    # denormalized parsed address for matching with incoming
+    parsed_street = models.CharField(
+        max_length=200, blank=True, db_index=True)
 
     # mapping
     pl = models.CharField(max_length=8, blank=True, db_index=True)
@@ -103,16 +109,27 @@ class Address(models.Model):
             self.street, self.city, self.state)
 
 
+    def save(self, *args, **kwargs):
+        self.parsed_street = " ".join([
+                elem for elem in [
+                    self.street_prefix,
+                    self.street_number,
+                    self.street_name,
+                    self.street_type,
+                    self.street_suffix
+                    ]
+                if elem
+                ])
+        return super(Address, self).save(*args, **kwargs)
+
+
     class Meta:
         verbose_name_plural = "addresses"
 
 
     @property
     def street(self):
-        if self.street_number and self.street_name:
-            return u"%s %s %s" % (
-                self.street_number, self.street_name, self.street_suffix)
-        return self.input_street
+        return self.parsed_street or self.input_street
 
 
     @property

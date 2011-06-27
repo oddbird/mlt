@@ -69,9 +69,11 @@ def create_alias(alias="Street", suffix=None):
 def create_address(**kwargs):
     defaults = {
         "input_street": "3635 Van Gordon St",
+        "street_prefix": "",
         "street_number": "3635",
         "street_name": "Van Gordon",
-        "street_suffix": "St",
+        "street_type": "St",
+        "street_suffix": "",
         "city": "Providence",
         "state": "RI",
         "imported_by": create_user(),

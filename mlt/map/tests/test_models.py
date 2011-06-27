@@ -68,11 +68,20 @@ class AddressTest(TestCase):
         return Address
 
 
+    def test_parsed_street(self):
+        a = create_address(
+            street_number="123",
+            street_name="Main",
+            street_type="St")
+
+        self.assertEqual(a.parsed_street, "123 Main St")
+
+
     def test_street_property(self):
         a = create_address(
             street_number="123",
             street_name="Main",
-            street_suffix="St")
+            street_type="St")
 
         self.assertEqual(a.street, "123 Main St")
 
@@ -80,8 +89,10 @@ class AddressTest(TestCase):
     def test_street_property_unparsed(self):
         a = create_address(
             input_street="123 Main St",
+            street_prefix="",
             street_number="",
             street_name="",
+            street_type="",
             street_suffix="",
             )
 

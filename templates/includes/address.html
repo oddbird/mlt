@@ -1,4 +1,4 @@
-<article id="address-id-{{ id }}" class="address" data-latitude="{{ latitude }}" data-longitude="{{ longitude }}">
+<article id="address-id-{{ address.id }}" class="address"{% if address.parcel %} data-latitude="{{ address.latitude }}" data-longitude="{{ address.longitude }}"{% endif %}>
   <input type="checkbox" id="select_{{ id }}" name="select" value="">
 
   <div class="content{% if edit %} editing{% endif %}">
