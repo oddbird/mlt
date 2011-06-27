@@ -12,3 +12,4 @@ vectorformats==0.1
 django-icanhaz==0.1.0
 django-html5accordion==0.1.1
 django-ajax-loading-overlay==0.1.0
+geopy==0.94.1
