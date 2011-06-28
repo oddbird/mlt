@@ -177,18 +177,21 @@ var MLT = MLT || {};
     };
 
     var addAddressLightbox = function() {
-        var bootstrapForm = function() {
+        var link = $('a[href=#lightbox-add-address]'),
+        target = $("#lightbox-add-address"),
+        url = target.data('add-address-url'),
+        success = function(data) {
+            target.html(data.html);
+            bootstrapForm();
+        },
+        bootstrapForm = function() {
             var form = $('#lightbox-add-address form').ajaxForm({
-                target: '#lightbox-add-address',
-                success: bootstrapForm
+                success: success
             });
         };
 
-        $('a[href=#lightbox-add-address]').click(function() {
-            $('#lightbox-add-address').load(
-                '/map/add_address/',
-                bootstrapForm
-            );
+        link.click(function() {
+            $.get(url, success);
         });
 
         $('#lightbox-add-address a[title*="close"]').live('click', function() {
