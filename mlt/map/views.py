@@ -19,7 +19,7 @@ def addresses(request):
     try:
         num = int(request.GET["num"])
     except (ValueError, KeyError):
-        num = 50
+        num = 20
 
     # @@@ indexing might break if addresses have been added/deleted?
     addresses = Address.objects.all()[start:start+num]
