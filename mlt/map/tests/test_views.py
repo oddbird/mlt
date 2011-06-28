@@ -41,7 +41,7 @@ class AddAddressViewTest(AuthenticatedWebTest):
                 "state",
                 "street_name",
                 "street_number",
-                "street_suffix",
+                "street_type",
                 ]
             )
 
@@ -53,7 +53,7 @@ class AddAddressViewTest(AuthenticatedWebTest):
         form["state"] = "RI"
         form["street_number"] = "3635"
         form["street_name"] = "Van Gordon",
-        form["street_suffix"] = "St"
+        form["street_type"] = "St"
 
         response = form.submit()
 
