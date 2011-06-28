@@ -11,4 +11,4 @@ simplejson==2.1.6
 vectorformats==0.1
 django-icanhaz==0.2.0
 django-html5accordion==0.1.1
-django-messages-ui==0.1.1
+django-messages-ui==0.1.2
