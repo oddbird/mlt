@@ -175,6 +175,11 @@ INSTALLED_APPS += ["html5accordion"]
 INSTALLED_APPS += ["ajax_loading_overlay"]
 
 INSTALLED_APPS += ["messages_ui"]
+MIDDLEWARE_CLASSES.insert(
+    MIDDLEWARE_CLASSES.index(
+        "django.contrib.messages.middleware.MessageMiddleware"
+        ) + 1,
+    "messages_ui.middleware.AjaxMessagesMiddleware")
 
 # import local settings, if they exist
 

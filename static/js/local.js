@@ -44,6 +44,7 @@ var MLT = MLT || {};
                     }
                 }
             },
+            geojson_url = $('#mapping').data('parcel-geojson-url'),
             geojson = new L.GeoJSON(),
             selectedId = null,
             selectedInfo = null,
@@ -55,8 +56,11 @@ var MLT = MLT || {};
 
                 if (map.getZoom() > 16) {
                     $.getJSON(
-                        "/map/geojson/" + sw.lng + "/" + ne.lng +
-                            "/" + sw.lat + "/" + ne.lat + "/",
+                        geojson_url +
+                            "?southlat=" + sw.lat +
+                            "&northlat=" + ne.lat +
+                            "&westlng=" + sw.lng +
+                            "&eastlng=" + ne.lng,
                         function(data) {
                             map.removeLayer(geojson);
                             selectedLayer = null;
@@ -137,14 +141,18 @@ var MLT = MLT || {};
         $('#addresstable .managelist .address input[id^="select_"]').live('click', function() {
             if ($(this).is(':checked')) {
                 var popupContent = 'A',
-                    lat = $(this).closest('.address').data('latitude'),
-                    lng = $(this).closest('.address').data('longitude');
-                this.popup = new L.Popup({ closeButton: false });
-                this.popup.setLatLng(new L.LatLng(lat, lng));
-                this.popup.setContent(popupContent);
-                MLT.map.addLayer(this.popup);
+                lat = $(this).closest('.address').data('latitude'),
+                lng = $(this).closest('.address').data('longitude');
+                if (lat && lng) {
+                    this.popup = new L.Popup({ closeButton: false });
+                    this.popup.setLatLng(new L.LatLng(lat, lng));
+                    this.popup.setContent(popupContent);
+                    MLT.map.addLayer(this.popup);
+                }
             } else {
-                MLT.map.removeLayer(this.popup);
+                if (this.popup) {
+                    MLT.map.removeLayer(this.popup);
+                }
             }
         });
     };
@@ -226,67 +234,31 @@ var MLT = MLT || {};
         });
     };
 
-    var autoLoad = function() {
-        var container = $('.managelist'),
-            loading = container.find('.load').css('opacity', 0);
+    var addressList = function() {
+        var container = $('#addresstable .managelist'),
+        url = container.data('addresses-url'),
+        loading = container.find('.load'),
+        moreAddresses = true,
+        newAddresses = function(data) {
+            if ($.trim(data.html)) {
+                var elems = $(data.html);
+                elems.find('.details').html5accordion('.summary');
+                loading.before(elems).css('opacity', 0);
+            } else {
+                loading.find('p').html('No more addresses');
+                moreAddresses = false;
+            }
+        };
+
+        // load some addresses to start out with
+        $.get(url, newAddresses);
+
         container.scroll(function() {
             $.doTimeout('scroll', 250, function() {
-                if ((container.get(0).scrollHeight - container.scrollTop() - container.outerHeight()) <= loading.outerHeight()) {
+                if ((container.get(0).scrollHeight - container.scrollTop() - container.outerHeight()) <= loading.outerHeight() && moreAddresses) {
+                    var count = container.find('.address').length;
                     loading.animate({opacity: 1}, 'fast');
-                    // This function mimics an ajax call with a delay of 300ms
-                    var fakeAjaxCall = function(number, callback) { // @@@ faked ajax
-                        var response =
-                            '<article class="address new" id="address-id-' + number + '" data-latitude="41.822001" data-longitude="-71.392436">' +
-                                '<input type="checkbox" value="" name="select" id="select_' + number + '">' +
-                                '<div class="content">' +
-                                    '<label for="select_' + number + '">' +
-                                        '<h3 class="adr">' +
-                                            '<div class="street-address">27 Fremont St.</div>' +
-                                            '<div class="locality">Providence</div>, ' +
-                                            '<div class="region">RI</div> ' +
-                                            '<div class="postal-code">02906</div>' +
-                                        '</h3>' +
-                                    '</label>' +
-                                    '<div class="id unmapped">' +
-                                        '<label class="value" for="select_' + number + '">not mapped</label>' +
-                                    '</div>' +
-                                    '<ul class="controls">' +
-                                        '<li><a title="edit" href="#">edit</a></li>' +
-                                        '<li><a title="history" href="#">history</a></li>' +
-                                        '<li><button value="" name="delete" type="submit">delete</button></li>' +
-                                    '</ul>' +
-                                    '<div class="details">' +
-                                        '<p class="summary" tabindex="0">details</p>' +
-                                        '<div class="more">' +
-                                            '<div class="complex">' +
-                                                '<button class="multiple" type="submit" name="complex">multiple units</button>' +
-                                                '<p class="name">single unit</p>' +
-                                            '</div>' +
-                                            '<div class="byline">' +
-                                                '<p class="hcard">' +
-                                                    'Imported by <cite class="fn">[username]</cite> from [source] on <time pubdate="">[timestamp]</time>.' +
-                                                '</p>' +
-                                            '</div>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</div>' +
-                            '</article>';
-                        function callbackfn() { callback(response); }
-                        window.setTimeout(callbackfn, 300);
-                    };
-                    var currentTotal = container.find('article.address').length;
-                    for (var i = currentTotal + 1; i < currentTotal + 27; i++) {
-                        // Add returned data
-                        fakeAjaxCall(
-                            i,
-                            function(data) {
-                                container.find('.load').before(data);
-                                container.find('.address.new .details').html5accordion('.summary');
-                                container.find('.address.new').removeClass('new');
-                                loading.css('opacity', 0);
-                            }
-                        );
-                    }
+                    $.get(url + '?start=' + count, newAddresses);
                 }
             });
         });
@@ -303,9 +275,9 @@ var MLT = MLT || {};
         $('#addresstable .managelist .address .content .details .summary').live('click', function() {
             $(this).blur();
         });
-        $('#messages').messages();
+        $('#messages').messages({handleAjax: true});
         sorting();
-        autoLoad();
+        addressList();
     });
 
 })(jQuery);

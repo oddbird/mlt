@@ -1,5 +1,3 @@
-import json
-
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -8,7 +6,25 @@ from django.contrib.auth.decorators import login_required
 from vectorformats.Formats import Django, GeoJSON
 
 from .forms import AddressForm
-from .models import Parcel
+from .models import Parcel, Address
+
+
+
+@login_required
+def addresses(request):
+    try:
+        start = int(request.GET["start"])
+    except (ValueError, KeyError):
+        start = 0
+    try:
+        num = int(request.GET["num"])
+    except (ValueError, KeyError):
+        num = 50
+
+    # @@@ indexing might break if addresses have been added/deleted?
+    addresses = Address.objects.all()[start:start+num]
+
+    return render(request, "includes/addresses.html", {"addresses": addresses})
 
 
 
@@ -24,7 +40,14 @@ def add_address(request):
 
 
 @login_required
-def geojson(request, westlat, eastlat, southlng, northlng):
+def geojson(request):
+    try:
+        westlng = request.GET["westlng"]
+        eastlng = request.GET["eastlng"]
+        northlat = request.GET["northlat"]
+        southlat = request.GET["southlat"]
+    except KeyError:
+        return HttpResponse("{}", content_type="application/json")
     wkt = (
         "POLYGON(("
         "%(w)s %(s)s, "
@@ -32,7 +55,7 @@ def geojson(request, westlat, eastlat, southlng, northlng):
         "%(e)s %(n)s, "
         "%(e)s %(s)s, "
         "%(w)s %(s)s"
-        "))" % {"w": westlat, "e": eastlat, "s": southlng, "n": northlng}
+        "))" % {"w": westlng, "e": eastlng, "s": southlat, "n": northlat}
         )
     qs = Parcel.objects.filter(geom__intersects=wkt)
     source = Django.Django(

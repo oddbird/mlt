@@ -16,6 +16,7 @@ def main():
 
     imports = [
         "import datetime",
+        "from django.contrib.auth.models import User",
         "from mlt.map.models import Parcel, Address",
         "from mlt.map.load import load",
         ]

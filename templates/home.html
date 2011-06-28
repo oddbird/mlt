@@ -8,24 +8,8 @@
 
     {% include "includes/actions.html" %}
 
-    <div class="managelist">
-
-      {% include "includes/address.html" with id="01" address="161 Chestnut St." latitude="41.81795" longitude="-71.40997" origin="created" notes="true" %}
-      {% include "includes/address.html" with id="02" address="10 Davol Sq." latitude="41.81659" longitude="-71.40670" origin="imported" mapped="Eric" notes="true" edit="true" complex="complex name"%}
-      {% include "includes/address.html" with id="03" address="10 Davol Sq." latitude="41.81659" longitude="-71.40670" origin="imported" mapped="blametern" complex="apartments"%}
-      {% include "includes/address.html" with id="04" address="10 Davol Sq." latitude="41.81659" longitude="-71.40670" origin="created" mapped="Jonny" %}
-      {% include "includes/address.html" with id="05" address="161 Chestnut St." latitude="41.81795" longitude="-71.40997" origin="created" %}
-      {% include "includes/address.html" with id="06" address="10 Davol Sq." latitude="41.81659" longitude="-71.40670" origin="imported" mapped="blametern" %}
-      {% include "includes/address.html" with id="07" address="161 Chestnut St." latitude="41.81795" longitude="-71.40997" origin="created" %}
-      {% include "includes/address.html" with id="08" address="10 Davol Sq." latitude="41.81659" longitude="-71.40670" origin="imported" mapped="blametern" %}
-      {% include "includes/address.html" with id="09" address="10 Davol Sq." latitude="41.81659" longitude="-71.40670" origin="imported" mapped="Carl" %}
-      {% include "includes/address.html" with id="10" address="10 Davol Sq." latitude="41.81659" longitude="-71.40670" origin="imported" mapped="blametern" %}
-
-      {% for i in 1|range:26  %}
-        {% if forloop.counter > 10 %}
-          {% include "includes/address.html" with id=i address="10 Davol Sq." latitude="41.81659" longitude="-71.40670" origin="imported" %}
-        {% endif %}
-      {% endfor %}
+    <div class="managelist" data-addresses-url="{% url map_addresses %}">
+      {# addresses ajax-loaded from includes/address.html #}
 
       <aside class="load">
         <p>loading more addresses...</p>
@@ -35,7 +19,7 @@
   </form>
 </section>
 
-<aside id="mapping">
+<aside id="mapping" data-parcel-geojson-url="{% url map_geojson %}">
   <h2>Parcel Map</h2>
   <div id="map"></div>
   <div id="mapinfo"></div>

@@ -1,43 +1,34 @@
-<article id="address-id-{{ address.id }}" class="address"{% if address.parcel %} data-latitude="{{ address.latitude }}" data-longitude="{{ address.longitude }}"{% endif %}>
-  <input type="checkbox" id="select_{{ id }}" name="select" value="">
+<article id="address-id-{{ address.id }}" class="address"{% if address.parcel %} data-latitude="{{ address.parcel.latitude }}" data-longitude="{{ address.parcel.longitude }}"{% endif %}>
+  <input type="checkbox" id="select_{{ address.id }}" name="select" value="{{ address.id }}">
 
-  <div class="content{% if edit %} editing{% endif %}">
-    {% if not edit %}
-    <label for="select_{{ id }}">
-    {% endif %}
+  <div class="content"> {# @@@ editing: 'editing' #}
+    {# @@@ editing: remove label wrapper #}
+    <label for="select_{{ address.id }}">
       <h3 class="adr">
-        <div class="street-address" {% if edit %}contenteditable{% endif %}>{{ address }}</div>
-        <div class="locality" {% if edit %}contenteditable{% endif %}>Providence</div>,
-        <div class="region" {% if edit %}contenteditable{% endif %}>RI</div>
-        <div class="postal-code" {% if edit %}contenteditable{% endif %}>02903</div>
+        {# @@@ editing: split into component parts w/ 'contenteditable' #}
+        <div class="street-address">{{ address.street }}</div>
+        {# @@@ editing: add 'contenteditable' attribute to all these #}
+        <div class="locality">{{ address.city }}</div>,
+        <div class="region">{{ address.state }}</div>
       </h3>
-    {% if not edit %}
     </label>
-    {% endif %}
 
-    <div class="id{% if not mapped %} unmapped{% else %}{% if mapped != "blametern" %} approved{% endif %}{% endif %}">
-      {% if mapped %}
-        {% if mapped == "blametern" %}
-          <input type="checkbox" name="flag_for_review_{{ id }}" value="" id="flag_for_review_{{ id }}" checked="checked">
-        {% else %}
-          <input type="checkbox" name="flag_for_review_{{ id }}" value="" id="flag_for_review_{{ id }}">
-        {% endif %}
-        <label for="flag_for_review_{{ id }}">flag for review</label>
+    <div class="id{% if not address.parcel %} unmapped{% else %}{% if not address.needs_review %} approved{% endif %}{% endif %}">
+      {% if address.parcel %}
+        <input type="checkbox" name="flag_for_review" value="{{ address.id }}" id="flag_for_review_{{ address.id }}"{% if address.needs_review %} checked="checked"{% endif %}>
+        <label for="flag_for_review_{{ address.id }}">flag for review</label>
 
-        <label for="select_{{ id }}" class="value">21 313</label>
+        <label for="select_{{ address.id }}" class="value">{{ address.pl }}</label>
       {% else %}
-        {% if edit %}
-          <p class="value">not mapped</p>
-        {% else %}
-          <label for="select_{{ id }}" class="value">not mapped</label>
-        {% endif %}
+        <label for="select_{{ address.id }}" class="value">not mapped</label>
       {% endif %}
     </div>
 
     <ul class="controls">
-      <li><a href="#" title="{% if edit %}save{% else %}edit{% endif %}">edit</a></li>
-      <li><a href="#" title="history">history</a></li>
-      <li><button type="submit" name="delete" value="">delete</button></li>
+      {# @@@ editing: change title and text to 'save' #}
+      <li><a href="#" title="edit">edit</a></li>
+      <li><a href="#{# @@@ link to revision history #}" title="history">history</a></li>
+      <li><button type="submit" name="delete" value="{{ address.id }}">delete</button></li>
     </ul>
 
     <div class="details">
@@ -45,45 +36,51 @@
       <div class="more">
 
         <div class="complex">
-          {% if complex %}
-            <button name="complex" type="submit" class="single">single unit</button>
-            <p class="name" {% if edit %}contenteditable{% endif %}>{{ complex }}</p>
+          {% if address.multi_units %}
+            <button name="complex" type="submit" class="single" value="{{ address.id }}">single unit</button>
           {% else %}
-            <button name="complex" type="submit" class="multiple">multiple units</button>
-            <p class="name">single unit</p>
+            <button name="complex" type="submit" class="multiple" value="{{ address.id }}">multiple units</button>
           {% endif %}
+          {# @@@ contenteditable #}
+          <p class="name">{{ address.complex_name }}</p>
         </div>
 
-        {% if origin or mapped %}
+        {% if address.import_source or address.mapped_by %}
           <div class="byline">
-            {% if origin %}
+            {% if address.import_source %}
               <p class="hcard">
-                {% if origin == "imported"  %}Imported{% endif %}
-                {% if origin == "created" %}Created{% endif %}
-                by <cite class="fn">[username]</cite>
-                {% if origin == "imported"  %}from [source]{% endif %}
-                on <time pubdate>[timestamp]</time>.
+                {% if address.import_source == "web-ui" %}
+                Created
+                {% else  %}
+                Imported
+                {% endif %}
+                {% if address.imported_by %}
+                by <cite class="fn">[{{ address.imported_by }}]</cite>
+                {% endif %}
+                {% if address.import_source and address.import_source != "web-ui" %}
+                from [{{ address.import_source }}]
+                {% endif %}
+                on <time pubdate>[{{ address.import_timestamp }}]</time>.
               </p>
             {% endif %}
 
-            {% if mapped %}
+            {% if address.parcel %}
               <p class="hcard">
-                Mapped by <cite class="fn">{{ mapped }}</cite>
-                on <time class="mapped">[timestamp]</time>.
+                Mapped by <cite class="fn">{{ address.mapped_by }}</cite>
+                on <time class="mapped">[{{ address.mapped_timestamp }}]</time>.
               </p>
             {% endif %}
           </div>
         {% endif %}
 
-        {% if notes %}
-          <p class="notes" {% if edit %}contenteditable{% endif %}>Notes about this address</p>
+        {% if address.notes %}
+          {# @@@ contenteditable #}
+          <p class="notes">{{ address.notes }}</p>
         {% endif %}
       </div>
     </div>
 
-    {% if edit %}
-      <button class="savechanges" title="save changes">save changes</button>
-    {% endif %}
+    {# @@@ editing: <button class="savechanges" title="save changes">save changes</button> #}
 
   </div>
 </article>
