@@ -264,8 +264,8 @@ var MLT = MLT || {};
                         var response =
                             '<article class="address new" id="address-id-' + number + '" data-latitude="41.822001" data-longitude="-71.392436">' +
                                 '<input type="checkbox" value="" name="select" id="select_' + number + '">' +
-                                '<span class="mapkey">A.</span>' +
                                 '<div class="content">' +
+                                    '<span class="mapkey">A.</span>' +
                                     '<label for="select_' + number + '">' +
                                         '<h3 class="adr">' +
                                             '<div class="street-address">27 Fremont St.</div>' +
@@ -276,7 +276,6 @@ var MLT = MLT || {};
                                     '<div class="id approved">' +
                                       '<input type="checkbox" name="flag_for_review_' + number + '" value="" id="flag_for_review_' + number + '">' +
                                       '<label for="flag_for_review_' + number + '">flag for review</label>' +
-
                                       '<label for="select_' + number + '" class="value">21 313</label>' +
                                     '</div>' +
                                     '<ul class="controls">' +
