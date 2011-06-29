@@ -12,4 +12,14 @@ $lightbox-fade: 300ms
   h2
     +gone
   aside
-    +lightbox-with-default-styles
+    +lightbox
+    > div
+      +box-shadow(rgba(0, 0, 0, 0.9), 0, 0, 1em)
+      position: relative
+      margin: 3em auto
+      padding: rhythm(1)
+      width: fixed(10) + rhythm(2)
+      border: 1em solid
+      background: white
+      text-align: left
+

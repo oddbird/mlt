@@ -2,6 +2,8 @@
   <input type="checkbox" id="select_{{ address.id }}" name="select" value="{{ address.id }}">
 
   <div class="content"> {# @@@ editing: 'editing' #}
+    {# @@@ the mapkey needs to be dynamic in JS #}
+    <span class="mapkey">{{ AAB }}.</span>
     {# @@@ editing: remove label wrapper #}
     <label for="select_{{ address.id }}">
       <h3 class="adr">
@@ -25,7 +27,7 @@
     </div>
 
     <ul class="controls">
-      {# @@@ editing: change title and text to 'save' #}
+      {# @@@ editing: change title and text to 'cancel' #}
       <li><a href="#" title="edit">edit</a></li>
       <li><a href="#{# @@@ link to revision history #}" title="history">history</a></li>
       <li><button type="submit" name="delete" value="{{ address.id }}">delete</button></li>
