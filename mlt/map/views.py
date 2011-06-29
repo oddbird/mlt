@@ -15,16 +15,22 @@ def addresses(request):
     try:
         start = int(request.GET["start"])
     except (ValueError, KeyError):
-        start = 0
+        start = 1
     try:
         num = int(request.GET["num"])
     except (ValueError, KeyError):
         num = 20
 
     # @@@ indexing might break if addresses have been added/deleted?
-    addresses = Address.objects.all()[start:start+num]
+    def _address_generator():
+        for i, address in enumerate(Address.objects.all()[start-1:start+num-1]):
+            address.index = i + start
+            yield address
 
-    return render(request, "includes/addresses.html", {"addresses": addresses})
+    return render(
+        request,
+        "includes/addresses.html",
+        {"addresses": _address_generator()})
 
 
 

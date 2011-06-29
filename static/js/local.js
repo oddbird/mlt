@@ -259,7 +259,7 @@ var MLT = MLT || {};
         container.scroll(function() {
             $.doTimeout('scroll', 250, function() {
                 if ((container.get(0).scrollHeight - container.scrollTop() - container.outerHeight()) <= loading.outerHeight() && moreAddresses) {
-                    var count = container.find('.address').length;
+                    var count = container.find('.address').length + 1;
                     loading.animate({opacity: 1}, 'fast');
                     $.get(url + '?start=' + count, newAddresses);
                 }
