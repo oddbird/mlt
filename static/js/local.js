@@ -274,8 +274,11 @@ var MLT = MLT || {};
                                             '<div class="postal-code">02906</div>' +
                                         '</h3>' +
                                     '</label>' +
-                                    '<div class="id unmapped">' +
-                                        '<label class="value" for="select_' + number + '">not mapped</label>' +
+                                    '<div class="id approved">' +
+                                      '<input type="checkbox" name="flag_for_review_' + number + '" value="" id="flag_for_review_' + number + '">' +
+                                      '<label for="flag_for_review_' + number + '">flag for review</label>' +
+
+                                      '<label for="select_' + number + '" class="value">21 313</label>' +
                                     '</div>' +
                                     '<ul class="controls">' +
                                         '<li><a title="edit" href="#">edit</a></li>' +
