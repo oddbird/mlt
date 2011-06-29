@@ -33,16 +33,12 @@ var MLT = MLT || {};
                 }
             },
             hideInfo = function() {
-                if (selectedInfo) {
-                    showInfo(selectedInfo, true);
-                } else {
-                    if (!mapinfoHover) {
-                        mapinfoTimeout = setTimeout(
-                            function() {
-                                mapinfo.empty().hide();
-                            },
-                            100);
-                    }
+                if (!mapinfoHover) {
+                    mapinfoTimeout = setTimeout(
+                        function() {
+                            mapinfo.empty().hide();
+                        },
+                        100);
                 }
             },
             geojson = new L.GeoJSON(),
@@ -98,19 +94,25 @@ var MLT = MLT || {};
                                         'mouseover',
                                         function(ev) {
                                             if (!selectedInfo) {
-                                                showInfo(info, this.selected);
+                                                showInfo(info, false);
                                             }
                                         });
                                     e.layer.on(
                                         'mouseout',
-                                        function(ev) { hideInfo(); });
+                                        function(ev) {
+                                            if (!selectedInfo) {
+                                                hideInfo();
+                                            }
+                                        });
                                     e.layer.on(
                                         'click',
                                         function(ev) {
                                             if (ev.target.selected) {
                                                 ev.target.unselect();
+                                                showInfo(info, false);
                                             } else {
                                                 ev.target.select();
+                                                showInfo(info, true);
                                             }
                                         });
                                 });
