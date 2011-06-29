@@ -2,6 +2,8 @@
   <input type="checkbox" id="select_{{ id }}" name="select" value="">
 
   <div class="content{% if edit %} editing{% endif %}">
+    {# @@@ the mapkey needs to be dynamic in JS #}
+    <span class="mapkey">A.</span>
     {% if not edit %}
     <label for="select_{{ id }}">
     {% endif %}
@@ -9,7 +11,6 @@
         <div class="street-address" {% if edit %}contenteditable{% endif %}>{{ address }}</div>
         <div class="locality" {% if edit %}contenteditable{% endif %}>Providence</div>,
         <div class="region" {% if edit %}contenteditable{% endif %}>RI</div>
-        <div class="postal-code" {% if edit %}contenteditable{% endif %}>02903</div>
       </h3>
     {% if not edit %}
     </label>
@@ -35,7 +36,9 @@
     </div>
 
     <ul class="controls">
-      <li><a href="#" title="{% if edit %}save{% else %}edit{% endif %}">edit</a></li>
+      <li><a href="#" title="{% if edit %}cancel{% else %}edit{% endif %}">
+        {% if edit %}cancel{% else %}edit{% endif %}</a>
+      </li>
       <li><a href="#" title="history">history</a></li>
       <li><button type="submit" name="delete" value="">delete</button></li>
     </ul>

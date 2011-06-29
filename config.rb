@@ -1,7 +1,7 @@
 # Compass CSS framework config file
 
 require 'susy'
-# require 'css-lightbox'
+require 'css-lightbox'
 # require 'css-slideshow'
 # require 'rgbapng'
 # require 'lemonade'

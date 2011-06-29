@@ -169,16 +169,21 @@
     +gone
   li
     +trailer(.5)
-  [name="multi_units"]
-    +float(left)
-    width: 5%
-    + label
+  .street-number
+    +columns(2,10)
+  .street-name
+    +columns(6,10)
+  .street-type
+    +columns(2,10)
+    +omega(10)
+  .units
+    +columns(2,10)
+    +padding-leader(.25)
+    label
       +back
-      +float(left)
-      width: 15%
-    ~ input
-      +float(right)
-      width: 65%
+  .complex
+    +columns(8,10)
+    +omega(10)
 
 #export-address-form, #import-address-form
   +leader(1)
@@ -216,8 +221,8 @@
     height: $base-rhythm-unit
   [title="edit"]
     +icon('ui/pencil.png')
-  [title="save"]
-    +icon('ui/disk.png')
+  [title="cancel"]
+    +icon('ui/x.png')
 
   [name="complex"]
     +icon('ui/house.png','ui/bldg.png')
@@ -227,6 +232,18 @@
       +icon('ui/bldg.png','ui/house.png')
   .summary
     +icon('ui/info.png')
+
+  .mapkey
+    +adjust-font-size-to($normpx+$xxsmallpx)
+    +transition(all,300ms)
+    +opacity(1)
+    +cond
+    +demi
+    position: absolute
+    left: 0
+    width: columns(1,8)
+    color: $base
+    text-align: right
 
   .address
     +pie-clearfix
@@ -276,18 +293,6 @@
     position: relative
     color: $mid
     font-weight: normal
-    &::before
-      +adjust-font-size-to($normpx+$xxsmallpx)
-      +transition(all,300ms)
-      +opacity(1)
-      +cond
-      +demi
-      position: absolute
-      left: 0
-      content: counter(address, upper-latin) "."
-      width: columns(1,6)
-      color: $base
-      text-align: right
 
   .street-address
     +demi
@@ -360,9 +365,8 @@
     right: columns(7,8) + gutter(8)
 
   .editing
-    .adr
-      &::before
-        +opacity(0)
+    .mapkey
+      +opacity(0)
     .savechanges
       +opacity(1)
 

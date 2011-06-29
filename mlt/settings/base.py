@@ -174,6 +174,8 @@ INSTALLED_APPS += ["html5accordion"]
 
 INSTALLED_APPS += ["messages_ui"]
 
+INSTALLED_APPS += ["ajax_loading_overlay"]
+
 # import local settings, if they exist
 
 local_settings = abspath(join(dirname(__file__), "local.py"))

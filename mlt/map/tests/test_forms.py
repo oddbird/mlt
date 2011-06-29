@@ -26,7 +26,7 @@ class AddressFormTest(TestCase):
         self.assertEqual(
             [f.name for f in self.form()],
             [
-                "street_number", "street_name", "street_suffix",
+                "street_number", "street_name", "street_type",
                 "city", "state", "multi_units",
                 "complex_name", "notes"
                 ]
@@ -39,7 +39,7 @@ class AddressFormTest(TestCase):
             {
                 "street_number": "3635",
                 "street_name": "Van Gordon",
-                "street_suffix": "St",
+                "street_type": "St",
                 "city": "Providence",
                 "state": "RI",
                 "multi_units": 1,
@@ -55,7 +55,9 @@ class AddressFormTest(TestCase):
 
         self.assertEqual(a.street_number, "3635")
         self.assertEqual(a.street_name, "Van Gordon")
-        self.assertEqual(a.street_suffix, "St")
+        self.assertEqual(a.street_type, "St")
+        self.assertEqual(a.input_street, "3635 Van Gordon St")
+        self.assertEqual(a.parsed_street, "3635 Van Gordon St")
         self.assertEqual(a.notes, "some notes")
         self.assertEqual(a.complex_name, "The Van Gordon Building")
         self.assertEqual(a.multi_units, True)
