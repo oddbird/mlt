@@ -234,11 +234,16 @@
     +icon('ui/info.png')
 
   .mapkey
+    +adjust-font-size-to($normpx+$xxsmallpx)
+    +transition(all,300ms)
+    +opacity(1)
     +cond
+    +demi
     position: absolute
-    right: columns(7,8) + gutter(8)
-    top: rhythm(1.25)
-    color: rgba($base,0)
+    left: 0
+    width: columns(1,8)
+    color: $base
+    text-align: right
 
   .address
     +pie-clearfix
@@ -257,8 +262,15 @@
         +opacity(.5)
         #{$focus}
           +opacity(1)
-      .mapkey
+      &::before
         color: rgba($base,.5)
+    &::before
+      +cond
+      content: counter(address, decimal-leading-zero) "."
+      position: absolute
+      right: columns(7,8) + gutter(8)
+      top: rhythm(1.25)
+      color: rgba($base,0)
 
   .content
     +clearfix
@@ -281,18 +293,6 @@
     position: relative
     color: $mid
     font-weight: normal
-    &::before
-      +adjust-font-size-to($normpx+$xxsmallpx)
-      +transition(all,300ms)
-      +opacity(1)
-      +cond
-      +demi
-      position: absolute
-      left: 0
-      content: counter(address, upper-latin) "."
-      width: columns(1,6)
-      color: $base
-      text-align: right
 
   .street-address
     +demi
@@ -365,9 +365,8 @@
     right: columns(7,8) + gutter(8)
 
   .editing
-    .adr
-      &::before
-        +opacity(0)
+    .mapkey
+      +opacity(0)
     .savechanges
       +opacity(1)
 
