@@ -1,6 +1,7 @@
 var MLT = MLT || {};
 
 (function($) {
+    var MIN_PARCEL_ZOOM = 17;
 
     var initializeMap = function() {
         if ($('#map').length) {
@@ -54,7 +55,7 @@ var MLT = MLT || {};
                 ne = bounds.getNorthEast(),
                 sw = bounds.getSouthWest();
 
-                if (map.getZoom() > 16) {
+                if (map.getZoom() >= MIN_PARCEL_ZOOM) {
                     $.getJSON(
                         geojson_url +
                             "?southlat=" + sw.lat +
@@ -145,10 +146,14 @@ var MLT = MLT || {};
             lng = thisAddress.data('longitude');
             if ($(this).is(':checked')) {
                 if (lat && lng) {
-                    this.popup = new L.Popup({ closeButton: false });
+                    this.popup = new L.Popup({
+                        closeButton: false,
+                        autoPan: false
+                    });
                     this.popup.setLatLng(new L.LatLng(lat, lng));
                     this.popup.setContent(popupContent);
                     MLT.map.addLayer(this.popup);
+                    MLT.map.setView(new L.LatLng(lat, lng), MIN_PARCEL_ZOOM);
                 }
             } else {
                 if (this.popup) {
