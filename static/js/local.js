@@ -149,7 +149,10 @@ var MLT = MLT || {};
                 this.popup.setLatLng(new L.LatLng(lat, lng));
                 this.popup.setContent(popupContent);
                 MLT.map.addLayer(this.popup);
-                MLT.map.setView(new L.LatLng(lat, lng), MIN_PARCEL_ZOOM);
+                MLT.map.panTo(new L.LatLng(lat, lng));
+                if (MLT.map.getZoom() < MIN_PARCEL_ZOOM) {
+                    MLT.map.setZoom(MIN_PARCEL_ZOOM);
+                }
             } else {
                 MLT.map.removeLayer(this.popup);
             }
