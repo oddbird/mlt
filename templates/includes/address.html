@@ -2,6 +2,8 @@
   <input type="checkbox" id="select_{{ id }}" name="select" value="">
 
   <div class="content{% if edit %} editing{% endif %}">
+    {# @@@ the mapkey needs to be dynamic in JS #}
+    <span class="mapkey">{{ id }}.</span>
     {% if not edit %}
     <label for="select_{{ id }}">
     {% endif %}

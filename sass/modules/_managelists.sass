@@ -233,6 +233,13 @@
   .summary
     +icon('ui/info.png')
 
+  .mapkey
+    +cond
+    position: absolute
+    right: columns(7,8) + gutter(8)
+    top: rhythm(1.25)
+    color: rgba($base,0)
+
   .address
     +pie-clearfix
     +transition(all,300ms)
@@ -250,15 +257,8 @@
         +opacity(.5)
         #{$focus}
           +opacity(1)
-      &::before
+      .mapkey
         color: rgba($base,.5)
-    &::before
-      +cond
-      content: counter(address, decimal-leading-zero) "."
-      position: absolute
-      right: columns(7,8) + gutter(8)
-      top: rhythm(1.25)
-      color: rgba($base,0)
 
   .content
     +clearfix

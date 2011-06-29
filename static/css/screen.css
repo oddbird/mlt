@@ -396,6 +396,7 @@ h1 a:link, h1 a:visited { display: block; }
 .managelist [name="complex"].single:focus, .managelist [name="complex"].single:hover, .managelist [name="complex"].single:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; background-image: url('../images/ui/house.png?1305749944'); }
 .managelist .summary { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/info.png?1306961747'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 19.417px; }
 .managelist .summary:focus, .managelist .summary:hover, .managelist .summary:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
+.managelist .mapkey { font-family: "CambridgeRoundCond", "Helvetica Neue", Helvetica, Arial, sans-serif; position: absolute; right: 89.744%; top: 2.023em; color: rgba(76, 76, 76, 0); }
 .managelist .address { *zoom: 1; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; clear: both; counter-increment: address; position: relative; }
 .managelist .address:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 .managelist .address:hover .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
@@ -403,8 +404,7 @@ h1 a:link, h1 a:visited { display: block; }
 .managelist .address:hover .summary:focus, .managelist .address:hover .summary:hover, .managelist .address:hover .summary:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .managelist .address:hover [for^="flag_for_review"] { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; }
 .managelist .address:hover [for^="flag_for_review"]:focus, .managelist .address:hover [for^="flag_for_review"]:hover, .managelist .address:hover [for^="flag_for_review"]:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
-.managelist .address:hover::before { color: rgba(76, 76, 76, 0.5); }
-.managelist .address::before { font-family: "CambridgeRoundCond", "Helvetica Neue", Helvetica, Arial, sans-serif; content: counter(address, decimal-leading-zero) "."; position: absolute; right: 89.744%; top: 2.023em; color: rgba(76, 76, 76, 0); }
+.managelist .address:hover .mapkey { color: rgba(76, 76, 76, 0.5); }
 .managelist .content { overflow: hidden; *zoom: 1; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 0.321em; padding-right: 0.809em; border-color: #dddddd; }
 .managelist [id^="select_"] { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 .managelist [id^="select_"]:checked + .content { background-color: rgba(0, 84, 152, 0.146); }
