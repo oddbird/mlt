@@ -179,16 +179,22 @@ var MLT = MLT || {};
     var addAddressLightbox = function() {
         var bootstrapForm = function() {
             var form = $('#lightbox-add-address form').ajaxForm({
-                target: "#lightbox-add-address",
+                target: '#lightbox-add-address',
                 success: bootstrapForm
             });
         };
 
         $('a[href=#lightbox-add-address]').click(function() {
-            $("#lightbox-add-address").load(
-                "/map/add_address/",
+            $('#lightbox-add-address').load(
+                '/map/add_address/',
                 bootstrapForm
             );
+        });
+
+        $('#lightbox-add-address a[title*="close"]').live('click', function() {
+            if ($('#lightbox-add-address form').length) {
+                $(this).closest('form').get(0).reset();
+            }
         });
     };
 
