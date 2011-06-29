@@ -78,7 +78,7 @@
 <body id="client-url" class="{% block bodyclasses %}{% endblock %}">
 {% block body %}
 
-{% include "messages_ui/_messages.html" %}
+{% include "_messages.html" %}
 
 <header role="banner">
   <h1><a href="/" rel="home">Master Lookup Table</a></h1>
@@ -164,6 +164,7 @@
 <script src="{{ STATIC_URL }}js/jquery.form.js"></script>
 <script src="{{ STATIC_URL }}js/defuscator.js"></script>
 <script src="{{ STATIC_URL }}js/viewport.js"></script>
+<script src="{{ STATIC_URL }}js/ajax_setup.js"></script>
 <script src="{{ STATIC_URL }}js/local.js"></script>
 {% endcompress %}
 

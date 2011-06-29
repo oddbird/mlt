@@ -303,6 +303,10 @@ var MLT = MLT || {};
         $('#hcard-client-name .email').defuscate();
         $('input[placeholder], textarea[placeholder]').placeholder();
         $('.details:not(html)').html5accordion('.summary');
+        $('#messages').messages({
+            handleAjax: true,
+            closeLink: '.message'
+        });
         addressListHeight();
         addAddressLightbox();
         initializeMap();
@@ -310,7 +314,6 @@ var MLT = MLT || {};
         $('#addresstable .managelist .address .content .details .summary').live('click', function() {
             $(this).blur();
         });
-        $('#messages').messages();
         sorting();
         autoLoad();
     });
