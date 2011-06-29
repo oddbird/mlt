@@ -1,6 +1,7 @@
 var MLT = MLT || {};
 
 (function($) {
+    var MIN_PARCEL_ZOOM = 17;
 
     var initializeMap = function() {
         if ($('#map').length) {
@@ -53,7 +54,7 @@ var MLT = MLT || {};
                 ne = bounds.getNorthEast(),
                 sw = bounds.getSouthWest();
 
-                if (map.getZoom() > 16) {
+                if (map.getZoom() >= MIN_PARCEL_ZOOM) {
                     $.getJSON(
                         "/map/geojson/" + sw.lng + "/" + ne.lng +
                             "/" + sw.lat + "/" + ne.lat + "/",
@@ -139,10 +140,14 @@ var MLT = MLT || {};
                 var popupContent = 'A',
                     lat = $(this).closest('.address').data('latitude'),
                     lng = $(this).closest('.address').data('longitude');
-                this.popup = new L.Popup({ closeButton: false });
+                this.popup = new L.Popup({
+                    closeButton: false,
+                    autoPan: false
+                });
                 this.popup.setLatLng(new L.LatLng(lat, lng));
                 this.popup.setContent(popupContent);
                 MLT.map.addLayer(this.popup);
+                MLT.map.setView(new L.LatLng(lat, lng), MIN_PARCEL_ZOOM);
             } else {
                 MLT.map.removeLayer(this.popup);
             }
