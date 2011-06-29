@@ -19,16 +19,26 @@ $side-gutter-width  : $gutter-width
   min-width: 65em
 
 #messages
+  +no-style-list
   +stretch-x
   +box-shadow
   +bold
   z-index: 900
-  ul
-    +no-style-list
+  p
+    margin: 0
 
   .message
-    padding: rhythm(1) 0
+    +adjust-font-size-to($medpx,1.5)
+    position: relative
+    padding: rhythm(.5,$medpx) rhythm(1,$medpx)
     background: rgba($light,.95)
+    cursor: pointer
+    &:hover
+      &::after
+        position: absolute
+        right: rhythm(1,$medpx)
+        top: rhythm(.5,$medpx)
+        content: "(dismiss)"
 
   .success
     background: rgba(200,250,200,.95)
@@ -36,24 +46,6 @@ $side-gutter-width  : $gutter-width
     background: rgba(250,250,200,.95)
   .error
     background: rgba(250,200,200,.95)
-
-  .content
-    +adjust-font-size-to($medpx)
-    +full
-
-  .dismiss
-    position: absolute
-    top: 0
-    bottom: 0
-    right: 0
-    margin: 0
-  .close
-    +opacity(.75)
-    +replace-text-with-dimensions('ui/x_med.png')
-    display: block
-    padding: rhythm(1)
-    #{$focus}
-      +opacity(1)
 
 [role="banner"]
   @extend .container

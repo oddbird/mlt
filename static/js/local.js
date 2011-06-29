@@ -198,27 +198,6 @@ var MLT = MLT || {};
         });
     };
 
-    var messages = function() {
-        var allSuccess = true;
-        $('#messages .close').click(function() {
-            $('#messages').fadeOut('fast');
-            return false;
-        });
-        $('#messages li.message').each(function() {
-            if (!($(this).hasClass('success'))) {
-                allSuccess = false;
-            }
-        });
-        if (allSuccess === true) {
-            $(document).bind('mousedown keydown', function(event) {
-                $.doTimeout(500, function() {
-                    $('#messages').fadeOut(3000);
-                    $(this).unbind(event);
-                });
-            });
-        }
-    };
-
     var sorting = function() {
         var list = $('.actions .listordering > ul'),
             item = list.find('li[class^="by"]'),
@@ -335,6 +314,10 @@ var MLT = MLT || {};
         $('#hcard-client-name .email').defuscate();
         $('input[placeholder], textarea[placeholder]').placeholder();
         $('.details:not(html)').html5accordion('.summary');
+        $('#messages').messages({
+            handleAjax: true,
+            closeLink: '.message'
+        });
         addressListHeight();
         addAddressLightbox();
         initializeMap();
@@ -342,7 +325,6 @@ var MLT = MLT || {};
         $('#addresstable .managelist .address .content .details .summary').live('click', function() {
             $(this).blur();
         });
-        messages();
         sorting();
         autoLoad();
     });
