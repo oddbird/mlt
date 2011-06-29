@@ -35,7 +35,9 @@
     </div>
 
     <ul class="controls">
-      <li><a href="#" title="{% if edit %}save{% else %}edit{% endif %}">edit</a></li>
+      <li><a href="#" title="{% if edit %}cancel{% else %}edit{% endif %}">
+        {% if edit %}cancel{% else %}edit{% endif %}</a>
+      </li>
       <li><a href="#" title="history">history</a></li>
       <li><button type="submit" name="delete" value="">delete</button></li>
     </ul>
