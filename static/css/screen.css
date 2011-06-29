@@ -271,6 +271,7 @@ h1 a:link, h1 a:visited { display: block; }
 #filter .suggest:not(:hover) li:first-child a:link, #filter .suggest:not(:hover) li:first-child a:visited { background: #dddddd; }
 #filter .suggest li:last-child a:link, #filter .suggest li:last-child a:visited { border-bottom-color: #949494; }
 #filter .suggest i { display: inline; float: right; padding-left: 1em; font-style: normal; color: #949494; }
+#filter .suggest small { color: #949494; font-size: inherit; line-height: inherit; }
 #filter #filter_input:focus + .suggest { display: block; }
 #filter .visual, #filter .bystatus { position: relative; height: 2.427em; }
 #filter .visual ul, #filter .bystatus ul { display: none; position: absolute; top: 100%; width: 11.326em; background: white; z-index: 900; }
