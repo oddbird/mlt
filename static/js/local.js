@@ -264,6 +264,7 @@ var MLT = MLT || {};
                         var response =
                             '<article class="address new" id="address-id-' + number + '" data-latitude="41.822001" data-longitude="-71.392436">' +
                                 '<input type="checkbox" value="" name="select" id="select_' + number + '">' +
+                                '<span class="mapkey">A.</span>' +
                                 '<div class="content">' +
                                     '<label for="select_' + number + '">' +
                                         '<h3 class="adr">' +
