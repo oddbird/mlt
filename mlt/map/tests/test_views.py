@@ -1,29 +1,75 @@
 import json
+import urllib
 
 from django.core.urlresolvers import reverse
 
 from django_webtest import WebTest
 
-from .utils import create_parcel, create_mpolygon
+import html5lib
+
+from .utils import create_address, create_parcel, create_mpolygon
 
 
 
-__all__ = ["GeoJSONViewTest", "AddAddressViewTest"]
+__all__ = ["AddressesViewTest", "GeoJSONViewTest", "AddAddressViewTest"]
 
 
 
 class AuthenticatedWebTest(WebTest):
+    url_name = None
+
+
     def setUp(self):
         from django.contrib.auth.models import User
         self.user = User.objects.create_user(
             "provplan", "provplan@example.com", "sekritplans")
 
 
-
-class AddAddressViewTest(AuthenticatedWebTest):
     @property
     def url(self):
-        return reverse("map_add_address")
+        return reverse(self.url_name)
+
+
+    def test_login_required(self):
+        response = self.app.get(self.url)
+
+        self.assertEqual(response.status_int, 302)
+
+
+
+class AddressesViewTest(AuthenticatedWebTest):
+    url_name = "map_addresses"
+
+
+    def test_get_addresses(self):
+        for i in range(50):
+            create_address(street_number=str(i+1))
+
+        res = self.app.get(self.url, user=self.user)
+
+        self.assertTrue('data-index="1"' in res.body)
+        self.assertTrue('data-index="20"' in res.body)
+        self.assertFalse('data-index="21"' in res.body)
+
+
+    def test_get_specific_addresses(self):
+        for i in range(50):
+            create_address(street_number=str(i+1))
+
+        res = self.app.get(
+            self.url + "?start=%s&num=%s" % (21, 10),
+            user=self.user)
+
+        self.assertFalse('data-index="1"' in res.body)
+        self.assertFalse('data-index="20"' in res.body)
+        self.assertTrue('data-index="21"' in res.body)
+        self.assertTrue('data-index="30"' in res.body)
+        self.assertFalse('data-index="31"' in res.body)
+
+
+
+class AddAddressViewTest(AuthenticatedWebTest):
+    url_name = "map_add_address"
 
 
     def test_get_form(self):
@@ -64,33 +110,27 @@ class AddAddressViewTest(AuthenticatedWebTest):
 
 
 class GeoJSONViewTest(AuthenticatedWebTest):
+    url_name = "map_geojson"
+
+
     def get(self, **kwargs):
         return self.app.get(
-            reverse("map_geojson", kwargs=kwargs), user=self.user)
-
-
-    def test_login_required(self):
-        response = self.app.get(
-            reverse(
-                "map_geojson", kwargs=dict(
-                    westlat="0.0",
-                    eastlat="3.0",
-                    southlng="4.0",
-                    northlng="7.0",
-                    )))
-
-        self.assertEqual(response.status_int, 302)
-        self.assertEqual(
-            response.headers["location"],
-            "http://localhost:80/account/login/"
-            "?next=/map/geojson/0.0/3.0/4.0/7.0/")
+            self.url + "?" + urllib.urlencode(kwargs),
+            user=self.user)
 
 
     def test_content_type(self):
         response = self.get(
-            westlat="0.0", eastlat="3.0", southlng="4.0", northlng="7.0")
+            westlng="0.0", eastlng="3.0", southlat="4.0", northlat="7.0")
 
         self.assertEqual(response.headers["content-type"], "application/json")
+
+
+    def test_incomplete_input(self):
+        response = self.get(
+            westlng="0.0", eastlng="3.0", southlat="4.0")
+
+        self.assertEqual(json.loads(response.body), {})
 
 
     def test_contains(self):
@@ -103,7 +143,7 @@ class GeoJSONViewTest(AuthenticatedWebTest):
                 [(1.0, 8.0), (1.0, 9.0), (2.0, 9.0), (1.0, 8.0)]))
 
         response = self.get(
-            westlat="0.0", eastlat="3.0", southlng="4.0", northlng="5.5")
+            westlng="0.0", eastlng="3.0", southlat="4.0", northlat="5.5")
 
         self.assertEqual(
             json.loads(response.body),
