@@ -169,16 +169,21 @@
     +gone
   li
     +trailer(.5)
-  [name="multi_units"]
-    +float(left)
-    width: 5%
-    + label
+  .street-number
+    +columns(2,10)
+  .street-name
+    +columns(6,10)
+  .street-type
+    +columns(2,10)
+    +omega(10)
+  .units
+    +columns(2,10)
+    +padding-leader(.25)
+    label
       +back
-      +float(left)
-      width: 15%
-    ~ input
-      +float(right)
-      width: 65%
+  .complex
+    +columns(8,10)
+    +omega(10)
 
 #export-address-form, #import-address-form
   +leader(1)

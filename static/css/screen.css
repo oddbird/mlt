@@ -295,10 +295,10 @@ h1 a:link, h1 a:visited { display: block; }
 
 /* Lightboxes -------------------------------------------------------------- */
 #lightboxes h2 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
-#lightboxes aside { margin: 0; padding: 0; border: 0; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; position: absolute; top: 0; right: 0; bottom: 0; left: 0; display: block; z-index: -1; background: rgba(0, 0, 0, 0.125); -moz-transition-property: opacity, z-index; -webkit-transition-property: opacity, z-index; -o-transition-property: opacity, z-index; transition-property: opacity, z-index; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; }
+#lightboxes aside { margin: 0; padding: 0; border: 0; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; position: absolute; top: 0; right: 0; bottom: 0; left: 0; display: block; z-index: -1; }
 #lightboxes aside:target { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; z-index: 999; }
 #lightboxes aside.active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; z-index: 999; }
-#lightboxes aside > div { -moz-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); -webkit-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); -o-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); position: relative; margin: 3em auto; padding: 1.5em; width: 32em; border: 1em solid; background: white; text-align: left; }
+#lightboxes aside > div { -moz-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); -webkit-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); -o-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); position: relative; margin: 3em auto; padding: 1.618em; width: 42.877em; border: 1em solid; background: white; text-align: left; }
 
 /* Actions ------------------------------------------------------------------- */
 .actionboolian, .actions .addremove, .actions .importexport, .actions .approval { display: inline; float: left; background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, rgba(221, 221, 221, 0.5)), color-stop(100%, rgba(221, 221, 221, 0))); background-image: -webkit-linear-gradient(left, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0)); background-image: -moz-linear-gradient(left, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0)); background-image: -o-linear-gradient(left, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0)); background-image: linear-gradient(left, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0)); width: 4.854em; }
@@ -360,9 +360,12 @@ h1 a:link, h1 a:visited { display: block; }
 
 #add-address-form label { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #add-address-form li { margin-bottom: 0.809em; }
-#add-address-form [name="multi_units"] { display: inline; float: left; width: 5%; }
-#add-address-form [name="multi_units"] + label { position: static; clip: auto; overflow: visible; height: auto; margin: 0; width: auto; display: inline; float: left; width: 15%; }
-#add-address-form [name="multi_units"] ~ input { display: inline; float: right; width: 65%; }
+#add-address-form .street-number { display: inline; float: left; width: 18.367%; margin-right: 2.041%; }
+#add-address-form .street-name { display: inline; float: left; width: 59.184%; margin-right: 2.041%; }
+#add-address-form .street-type { display: inline; float: left; width: 18.367%; margin-right: 2.041%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; }
+#add-address-form .units { display: inline; float: left; width: 18.367%; margin-right: 2.041%; padding-top: 0.405em; }
+#add-address-form .units label { position: static; clip: auto; overflow: visible; height: auto; margin: 0; width: auto; }
+#add-address-form .complex { display: inline; float: left; width: 79.592%; margin-right: 2.041%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; }
 
 #export-address-form, #import-address-form { margin-top: 1.618em; }
 #export-address-form label, #import-address-form label { display: block; }
