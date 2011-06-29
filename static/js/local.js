@@ -271,7 +271,6 @@ var MLT = MLT || {};
                                             '<div class="street-address">27 Fremont St.</div>' +
                                             '<div class="locality">Providence</div>, ' +
                                             '<div class="region">RI</div> ' +
-                                            '<div class="postal-code">02906</div>' +
                                         '</h3>' +
                                     '</label>' +
                                     '<div class="id approved">' +
