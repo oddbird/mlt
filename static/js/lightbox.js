@@ -35,7 +35,7 @@
             });
         });
 
-        closeLinks.click(function() {
+        closeLinks.live('click', function() {
             lightboxClose($(this).parents(boxes));
             return false;
         });

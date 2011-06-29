@@ -33,16 +33,12 @@ var MLT = MLT || {};
                 }
             },
             hideInfo = function() {
-                if (selectedInfo) {
-                    showInfo(selectedInfo, true);
-                } else {
-                    if (!mapinfoHover) {
-                        mapinfoTimeout = setTimeout(
-                            function() {
-                                mapinfo.empty().hide();
-                            },
-                            100);
-                    }
+                if (!mapinfoHover) {
+                    mapinfoTimeout = setTimeout(
+                        function() {
+                            mapinfo.empty().hide();
+                        },
+                        100);
                 }
             },
             geojson_url = $('#mapping').data('parcel-geojson-url'),
@@ -102,19 +98,25 @@ var MLT = MLT || {};
                                         'mouseover',
                                         function(ev) {
                                             if (!selectedInfo) {
-                                                showInfo(info, this.selected);
+                                                showInfo(info, false);
                                             }
                                         });
                                     e.layer.on(
                                         'mouseout',
-                                        function(ev) { hideInfo(); });
+                                        function(ev) {
+                                            if (!selectedInfo) {
+                                                hideInfo();
+                                            }
+                                        });
                                     e.layer.on(
                                         'click',
                                         function(ev) {
                                             if (ev.target.selected) {
                                                 ev.target.unselect();
+                                                showInfo(info, false);
                                             } else {
                                                 ev.target.select();
+                                                showInfo(info, true);
                                             }
                                         });
                                 });
@@ -153,7 +155,10 @@ var MLT = MLT || {};
                     this.popup.setLatLng(new L.LatLng(lat, lng));
                     this.popup.setContent(popupContent);
                     MLT.map.addLayer(this.popup);
-                    MLT.map.setView(new L.LatLng(lat, lng), MIN_PARCEL_ZOOM);
+                    MLT.map.panTo(new L.LatLng(lat, lng));
+                    if (MLT.map.getZoom() < MIN_PARCEL_ZOOM) {
+                        MLT.map.setZoom(MIN_PARCEL_ZOOM);
+                    }
                 }
             } else {
                 if (this.popup) {
@@ -196,6 +201,12 @@ var MLT = MLT || {};
 
         link.click(function() {
             $.get(url, success);
+        });
+
+        $('#lightbox-add-address a[title*="close"]').live('click', function() {
+            if ($('#lightbox-add-address form').length) {
+                $(this).closest('form').get(0).reset();
+            }
         });
     };
 
@@ -277,6 +288,10 @@ var MLT = MLT || {};
         $('#hcard-client-name .email').defuscate();
         $('input[placeholder], textarea[placeholder]').placeholder();
         $('.details:not(html)').html5accordion('.summary');
+        $('#messages').messages({
+            handleAjax: true,
+            closeLink: '.message'
+        });
         addressListHeight();
         addAddressLightbox();
         initializeMap();
@@ -284,7 +299,6 @@ var MLT = MLT || {};
         $('#addresstable .managelist .address .content .details .summary').live('click', function() {
             $(this).blur();
         });
-        $('#messages').messages({handleAjax: true});
         sorting();
         addressList();
     });

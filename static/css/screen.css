@@ -223,17 +223,14 @@ button, input[type="reset"], input[type="submit"], input[type="button"], input[t
 .container, [role="banner"], [role="main"], [role="contentinfo"] { *zoom: 1; width: 100%; min-width: 65em; }
 .container:after, [role="banner"]:after, [role="main"]:after, [role="contentinfo"]:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
-#messages { position: absolute; left: 0; right: 0; -moz-box-shadow: 0px 0px 5px #333333; -webkit-box-shadow: 0px 0px 5px #333333; -o-box-shadow: 0px 0px 5px #333333; box-shadow: 0px 0px 5px #333333; font-weight: 700; z-index: 900; }
-#messages ul { margin: 0; padding: 0; border: 0; list-style: none; }
-#messages ul li { list-style-image: none; list-style-type: none; margin-left: 0px; }
-#messages .message { padding: 1.618em 0; background: rgba(221, 221, 221, 0.95); }
+#messages { margin: 0; padding: 0; border: 0; list-style: none; position: absolute; left: 0; right: 0; -moz-box-shadow: 0px 0px 5px #333333; -webkit-box-shadow: 0px 0px 5px #333333; -o-box-shadow: 0px 0px 5px #333333; box-shadow: 0px 0px 5px #333333; font-weight: 700; z-index: 900; }
+#messages li { list-style-image: none; list-style-type: none; margin-left: 0px; }
+#messages p { margin: 0; }
+#messages .message { font-size: 1.618em; line-height: 1.5em; position: relative; padding: 0.5em 1em; background: rgba(221, 221, 221, 0.95); cursor: pointer; }
+#messages .message:hover::after { position: absolute; right: 1em; top: 0.5em; content: "(dismiss)"; }
 #messages .success { background: rgba(200, 250, 200, 0.95); }
 #messages .warning { background: rgba(250, 250, 200, 0.95); }
 #messages .error { background: rgba(250, 200, 200, 0.95); }
-#messages .content { font-size: 1.618em; line-height: 1em; clear: both; margin-left: 0.685%; margin-right: 0.685%; }
-#messages .dismiss { position: absolute; top: 0; bottom: 0; right: 0; margin: 0; }
-#messages .close { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/x_med.png?1307735152'); background-repeat: no-repeat; background-position: 50% 50%; width: 19px; height: 19px; display: block; padding: 1.618em; }
-#messages .close:focus, #messages .close:hover, #messages .close:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 
 [role="banner"] { overflow: hidden; *zoom: 1; padding-top: 0.405em; padding-bottom: 0.405em; border-color: #dddddd; }
 
@@ -274,6 +271,7 @@ h1 a:link, h1 a:visited { display: block; }
 #filter .suggest:not(:hover) li:first-child a:link, #filter .suggest:not(:hover) li:first-child a:visited { background: #dddddd; }
 #filter .suggest li:last-child a:link, #filter .suggest li:last-child a:visited { border-bottom-color: #949494; }
 #filter .suggest i { display: inline; float: right; padding-left: 1em; font-style: normal; color: #949494; }
+#filter .suggest small { color: #949494; font-size: inherit; line-height: inherit; }
 #filter #filter_input:focus + .suggest { display: block; }
 #filter .visual, #filter .bystatus { position: relative; height: 2.427em; }
 #filter .visual ul, #filter .bystatus ul { display: none; position: absolute; top: 100%; width: 11.326em; background: white; z-index: 900; }
@@ -397,6 +395,7 @@ h1 a:link, h1 a:visited { display: block; }
 .managelist .summary { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/info.png?1306961747'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 19.417px; }
 .managelist .summary:focus, .managelist .summary:hover, .managelist .summary:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .managelist .mapkey { font-size: 1.236em; line-height: 1.309em; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; font-family: "CambridgeRoundCond", "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 500; position: absolute; left: 0; width: 10.256%; color: #4c4c4c; text-align: right; }
+.managelist .mapkey::after { content: "."; }
 .managelist .address { *zoom: 1; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; clear: both; counter-increment: address; position: relative; }
 .managelist .address:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 .managelist .address:hover .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
