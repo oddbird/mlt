@@ -4,140 +4,139 @@ var MLT = MLT || {};
     var MIN_PARCEL_ZOOM = 17;
 
     var initializeMap = function() {
-        if ($('#map').length) {
-            var layer = new L.TileLayer(
-                MLT.tileServerUrl, {attribution: MLT.mapCredits}),
-            map = new L.Map(
-                'map',
-                {
-                    center: new L.LatLng(MLT.mapDefaultLat, MLT.mapDefaultLon),
-                    zoom: MLT.mapDefaultZoom,
-                    layers: [layer],
-                    closePopupOnClick: false
-                }),
-            mapinfoHover = false,
-            mapinfo = $("#mapinfo").hide().hover(
-                function() { mapinfoHover = true; },
-                function() { mapinfoHover = false; hideInfo(); }),
-            mapinfoTimeout = null,
-            showInfo = function(newInfo, selected) {
-                if (mapinfoTimeout) {
-                    clearTimeout(mapinfoTimeout);
-                    mapinfoTimeout = null;
-                }
-                mapinfo.empty().prepend(newInfo).show();
-                if (selected) {
-                    mapinfo.addClass("selected");
-                } else {
-                    mapinfo.removeClass("selected");
-                }
-            },
-            hideInfo = function() {
-                if (!mapinfoHover) {
-                    mapinfoTimeout = setTimeout(
-                        function() {
-                            mapinfo.empty().hide();
-                        },
-                        100);
-                }
-            },
-            geojson_url = $('#mapping').data('parcel-geojson-url'),
-            geojson = new L.GeoJSON(),
-            selectedId = null,
-            selectedInfo = null,
-            selectedLayer = null,
-            refreshParcels = function() {
-                var bounds = map.getBounds(),
-                ne = bounds.getNorthEast(),
-                sw = bounds.getSouthWest();
+        var layer = new L.TileLayer(
+            MLT.tileServerUrl, {attribution: MLT.mapCredits}),
+        map = new L.Map(
+            'map',
+            {
+                center: new L.LatLng(MLT.mapDefaultLat, MLT.mapDefaultLon),
+                zoom: MLT.mapDefaultZoom,
+                layers: [layer],
+                closePopupOnClick: false
+            }),
+        mapinfoHover = false,
+        mapinfo = $("#mapinfo").hide().hover(
+            function() { mapinfoHover = true; },
+            function() {
+                mapinfoHover = false;
+                hideInfo();
+            }
+        ),
+        mapinfoTimeout = null,
+        showInfo = function(newInfo, selected) {
+            if (mapinfoTimeout) {
+                clearTimeout(mapinfoTimeout);
+                mapinfoTimeout = null;
+            }
+            mapinfo.empty().prepend(newInfo).show();
+            if (selected) {
+                mapinfo.addClass("selected");
+            } else {
+                mapinfo.removeClass("selected");
+            }
+        },
+        hideInfo = function() {
+            if (!selectedInfo) {
+                mapinfoTimeout = setTimeout(function() {
+                    if (!mapinfoHover) {
+                        mapinfo.empty().hide();
+                    }
+                }, 100);
+            }
+        },
+        geojson_url = $('#mapping').data('parcel-geojson-url'),
+        geojson = new L.GeoJSON(),
+        selectedId = null,
+        selectedInfo = null,
+        selectedLayer = null,
+        refreshParcels = function() {
+            var bounds = map.getBounds(),
+            ne = bounds.getNorthEast(),
+            sw = bounds.getSouthWest();
 
-                if (map.getZoom() >= MIN_PARCEL_ZOOM) {
-                    $.getJSON(
-                        geojson_url +
-                            "?southlat=" + sw.lat +
-                            "&northlat=" + ne.lat +
-                            "&westlng=" + sw.lng +
-                            "&eastlng=" + ne.lng,
-                        function(data) {
-                            map.removeLayer(geojson);
-                            selectedLayer = null;
-                            geojson = new L.GeoJSON();
+            if (map.getZoom() >= MIN_PARCEL_ZOOM) {
+                $.getJSON(
+                    geojson_url +
+                        "?southlat=" + sw.lat +
+                        "&northlat=" + ne.lat +
+                        "&westlng=" + sw.lng +
+                        "&eastlng=" + ne.lng,
+                    function(data) {
+                        map.removeLayer(geojson);
+                        selectedLayer = null;
+                        geojson = new L.GeoJSON();
 
-                            geojson.on(
-                                'featureparse',
-                                function(e) {
-                                    var info = ich.parcelinfo(e.properties),
-                                    id = e.id;
-                                    e.layer.select = function() {
-                                        if (selectedLayer) {
-                                            selectedLayer.unselect();
-                                        }
-                                        selectedId = id;
-                                        selectedInfo = info;
-                                        selectedLayer = this;
-                                        this.selected = true;
-                                        this.setStyle(
-                                            {color: "red", weight: 5});
-                                    };
-                                    e.layer.unselect = function() {
-                                        if (this.selected) {
-                                            selectedId = null;
-                                            selectedInfo = null;
-                                            selectedLayer = null;
-                                        }
-                                        this.selected = false;
-                                        this.setStyle(
-                                            {color: "blue", weight: 2});
-                                    };
-                                    if (id === selectedId) {
-                                        e.layer.select();
-                                    } else {
-                                        e.layer.unselect();
+                        geojson.on(
+                            'featureparse',
+                            function(e) {
+                                var info = ich.parcelinfo(e.properties),
+                                id = e.id;
+                                e.layer.select = function() {
+                                    if (selectedLayer) {
+                                        selectedLayer.unselect();
                                     }
-                                    e.layer.on(
-                                        'mouseover',
-                                        function(ev) {
-                                            if (!selectedInfo) {
-                                                showInfo(info, false);
-                                            }
-                                        });
-                                    e.layer.on(
-                                        'mouseout',
-                                        function(ev) {
-                                            if (!selectedInfo) {
-                                                hideInfo();
-                                            }
-                                        });
-                                    e.layer.on(
-                                        'click',
-                                        function(ev) {
-                                            if (ev.target.selected) {
-                                                ev.target.unselect();
-                                                showInfo(info, false);
-                                            } else {
-                                                ev.target.select();
-                                                showInfo(info, true);
-                                            }
-                                        });
-                                });
+                                    selectedId = id;
+                                    selectedInfo = info;
+                                    selectedLayer = this;
+                                    this.selected = true;
+                                    this.setStyle(
+                                        {color: "red", weight: 5});
+                                };
+                                e.layer.unselect = function() {
+                                    if (this.selected) {
+                                        selectedId = null;
+                                        selectedInfo = null;
+                                        selectedLayer = null;
+                                    }
+                                    this.selected = false;
+                                    this.setStyle(
+                                        {color: "blue", weight: 2});
+                                };
+                                if (id === selectedId) {
+                                    e.layer.select();
+                                } else {
+                                    e.layer.unselect();
+                                }
+                                e.layer.on(
+                                    'mouseover',
+                                    function(ev) {
+                                        if (!selectedInfo) {
+                                            showInfo(info, false);
+                                        }
+                                    });
+                                e.layer.on(
+                                    'mouseout',
+                                    function(ev) {
+                                        hideInfo();
+                                    });
+                                e.layer.on(
+                                    'click',
+                                    function(ev) {
+                                        if (ev.target.selected) {
+                                            ev.target.unselect();
+                                            showInfo(info, false);
+                                        } else {
+                                            ev.target.select();
+                                            showInfo(info, true);
+                                        }
+                                    });
+                            });
 
-                            geojson.addGeoJSON(data);
-                            map.addLayer(geojson);
-                        });
-                } else {
-                    map.removeLayer(geojson);
-                    mapinfo.hide();
-                };
+                        geojson.addGeoJSON(data);
+                        map.addLayer(geojson);
+                    });
+            } else {
+                map.removeLayer(geojson);
             };
+        };
 
-            map.on(
-                'moveend',
-                function() {
-                    refreshParcels();
-                });
+        map.on(
+            'moveend',
+            function() {
+                refreshParcels();
+            });
 
-            MLT.map = map; // for playing in Firebug
-        }
+        MLT.map = map; // for playing in Firebug
     };
 
     var mapPopups = function() {
@@ -294,7 +293,9 @@ var MLT = MLT || {};
         });
         addressListHeight();
         addAddressLightbox();
-        initializeMap();
+        if ($('#map').length) {
+            initializeMap();
+        }
         mapPopups();
         $('#addresstable .managelist .address .content .details .summary').live('click', function() {
             $(this).blur();
