@@ -49,6 +49,11 @@
       <p class="summary" title="show details">details</p>
       <div class="more">
 
+        {% if address.notes %}
+          {# @@@ contenteditable #}
+          <p class="notes">{{ address.notes }}</p>
+        {% endif %}
+
         {% if address.import_source or address.mapped_by %}
           <div class="byline">
             {% if address.import_source %}
@@ -62,24 +67,19 @@
                 by <cite class="fn">{{ address.imported_by }}</cite>
                 {% endif %}
                 {% if address.import_source and address.import_source != "web-ui" %}
-                from {{ address.import_source }}
+                from <span class="from">{{ address.import_source }}</span>
                 {% endif %}
-                on <time pubdate>{{ address.import_timestamp }}</time>.
+                on <time pubdate>{{ address.import_timestamp }}</time>
               </p>
             {% endif %}
 
             {% if address.parcel %}
               <p class="hcard">
                 Mapped by <cite class="fn">{{ address.mapped_by }}</cite>
-                on <time class="mapped">{{ address.mapped_timestamp }}</time>.
+                on <time class="mapped">{{ address.mapped_timestamp }}</time>
               </p>
             {% endif %}
           </div>
-        {% endif %}
-
-        {% if address.notes %}
-          {# @@@ contenteditable #}
-          <p class="notes">{{ address.notes }}</p>
         {% endif %}
       </div>
     </div>

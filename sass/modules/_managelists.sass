@@ -359,14 +359,15 @@
     margin: 0
 
   .more
-    +padding-leader(.5)
     clear: both
     padding-left: columns(1,8) + gutter(8)
     color: $mid
 
   .byline
+    +padding-leader(.5)
     +trailer(.5)
-    cite, time
+    +italic
+    cite, time, .from
       +demi
       +font-style-normal
       color: $base
