@@ -32,21 +32,21 @@
     </div>
 
     <ul class="controls">
-      <li>
-        {% if address.multi_units %}
-          <button name="complex" type="submit" class="single" value="{{ address.id }}" title="single unit">single unit</button>
-        {% else %}
-          <button name="complex" type="submit" class="multiple" value="{{ address.id }}" title="multiple units">multiple units</button>
-        {% endif %}
-      </li>
       {# @@@ editing: change title and text to 'cancel' #}
       <li><a href="#" title="edit">edit</a></li>
       <li><a href="#{# @@@ link to revision history #}" title="history">history</a></li>
-      <li><button type="submit" name="delete" value="{{ address.id }}">delete</button></li>
+      <li><button type="submit" name="delete" value="{{ address.id }}" title="delete">delete</button></li>
+      <li>
+        {% if address.multi_units %}
+          <button name="complex" type="submit" class="single" value="{{ address.id }}" title="set as single unit">single unit</button>
+        {% else %}
+          <button name="complex" type="submit" class="multiple" value="{{ address.id }}" title="set as multiple units">multiple units</button>
+        {% endif %}
+      </li>
     </ul>
 
     <div class="details">
-      <p class="summary">details</p>
+      <p class="summary" title="show details">details</p>
       <div class="more">
 
         {% if address.import_source or address.mapped_by %}
