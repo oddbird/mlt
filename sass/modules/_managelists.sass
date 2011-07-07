@@ -372,33 +372,12 @@
     .savechanges
       +opacity(1)
 
-=loading
-  0%
-    background-position: 0%
-  100%
-    background-position: 100%
-
-@keyframes loading
-  +loading
-
-@-webkit-keyframes loading
-  +loading
-
 .load
   +demi
   +padding-leader
   +padding-trailer
   +hpadding($gutter-width + columns-width(1))
+  +box-shadow(rgba($base,.5) 0 -1px rhythm(.25) inset)
+  +background-image(linear-gradient(top,rgba($lighter,1),rgba($lighter,0),rgba($base,0),rgba($base,$small)))
   background: rgba($light,.25)
-  p
-    +border-radius(3em)
-    +box-shadow(rgba($base,.5) 0 0 .5em inset)
-    +padding-leader(.25)
-    +padding-trailer(.25)
-    +hpadding(rhythm())
-    +background-size(rhythm(.5))
-    +background-image(linear-gradient(left, rgba($light,0), rgba($light,0) 35%, rgba($light,.5) 45%, rgba($light,.5) 95%, rgba($light,0) 100%))
-    background-color: rgba($light,.5)
-    text-align: center
-    -webkit-animation: loading 20s infinite
-    animation: loading 20s infinite
+  text-align: center
