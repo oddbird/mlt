@@ -39,6 +39,27 @@ class ParcelTest(TestCase):
         self.assertEqual(parcel.longitude, 2.0)
 
 
+    def test_mapped(self):
+        parcel = create_parcel(pl="1234")
+        address1 = create_address(pl="1234", needs_review=False)
+        create_address(pl="12345")
+        address3 = create_address(pl="1234", needs_review=True)
+        parcel2 = create_parcel(pl="4321")
+
+        self.assertEqual(
+            set(parcel.mapped_addresses), set([address1, address3]))
+        self.assertEqual(
+            sorted(parcel.mapped_to),
+            sorted([
+                {"street": address1.street, "needs_review": False},
+                {"street": address3.street, "needs_review": True},
+                ]
+                )
+            )
+        self.assertTrue(parcel.mapped)
+        self.assertFalse(parcel2.mapped)
+
+
 
 class AddressTest(TestCase):
     @property

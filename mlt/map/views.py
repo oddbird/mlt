@@ -66,6 +66,7 @@ def geojson(request):
     qs = Parcel.objects.filter(geom__intersects=wkt)
     source = Django.Django(
         geodjango="geom",
-        properties=["pl", "address", "first_owner", "classcode"])
+        properties=[
+            "pl", "address", "first_owner", "classcode", "mapped", "mapped_to"])
     output = GeoJSON.GeoJSON().encode(source.decode(qs))
     return HttpResponse(output, content_type="application/json")

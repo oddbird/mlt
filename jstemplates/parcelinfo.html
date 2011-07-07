@@ -6,11 +6,13 @@
 <p class="owner">{{ first_owner }}</p>
 
 <section class="mapped-addresses">
+  {{# mapped }}
   <h4>Mapped To:</h4>
   <ul>
-    <li>3635 Van Gordon St.</li>
-    <li class="flagged">1550 Detroit St.</li>
-    <li>2228 Vine St.</li>
+    {{# mapped_to }}
+    <li{{# needs_review }} class="flagged"{{/ needs_review }}>{{ street }}</li>
+    {{/ mapped_to }}
   </ul>
+  {{/ mapped }}
   <button class="mapit">map to selected</button>
 </section>

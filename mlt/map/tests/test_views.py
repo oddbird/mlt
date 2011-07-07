@@ -5,8 +5,6 @@ from django.core.urlresolvers import reverse
 
 from django_webtest import WebTest
 
-import html5lib
-
 from .utils import create_address, create_parcel, create_mpolygon
 
 
@@ -167,7 +165,9 @@ class GeoJSONViewTest(AuthenticatedWebTest):
                             u"first_owner": u"Van Gordon",
                             u"classcode": u"Single Family Residence",
                             u"pl": u"111 22",
-                            u"address": u"3635 Van Gordon St"
+                            u"address": u"3635 Van Gordon St",
+                            u"mapped": False,
+                            u"mapped_to": []
                             }
                         }
                     ]

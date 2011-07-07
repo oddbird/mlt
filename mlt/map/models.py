@@ -28,6 +28,36 @@ class Parcel(models.Model):
         return self.geom.centroid.x
 
 
+    @property
+    def mapped_addresses(self):
+        """
+        QuerySet of Addresses mapped to this Parcel.
+
+        """
+        return Address.objects.filter(pl=self.pl)
+
+
+    @property
+    def mapped_to(self):
+        """
+        List of mapped addresses as dictionaries rather than models.
+
+        """
+        return [
+            {"street": a.street, "needs_review": a.needs_review}
+            for a in self.mapped_addresses
+            ]
+
+
+    @property
+    def mapped(self):
+        """
+        Boolean indicator if this parcel is mapped to any addresses.
+
+        """
+        return bool(self.mapped_addresses)
+
+
 
 class Address(models.Model):
     # unmodified input data
