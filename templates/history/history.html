@@ -2,63 +2,58 @@
 
 {% block content %}
 
-<section id="historytable">
+<section id="history">
   <h2>Revision History</h2>
-  <a href="#" class="revertselected">revert selected changes</a>
-  <a href="#" class="selectall">select all</a>
-  <a href="#" class="selectnone">select none</a>
 
-  {% include "includes/filter.html" %}
+  <form method="POST" id="history-form">
 
-  <form method="POST" class="historytable">
-    <nav class="listordering">
-      <h3 class="navhead">List Ordering</h3>
-      <ul>
-        <li class="byrow">
-          <a href="#">row</a>
-        </li>
-        <li class="bystreet">
-          <a href="#">street</a>
-        </li>
-        <li class="bycity">
-          <a href="#">city</a>
-        </li>
-        <li class="bystate">
-          <a href="#">state</a>
-        </li>
-        <li class="bychangedfield">
-          <a href="#">changed field</a>
-        </li>
-      </ul>
-    </nav>
-
-    <article id="address-history-id" class="details address">
-      <header class="summary">
-        <p class="selected">
-          <input type="checkbox" name="selected" value="">
-        </p>
-        <p class="row">1</p>
-        <p class="street">10 Davol Sq</p>
-        <p class="city">Providence</p>
-        <p class="state">RI</p>
-        <p class="changed_field">property ID</p>
-        <div class="controls">
-          <a href="#" title="revert">revert this change</a>
+    <article id="address-history-id" class="revision">
+      <input type="checkbox" id="select-id" name="select" value="">
+      <label for="select-id">
+        <div class="new">
+          <div class="address">
+            <h3 class="adr">
+              <div class="street-address">10 Davol Sq</div>
+              <span class="locality">Providence</span>,
+              <span class="region">RI</span>
+              <span class="complex-name">[complex name]</span>
+            </h3>
+            <div class="id">
+              <div class="value"><mark>21 222</mark></div>
+              <div class="flag-for-review flagged"><mark>flagged for review</mark></div>
+            </div>
+            <p class="notes">optional notes on this address.</p>
+          </div>
+          <div class="blame hcard">
+            <p>Changed by <cite>username</cite></p>
+            <p>on <time>timestamp</time></p>
+          </div>
         </div>
-      </header>
-      <div class="content">
-        <div class="description">
-          <p class="previous_value">111-222-3333</p>
-          <p class="new_value">444-555-6666</p>
-          <p class="byline hcard">
-            Changed by [username]
-            on <time>[timestamp]</time>
-          </p>
-        </div>
+
+        <section class="old">
+          <div class="address">
+            <h4 class="adr">
+              <div class="street-address">10 Davol Sq</div>
+              <span class="locality">Providence</span>,
+              <span class="region">RI</span>
+              <span class="complex-name">[complex name]</span>
+            </h4>
+            <div class="id">
+              <div class="value"><mark>unmapped</mark></div>
+            </div>
+            <p class="notes">optional notes on this address.</p>
+          </div>
+          <div class="blame hcard">
+            <p>Changed by <cite>username</cite></p>
+            <p>on <time>timestamp</time></p>
+          </div>
+        </section>
+      </label>
+      <div class="controls">
+        <button class="revert">revert this change</button>
+        <a href="#">show all revisions for this address</a>
       </div>
     </article>
-
-    <!-- include "includes/listnav.html" -->
 
   </form>
 </section>
