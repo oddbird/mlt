@@ -394,7 +394,7 @@ h1 a:link, h1 a:visited { display: block; }
 .managelist [name="complex"].single:focus, .managelist [name="complex"].single:hover, .managelist [name="complex"].single:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; background-image: url('../images/ui/house.png?1305749944'); }
 .managelist .summary { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/info.png?1306961747'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 19.417px; }
 .managelist .summary:focus, .managelist .summary:hover, .managelist .summary:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
-.managelist .mapkey { font-size: 1.236em; line-height: 1.309em; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; font-family: "CambridgeRoundCond", "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 500; position: absolute; left: 0; width: 10.256%; color: #4c4c4c; text-align: right; }
+.managelist .mapkey { font-size: 1.618em; line-height: 1em; padding-top: 0.25em; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; font-family: "CambridgeRoundCond", "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 500; position: absolute; left: 0; width: 10.256%; color: #005498; text-align: right; }
 .managelist .mapkey::after { content: "."; }
 .managelist .address { *zoom: 1; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; clear: both; counter-increment: address; position: relative; }
 .managelist .address:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
@@ -404,16 +404,16 @@ h1 a:link, h1 a:visited { display: block; }
 .managelist .address:hover [for^="flag_for_review"] { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; }
 .managelist .address:hover [for^="flag_for_review"]:focus, .managelist .address:hover [for^="flag_for_review"]:hover, .managelist .address:hover [for^="flag_for_review"]:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .managelist .address:hover::before { color: rgba(76, 76, 76, 0.5); }
-.managelist .address::before { font-family: "CambridgeRoundCond", "Helvetica Neue", Helvetica, Arial, sans-serif; content: counter(address, decimal-leading-zero) "."; position: absolute; right: 89.744%; top: 2.023em; color: rgba(76, 76, 76, 0); }
+.managelist .address::before { font-family: "CambridgeRoundCond", "Helvetica Neue", Helvetica, Arial, sans-serif; content: counter(address, decimal-leading-zero) "."; position: absolute; right: 89.744%; top: 2.103em; color: rgba(76, 76, 76, 0); }
 .managelist .content { overflow: hidden; *zoom: 1; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 0.321em; padding-right: 0.809em; border-color: #dddddd; }
 .managelist [id^="select_"] { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 .managelist [id^="select_"]:checked + .content { background-color: rgba(0, 84, 152, 0.146); }
 .managelist [id^="select_"]:checked + .content .street-address::before { color: #005498; }
-.managelist .adr { display: inline; float: left; width: 61.538%; margin-right: 2.564%; padding-left: 12.821%; padding-top: 0.405em; position: relative; color: #949494; font-weight: normal; }
+.managelist .adr { display: inline; float: left; width: 48.718%; margin-right: 2.564%; padding-left: 12.821%; padding-top: 0.405em; position: relative; color: #949494; font-weight: normal; }
 .managelist .street-address { font-weight: 500; color: #4c4c4c; }
-.managelist .locality, .managelist .region, .managelist .postal-code { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; }
-.managelist .locality, .managelist .region, .managelist .postal-code { *display: inline; }
-.managelist .id { display: inline; float: left; width: 23.077%; margin-right: 2.564%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; font-weight: 500; color: orange; text-align: right; }
+.managelist .locality, .managelist .region, .managelist .postal-code, .managelist .complex-name { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; }
+.managelist .locality, .managelist .region, .managelist .postal-code, .managelist .complex-name { *display: inline; }
+.managelist .id { display: inline; float: left; width: 35.897%; margin-right: 2.564%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; padding-top: 0.405em; font-weight: 500; color: orange; text-align: right; }
 .managelist .id .value, .managelist .id [for^="flag_for_review"] { margin-top: 0.405em; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; margin: 0; }
 .managelist .id .value, .managelist .id [for^="flag_for_review"] { *display: inline; }
 .managelist .id.unmapped .value { display: block; color: #984400; }
@@ -427,10 +427,9 @@ h1 a:link, h1 a:visited { display: block; }
 .managelist .controls li { list-style-image: none; list-style-type: none; margin-left: 0px; }
 .managelist .controls li { display: inline; float: left; }
 .managelist .summary { display: inline; float: right; margin: 0; }
-.managelist .more { clear: both; padding-left: 12.821%; color: #949494; }
-.managelist .complex, .managelist .byline { margin-bottom: 0.809em; }
-.managelist .complex .name, .managelist .complex .multiple, .managelist .complex .single { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; }
-.managelist .complex .name, .managelist .complex .multiple, .managelist .complex .single { *display: inline; }
+.managelist .more { padding-top: 0.809em; clear: both; padding-left: 12.821%; color: #949494; }
+.managelist .byline { margin-bottom: 0.809em; }
+.managelist .byline cite, .managelist .byline time { font-weight: 500; font-style: normal; color: #4c4c4c; }
 .managelist .savechanges { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/disk_med.png?1308254127'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 26.417px; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; height: 1.618em; position: absolute; top: 0.405em; right: 89.744%; }
 .managelist .savechanges:focus, .managelist .savechanges:hover, .managelist .savechanges:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .managelist .editing .mapkey { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; }

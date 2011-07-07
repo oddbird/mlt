@@ -13,6 +13,10 @@
         {# @@@ editing: add 'contenteditable' attribute to all these #}
         <div class="locality">{{ address.city }}</div>,
         <div class="region">{{ address.state }}</div>
+        {% if address.complex_name %}
+          {# @@@ contenteditable #}
+          <div class="complex-name">[{{ address.complex_name }}]</div>
+        {% endif %}
       </h3>
     </label>
 
@@ -28,6 +32,13 @@
     </div>
 
     <ul class="controls">
+      <li>
+        {% if address.multi_units %}
+          <button name="complex" type="submit" class="single" value="{{ address.id }}" title="single unit">single unit</button>
+        {% else %}
+          <button name="complex" type="submit" class="multiple" value="{{ address.id }}" title="multiple units">multiple units</button>
+        {% endif %}
+      </li>
       {# @@@ editing: change title and text to 'cancel' #}
       <li><a href="#" title="edit">edit</a></li>
       <li><a href="#{# @@@ link to revision history #}" title="history">history</a></li>
@@ -37,16 +48,6 @@
     <div class="details">
       <p class="summary">details</p>
       <div class="more">
-
-        <div class="complex">
-          {% if address.multi_units %}
-            <button name="complex" type="submit" class="single" value="{{ address.id }}">single unit</button>
-          {% else %}
-            <button name="complex" type="submit" class="multiple" value="{{ address.id }}">multiple units</button>
-          {% endif %}
-          {# @@@ contenteditable #}
-          <p class="name">{{ address.complex_name }}</p>
-        </div>
 
         {% if address.import_source or address.mapped_by %}
           <div class="byline">
@@ -58,19 +59,19 @@
                 Imported
                 {% endif %}
                 {% if address.imported_by %}
-                by <cite class="fn">[{{ address.imported_by }}]</cite>
+                by <cite class="fn">{{ address.imported_by }}</cite>
                 {% endif %}
                 {% if address.import_source and address.import_source != "web-ui" %}
-                from [{{ address.import_source }}]
+                from {{ address.import_source }}
                 {% endif %}
-                on <time pubdate>[{{ address.import_timestamp }}]</time>.
+                on <time pubdate>{{ address.import_timestamp }}</time>.
               </p>
             {% endif %}
 
             {% if address.parcel %}
               <p class="hcard">
                 Mapped by <cite class="fn">{{ address.mapped_by }}</cite>
-                on <time class="mapped">[{{ address.mapped_timestamp }}]</time>.
+                on <time class="mapped">{{ address.mapped_timestamp }}</time>.
               </p>
             {% endif %}
           </div>
