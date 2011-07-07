@@ -253,7 +253,7 @@ var MLT = MLT || {};
         });
     };
 
-    var addressList = function() {
+    var addressListLoading = function() {
         var container = $('#addresstable .managelist'),
         url = container.data('addresses-url'),
         loading = container.find('.load'),
@@ -283,6 +283,17 @@ var MLT = MLT || {};
         });
     };
 
+    var addressDetails = function() {
+        var info = $('#addresstable .managelist [id^="address-id"] .details .summary');
+        info.live('click', function() {
+            if ($(this).closest('.details').hasClass('open')) {
+                $(this).closest('.address').addClass('expanded');
+            } else {
+                $(this).closest('.address').removeClass('expanded');
+            }
+        });
+    };
+
     $(function() {
         $('#hcard-client-name .email').defuscate();
         $('input[placeholder], textarea[placeholder]').placeholder();
@@ -301,7 +312,8 @@ var MLT = MLT || {};
             $(this).blur();
         });
         sorting();
-        addressList();
+        addressListLoading();
+        addressDetails();
     });
 
 })(jQuery);
