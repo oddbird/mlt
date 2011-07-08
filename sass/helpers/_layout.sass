@@ -1,0 +1,15 @@
+=hpadding($l:rhythm(),$r:$l)
+  padding:
+    left: $l
+    right: $r
+
+// Grids ---------------------------------------------------------------------
+
+@function fixed($n)
+  $width: $col-width*$n + $gutter-width*($n - 1)
+  @return $width
+
+=fixed-columns($n)
+  +float(left)
+  width: fixed($n)
+  margin-right: $gutter-width

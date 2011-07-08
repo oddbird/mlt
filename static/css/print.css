@@ -15,6 +15,13 @@
 @font-face { font-family: "CambridgeRoundCond"; src: url('../fonts/cambridgeround_semiboldcondensed_macroman/cambridge_round_semibold_cond-webfont.woff') format('woff'), url('../fonts/cambridgeround_semiboldcondensed_macroman/cambridge_round_semibold_cond-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_semiboldcondensed_macroman/cambridge_round_semibold_cond-webfont.svg#CambridgeRoundBoldCondensed') format('svg'); font-weight: 500; font-style: normal; }
 
 /* ! Web Fonts from fontspring.com  All OpenType features and all extended glyphs have been removed. Fully installable fonts can be purchased at http://www.fontspring.com  The fonts included in this stylesheet are subject to the End User License you purchased from Fontspring. The fonts are protected under domestic and international trademark and copyright law. You are prohibited from modifying, reverse engineering, duplicating, or distributing this font software.  (c) 2010-2011 Fontspring     The fonts included are copyrighted by the vendor listed below.  Vendor:      Aviation Partners License URL: http://www.fontspring.com/fflicense/aviation-partners   */
+/* Lightboxes -------------------------------------------------------------- */
+#lightboxes h2 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
+#lightboxes aside { margin: 0; padding: 0; border: 0; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; position: absolute; top: 0; right: 0; bottom: 0; left: 0; display: block; z-index: -1; }
+#lightboxes aside:target { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; z-index: 999; }
+#lightboxes aside.active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; z-index: 999; }
+#lightboxes aside > div { -moz-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); -webkit-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); -o-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); position: relative; margin: 3em auto; padding: 1.618em; width: 52.236em; border: 1em solid; background: white; text-align: left; }
+
 /* Print Defaults ------------------------------------------------------------ */
 nav { display: none; }
 

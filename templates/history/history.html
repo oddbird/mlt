@@ -8,50 +8,53 @@
   <form method="POST" id="history-form">
 
     <article id="address-history-id" class="revision">
-      <input type="checkbox" id="select-id" name="select" value="">
-      <label for="select-id">
-        <div class="new">
-          <div class="address">
-            <h3 class="adr">
-              <div class="street-address">10 Davol Sq</div>
-              <span class="locality">Providence</span>,
-              <span class="region">RI</span>
-              <span class="complex-name">[complex name]</span>
-            </h3>
-            <div class="id">
-              <div class="value"><mark>21 222</mark></div>
-              <div class="flag-for-review flagged"><mark>flagged for review</mark></div>
-            </div>
-            <p class="notes">optional notes on this address.</p>
-          </div>
-          <div class="blame hcard">
-            <p>Changed by <cite>username</cite></p>
-            <p>on <time>timestamp</time></p>
-          </div>
-        </div>
+      <input type="checkbox" id="select-id" name="select" value="" class="item-select">
 
-        <section class="old">
-          <div class="address">
-            <h4 class="adr">
-              <div class="street-address">10 Davol Sq</div>
-              <span class="locality">Providence</span>,
-              <span class="region">RI</span>
-              <span class="complex-name">[complex name]</span>
-            </h4>
-            <div class="id">
-              <div class="value"><mark>unmapped</mark></div>
+      <div class="content">
+        <label for="select-id">
+          <div class="new">
+            <div class="address">
+              <h3 class="adr">
+                <div class="street-address">10 Davol Sq</div>
+                <span class="locality">Providence</span>,
+                <span class="region">RI</span>
+                <span class="complex-name">[complex name]</span>
+              </h3>
+              <div class="id">
+                <div class="value"><mark>21 222</mark></div>
+                <div class="flag-for-review flagged"><mark>flagged for review</mark></div>
+              </div>
+              <p class="notes">optional notes on this address.</p>
             </div>
-            <p class="notes">optional notes on this address.</p>
+            <div class="blame hcard">
+              <p>Changed by <cite>username</cite></p>
+              <p>on <time>timestamp</time></p>
+            </div>
           </div>
-          <div class="blame hcard">
-            <p>Changed by <cite>username</cite></p>
-            <p>on <time>timestamp</time></p>
-          </div>
-        </section>
-      </label>
-      <div class="controls">
-        <button class="revert">revert this change</button>
-        <a href="#">show all revisions for this address</a>
+
+          <section class="old">
+            <div class="address">
+              <h4 class="adr">
+                <div class="street-address">10 Davol Sq</div>
+                <span class="locality">Providence</span>,
+                <span class="region">RI</span>
+                <span class="complex-name">[complex name]</span>
+              </h4>
+              <div class="id">
+                <div class="value"><mark>unmapped</mark></div>
+              </div>
+              <p class="notes">optional notes on this address.</p>
+            </div>
+            <div class="blame hcard">
+              <p>Changed by <cite>username</cite></p>
+              <p>on <time>timestamp</time></p>
+            </div>
+          </section>
+        </label>
+        <div class="controls">
+          <button class="revert">revert this change</button>
+          <a href="#">show all revisions for this address</a>
+        </div>
       </div>
     </article>
 

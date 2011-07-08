@@ -1,0 +1,193 @@
+/* Actions -------------------------------------------------------------------
+
+.actionboolian
+  +float(left)
+  +background-image(linear-gradient(left,rgba($light,.5),rgba($light,0)))
+  width: rhythm(3)
+  &:hover
+    +background-image(linear-gradient(-25deg,rgba($alt,.125),rgba($alt,.125) 52%,rgba($alt,0) 52%,rgba($alt,0)))
+    background-color: desaturate(lighten($alt,60),30)
+  > *
+    &:nth-child(2n)
+      +float(right)
+
+.iconaction
+  +float(left)
+  height: rhythm(1.5)
+
+.actions
+  +pie-clearfix
+  background-color: rgba($light,$xxsmall)
+  border-bottom: 1px solid $light
+  h3
+    +gone
+  ul
+    +no-style-list
+  button
+    +no-style-button
+
+  .bulkselect
+    +float(left)
+    width: rhythm(1.5)
+    margin: 0
+  [for="select_all_none"]
+    +icon('ui/check.png')
+    height: rhythm(1.5)
+    width: auto
+    background-color: $light
+  [id="select_all_none"]
+    +gone
+    &:checked + [for="select_all_none"]
+      background-color: desaturate(lighten($alt,50),30)
+
+  .bools
+    +clearfix
+    background-color: rgba($light,$xxsmall)
+
+  .addremove
+    @extend .actionboolian
+  .delete_selected
+    @extend .iconaction
+    +icon('ui/trash.png')
+    width: 50%
+  .create
+    @extend .iconaction
+    +icon('ui/add.png')
+    width: 50%
+
+  .importexport
+    @extend .actionboolian
+  [title^="import"]
+    @extend .iconaction
+    +icon('ui/import.png')
+    width: 50%
+  [title^="export"]
+    @extend .iconaction
+    +icon('ui/export.png')
+    width: 50%
+
+  .approval
+    @extend .actionboolian
+  .approve
+    @extend .iconaction
+    +icon('ui/thumb_up.png')
+    width: 50%
+  .flag
+    @extend .iconaction
+    +icon('ui/warning.png')
+    width: 50%
+
+  .listlength
+    +box-sizing(border-box)
+    +float(right)
+    +background-image(linear-gradient(right,rgba($light,.5),rgba($light,0)))
+    margin: 0
+    padding: rhythm(.25)
+    width: rhythm(3)
+    height: rhythm(1.5)
+    text-align: center
+    &::before
+      content: "("
+    &::after
+      content: ")"
+
+// List Ordering -------------------------------------------------------------
+
+.listordering
+  +float(left)
+  position: relative
+  width: rhythm(10)
+  height: rhythm(1.5)
+  h4
+    +gone
+  ul
+    position: absolute
+    left: 0
+    padding: rhythm(.125) 0 rhythm(.5)
+    width: 100%
+  li
+    display: none
+    position: relative
+    &:first-child
+      display: block
+    &:not(.none)
+      +bold
+  &:hover
+    ul
+      +box-shadow($base 0em .25em .25em)
+      background: white
+      z-index: 2
+    li
+      display: block
+  .field
+    #{$link}
+      +adjust-leading-to(1.25)
+      display: block
+      padding-left: rhythm(1)
+      background: no-repeat scroll rhythm(.375)
+    #{$focus}
+      background-image: image-url('ui/x_sm.png')
+  .none
+    &:hover
+      .field
+        #{$link}
+          background-image: image-url('ui/chaos_sm.png')
+      .dir
+        #{$link}
+          background-image: image-url('ui/angle_up.png')
+  .dir
+    #{$link}
+      +stretch-y
+      +replace-text('ui/x_sm.png')
+      +opacity(.5)
+      right: 0
+      display: block
+      width: rhythm(1.5)
+    #{$focus}
+      +replace-text('ui/angle_up.png')
+    &.asc, &.desc
+      #{$link}
+        +demi
+        +opacity(1)
+      #{$focus}
+        +opacity(.5)
+    &.asc
+      #{$link}
+        +replace-text('ui/angle_up.png')
+      #{$focus}
+        +replace-text('ui/angle_down.png')
+    &.desc
+      #{$link}
+        +replace-text('ui/angle_down.png')
+      #{$focus}
+        +replace-text('ui/angle_up.png')
+
+// Lightboxes ----------------------------------------------------------------
+
+#add-address-form
+  label
+    +gone
+  li
+    +trailer(.5)
+  .street-number
+    +columns(2,10)
+  .street-name
+    +columns(6,10)
+  .street-type
+    +columns(2,10)
+    +omega(10)
+  .units
+    +columns(2,10)
+    +padding-leader(.25)
+    label
+      +back
+  .complex
+    +columns(8,10)
+    +omega(10)
+
+#export-address-form, #import-address-form
+  +leader(1)
+  label
+    display: block
+  .form-actions
+    +leader(1)

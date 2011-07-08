@@ -6,6 +6,7 @@
 @import susy
 
 @import settings/fonts
+@import settings/colors
 
 // Settings ------------------------------------------------------------------
 
@@ -15,92 +16,6 @@ $show-column-grid-backgrounds   : true
 $show-baseline-grid-backgrounds : false
 $show-grid-backgrounds          : false
 
-// Colors --------------------------------------------------------------------
+// Helpers -------------------------------------------------------------------
 
-$dark       : #4c4c4c
-$light      : #ddd
-$mid        : mix($dark,$light)
-$mid-light  : mix($dark,$light,25%)
-$mid-dark   : mix($dark,$light,75%)
-
-$base   : $dark
-$alt    : #005498
-$accent : complement($alt)
-
-$lighter : lighten($light,15)
-
-$contrasted-dark-default  : $base
-$contrasted-light-default : $light
-
-$grid-background-baseline-color : rgba(0,0,0,.125)
-$grid-background-column-color   : rgba(120, 120, 225, 0.125)
-$grid-background-gutter-color   : rgba(0, 0, 0, 0)
-
-// ---------------------------------------------------------------------------
-
-  dark        : #{$dark}
-  mid-dark    : #{$mid-dark}
-  mid         : #{$mid}
-  mid-light   : #{$mid-light}
-  light       : #{$light}
-
-  base        : #{$base}
-  alt         : #{$alt}
-  accent      : #{$accent}
-
-// Mixins --------------------------------------------------------------------
-
-=hpadding($l:rhythm(),$r:$l)
-  padding:
-    left: $l
-    right: $r
-
-=gone
-  position: absolute
-  clip: rect(0 0 0 0)
-  overflow: hidden
-  margin: -1px
-  padding: 0
-  height: 1px
-  width: 1px
-  border: 0
-
-=back
-  position: static
-  clip: auto
-  overflow: visible
-  height: auto
-  margin: 0
-  width: auto
-
-=oncall
-  +gone
-  &:active, &:focus
-    +back
-
-@function fixed($n)
-  $width: $col-width*$n + $gutter-width*($n - 1)
-  @return $width
-
-=fixed-columns($n)
-  +float(left)
-  width: fixed($n)
-  margin-right: $gutter-width
-
-=icon($image,$hover:false)
-  +replace-text($image)
-  +opacity(.75)
-  display: block
-  width: image-width($image) + $smallpx
-  #{$focus}
-    +opacity(1)
-    @if $hover
-      background-image: image-url($hover)
-
-=ellipsis($r:1)
-  overflow: hidden
-  max-height: rhythm($r)
-  white-space: nowrap
-  word-wrap: break-word
-  -o-text-overflow: ellipsis
-  text-overflow: ellipsis
+@import helpers/helpers

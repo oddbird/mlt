@@ -1,0 +1,46 @@
+.item-select
+  +gone
+  &:checked
+    + .content
+      background-color: rgba($alt,$xxxsmall)
+      .mapkey
+        color: $accent
+
+.address
+  +pie-clearfix
+  +transition(all,300ms)
+  position: relative
+
+  .content
+    +clearfix
+    +trailing-border(1px,.25)
+    border-color: $light
+
+  .adr
+    +columns(4,8)
+    +prefix(1,8)
+    +padding-leader(.25)
+    position: relative
+    color: $mid
+    font-weight: normal
+
+  .street-address
+    +demi
+    color: $base
+  .locality, .region, .postal-code, .complex-name
+    +inline-block
+
+  .id
+    +columns(3,8)
+    +omega(8)
+    +padding-leader(.25)
+    +demi
+    text-align: right
+    .value, .action-flag
+      +leader(.25)
+      +inline-block
+      margin: 0
+
+    &.unmapped
+      .value
+        display: block

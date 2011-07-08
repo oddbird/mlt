@@ -1,0 +1,32 @@
+// Colors --------------------------------------------------------------------
+
+$dark       : #4c4c4c
+$light      : #ddd
+$mid        : mix($dark,$light)
+$mid-light  : mix($dark,$light,25%)
+$mid-dark   : mix($dark,$light,75%)
+
+$base   : $dark
+$alt    : #005498
+$accent : complement($alt)
+
+$lighter : lighten($light,15)
+
+$contrasted-dark-default  : $base
+$contrasted-light-default : $light
+
+$grid-background-baseline-color : rgba(0,0,0,.125)
+$grid-background-column-color   : rgba(120, 120, 225, 0.125)
+$grid-background-gutter-color   : rgba(0, 0, 0, 0)
+
+// ---------------------------------------------------------------------------
+
+  dark        : #{$dark}
+  mid-dark    : #{$mid-dark}
+  mid         : #{$mid}
+  mid-light   : #{$mid-light}
+  light       : #{$light}
+
+  base        : #{$base}
+  alt         : #{$alt}
+  accent      : #{$accent}

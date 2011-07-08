@@ -1,7 +1,7 @@
 {% load addresslist %}
 
 <article id="address-id-{{ address.id }}" class="address"{% if address.parcel %} data-latitude="{{ address.parcel.latitude }}" data-longitude="{{ address.parcel.longitude }}"{% endif %} data-index="{{ address.index }}">
-  <input type="checkbox" id="select_{{ address.id }}" name="select" value="{{ address.id }}">
+  <input type="checkbox" id="select_{{ address.id }}" name="select" value="{{ address.id }}" class="item-select">
 
   <div class="content"> {# @@@ editing: 'editing' #}
     <span class="mapkey">{{ address.index|letter_key }}</span>
@@ -22,8 +22,8 @@
 
     <div class="id{% if not address.parcel %} unmapped{% else %}{% if not address.needs_review %} approved{% endif %}{% endif %}">
       {% if address.parcel %}
-        <input type="checkbox" name="flag_for_review" value="{{ address.id }}" id="flag_for_review_{{ address.id }}"{% if address.needs_review %} checked="checked"{% endif %}>
-        <label for="flag_for_review_{{ address.id }}">flag for review</label>
+        <input type="checkbox" name="flag_for_review" value="{{ address.id }}" id="flag_for_review_{{ address.id }}"{% if address.needs_review %} checked="checked"{% endif %} class="flag">
+        <label for="flag_for_review_{{ address.id }}" class="action-flag">flag for review</label>
 
         <label for="select_{{ address.id }}" class="value">{{ address.pl }}</label>
       {% else %}
@@ -32,21 +32,21 @@
     </div>
 
     <ul class="controls">
-      {# @@@ editing: change title and text to 'cancel' #}
-      <li><a href="#" title="edit">edit</a></li>
-      <li><a href="#{# @@@ link to revision history #}" title="history">history</a></li>
-      <li><button type="submit" name="delete" value="{{ address.id }}" title="delete">delete</button></li>
+      {# @@@ editing: change class, title and text to '[action-]cancel' #}
+      <li><a href="#" title="edit" class="action-edit">edit</a></li>
+      <li><a href="#{# @@@ link to revision history #}" title="history" class="action-history">history</a></li>
+      <li><button type="submit" name="delete" value="{{ address.id }}" title="delete" class="action-delete">delete</button></li>
       <li>
         {% if address.multi_units %}
-          <button name="complex" type="submit" class="single" value="{{ address.id }}" title="set as single unit">single unit</button>
+          <button name="complex" type="submit" class="action-complex single" value="{{ address.id }}" title="set as single unit">single unit</button>
         {% else %}
-          <button name="complex" type="submit" class="multiple" value="{{ address.id }}" title="set as multiple units">multiple units</button>
+          <button name="complex" type="submit" class="action-complex multiple" value="{{ address.id }}" title="set as multiple units">multiple units</button>
         {% endif %}
       </li>
     </ul>
 
     <div class="details">
-      <p class="summary" title="show details">details</p>
+      <p class="summary action-info" title="show details">details</p>
       <div class="more">
 
         {% if address.notes %}
