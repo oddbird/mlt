@@ -1,12 +1,44 @@
+import json
+
 from django.http import HttpResponse
 from django.shortcuts import render
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 from vectorformats.Formats import Django, GeoJSON
 
 from .forms import AddressForm
 from .models import Parcel, Address
+
+
+
+@login_required
+def associate(request):
+    ret = {}
+
+    parcel = None
+    try:
+        pl = request.POST["pl"]
+        parcel = Parcel.objects.get(pl=pl)
+    except KeyError:
+        messages.error(request, "No PL provided.")
+    except Parcel.DoesNotExist:
+        messages.error(request, "No parcel with PL '%s'" % pl)
+
+    aids = request.POST.getlist("aid")
+    addresses = Address.objects.filter(id__in=aids)
+    if not addresses:
+        messages.error(
+            request, "No addresses with given IDs (%s)" % ", ".join(aids))
+
+    if parcel and addresses:
+        addresses.update(pl=pl)
+        ret["pl"] = pl
+        ret["addresses"] = [
+            {"id": a.id, "needs_review": a.needs_review} for a in addresses]
+
+    return HttpResponse(json.dumps(ret), "application/json")
 
 
 

@@ -9,7 +9,12 @@ from .utils import create_address, create_parcel, create_mpolygon
 
 
 
-__all__ = ["AddressesViewTest", "GeoJSONViewTest", "AddAddressViewTest"]
+__all__ = [
+    "AssociateViewTest",
+    "AddressesViewTest",
+    "GeoJSONViewTest",
+    "AddAddressViewTest"
+    ]
 
 
 
@@ -29,9 +34,152 @@ class AuthenticatedWebTest(WebTest):
 
 
     def test_login_required(self):
+        # clear any previous logged-in session
+        self.app.reset()
+
         response = self.app.get(self.url)
 
         self.assertEqual(response.status_int, 302)
+
+
+
+class AssociateViewTest(AuthenticatedWebTest):
+    url_name = "map_associate"
+
+
+    def setUp(self):
+        super(AssociateViewTest, self).setUp()
+
+        res = self.app.get("/", user=self.user)
+        self.csrftoken = dict(
+            [i.strip() for i in c.split(";")[0].split("=")]
+            for c in res.headers.getall("set-cookie")
+            )["csrftoken"]
+
+
+    def post(self, url, data):
+        data["csrfmiddlewaretoken"] = self.csrftoken
+        return self.app.post(
+            url,
+            urllib.urlencode(data, doseq=True),
+            extra_environ={"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"})
+
+
+    def test_associate_one(self):
+        create_parcel(pl="1234")
+        a = create_address()
+
+        res = self.post(self.url, {"pl": "1234", "aid": a.id})
+
+        self.assertEqual(a.__class__.objects.get(id=a.id).pl, "1234")
+        self.assertEqual(
+            json.loads(res.body),
+            {
+                "pl": "1234",
+                "addresses": [
+                    {"id": a.id, "needs_review": True}
+                    ],
+                "messages": []
+             })
+
+
+    def test_associate_multiple(self):
+        create_parcel(pl="1234")
+        a1 = create_address()
+        a2 = create_address()
+
+        res = self.post(self.url, {"pl": "1234", "aid": [a1.id, a2.id]})
+
+        self.assertEqual(a1.__class__.objects.get(id=a1.id).pl, "1234")
+        self.assertEqual(a2.__class__.objects.get(id=a2.id).pl, "1234")
+        self.assertEqual(
+            json.loads(res.body),
+            {
+                "pl": "1234",
+                "addresses": [
+                    {"id": a1.id, "needs_review": True},
+                    {"id": a2.id, "needs_review": True}
+                    ],
+                "messages": []
+             })
+
+
+    def test_no_such_parcel(self):
+        a = create_address()
+
+        res = self.post(self.url, {"pl": "1234", "aid": a.id})
+
+        self.assertEqual(a.__class__.objects.get(id=a.id).pl, "")
+        self.assertEqual(
+            json.loads(res.body),
+            {
+                "messages": [
+                    {
+                        "level": 40,
+                        "tags": "error",
+                        "message": "No parcel with PL '1234'"
+                        }
+                    ]
+                }
+            )
+
+
+    def test_no_pl(self):
+        a = create_address()
+
+        res = self.post(self.url, {"aid": a.id})
+
+        self.assertEqual(a.__class__.objects.get(id=a.id).pl, "")
+        self.assertEqual(
+            json.loads(res.body),
+            {
+                "messages": [
+                    {
+                        "level": 40,
+                        "tags": "error",
+                        "message": "No PL provided."
+                        }
+                    ]
+                }
+            )
+
+
+    def test_no_addresses(self):
+        create_parcel(pl="1234")
+
+        res = self.post(self.url, {"pl": "1234"})
+
+        self.assertEqual(
+            json.loads(res.body),
+            {
+                "messages": [
+                    {
+                        "level": 40,
+                        "tags": "error",
+                        "message": "No addresses with given IDs ()"
+                        }
+                    ]
+                }
+            )
+
+
+    def test_no_such_addresses(self):
+        create_parcel(pl="1234")
+
+        res = self.post(self.url, {"pl": "1234", "aid": "123"})
+
+        self.assertEqual(
+            json.loads(res.body),
+            {
+                "messages": [
+                    {
+                        "level": 40,
+                        "tags": "error",
+                        "message": "No addresses with given IDs (123)"
+                        }
+                    ]
+                }
+            )
 
 
 
