@@ -23,6 +23,9 @@ Copy settings/local.sample.py to settings/local.py and modify as needed.
 #MAP_DEFAULT_LON = "-71.417713"
 #MAP_DEFAULT_ZOOM = 13
 
+# Set default state for manually-input addresses
+#MLT_DEFAULT_STATE = "RI"
+
 #DEBUG = False
 #TEMPLATE_DEBUG = False
 

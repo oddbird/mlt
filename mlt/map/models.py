@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.contrib.localflavor.us.models import USStateField
 
+from ..core.conf import conf
+
 
 
 class Parcel(models.Model):
@@ -71,7 +73,10 @@ class Address(models.Model):
     street_suffix = models.CharField(max_length=20, blank=True, db_index=True)
     multi_units = models.BooleanField(default=False)
     city = models.CharField(max_length=200, db_index=True)
-    state = USStateField(db_index=True)
+    if conf.MLT_DEFAULT_STATE is not None:
+        state = USStateField(db_index=True, default=conf.MLT_DEFAULT_STATE)
+    else:
+        state = USStateField(db_index=True)
     complex_name = models.CharField(max_length=250, blank=True)
     notes = models.TextField(blank=True)
 
