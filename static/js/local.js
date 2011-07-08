@@ -28,11 +28,18 @@ var MLT = MLT || {};
                 clearTimeout(mapinfoTimeout);
                 mapinfoTimeout = null;
             }
-            mapinfo.empty().prepend(newInfo).show();
+            mapinfo.html(newInfo).show();
             if (selected) {
                 mapinfo.addClass("selected");
+                // Only show `map to selected` button if an address is selected
+                if ($('#addresstable input[id^="select"]:checked').length) {
+                    mapinfo.find('.mapit').show();
+                } else {
+                    mapinfo.find('.mapit').hide();
+                }
             } else {
                 mapinfo.removeClass("selected");
+                mapinfo.find('.mapit').hide();
             }
         },
         hideInfo = function() {
@@ -79,8 +86,10 @@ var MLT = MLT || {};
                                     selectedInfo = info;
                                     selectedLayer = this;
                                     this.selected = true;
-                                    this.setStyle(
-                                        {color: "red", weight: 5});
+                                    this.setStyle({
+                                        color: "red",
+                                        weight: 5
+                                    });
                                 };
                                 e.layer.unselect = function() {
                                     if (this.selected) {
@@ -89,8 +98,10 @@ var MLT = MLT || {};
                                         selectedLayer = null;
                                     }
                                     this.selected = false;
-                                    this.setStyle(
-                                        {color: "blue", weight: 2});
+                                    this.setStyle({
+                                        color: "blue",
+                                        weight: 2
+                                    });
                                 };
                                 if (id === selectedId) {
                                     e.layer.select();
@@ -163,6 +174,12 @@ var MLT = MLT || {};
                 if (this.popup) {
                     MLT.map.removeLayer(this.popup);
                 }
+            }
+            // Only show `map to selected` button if an address is selected
+            if ($(this).is(':checked')) {
+                $('#mapinfo .mapit').show();
+            } else {
+                $('#mapinfo .mapit').hide();
             }
         });
     };
