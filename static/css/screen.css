@@ -378,11 +378,8 @@ h1 a:link, h1 a:visited { display: block; }
 .address .content { overflow: hidden; *zoom: 1; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 0.321em; border-color: #dddddd; }
 .address .adr { display: inline; float: left; width: 48.718%; margin-right: 2.564%; padding-left: 12.821%; padding-top: 0.405em; position: relative; color: #949494; font-weight: normal; }
 .address .street-address { font-weight: 500; color: #4c4c4c; }
-.address .locality, .address .region, .address .postal-code, .address .complex-name { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; }
-.address .locality, .address .region, .address .postal-code, .address .complex-name { *display: inline; }
 .address .id { display: inline; float: left; width: 35.897%; margin-right: 2.564%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; padding-top: 0.405em; font-weight: 500; text-align: right; }
-.address .id .value, .address .id .action-flag { margin-top: 0.405em; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; margin: 0; }
-.address .id .value, .address .id .action-flag { *display: inline; }
+.address .id .value, .address .id .action-flag { margin-top: 0.405em; margin: 0; }
 .address .id.unmapped .value { display: block; }
 
 .actionbutton, .action-delete, .action-complex { margin: 0; padding: 0; border: 0; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; -moz-border-radius: 0; -webkit-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; -khtml-border-radius: 0; border-radius: 0; text-shadow: none; overflow: visible; width: auto; vertical-align: baseline; background: none; color: inherit; font: inherit; text-align: left; }
@@ -428,25 +425,29 @@ h1 a:link, h1 a:visited { display: block; }
 .managelist { overflow: hidden; overflow-y: scroll; overflow-x: hidden; }
 .managelist p, .managelist ul { margin: 0; }
 .managelist .address { clear: both; counter-increment: address; }
+.managelist .address::before { font-family: "CambridgeRoundCond", "Helvetica Neue", Helvetica, Arial, sans-serif; content: counter(address, decimal-leading-zero) "."; position: absolute; right: 89.744%; top: 2.103em; color: rgba(76, 76, 76, 0); }
+.managelist .address .content { padding-right: 0.809em; }
+.managelist .address .locality, .managelist .address .region, .managelist .address .postal-code, .managelist .address .complex-name { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; }
+.managelist .address .locality, .managelist .address .region, .managelist .address .postal-code, .managelist .address .complex-name { *display: inline; }
+.managelist .address .id { color: #005498; }
+.managelist .address .id .value, .managelist .address .id .action-flag { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; }
+.managelist .address .id .value, .managelist .address .id .action-flag { *display: inline; }
+.managelist .address .id.unmapped .value { color: #984400; }
+.managelist .address .controls, .managelist .address .summary { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; -moz-transition-property: opacity; -webkit-transition-property: opacity; -o-transition-property: opacity; transition-property: opacity; -moz-transition-duration: 0.3s; -webkit-transition-duration: 0.3s; -o-transition-duration: 0.3s; transition-duration: 0.3s; }
+.managelist .address .controls { margin: 0; padding: 0; border: 0; list-style: none; display: inline; float: right; }
+.managelist .address .controls li { list-style-image: none; list-style-type: none; margin-left: 0px; }
+.managelist .address .controls li { display: inline; float: left; }
+.managelist .address .summary { display: inline; float: right; margin: 0; }
 .managelist .address:hover .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .managelist .address:hover .summary { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; }
 .managelist .address:hover .summary:focus, .managelist .address:hover .summary:hover, .managelist .address:hover .summary:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .managelist .address:hover .action-flag { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; }
 .managelist .address:hover .action-flag:focus, .managelist .address:hover .action-flag:hover, .managelist .address:hover .action-flag:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .managelist .address:hover::before { color: rgba(76, 76, 76, 0.5); }
-.managelist .address::before { font-family: "CambridgeRoundCond", "Helvetica Neue", Helvetica, Arial, sans-serif; content: counter(address, decimal-leading-zero) "."; position: absolute; right: 89.744%; top: 2.103em; color: rgba(76, 76, 76, 0); }
-.managelist .address .content { padding-right: 0.809em; }
-.managelist .address .id { color: #005498; }
-.managelist .address .id.unmapped .value { color: #984400; }
-.managelist .address .controls, .managelist .address .summary { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; -moz-transition-property: opacity; -webkit-transition-property: opacity; -o-transition-property: opacity; transition-property: opacity; -moz-transition-duration: 0.3s; -webkit-transition-duration: 0.3s; -o-transition-duration: 0.3s; transition-duration: 0.3s; }
 .managelist .address.expanded .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; }
 .managelist .address.expanded .summary { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=25)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=25); opacity: 0.25; }
 .managelist .address.expanded:hover .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .managelist .address.expanded:hover .summary { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; }
-.managelist .address .controls { margin: 0; padding: 0; border: 0; list-style: none; display: inline; float: right; }
-.managelist .address .controls li { list-style-image: none; list-style-type: none; margin-left: 0px; }
-.managelist .address .controls li { display: inline; float: left; }
-.managelist .address .summary { display: inline; float: right; margin: 0; }
 .managelist .address .more { clear: both; padding-left: 12.821%; color: #949494; }
 .managelist .address .byline { padding-top: 0.809em; margin-bottom: 0.809em; font-style: italic; }
 .managelist .address .byline cite, .managelist .address .byline time, .managelist .address .byline .from { font-weight: 500; font-style: normal; color: #4c4c4c; }
@@ -455,6 +456,24 @@ h1 a:link, h1 a:visited { display: block; }
 .managelist .address.editing { background: rgba(246, 246, 119, 0.146); }
 .managelist .address.editing .mapkey { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; }
 .managelist .address.editing .savechanges { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
+
+#history { clear: both; margin-left: 0.685%; margin-right: 0.685%; }
+
+.revisionlist .content { clear: both; padding-left: 3.472%; padding-right: 3.472%; *zoom: 1; }
+.revisionlist .content:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
+.revisionlist .changes { display: inline; float: left; width: 92.537%; margin-right: 0.746%; }
+.revisionlist .new, .revisionlist .old { display: inline; float: left; width: 47.581%; margin-right: 0.806%; }
+.revisionlist .old { display: inline; float: right; margin-right: 0; #margin-left: -0.809em; }
+.revisionlist .blame { display: inline; float: left; width: 32.203%; margin-right: 1.695%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; padding-top: 0.405em; }
+.revisionlist .blame p { margin: 0; }
+.revisionlist .controls { display: inline; float: left; width: 6.716%; margin-right: 0.746%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; }
+.revisionlist .address { display: inline; float: left; width: 66.102%; margin-right: 1.695%; }
+.revisionlist .adr { display: inline; float: left; width: 61.538%; margin-right: 2.564%; padding-left: 0; padding-right: 0; }
+.revisionlist .locality, .revisionlist .region, .revisionlist .postal-code, .revisionlist .complex-name { display: inline; }
+.revisionlist .notes { font-style: italic; clear: both; color: #949494; }
+.revisionlist button { margin: 0; padding: 0; border: 0; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; -moz-border-radius: 0; -webkit-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; -khtml-border-radius: 0; border-radius: 0; text-shadow: none; overflow: visible; width: auto; vertical-align: baseline; background: none; color: inherit; font: inherit; }
+.revisionlist button { *display: inline; }
+.revisionlist .blame { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; padding-left: 0.809em; padding-right: 0.809em; border-left: 1px solid #dddddd; min-height: 4.854em; }
 
 /* Map ----------------------------------------------------------------------- */
 #mapping { position: absolute; top: 0; right: 0; bottom: 0; left: 33.169em; }

@@ -84,6 +84,41 @@
   .address
     clear: both
     counter-increment: address
+
+    &::before
+      +cond
+      content: counter(address, decimal-leading-zero) "."
+      position: absolute
+      right: columns(7,8) + gutter(8)
+      top: rhythm(1.3)
+      color: rgba($base,0)
+
+    .content
+      padding-right: $gutter-width
+
+    .locality, .region, .postal-code, .complex-name
+      +inline-block
+
+    .id
+      color: $alt
+      .value, .action-flag
+        +inline-block
+      &.unmapped
+        .value
+          color: $accent
+
+    .controls, .summary
+      +opacity(0)
+      +transition(opacity,.3s)
+    .controls
+      +no-style-list
+      +float(right)
+      li
+        +float(left)
+    .summary
+      +float(right)
+      margin: 0
+
     &:hover
       .controls
         +opacity(1)
@@ -97,26 +132,6 @@
           +opacity(1)
       &::before
         color: rgba($base,.5)
-    &::before
-      +cond
-      content: counter(address, decimal-leading-zero) "."
-      position: absolute
-      right: columns(7,8) + gutter(8)
-      top: rhythm(1.3)
-      color: rgba($base,0)
-
-    .content
-      padding-right: $gutter-width
-
-    .id
-      color: $alt
-      &.unmapped
-        .value
-          color: $accent
-
-    .controls, .summary
-      +opacity(0)
-      +transition(opacity,.3s)
 
     &.expanded
       .controls
@@ -128,16 +143,6 @@
           +opacity(1)
         .summary
           +opacity(.75)
-
-    .controls
-      +no-style-list
-      +float(right)
-      li
-        +float(left)
-
-    .summary
-      +float(right)
-      margin: 0
 
     .more
       clear: both

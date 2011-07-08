@@ -1,0 +1,45 @@
+#history
+  +full
+
+.revisionlist
+  .content
+    +full(29)
+    +pad(1,1,29)
+    +pie-clearfix
+  .changes
+    +columns(25,27)
+  .new, .old
+    +columns(12,25)
+  .old
+    +omega(25)
+  .blame
+    +columns(4,12)
+    +omega(12)
+    +padding-leader(.25)
+    p
+      margin: 0
+  .controls
+    +columns(2,27)
+    +omega(27)
+
+  .address
+    +columns(8,12)
+  .adr
+    +columns(5,8)
+    +hpadding(0)
+  .locality, .region, .postal-code, .complex-name
+    display: inline
+
+  .notes
+    +italic
+    clear: both
+    color: $mid
+
+  button
+    +button-reset
+
+  .blame
+    +box-sizing('border-box')
+    +hpadding(rhythm(.5))
+    border-left: 1px solid $light
+    min-height: rhythm(3)
