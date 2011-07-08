@@ -12,45 +12,39 @@
 
       <div class="content">
         <label for="select-id" class="changes">
-          <div class="new">
-            <div class="address">
-              <h3 class="adr">
-                <div class="street-address">10 Davol Sq</div>
-                <span class="locality">Providence</span>,
-                <span class="region">RI</span>
-                <span class="complex-name">[complex name]</span>
-              </h3>
-              <div class="id">
-                <div class="value"><mark>21 222</mark></div>
-                <div class="flag-for-review flagged"><mark>flagged for review</mark></div>
-              </div>
-              <p class="notes">optional notes on this address.</p>
-            </div>
-            <div class="blame hcard">
-              <p>Changed by <cite>username</cite></p>
-              <p>on <time>timestamp</time></p>
-            </div>
-          </div>
+          <h3 class="blame hcard">
+            Changed by <cite>username</cite> <br />
+            on <time>timestamp</time>
+          </h3>
 
-          <section class="old">
-            <div class="address">
-              <h4 class="adr">
-                <div class="street-address">10 Davol Sq</div>
-                <span class="locality">Providence</span>,
-                <span class="region">RI</span>
-                <span class="complex-name">[complex name]</span>
-              </h4>
-              <div class="id">
-                <div class="value"><mark>unmapped</mark></div>
-              </div>
-              <p class="notes">optional notes on this address.</p>
+          <section class="new address">
+            <h4 class="adr">
+              <div class="street-address">10 Davol Sq</div>
+              <span class="locality">Providence</span>,
+              <span class="region">RI</span>
+              <span class="complex-name">[complex name]</span>
+            </h4>
+            <div class="id">
+              <div class="value"><mark>21 222</mark></div>
+              <div class="flag-for-review flagged"><mark>flagged for review</mark></div>
             </div>
-            <div class="blame hcard">
-              <p>Changed by <cite>username</cite></p>
-              <p>on <time>timestamp</time></p>
+            <p class="notes">optional notes on this address.</p>
+          </section>
+
+          <section class="old address">
+            <h4 class="adr">
+              <div class="street-address">10 Davol Sq</div>
+              <span class="locality">Providence</span>,
+              <span class="region">RI</span>
+              <span class="complex-name">[complex name]</span>
+            </h4>
+            <div class="id">
+              <div class="value"><mark>unmapped</mark></div>
             </div>
+            <p class="notes">optional notes on this address.</p>
           </section>
         </label>
+
         <div class="controls">
           <button class="action-revert">revert this change</button>
           <a href="#" class="action-history">show all revisions for this address</a>
