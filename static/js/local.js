@@ -261,8 +261,8 @@ var MLT = MLT || {};
         newAddresses = function(data) {
             if ($.trim(data.html)) {
                 var elems = $(data.html);
-                elems.find('.details').html5accordion('.summary');
                 loading.before(elems).css('opacity', 0);
+                elems.find('.details').html5accordion();
             } else {
                 loading.find('p').html('No more addresses');
                 moreAddresses = false;
@@ -297,7 +297,7 @@ var MLT = MLT || {};
     $(function() {
         $('#hcard-client-name .email').defuscate();
         $('input[placeholder], textarea[placeholder]').placeholder();
-        $('.details:not(html)').html5accordion('.summary');
+        $('.details:not(html)').html5accordion();
         $('#messages').messages({
             handleAjax: true,
             closeLink: '.message'
