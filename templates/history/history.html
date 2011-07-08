@@ -7,50 +7,9 @@
 
   <form method="POST" id="history-form" class="revisionlist">
 
-    <article id="address-history-id" class="revision">
-      <input type="checkbox" id="select-id" name="select" value="" class="item-select">
-
-      <div class="content">
-        <label for="select-id" class="changes">
-          <h3 class="blame hcard">
-            Changed by <cite>username</cite> <br />
-            on <time>timestamp</time>
-          </h3>
-
-          <section class="new address">
-            <h4 class="adr">
-              <div class="street-address">10 Davol Sq</div>
-              <span class="locality">Providence</span>,
-              <span class="region">RI</span>
-              <span class="complex-name">[complex name]</span>
-            </h4>
-            <div class="id">
-              <div class="value"><mark>21 222</mark></div>
-              <div class="flag-for-review flagged"><mark>flagged for review</mark></div>
-            </div>
-            <p class="notes">optional notes on this address.</p>
-          </section>
-
-          <section class="old address">
-            <h4 class="adr">
-              <div class="street-address">10 Davol Sq</div>
-              <span class="locality">Providence</span>,
-              <span class="region">RI</span>
-              <span class="complex-name">[complex name]</span>
-            </h4>
-            <div class="id">
-              <div class="value"><mark>unmapped</mark></div>
-            </div>
-            <p class="notes">optional notes on this address.</p>
-          </section>
-        </label>
-
-        <div class="controls">
-          <button class="action-revert" title="revert this change">revert this change</button>
-          <a href="#" class="action-history" title="show all revisions for this address">show all revisions for this address</a>
-        </div>
-      </div>
-    </article>
+    {% include "includes/revision.html" with id="01" %}
+    {% include "includes/revision.html" with id="02" %}
+    {% include "includes/revision.html" with id="03" %}
 
   </form>
 </section>

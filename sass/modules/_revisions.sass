@@ -5,6 +5,18 @@
 .action-history
   +icon('ui/history_med.png')
 
+.complex
+  +float(right)
+  margin: 0
+  width: rhythm(1.5)
+  text-align: right
+  &.single
+    +replace-text('ui/house.png')
+  &.multiple
+    +replace-text('ui/bldg.png')
+  mark
+    display: block
+
 #history
   +full
 
@@ -61,4 +73,12 @@
     margin: 0
     color: $mid
 
-  .blame
+  .id
+    .flag-for-review, .value
+      +inline-block
+    .flag-for-review
+      +replace-text('ui/warning.png')
+      width: rhythm(1.5)
+    mark
+      +hpadding(rhythm(.25))
+      display: block
