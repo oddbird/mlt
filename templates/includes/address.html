@@ -1,6 +1,6 @@
 {% load addresslist %}
 
-<article id="address-id-{{ address.id }}" class="address"{% if address.parcel %} data-latitude="{{ address.parcel.latitude }}" data-longitude="{{ address.parcel.longitude }}"{% endif %} data-index="{{ address.index }}">
+<article id="address-id-{{ address.id }}" class="address"{% if address.parcel %} data-latitude="{{ address.parcel.latitude }}" data-longitude="{{ address.parcel.longitude }}"{% endif %} data-id="{{ address.id }}" data-index="{{ address.index }}">
   <input type="checkbox" id="select_{{ address.id }}" name="select" value="{{ address.id }}" class="item-select">
 
   <div class="content"> {# @@@ editing: 'editing' #}

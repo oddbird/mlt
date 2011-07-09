@@ -1,7 +1,7 @@
 var MLT = MLT || {};
+MLT.MIN_PARCEL_ZOOM = 17;
 
 (function($) {
-    var MIN_PARCEL_ZOOM = 17;
 
     var initializeMap = function() {
         var layer = new L.TileLayer(
@@ -32,7 +32,7 @@ var MLT = MLT || {};
             if (selected) {
                 mapinfo.addClass("selected");
                 // Only show `map to selected` button if an address is selected
-                if ($('#addresstable input[id^="select"]:checked').length) {
+                if ($('#addresstable .address input[id^="select"]:checked').length) {
                     mapinfo.find('.mapit').show();
                 } else {
                     mapinfo.find('.mapit').hide();
@@ -53,15 +53,15 @@ var MLT = MLT || {};
         },
         geojson_url = $('#mapping').data('parcel-geojson-url'),
         geojson = new L.GeoJSON(),
+        selectedLayer = null,
         selectedId = null,
         selectedInfo = null,
-        selectedLayer = null,
         refreshParcels = function() {
             var bounds = map.getBounds(),
             ne = bounds.getNorthEast(),
             sw = bounds.getSouthWest();
 
-            if (map.getZoom() >= MIN_PARCEL_ZOOM) {
+            if (map.getZoom() >= MLT.MIN_PARCEL_ZOOM) {
                 $.getJSON(
                     geojson_url +
                         "?southlat=" + sw.lat +
@@ -82,6 +82,7 @@ var MLT = MLT || {};
                                     if (selectedLayer) {
                                         selectedLayer.unselect();
                                     }
+                                    MLT.selectedProperties = e.properties;
                                     selectedId = id;
                                     selectedInfo = info;
                                     selectedLayer = this;
@@ -147,11 +148,11 @@ var MLT = MLT || {};
                 refreshParcels();
             });
 
-        MLT.map = map; // for playing in Firebug
-    };
+        MLT.map = map;
+    },
 
-    var mapPopups = function() {
-        $('#addresstable .managelist .address input[id^="select_"]').live('click', function() {
+    mapPopups = function() {
+        $('#addresstable .managelist .address input[id^="select"]').live('click', function() {
             var thisAddress = $(this).closest('.address'),
             popupContent = thisAddress.find('.mapkey').html(),
             lat = thisAddress.data('latitude'),
@@ -166,8 +167,8 @@ var MLT = MLT || {};
                     this.popup.setContent(popupContent);
                     MLT.map.addLayer(this.popup);
                     MLT.map.panTo(new L.LatLng(lat, lng));
-                    if (MLT.map.getZoom() < MIN_PARCEL_ZOOM) {
-                        MLT.map.setZoom(MIN_PARCEL_ZOOM);
+                    if (MLT.map.getZoom() < MLT.MIN_PARCEL_ZOOM) {
+                        MLT.map.setZoom(MLT.MIN_PARCEL_ZOOM);
                     }
                 }
             } else {
@@ -182,9 +183,26 @@ var MLT = MLT || {};
                 $('#mapinfo .mapit').hide();
             }
         });
-    };
+    },
 
-    var addressListHeight = function() {
+    addressMapping = function() {
+        var url = $('#mapping').data('associate-url');
+        $('#mapinfo .mapit').live('click', function() {
+            var selectedAddressID = $('#addresstable .address input[id^="select"]:checked').map(function() {
+                return $(this).closest('.address').data('id');
+            }).get(),
+            PL = MLT.selectedProperties.pl;
+            // debugger;
+            $.post(url, {
+                pl: PL,
+                aid: selectedAddressID
+            }, function(data) {
+                alert('success');
+            });
+        });
+    },
+
+    addressListHeight = function() {
         var headerHeight = $('header[role="banner"]').outerHeight(),
             actionsHeight = $('.actions').outerHeight(),
             footerHeight = $('footer[role="contentinfo"]').outerHeight(),
@@ -199,9 +217,9 @@ var MLT = MLT || {};
                 updateHeight();
             });
         });
-    };
+    },
 
-    var addAddressLightbox = function() {
+    addAddressLightbox = function() {
         var link = $('a[href=#lightbox-add-address]'),
         target = $("#lightbox-add-address"),
         url = target.data('add-address-url'),
@@ -246,9 +264,9 @@ var MLT = MLT || {};
                 form.get(0).reset();
             }
         });
-    };
+    },
 
-    var sorting = function() {
+    sorting = function() {
         var list = $('.actions .listordering > ul'),
             item = list.find('li[class^="by"]'),
             field = item.find('.field'),
@@ -290,9 +308,9 @@ var MLT = MLT || {};
                 resetList();
             }
         });
-    };
+    },
 
-    var addressListLoading = function() {
+    addressListLoading = function() {
         var container = $('#addresstable .managelist'),
         url = container.data('addresses-url'),
         loading = container.find('.load'),
@@ -322,9 +340,9 @@ var MLT = MLT || {};
                 }
             });
         });
-    };
+    },
 
-    var addressDetails = function() {
+    addressDetails = function() {
         var info = $('#addresstable .managelist [id^="address-id"] .details .summary');
         info.live('click', function() {
             if ($(this).closest('.details').hasClass('open')) {
@@ -350,6 +368,7 @@ var MLT = MLT || {};
             initializeMap();
         }
         mapPopups();
+        addressMapping();
         $('#addresstable .managelist .address .content .details .summary').live('click', function() {
             $(this).blur();
         });
