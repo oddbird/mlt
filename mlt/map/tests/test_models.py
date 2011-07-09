@@ -148,3 +148,39 @@ class AddressTest(TestCase):
 
         self.assertNotEqual(a, b)
         self.assertEqual(b.input_street, "321 S Little St")
+
+
+    def test_create_dupe(self):
+        create_address(
+            input_street="123 N Main St", city="Rapid City", state="SD")
+
+        b = self.create_from_input(
+            street="123 N Main St", city="Rapid City", state="SD")
+
+
+        self.assertIs(b, None)
+        self.assertEqual(self.model.objects.count(), 1)
+
+
+    def test_create_dupe_different_case(self):
+        create_address(
+            input_street="123 N Main St", city="Rapid City", state="SD")
+
+        b = self.create_from_input(
+            street="123 n main st", city="rapid city", state="sd")
+
+
+        self.assertIs(b, None)
+
+
+    def test_create_dupe_of_parsed(self):
+        create_address(
+            input_street="123  N Main St.",
+            street_number="123", street_name="N Main", street_type="St",
+            city="Rapid City", state="SD")
+
+        b = self.create_from_input(
+            street="123 N Main St", city="Rapid City", state="SD")
+
+
+        self.assertIs(b, None)
