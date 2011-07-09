@@ -62,6 +62,13 @@ class Parcel(models.Model):
 class AddressManager(models.Manager):
     def create_from_input(self, street, city, state,
                           import_timestamp, imported_by, import_source):
+        """
+        Create an address with the given data and return it, unless a duplicate
+        existing address is found; then return None.
+
+        If the data is bad (e.g. unknown state) will raise ValidationError.
+
+        """
         dupe_condition = (
             (
                 models.Q(input_street__iexact=street) |
