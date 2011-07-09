@@ -1,15 +1,46 @@
 import json
 
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 from vectorformats.Formats import Django, GeoJSON
 
-from .forms import AddressForm
+from .forms import AddressForm, AddressImportForm
+from .importer import ImporterError
 from .models import Parcel, Address
+
+
+
+@login_required
+def import_addresses(request):
+    errors = None
+    if request.method == "POST":
+        form = AddressImportForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                count, dupes = form.save(request.user)
+            except ImporterError as e:
+                errors = e.errors
+            else:
+                messages.success(
+                    request,
+                    "Successfully imported %s addresses (%s duplicates)."
+                    % (count, dupes))
+                return redirect("home")
+    else:
+        form = AddressImportForm()
+
+    template_name = "import/form.html"
+    if request.is_ajax():
+        template_name = "import/_form.html"
+
+    return render(
+        request,
+        template_name,
+        {"form": form, "errors": errors})
 
 
 

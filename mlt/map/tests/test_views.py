@@ -2,14 +2,16 @@ import json
 import urllib
 
 from django.core.urlresolvers import reverse
+from django.template.loader import render_to_string
 
 from django_webtest import WebTest
 
-from .utils import create_address, create_parcel, create_mpolygon
+from .utils import create_address, create_parcel, create_mpolygon, create_user
 
 
 
 __all__ = [
+    "ImportViewTest",
     "AssociateViewTest",
     "AddressesViewTest",
     "GeoJSONViewTest",
@@ -23,9 +25,7 @@ class AuthenticatedWebTest(WebTest):
 
 
     def setUp(self):
-        from django.contrib.auth.models import User
-        self.user = User.objects.create_user(
-            "provplan", "provplan@example.com", "sekritplans")
+        self.user = create_user()
 
 
     @property
@@ -40,6 +40,61 @@ class AuthenticatedWebTest(WebTest):
         response = self.app.get(self.url)
 
         self.assertEqual(response.status_int, 302)
+
+
+class ImportViewTest(AuthenticatedWebTest):
+    url_name = "map_import_addresses"
+
+
+    def test_get_form_ajax(self):
+        res = self.app.get(
+            self.url, user=self.user,
+            extra_environ={"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"})
+
+        self.assertTrue("html" in res.json)
+        self.assertTrue("multipart/form-data" in res.json["html"])
+        self.assertEqual(res.templates[0].name, "import/_form.html")
+
+
+    def test_post_form_with_form_errors(self):
+        res = self.app.get(
+            self.url, user=self.user)
+
+        res = res.forms["import-address-form"].submit()
+
+        self.assertEqual(
+            [u.li.text for u in res.html.findAll("ul", "errorlist")],
+            ["This field is required.", "This field is required."])
+
+
+    def test_post_form_with_import_errors(self):
+        res = self.app.get(
+            self.url, user=self.user)
+
+        form = res.forms["import-address-form"]
+        form["source"] = "mysource"
+        form["file"] = ("bad.csv", "Bad, Address, Yo")
+
+        res = form.submit()
+
+        self.assertEqual(
+            res.html.findAll("ul", "errorlist")[0].li.text,
+            "Value &#39;YO&#39; is not a valid choice.")
+
+
+    def test_post_form_with_success(self):
+        res = self.app.get(
+            self.url, user=self.user)
+
+        form = res.forms["import-address-form"]
+        form["source"] = "mysource"
+        form["file"] = ("good.csv", "123 Good St, Providence, RI")
+
+        res = form.submit().follow()
+
+        self.assertEqual(
+            res.html.findAll("li", "success")[0].p.text,
+            "Successfully imported 1 addresses (0 duplicates).")
 
 
 

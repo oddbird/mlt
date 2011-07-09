@@ -1,20 +1,35 @@
 import datetime
+from cStringIO import StringIO
 
 from django.test import TransactionTestCase
 
-from .utils import create_user
+from .utils import create_user, create_address
 
 
 
-__all__ = ["AddressImporterTest"]
+__all__ = ["AddressImporterTest", "CSVAddressImporterTest"]
 
 
 
-class AddressImporterTest(TransactionTestCase):
+class GetImporterMixin(object):
     def setUp(self):
         self.user = create_user()
 
 
+    @property
+    def importer(self):
+        raise NotImplementedError
+
+
+    def get_importer(self):
+        return self.importer(
+            timestamp=datetime.datetime(2011, 7, 8, 1, 2, 3),
+            user=self.user,
+            source="tests")
+
+
+
+class AddressImporterTest(GetImporterMixin, TransactionTestCase):
     @property
     def model(self):
         from mlt.map.models import Address
@@ -27,23 +42,20 @@ class AddressImporterTest(TransactionTestCase):
         return AddressImporter
 
 
-    def get_importer(self):
-        return self.importer(
-            timestamp=datetime.datetime(2011, 7, 8, 1, 2, 3),
-            user=self.user,
-            source="tests")
-
-
     def test_import(self):
         """
         Given an iterable of dictionaries, the process() method saves each
-        dictionary as an address, adding the extra importer metadata.
+        dictionary as an address, adding the extra importer metadata, returning
+        the count of addresses added and the count of dupes.
 
         """
 
         i = self.get_importer()
 
-        errors = i.process(
+        create_address(
+            input_street="3815 Brookside Dr", city="Rapid City", state="SD")
+
+        count, dupes = i.process(
             [
                 {
                     "street": "123 N Main St",
@@ -58,7 +70,8 @@ class AddressImporterTest(TransactionTestCase):
                 ]
             )
 
-        self.assertEqual(errors, [])
+        self.assertEqual(count, 1)
+        self.assertEqual(dupes, 1)
         self.assertEqual(
             set([a.input_street for a in self.model.objects.all()]),
             set(["123 N Main St", "3815 Brookside Dr"])
@@ -76,35 +89,62 @@ class AddressImporterTest(TransactionTestCase):
 
     def test_import_errors(self):
         """
-        Errors, if any, are returned as a list of (row-number, ValidationError)
-        tuples
+        Errors, if any, are raised as an ImporterError whose ``errors``
+        attribute is a list of (row-number, error-dict) tuples.
+
         """
+        from mlt.map.importer import ImporterError
+
         i = self.get_importer()
 
-        errors = i.process(
-            [
-                {
-                    "street": "123 N Main St",
-                    "city": "Rapid City",
-                    "state": "SD"
-                    },
-                {
-                    "street": "3815 Brookside Dr",
-                    "city": "Rapid City",
-                    "state": "NOSUCH"
-                    },
-                {
-                    "street": "3815 Brookside Dr",
-                    "state": "SD"
-                    },
-                ]
-            )
+        with self.assertRaises(ImporterError) as cm:
+            i.process(
+                [
+                    {
+                        "street": "123 N Main St",
+                        "city": "Rapid City",
+                        "state": "SD"
+                        },
+                    {
+                        "street": "3815 Brookside Dr",
+                        "city": "Rapid City",
+                        "state": "NOSUCH"
+                        },
+                    {
+                        "street": "3815 Brookside Dr",
+                        "state": "SD"
+                        },
+                    ]
+                )
 
         self.assertEqual(
-            [(i, e.message_dict) for (i, e) in errors],
+            cm.exception.errors,
             [
                 (2, {"state": [u"Value 'NOSUCH' is not a valid choice."]}),
                 (3, {"city": [u"This field cannot be blank."]})
                 ]
             )
         self.assertEqual(self.model.objects.count(), 0)
+
+
+
+class CSVAddressImporterTest(AddressImporterTest):
+    @property
+    def importer(self):
+        from mlt.map.importer import CSVAddressImporter
+        return CSVAddressImporter
+
+
+    def test_process_file(self):
+        i = self.get_importer()
+
+        fh = StringIO(
+            "123 N Main St, Rapid City, SD\n3815 Brookside, Rapid City, SD")
+
+        count, dupes = i.process_file(fh)
+
+        self.assertEqual(count, 2)
+        self.assertEqual(dupes, 0)
+        self.assertEqual(
+            [a.input_street for a in self.model.objects.all()],
+            ["123 N Main St", "3815 Brookside"])

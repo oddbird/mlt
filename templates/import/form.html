@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Import Addresses | {{ block.super }}{% endblock %}
+
+{% block content %}
+
+{% include "import/_form.html" %}
+
+{% if errors %}
+<section class="import-errors">
+  <h4>The selected file had the following errors:</h4>
+  <ul>
+    {% for lineno, errordict in errors %}
+    <li class="line-errors">
+      <span class="line-number">Input line {{ lineno }}</span>
+      <dl>
+        {% for fieldname, errormsgs in errordict.items %}
+        <dt class="fieldname">{{ fieldname }}</dt>
+        <dd>
+          <ul class="errorlist">
+            {% for msg in errormsgs %}
+            <li>{{ msg }}</li>
+            {% endfor %}
+          </ul>
+        </dd>
+        {% endfor %}
+      </dl>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% endblock %}

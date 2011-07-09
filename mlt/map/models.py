@@ -72,8 +72,18 @@ class AddressManager(models.Manager):
         city = kwargs.get("city", None)
         state = kwargs.get("state", None)
 
+        if state is not None:
+            state = kwargs["state"] = state.upper().strip()
+
+        if street is not None:
+            street = kwargs["input_street"] = street.strip()
+            del kwargs["street"]
+
+        if city is not None:
+            city = kwargs["city"] = city.strip()
+
         if None not in [street, city, state]:
-            dupes  = self.filter(
+            dupes = self.filter(
                 (
                     models.Q(input_street__iexact=street) |
                     models.Q(parsed_street__iexact=street)
@@ -83,13 +93,6 @@ class AddressManager(models.Manager):
                 )
         else:
             dupes = None
-
-        if state is not None:
-            kwargs["state"] = state.upper()
-
-        if street is not None:
-            kwargs["input_street"] = street
-            del kwargs["street"]
 
         if not dupes:
             obj = self.model(**kwargs)

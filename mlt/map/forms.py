@@ -4,6 +4,7 @@ import floppyforms as forms
 
 from ..core.conf import conf
 from ..core.forms import BareTextarea
+from .importer import CSVAddressImporter
 from . import models
 
 
@@ -39,3 +40,18 @@ class AddressForm(forms.ModelForm):
         address.save()
 
         return address
+
+
+
+class AddressImportForm(forms.Form):
+    file = forms.FileField()
+    source = forms.CharField()
+
+
+    def save(self, user):
+        i = CSVAddressImporter(
+            timestamp=datetime.utcnow(),
+            user=user,
+            source=self.cleaned_data["source"])
+
+        return i.process_file(self.cleaned_data["file"])

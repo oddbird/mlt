@@ -2,18 +2,8 @@
   {# includes/add_address/form.html is pulled in via ajax #}
 </aside>
 
-<aside id="lightbox-import-addresses">
-<div>
-  <h3>import addresses</h3>
-  <form id="import-address-form">
-    <label for="import_addresses">select a CSV file to import</label>
-    <input type="file" name="import_addresses" id="import_addresses" value="">
-    <div class="form-actions">
-      <a href="#">cancel</a> or
-      <button title="import addresses" type="submit" name="action-import" value="">import</button>
-    </div>
-  </form>
-</div>
+<aside id="lightbox-import-addresses" data-import-addresses-url="{% url map_import_addresses %}">
+  {# includes/import_addresses/form.html is pulled in via ajax #}
 </aside>
 
 <aside id="lightbox-export-addresses">

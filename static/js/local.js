@@ -227,6 +227,27 @@ var MLT = MLT || {};
         });
     };
 
+
+    var importAddressesLightbox = function() {
+        var link = $('a[href=#lightbox-import-addresses]'),
+        target = $("#lightbox-import-addresses"),
+        url = target.data('import-addresses-url'),
+        success = function(data) {
+            target.html(data.html);
+        };
+
+        link.click(function() {
+            $.get(url, success);
+        });
+
+        target.find('a[title*="close"]').live('click', function() {
+            var form = target.find('form');
+            if (form.length) {
+                form.get(0).reset();
+            }
+        });
+    };
+
     var sorting = function() {
         var list = $('.actions .listordering > ul'),
             item = list.find('li[class^="by"]'),
@@ -324,6 +345,7 @@ var MLT = MLT || {};
         });
         addressListHeight();
         addAddressLightbox();
+        importAddressesLightbox();
         if ($('#map').length) {
             initializeMap();
         }

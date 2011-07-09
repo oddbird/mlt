@@ -1,7 +1,15 @@
+import csv
+
 from django.core.exceptions import ValidationError
 from django.db import transaction
 
 from .models import Address
+
+
+
+class ImporterError(Exception):
+    def __init__(self, errors):
+        self.errors = errors
 
 
 
@@ -17,18 +25,31 @@ class AddressImporter(object):
     @transaction.commit_manually
     def process(self, rows):
         errors = []
+        saved = 0
+        dupes = 0
         for i, r in enumerate(rows):
             data = self.extra_data.copy()
             data.update(r)
             try:
-                Address.objects.create_from_input(**data)
+                res = Address.objects.create_from_input(**data)
+                if res is None:
+                    dupes += 1
+                else:
+                    saved += 1
             except ValidationError as e:
                 # 1-based numbering for rows
-                errors.append((i + 1, e))
+                errors.append((i + 1, e.message_dict))
 
         if errors:
             transaction.rollback()
-        else:
-            transaction.commit()
+            raise ImporterError(errors)
 
-        return errors
+        transaction.commit()
+        return saved, dupes
+
+
+
+class CSVAddressImporter(AddressImporter):
+    def process_file(self, fh):
+        reader = csv.DictReader(fh, fieldnames=["street", "city", "state"])
+        return self.process(reader)
