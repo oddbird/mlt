@@ -61,6 +61,30 @@ class Parcel(models.Model):
 
 
 
+class AddressManager(models.Manager):
+    def create_from_input(self, street, city, state,
+                          import_timestamp, imported_by, import_source):
+        dupe_condition = (
+            (
+                models.Q(input_street__iexact=street) |
+                models.Q(parsed_street__iexact=street)
+                ) &
+            models.Q(city__iexact=city) &
+            models.Q(state__iexact=state)
+            )
+
+        if not self.filter(dupe_condition):
+            obj = self.model(
+                input_street=street, city=city, state=state,
+                import_timestamp=import_timestamp,
+                imported_by=imported_by,
+                import_source=import_source)
+            obj.full_clean()
+            obj.save()
+            return obj
+
+
+
 class Address(models.Model):
     # unmodified input data
     input_street = models.CharField(max_length=200, db_index=True)
@@ -98,6 +122,8 @@ class Address(models.Model):
         User, on_delete=models.PROTECT, related_name="addresses_imported")
     import_timestamp = models.DateTimeField()
     import_source = models.CharField(max_length=100, db_index=True)
+
+    objects = AddressManager()
 
 
     def __unicode__(self):

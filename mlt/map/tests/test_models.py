@@ -1,6 +1,8 @@
+import datetime
+
 from django.test import TestCase
 
-from .utils import create_parcel, create_address, create_mpolygon
+from .utils import create_parcel, create_address, create_mpolygon, create_user
 
 
 
@@ -116,3 +118,33 @@ class AddressTest(TestCase):
         a = create_address(pl="")
 
         self.assertEqual(a.parcel, None)
+
+
+    def import_data(self):
+        try:
+            user = self._import_user
+        except AttributeError:
+            user = self._import_user = create_user()
+
+        return {
+            "import_timestamp": datetime.datetime(2011, 7, 8, 1, 2, 3),
+            "imported_by": user,
+            "import_source": "tests",
+            }
+
+
+    def create_from_input(self, **kwargs):
+        data = self.import_data()
+        data.update(kwargs)
+        return self.model.objects.create_from_input(**data)
+
+
+    def test_create(self):
+        a = create_address(
+            input_street="123 N Main St", city="Rapid City", state="SD")
+
+        b = self.create_from_input(
+            street="321 S Little St", city="Rapid City", state="SD")
+
+        self.assertNotEqual(a, b)
+        self.assertEqual(b.input_street, "321 S Little St")
