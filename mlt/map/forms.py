@@ -2,6 +2,7 @@ from datetime import datetime
 
 import floppyforms as forms
 
+from ..core.conf import conf
 from ..core.forms import BareTextarea
 from . import models
 
@@ -18,6 +19,12 @@ class AddressForm(forms.ModelForm):
         fields = [
             "street_number", "street_name", "street_type",
             "city", "state", "multi_units", "complex_name", "notes"]
+
+
+    def __init__(self, *args, **kwargs):
+        super(AddressForm, self).__init__(*args, **kwargs)
+        if conf.MLT_DEFAULT_STATE is not None:
+            self.fields["state"].initial = conf.MLT_DEFAULT_STATE
 
 
     def save(self, user):

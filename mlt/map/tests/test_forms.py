@@ -4,6 +4,8 @@ from mock import patch
 
 from django.test import TestCase
 
+from .backports import override_settings
+
 
 
 __all__ = ["AddressFormTest"]
@@ -20,6 +22,20 @@ class AddressFormTest(TestCase):
     def create_user(self, username):
         from django.contrib.auth.models import User
         return User.objects.create(username=username)
+
+
+    @override_settings(MLT_DEFAULT_STATE="SD")
+    def test_default_state(self):
+        f = self.form()
+
+        self.assertEqual(f.fields["state"].initial, "SD")
+
+
+    @override_settings(MLT_DEFAULT_STATE=None)
+    def test_no_default_state(self):
+        f = self.form()
+
+        self.assertEqual(f.fields["state"].initial, None)
 
 
     def test_fields(self):
