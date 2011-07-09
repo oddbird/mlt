@@ -1,4 +1,4 @@
 #!/bin/bash
 
-coverage run manage.py test map
+coverage run --branch manage.py test map
 coverage html --include='mlt/map/*.py' --omit='mlt/map/migrations/*','mlt/map/tests/*'
