@@ -73,7 +73,7 @@ class AddressManager(models.Manager):
 
         if not self.filter(dupe_condition):
             obj = self.model(
-                input_street=street, city=city, state=state,
+                input_street=street, city=city, state=state.upper(),
                 import_timestamp=import_timestamp,
                 imported_by=imported_by,
                 import_source=import_source)

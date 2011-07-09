@@ -1,5 +1,6 @@
 import datetime
 
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from .utils import create_parcel, create_address, create_mpolygon, create_user
@@ -184,3 +185,16 @@ class AddressTest(TestCase):
 
 
         self.assertIs(b, None)
+
+
+    def test_create_uppercases_state(self):
+        a = self.create_from_input(
+            street="321 S Little St", city="Rapid City", state="sd")
+
+        self.assertEqual(a.state, "SD")
+
+
+    def test_create_bad_data(self):
+        with self.assertRaises(ValidationError):
+            self.create_from_input(
+                street="123 N Main St", city="Rapid City", state="NOSUCH")
