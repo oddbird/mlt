@@ -210,7 +210,7 @@ var MLT = MLT || {};
             bootstrapForm();
         },
         bootstrapForm = function() {
-            var form = $('#lightbox-add-address form').ajaxForm({
+            var form = target.find('form').ajaxForm({
                 success: success
             });
         };
@@ -219,9 +219,10 @@ var MLT = MLT || {};
             $.get(url, success);
         });
 
-        $('#lightbox-add-address a[title*="close"]').live('click', function() {
-            if ($('#lightbox-add-address form').length) {
-                $(this).closest('form').get(0).reset();
+        target.find('a[title*="close"]').live('click', function() {
+            var form = target.find('form');
+            if (form.length) {
+                form.get(0).reset();
             }
         });
     };
