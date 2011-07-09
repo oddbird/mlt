@@ -192,7 +192,7 @@ MLT.MIN_PARCEL_ZOOM = 17;
                 return $(this).closest('.address').data('id');
             }).get(),
             PL = MLT.selectedProperties.pl;
-            // debugger;
+            debugger;
             $.post(url, {
                 pl: PL,
                 aid: selectedAddressID

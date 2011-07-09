@@ -75,7 +75,7 @@
   {% block extrahead %}{% endblock %}
 </head>
 
-<body id="client-url" class="{% block bodyclasses %}{% endblock %}">
+<body id="client-url" class="{% block bodyclasses %}{% endblock %}" data-login-url="{% url account_login %}">
 {% block body %}
 
 {% include "_messages.html" %}
