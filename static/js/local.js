@@ -288,7 +288,9 @@ var MLT = MLT || {};
         };
 
         // load some addresses to start out with
-        $.get(url, newAddresses);
+        if(url) {
+            $.get(url, newAddresses);
+        }
 
         container.scroll(function() {
             $.doTimeout('scroll', 250, function() {
