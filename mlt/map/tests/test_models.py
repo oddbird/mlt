@@ -198,3 +198,14 @@ class AddressTest(TestCase):
         with self.assertRaises(ValidationError):
             self.create_from_input(
                 street="123 N Main St", city="Rapid City", state="NOSUCH")
+
+
+    def test_create_no_state(self):
+        with self.assertRaises(ValidationError):
+            self.create_from_input(
+                street="123 N Main St", city="Rapid City")
+
+
+    def test_create_no_street(self):
+        with self.assertRaises(ValidationError):
+            self.create_from_input(city="Rapid City", state="SD")

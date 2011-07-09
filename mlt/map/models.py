@@ -60,8 +60,7 @@ class Parcel(models.Model):
 
 
 class AddressManager(models.Manager):
-    def create_from_input(self, street, city, state,
-                          import_timestamp, imported_by, import_source):
+    def create_from_input(self, **kwargs):
         """
         Create an address with the given data and return it, unless a duplicate
         existing address is found; then return None.
@@ -69,21 +68,31 @@ class AddressManager(models.Manager):
         If the data is bad (e.g. unknown state) will raise ValidationError.
 
         """
-        dupe_condition = (
-            (
-                models.Q(input_street__iexact=street) |
-                models.Q(parsed_street__iexact=street)
-                ) &
-            models.Q(city__iexact=city) &
-            models.Q(state__iexact=state)
-            )
+        street = kwargs.get("street", None)
+        city = kwargs.get("city", None)
+        state = kwargs.get("state", None)
 
-        if not self.filter(dupe_condition):
-            obj = self.model(
-                input_street=street, city=city, state=state.upper(),
-                import_timestamp=import_timestamp,
-                imported_by=imported_by,
-                import_source=import_source)
+        if None not in [street, city, state]:
+            dupes  = self.filter(
+                (
+                    models.Q(input_street__iexact=street) |
+                    models.Q(parsed_street__iexact=street)
+                    ) &
+                models.Q(city__iexact=city) &
+                models.Q(state__iexact=state)
+                )
+        else:
+            dupes = None
+
+        if state is not None:
+            kwargs["state"] = state.upper()
+
+        if street is not None:
+            kwargs["input_street"] = street
+            del kwargs["street"]
+
+        if not dupes:
+            obj = self.model(**kwargs)
             obj.full_clean()
             obj.save()
             return obj
