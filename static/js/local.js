@@ -177,7 +177,7 @@ MLT.MIN_PARCEL_ZOOM = 17;
                 }
             }
             // Only show `map to selected` button if an address is selected
-            if ($(this).is(':checked')) {
+            if ($('#addresstable .address input[id^="select"]:checked').length) {
                 $('#mapinfo .mapit').show();
             } else {
                 $('#mapinfo .mapit').hide();
