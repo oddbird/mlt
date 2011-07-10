@@ -1,4 +1,4 @@
-import json
+import json, datetime
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -64,10 +64,10 @@ def associate(request):
             request, "No addresses with given IDs (%s)" % ", ".join(aids))
 
     if parcel and addresses:
-        addresses.update(pl=pl)
+        addresses.update(pl=pl, mapped_by=request.user, mapped_timestamp=datetime.datetime.utcnow())
         ret["pl"] = pl
         ret["addresses"] = [
-            {"id": a.id, "needs_review": a.needs_review} for a in addresses]
+            {"id": a.id, "needs_review": a.needs_review, "mapped_by": str(a.mapped_by), "mapped_timestamp": str(a.mapped_timestamp)} for a in addresses]
 
     return HttpResponse(json.dumps(ret), "application/json")
 
@@ -130,6 +130,6 @@ def geojson(request):
     source = Django.Django(
         geodjango="geom",
         properties=[
-            "pl", "address", "first_owner", "classcode", "mapped", "mapped_to"])
+            "pl", "address", "first_owner", "classcode", "mapped", "mapped_to", "latitude", "longitude"])
     output = GeoJSON.GeoJSON().encode(source.decode(qs))
     return HttpResponse(output, content_type="application/json")

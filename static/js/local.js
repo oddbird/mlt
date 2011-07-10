@@ -191,13 +191,50 @@ MLT.MIN_PARCEL_ZOOM = 17;
             var selectedAddressID = $('#addresstable .address input[id^="select"]:checked').map(function() {
                 return $(this).closest('.address').data('id');
             }).get(),
-            PL = MLT.selectedProperties.pl;
-            debugger;
+            PL = MLT.selectedProperties.pl,
+            lat = MLT.selectedProperties.latitude,
+            lng = MLT.selectedProperties.longitude;
             $.post(url, {
                 pl: PL,
                 aid: selectedAddressID
             }, function(data) {
-                alert('success');
+                var pl = data.pl;
+                $('#mapinfo .mapped-addresses').prepend(ich.mapped_parcel());
+                $.each(data.addresses, function(i, address) {
+                    var id = address.id,
+                    needsReview = address.needs_review,
+                    user = address.mapped_by,
+                    timestamp = address.mapped_timestamp,
+                    thisAddress = $('#addresstable .address[data-id="' + id + '"]'),
+                    street = thisAddress.find('.street-address').html(),
+                    newMapping = ich.mapped_parcel_address({ street: street });
+
+                    thisAddress.find('label.value').html(pl);
+                    thisAddress.data('latitude', lat).data('longitude', lng);
+                    $('#mapinfo .mapped-addresses ul').append(newMapping);
+
+                    if (thisAddress.find('.id').hasClass('unmapped')) {
+                        var flagInput = ich.address_flag_input({ id: id }),
+                        mappedBy = ich.address_mapped_by({
+                            mapped_by: user,
+                            mapped_timestamp: timestamp
+                        });
+                        thisAddress.find('.id').removeClass('unmapped').prepend(flagInput);
+                        thisAddress.find('.byline').append(mappedBy);
+                    } else {
+                        thisAddress.find('.byline .mapped-by').html(user);
+                        thisAddress.find('.byline .mapped').html(timestamp);
+                    }
+
+                    if (needsReview) {
+                        thisAddress.find('.flag').prop('checked', true);
+                        thisAddress.find('.id').removeClass('approved');
+                        $('#mapinfo .mapped-addresses ul li:last-child').addClass('flagged');
+                    } else {
+                        thisAddress.find('.flag').prop('checked', false);
+                        thisAddress.find('.id').addClass('approved');
+                    }
+                });
             });
         });
     },
@@ -243,10 +280,10 @@ MLT.MIN_PARCEL_ZOOM = 17;
                 form.get(0).reset();
             }
         });
-    };
+    },
 
 
-    var importAddressesLightbox = function() {
+    importAddressesLightbox = function() {
         var link = $('a[href=#lightbox-import-addresses]'),
         target = $("#lightbox-import-addresses"),
         url = target.data('import-addresses-url'),

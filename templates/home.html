@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load range %}
+{% load range icanhaz %}
 
 {% block content %}
 <section id="addresstable">
@@ -9,6 +9,9 @@
     {% include "includes/actions.html" %}
 
     <div class="managelist" data-addresses-url="{% url map_addresses %}">
+      {% icanhaz "address_flag_input" %}
+      {% icanhaz "address_mapped_by" %}
+
       {# addresses ajax-loaded from includes/address.html #}
 
       <aside class="load">
@@ -22,7 +25,10 @@
 <aside id="mapping" data-parcel-geojson-url="{% url map_geojson %}" data-associate-url="{% url map_associate %}">
   <h2>Parcel Map</h2>
   <div id="map"></div>
-  <div id="mapinfo"></div>
+  <div id="mapinfo">
+    {% icanhaz "mapped_parcel" %}
+    {% icanhaz "mapped_parcel_address" %}
+  </div>
 </aside>
 
 {% endblock content %}
