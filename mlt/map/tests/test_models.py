@@ -52,13 +52,7 @@ class ParcelTest(TestCase):
         self.assertEqual(
             set(parcel.mapped_addresses), set([address1, address3]))
         self.assertEqual(
-            sorted(parcel.mapped_to),
-            sorted([
-                {"street": address1.street, "needs_review": False},
-                {"street": address3.street, "needs_review": True},
-                ]
-                )
-            )
+            set([a["pl"] for a in parcel.mapped_to]), set(["1234"]))
         self.assertTrue(parcel.mapped)
         self.assertFalse(parcel2.mapped)
 

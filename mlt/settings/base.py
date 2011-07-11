@@ -99,7 +99,7 @@ TEMPLATE_DIRS = [
     join(BASE_PATH, "templates"),
 ]
 
-DATE_FORMAT = "m/d/Y"
+DATETIME_FORMAT = r"N j, Y \a\t P"
 
 INSTALLED_APPS = [
     "django.contrib.auth",

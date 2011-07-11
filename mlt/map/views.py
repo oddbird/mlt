@@ -11,6 +11,7 @@ from vectorformats.Formats import Django, GeoJSON
 from .forms import AddressForm, AddressImportForm
 from .importer import ImporterError
 from .models import Parcel, Address
+from . import serializers
 
 
 
@@ -129,7 +130,6 @@ def geojson(request):
     qs = Parcel.objects.filter(geom__intersects=wkt)
     source = Django.Django(
         geodjango="geom",
-        properties=[
-            "pl", "address", "first_owner", "classcode", "mapped", "mapped_to", "latitude", "longitude"])
+        properties=serializers.ParcelSerializer.default_fields + ["mapped_to"])
     output = GeoJSON.GeoJSON().encode(source.decode(qs))
     return HttpResponse(output, content_type="application/json")
