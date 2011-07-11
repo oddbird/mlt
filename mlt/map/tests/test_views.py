@@ -247,9 +247,8 @@ class AddressesViewTest(AuthenticatedWebTest):
 
         res = self.app.get(self.url, user=self.user)
 
-        self.assertTrue('data-index="1"' in res.body)
-        self.assertTrue('data-index="20"' in res.body)
-        self.assertFalse('data-index="21"' in res.body)
+        self.assertEqual(
+            [a["index"] for a in res.json["addresses"]], range(1, 21))
 
 
     def test_get_specific_addresses(self):
@@ -260,11 +259,8 @@ class AddressesViewTest(AuthenticatedWebTest):
             self.url + "?start=%s&num=%s" % (21, 10),
             user=self.user)
 
-        self.assertFalse('data-index="1"' in res.body)
-        self.assertFalse('data-index="20"' in res.body)
-        self.assertTrue('data-index="21"' in res.body)
-        self.assertTrue('data-index="30"' in res.body)
-        self.assertFalse('data-index="31"' in res.body)
+        self.assertEqual(
+            [a["index"] for a in res.json["addresses"]], range(21, 31))
 
 
 

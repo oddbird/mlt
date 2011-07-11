@@ -87,15 +87,13 @@ def addresses(request):
         num = 20
 
     # @@@ indexing might break if addresses have been added/deleted?
-    def _address_generator():
-        for i, address in enumerate(Address.objects.all()[start-1:start+num-1]):
-            address.index = i + start
-            yield address
+    ret = []
+    for i, address in enumerate(Address.objects.all()[start-1:start+num-1]):
+        address.index = i + start
+        ret.append(address)
 
-    return render(
-        request,
-        "includes/addresses.html",
-        {"addresses": _address_generator()})
+    return json_response(
+        {"addresses": serializers.AddressSerializer(extra=["index"]).many(ret)})
 
 
 
