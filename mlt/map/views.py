@@ -12,6 +12,7 @@ from .encoder import IterEncoder
 from .forms import AddressForm, AddressImportForm
 from .importer import ImporterError
 from .models import Parcel, Address
+from .utils import letter_key
 from . import serializers
 
 
@@ -75,6 +76,15 @@ def associate(request):
 
 
 
+class IndexedAddressSerializer(serializers.AddressSerializer):
+    default_fields = serializers.AddressSerializer.default_fields + ["index"]
+
+
+    def encode_index(self, val):
+        return letter_key(val)
+
+
+
 @login_required
 def addresses(request):
     try:
@@ -94,8 +104,8 @@ def addresses(request):
 
     return json_response(
         {
-            "addresses": serializers.AddressSerializer(
-                extra=["index", "parcel"]).many(ret)
+            "addresses": IndexedAddressSerializer(
+                extra=["parcel"]).many(ret)
             }
         )
 

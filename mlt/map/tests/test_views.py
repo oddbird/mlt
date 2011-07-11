@@ -247,8 +247,11 @@ class AddressesViewTest(AuthenticatedWebTest):
 
         res = self.app.get(self.url, user=self.user)
 
+        from mlt.map.utils import letter_key
+
         self.assertEqual(
-            [a["index"] for a in res.json["addresses"]], range(1, 21))
+            [a["index"] for a in res.json["addresses"]],
+            [letter_key(i) for i in range(1, 21)])
 
 
     def test_get_specific_addresses(self):
@@ -259,8 +262,11 @@ class AddressesViewTest(AuthenticatedWebTest):
             self.url + "?start=%s&num=%s" % (21, 10),
             user=self.user)
 
+        from mlt.map.utils import letter_key
+
         self.assertEqual(
-            [a["index"] for a in res.json["addresses"]], range(21, 31))
+            [a["index"] for a in res.json["addresses"]],
+            [letter_key(i) for i in range(21, 31)])
 
 
 

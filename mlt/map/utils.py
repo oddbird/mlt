@@ -1,11 +1,3 @@
-from django import template
-
-
-
-register = template.Library()
-
-
-
 def letter(index):
     """
     Convert a number from 1 to 26 into a capital letter A-Z.
@@ -14,7 +6,6 @@ def letter(index):
 
 
 
-@register.filter
 def letter_key(index):
     """
     Convert a number to its equivalent in a base-26 alphabetic enumeration:
