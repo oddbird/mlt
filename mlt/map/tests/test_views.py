@@ -396,7 +396,9 @@ class GeoJSONViewTest(AuthenticatedWebTest):
                             u"pl": u"111 22",
                             u"address": u"3635 Van Gordon St",
                             u"mapped": False,
-                            u"mapped_to": []
+                            u"mapped_to": [],
+                            u"latitude": 5.5,
+                            u"longitude": 1.5,
                             }
                         }
                     ]
