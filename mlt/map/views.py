@@ -93,7 +93,11 @@ def addresses(request):
         ret.append(address)
 
     return json_response(
-        {"addresses": serializers.AddressSerializer(extra=["index"]).many(ret)})
+        {
+            "addresses": serializers.AddressSerializer(
+                extra=["index", "parcel"]).many(ret)
+            }
+        )
 
 
 
