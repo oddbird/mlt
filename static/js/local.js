@@ -351,6 +351,7 @@ MLT.MIN_PARCEL_ZOOM = 17;
         url = container.data('addresses-url'),
         loading = container.find('.load'),
         moreAddresses = true,
+        currentlyLoading,
         newAddresses = function(data) {
             if (data.addresses.length) {
                 $.each(data.addresses, function(i, address) {
@@ -392,18 +393,21 @@ MLT.MIN_PARCEL_ZOOM = 17;
                 loading.find('p').html('No more addresses');
                 moreAddresses = false;
             }
+            currentlyLoading = false;
         };
 
         // load some addresses to start out with
         if(url) {
+            currentlyLoading = true;
             $.get(url, newAddresses);
         }
 
         container.scroll(function() {
-            $.doTimeout('scroll', 250, function() {
-                if ((container.get(0).scrollHeight - container.scrollTop() - container.outerHeight()) <= loading.outerHeight() && moreAddresses) {
+            $.doTimeout('scroll', 150, function() {
+                if ((container.get(0).scrollHeight - container.scrollTop() - container.outerHeight()) <= loading.outerHeight() && moreAddresses && !currentlyLoading) {
                     var count = container.find('.address').length + 1;
                     loading.animate({opacity: 1}, 'fast');
+                    currentlyLoading = true;
                     $.get(url + '?start=' + count, newAddresses);
                 }
             });
