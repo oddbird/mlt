@@ -2,7 +2,7 @@ import json
 import urllib
 
 from django.core.urlresolvers import reverse
-from django.template.loader import render_to_string
+from django.utils.formats import date_format
 
 from django_webtest import WebTest
 
@@ -126,15 +126,22 @@ class AssociateViewTest(AuthenticatedWebTest):
 
         res = self.post(self.url, {"pl": "1234", "aid": a.id})
 
-        self.assertEqual(a.__class__.objects.get(id=a.id).pl, "1234")
+        a = a.__class__.objects.get(id=a.id)
+        self.assertEqual(a.pl, "1234")
         self.assertEqual(
             json.loads(res.body),
             {
-                "pl": "1234",
-                "addresses": [
-                    {"id": a.id, "needs_review": True}
+                u"pl": u"1234",
+                u"addresses": [
+                    {
+                        u"id": int(a.id),
+                        u"mapped_by": unicode(self.user.username),
+                        u"mapped_timestamp": date_format(
+                            a.mapped_timestamp, "DATETIME_FORMAT"),
+                        u"needs_review": True,
+                        }
                     ],
-                "messages": []
+                u"messages": []
              })
 
 
@@ -145,17 +152,31 @@ class AssociateViewTest(AuthenticatedWebTest):
 
         res = self.post(self.url, {"pl": "1234", "aid": [a1.id, a2.id]})
 
-        self.assertEqual(a1.__class__.objects.get(id=a1.id).pl, "1234")
-        self.assertEqual(a2.__class__.objects.get(id=a2.id).pl, "1234")
+        a1 = a1.__class__.objects.get(id=a1.id)
+        a2 = a2.__class__.objects.get(id=a2.id)
+        self.assertEqual(a1.pl, "1234")
+        self.assertEqual(a2.pl, "1234")
         self.assertEqual(
             json.loads(res.body),
             {
-                "pl": "1234",
-                "addresses": [
-                    {"id": a1.id, "needs_review": True},
-                    {"id": a2.id, "needs_review": True}
+                u"pl": u"1234",
+                u"addresses": [
+                    {
+                        u"id": int(a1.id),
+                        u"mapped_by": unicode(self.user.username),
+                        u"mapped_timestamp": date_format(
+                            a1.mapped_timestamp, "DATETIME_FORMAT"),
+                        "needs_review": True,
+                        },
+                    {
+                        u"id": int(a2.id),
+                        u"mapped_by": unicode(self.user.username),
+                        u"mapped_timestamp": date_format(
+                            a2.mapped_timestamp, "DATETIME_FORMAT"),
+                        "needs_review": True,
+                        }
                     ],
-                "messages": []
+                u"messages": []
              })
 
 
@@ -338,7 +359,7 @@ class GeoJSONViewTest(AuthenticatedWebTest):
         self.maxDiff = None
         p = create_parcel(
             geom=create_mpolygon(
-                [(1.0, 5.0), (1.0, 6.0), (2.0, 6.0), (1.0, 5.0)]))
+                [(1.0, 5.0), (1.0, 6.0), (2.0, 6.0), (2.0, 5.0), (1.0, 5.0)]))
         create_parcel(
             geom=create_mpolygon(
                 [(1.0, 8.0), (1.0, 9.0), (2.0, 9.0), (1.0, 8.0)]))
@@ -359,12 +380,15 @@ class GeoJSONViewTest(AuthenticatedWebTest):
                                         [1.0, 5.0],
                                         [1.0, 6.0],
                                         [2.0, 6.0],
-                                        [1.0, 5.0]
+                                        [2.0, 5.0],
+                                        [1.0, 5.0],
                                         ]]]
                             },
                         u"type": u"Feature",
-                        u"id": p.id,
+                        u"id": int(p.id),
                         u"properties": {
+                            u"latitude": 5.5,
+                            u"longitude": 1.5,
                             u"first_owner": u"Van Gordon",
                             u"classcode": u"Single Family Residence",
                             u"pl": u"111 22",
