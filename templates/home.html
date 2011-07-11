@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load range %}
+{% load range icanhaz %}
 
 {% block content %}
 <section id="addresstable">
@@ -9,7 +9,7 @@
     {% include "includes/actions.html" %}
 
     <div class="managelist" data-addresses-url="{% url map_addresses %}">
-      {# addresses ajax-loaded from includes/address.html #}
+      {% icanhaz "address" %}
 
       <aside class="load">
         <p>loading addresses...</p>
