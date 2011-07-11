@@ -282,7 +282,6 @@ MLT.MIN_PARCEL_ZOOM = 17;
         });
     },
 
-
     importAddressesLightbox = function() {
         var link = $('a[href=#lightbox-import-addresses]'),
         target = $("#lightbox-import-addresses"),
@@ -353,10 +352,42 @@ MLT.MIN_PARCEL_ZOOM = 17;
         loading = container.find('.load'),
         moreAddresses = true,
         newAddresses = function(data) {
-            if ($.trim(data.html)) {
-                var elems = $(data.html);
-                loading.before(elems).css('opacity', 0);
-                elems.find('.details').html5accordion();
+            if (data.addresses) {
+                $.each(data.addresses, function(i, address) {
+                    var byline, web_ui, lat, lng;
+
+                    if (address.parcel) {
+                        lat = address.parcel.latitude,
+                        lng = address.parcel.longitude;
+                    }
+                    if (address.import_source || address.mapped_by) { byline = true; }
+                    if (address.import_source === 'web-ui') { web_ui = true; }
+
+                    var addressHTML = ich.address({
+                        id: address.id,
+                        pl: address.pl,
+                        latitude: lat,
+                        longitude: lng,
+                        index: address.index,
+                        street: address.street,
+                        city: address.city,
+                        state: address.state,
+                        complex_name: address.complex_name,
+                        needs_review: address.needs_review,
+                        multi_units: address.multi_units,
+                        notes: address.notes,
+                        byline: byline,
+                        import_source: address.import_source,
+                        web_ui: web_ui,
+                        imported_by: address.imported_by,
+                        import_timestamp: address.import_timestamp,
+                        mapped_by: address.mapped_by,
+                        mapped_timestamp: address.mapped_timestamp
+                    });
+
+                    loading.before(addressHTML).css('opacity', 0);
+                    addressHTML.find('.details').html5accordion();
+                });
             } else {
                 loading.find('p').html('No more addresses');
                 moreAddresses = false;

@@ -9,7 +9,7 @@ __all__ = ["LetterKeyTest"]
 class LetterKeyTest(TestCase):
     @property
     def func(self):
-        from mlt.map.templatetags.addresslist import letter_key
+        from mlt.map.utils import letter_key
         return letter_key
 
 

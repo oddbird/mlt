@@ -1,0 +1,93 @@
+<article id="address-id-{{ id }}" class="address"{{# pl }} data-latitude="{{ latitude }}" data-longitude="{{ longitude }}"{{/ pl }}>
+  <input type="checkbox" id="select_{{ id }}" name="select" value="{{ id }}" class="item-select">
+
+  <div class="content"> {{! @@@ editing: 'editing' }}
+    <span class="mapkey">{{ index }}</span>
+    {{! @@@ editing: remove label wrapper }}
+    <label for="select_{{ id }}">
+      <h3 class="adr">
+        {{! @@@ editing: split into component parts with 'contenteditable' }}
+        <div class="street-address">{{ street }}</div>
+        {{! @@@ editing: add 'contenteditable' attribute to all these }}
+        <div class="locality">{{ city }}</div>,
+        <div class="region">{{ state }}</div>
+        {{# complex_name }}
+          {{! @@@ contenteditable }}
+          <div class="complex-name">[{{ complex_name }}]</div>
+        {{/ complex_name }}
+      </h3>
+    </label>
+
+    <div class="id{{^ pl }} unmapped{{/ pl }}{{# pl }}{{^ needs_review }} approved{{/ needs_review }}{{/ pl }}">
+      {{# pl }}
+        <input type="checkbox" name="flag_for_review" value="{{ id }}" id="flag_for_review_{{ id }}"{{# needs_review }} checked="checked"{{/ needs_review }} class="flag">
+        <label for="flag_for_review_{{ id }}" class="action-flag">flag for review</label>
+
+        <label for="select_{{ id }}" class="value">{{ pl }}</label>
+      {{/ pl }}
+      {{^ pl }}
+        <label for="select_{{ id }}" class="value">not mapped</label>
+      {{/ pl }}
+    </div>
+
+    <ul class="controls">
+      {{! @@@ editing: change class, title and text to '[action-]cancel' }}
+      <li><a href="#" title="edit" class="action-edit">edit</a></li>
+      <li><a href="#{{! @@@ link to revision history }}" title="history" class="action-history">history</a></li>
+      <li><button type="submit" name="delete" value="{{ id }}" title="delete" class="action-delete">delete</button></li>
+      <li>
+        {{# multi_units }}
+          <button name="complex" type="submit" class="action-complex single" value="{{ id }}" title="set as single unit">single unit</button>
+        {{/ multi_units }}
+        {{^ multi_units }}
+          <button name="complex" type="submit" class="action-complex multiple" value="{{ id }}" title="set as multiple units">multiple units</button>
+        {{/ multi_units }}
+      </li>
+    </ul>
+
+    <div class="details">
+      <p class="summary action-info" title="show details">details</p>
+      <div class="more">
+
+        {{# notes }}
+          {{! @@@ contenteditable }}
+          <p class="notes">{{ notes }}</p>
+        {{/ notes }}
+
+        {{# byline }}
+          <div class="byline">
+            {{# import_source }}
+              <p class="hcard">
+                {{# web_ui }}
+                Created
+                {{/ web_ui }}
+                {{^ web_ui }}
+                Imported
+                {{/ web_ui }}
+                {{# imported_by }}
+                by <cite class="fn">{{ imported_by }}</cite>
+                {{/ imported_by }}
+                {{^ web_ui }}
+                from <span class="from">{{ import_source }}</span>
+                {{/ web_ui }}
+                {{# import_timestamp }}
+                on <time pubdate>{{ import_timestamp }}</time>
+                {{/ import_timestamp }}
+              </p>
+            {{/ import_source }}
+
+            {{# pl }}
+              <p class="hcard">
+                Mapped by <cite class="fn">{{ mapped_by }}</cite>
+                on <time class="mapped">{{ mapped_timestamp }}</time>
+              </p>
+            {{/ pl }}
+          </div>
+        {{/ byline }}
+      </div>
+    </div>
+
+    {{! @@@ editing: <button class="savechanges" title="save changes">save changes<end button> }}
+
+  </div>
+</article>
