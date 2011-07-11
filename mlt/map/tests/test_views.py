@@ -138,6 +138,25 @@ class AssociateViewTest(AuthenticatedWebTest):
         self.assertEqual(addy["needs_review"], True)
 
 
+    def test_associate_another(self):
+        create_parcel(pl="1234")
+        create_address(pl="1234")
+        a2 = create_address()
+
+        res = self.post(self.url, {"pl": "1234", "aid": a2.id})
+
+        a2 = a2.__class__.objects.get(id=a2.id)
+        self.assertEqual(a2.pl, "1234")
+        self.assertEqual(res.json["pl"], "1234")
+        self.assertEqual(len(res.json["mapped_to"]), 2)
+        addy = [a for a in res.json["mapped_to"] if a["id"] == a2.id][0]
+        self.assertEqual(addy["id"], a2.id)
+        self.assertEqual(addy["mapped_by"], self.user.username)
+        self.assertEqual(addy["mapped_timestamp"], date_format(
+                a2.mapped_timestamp, "DATETIME_FORMAT"))
+        self.assertEqual(addy["needs_review"], True)
+
+
     def test_associate_multiple(self):
         create_parcel(pl="1234")
         a1 = create_address()
@@ -152,7 +171,7 @@ class AssociateViewTest(AuthenticatedWebTest):
         self.assertEqual(res.json["pl"], "1234")
         mt = res.json["mapped_to"]
         self.assertEqual(len(mt), 2)
-        self.assertEqual([a["id"] for a in mt], [a1.id, a2.id])
+        self.assertEqual(set([a["id"] for a in mt]), set([a1.id, a2.id]))
         self.assertEqual(
             set([a["mapped_by"] for a in mt]), set([self.user.username])
             )
