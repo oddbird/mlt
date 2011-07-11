@@ -297,7 +297,7 @@ var MLT = MLT || {};
         loading = container.find('.load'),
         moreAddresses = true,
         newAddresses = function(data) {
-            if (data.addresses) {
+            if (data.addresses.length) {
                 $.each(data.addresses, function(i, address) {
                     var byline, web_ui, lat, lng;
 
