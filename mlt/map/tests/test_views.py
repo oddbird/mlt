@@ -128,21 +128,14 @@ class AssociateViewTest(AuthenticatedWebTest):
 
         a = a.__class__.objects.get(id=a.id)
         self.assertEqual(a.pl, "1234")
-        self.assertEqual(
-            json.loads(res.body),
-            {
-                u"pl": u"1234",
-                u"addresses": [
-                    {
-                        u"id": int(a.id),
-                        u"mapped_by": unicode(self.user.username),
-                        u"mapped_timestamp": date_format(
-                            a.mapped_timestamp, "DATETIME_FORMAT"),
-                        u"needs_review": True,
-                        }
-                    ],
-                u"messages": []
-             })
+        self.assertEqual(res.json["pl"], "1234")
+        self.assertEqual(len(res.json["mapped_to"]), 1)
+        addy = res.json["mapped_to"][0]
+        self.assertEqual(addy["id"], a.id)
+        self.assertEqual(addy["mapped_by"], self.user.username)
+        self.assertEqual(addy["mapped_timestamp"], date_format(
+                a.mapped_timestamp, "DATETIME_FORMAT"))
+        self.assertEqual(addy["needs_review"], True)
 
 
     def test_associate_multiple(self):
@@ -156,28 +149,18 @@ class AssociateViewTest(AuthenticatedWebTest):
         a2 = a2.__class__.objects.get(id=a2.id)
         self.assertEqual(a1.pl, "1234")
         self.assertEqual(a2.pl, "1234")
+        self.assertEqual(res.json["pl"], "1234")
+        mt = res.json["mapped_to"]
+        self.assertEqual(len(mt), 2)
+        self.assertEqual([a["id"] for a in mt], [a1.id, a2.id])
         self.assertEqual(
-            json.loads(res.body),
-            {
-                u"pl": u"1234",
-                u"addresses": [
-                    {
-                        u"id": int(a1.id),
-                        u"mapped_by": unicode(self.user.username),
-                        u"mapped_timestamp": date_format(
-                            a1.mapped_timestamp, "DATETIME_FORMAT"),
-                        "needs_review": True,
-                        },
-                    {
-                        u"id": int(a2.id),
-                        u"mapped_by": unicode(self.user.username),
-                        u"mapped_timestamp": date_format(
-                            a2.mapped_timestamp, "DATETIME_FORMAT"),
-                        "needs_review": True,
-                        }
-                    ],
-                u"messages": []
-             })
+            set([a["mapped_by"] for a in mt]), set([self.user.username])
+            )
+        self.assertEqual(
+            set([a["mapped_timestamp"] for a in mt]),
+            set([date_format(a1.mapped_timestamp, "DATETIME_FORMAT")])
+            )
+        self.assertTrue(all([a["needs_review"] for a in mt]))
 
 
     def test_no_such_parcel(self):

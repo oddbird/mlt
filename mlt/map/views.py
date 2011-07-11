@@ -68,16 +68,8 @@ def associate(request):
 
     if parcel and addresses:
         addresses.update(pl=pl, mapped_by=request.user, mapped_timestamp=datetime.datetime.utcnow())
-        ret["pl"] = pl
-        ret["addresses"] = [
-            {
-                "id": a.id,
-                "needs_review": a.needs_review,
-                "mapped_by": str(a.mapped_by),
-                "mapped_timestamp": date_format(
-                    a.mapped_timestamp, "DATETIME_FORMAT")
-                }
-            for a in addresses]
+        ret = serializers.ParcelSerializer().one(parcel)
+        ret["mapped_to"] = serializers.AddressSerializer().many(addresses)
 
     return json_response(ret)
 
