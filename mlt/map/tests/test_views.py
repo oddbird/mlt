@@ -2,7 +2,6 @@ import json
 import urllib
 
 from django.core.urlresolvers import reverse
-from django.template.loader import render_to_string
 
 from django_webtest import WebTest
 
