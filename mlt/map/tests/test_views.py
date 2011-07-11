@@ -337,7 +337,7 @@ class GeoJSONViewTest(AuthenticatedWebTest):
         self.maxDiff = None
         p = create_parcel(
             geom=create_mpolygon(
-                [(1.0, 5.0), (1.0, 6.0), (2.0, 6.0), (1.0, 5.0)]))
+                [(1.0, 5.0), (1.0, 6.0), (2.0, 6.0), (2.0, 5.0), (1.0, 5.0)]))
         create_parcel(
             geom=create_mpolygon(
                 [(1.0, 8.0), (1.0, 9.0), (2.0, 9.0), (1.0, 8.0)]))
@@ -358,18 +358,21 @@ class GeoJSONViewTest(AuthenticatedWebTest):
                                         [1.0, 5.0],
                                         [1.0, 6.0],
                                         [2.0, 6.0],
+                                        [2.0, 5.0],
                                         [1.0, 5.0]
                                         ]]]
                             },
                         u"type": u"Feature",
-                        u"id": p.id,
+                        u"id": int(p.id),
                         u"properties": {
                             u"first_owner": u"Van Gordon",
                             u"classcode": u"Single Family Residence",
                             u"pl": u"111 22",
                             u"address": u"3635 Van Gordon St",
                             u"mapped": False,
-                            u"mapped_to": []
+                            u"mapped_to": [],
+                            u"latitude": 5.5,
+                            u"longitude": 1.5,
                             }
                         }
                     ]
