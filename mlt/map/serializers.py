@@ -41,6 +41,7 @@ class ParcelSerializer(Serializer):
 
 class AddressSerializer(Serializer):
     default_fields = [
+        "id",
         "street",
         "street_prefix",
         "street_number",

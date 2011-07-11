@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 from vectorformats.Formats import Django, GeoJSON
 
+from .encoder import IterEncoder
 from .forms import AddressForm, AddressImportForm
 from .importer import ImporterError
 from .models import Parcel, Address
@@ -70,7 +71,7 @@ def associate(request):
         ret["addresses"] = [
             {"id": a.id, "needs_review": a.needs_review} for a in addresses]
 
-    return HttpResponse(json.dumps(ret), "application/json")
+    return json_response(ret)
 
 
 
@@ -117,7 +118,7 @@ def geojson(request):
         northlat = request.GET["northlat"]
         southlat = request.GET["southlat"]
     except KeyError:
-        return HttpResponse("{}", content_type="application/json")
+        return json_response({})
     wkt = (
         "POLYGON(("
         "%(w)s %(s)s, "
@@ -131,5 +132,12 @@ def geojson(request):
     source = Django.Django(
         geodjango="geom",
         properties=serializers.ParcelSerializer.default_fields + ["mapped_to"])
-    output = GeoJSON.GeoJSON().encode(source.decode(qs))
-    return HttpResponse(output, content_type="application/json")
+    output = GeoJSON.GeoJSON().encode(source.decode(qs), to_string=False)
+    return json_response(output)
+
+
+
+def json_response(data):
+    return HttpResponse(
+        json.dumps(data, cls=IterEncoder),
+        content_type="application/json")

@@ -45,7 +45,7 @@ class Parcel(models.Model):
         List of mapped addresses as serialized dictionaries rather than models.
 
         """
-        return list(serializers.AddressSerializer().many(self.mapped_addresses))
+        return serializers.AddressSerializer().many(self.mapped_addresses)
 
 
     @property
