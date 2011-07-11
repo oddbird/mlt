@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.contrib.localflavor.us.models import USStateField
 
+from . import serializers
+
 
 
 class Parcel(models.Model):
@@ -40,13 +42,10 @@ class Parcel(models.Model):
     @property
     def mapped_to(self):
         """
-        List of mapped addresses as dictionaries rather than models.
+        List of mapped addresses as serialized dictionaries rather than models.
 
         """
-        return [
-            {"street": a.street, "needs_review": a.needs_review}
-            for a in self.mapped_addresses
-            ]
+        return list(serializers.AddressSerializer().many(self.mapped_addresses))
 
 
     @property
