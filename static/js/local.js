@@ -20,7 +20,16 @@ var MLT = MLT || {};
                 mapinfoHover = false;
                 hideInfo();
             }
-        ),
+        ).click(function(event) {
+            if ($(this).hasClass('selected') && !$(event.target).is('.mapit')) {
+                var lat = selectedParcelInfo.latitude,
+                lng = selectedParcelInfo.longitude;
+                map.panTo(new L.LatLng(lat, lng));
+                if (map.getZoom() < MIN_PARCEL_ZOOM) {
+                    map.setZoom(MIN_PARCEL_ZOOM);
+                }
+            }
+        }),
         mapinfoTimeout = null,
         geojson_url = $('#mapping').data('parcel-geojson-url'),
         geojson = new L.GeoJSON(),
