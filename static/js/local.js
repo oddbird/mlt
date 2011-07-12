@@ -154,7 +154,7 @@ MLT.MIN_PARCEL_ZOOM = 17;
     },
 
     mapPopups = function() {
-        $('#addresstable .managelist .address input[id^="select"]').live('click', function() {
+        $('#addresstable .managelist .address input[id^="select"]').live('change', function() {
             var thisAddress = $(this).closest('.address'),
             popupContent = thisAddress.find('.mapkey').html(),
             lat = thisAddress.data('latitude'),
@@ -231,12 +231,14 @@ MLT.MIN_PARCEL_ZOOM = 17;
                         mapped_timestamp: address.mapped_timestamp
                     });
 
+                    thisAddress.find('input[id^="select"]').click();
                     thisAddress.replaceWith(updatedAddress);
                     updatedAddress.find('.details').html5accordion();
                 });
 
                 var updatedParcelInfo = ich.parcelinfo(data);
                 $('#mapinfo').html(updatedParcelInfo);
+                $('#mapinfo .mapit').hide();
             });
         });
     },
