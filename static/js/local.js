@@ -287,6 +287,11 @@ var MLT = MLT || {};
         success = function(data) {
             target.html(data.html);
             bootstrapForm();
+            $(document).bind('keydown.closeAddLightbox', function(event) {
+                if (event.keyCode === 27) {
+                    target.find('a[title*="close"]').click();
+                }
+            });
         },
         bootstrapForm = function() {
             var form = target.find('form').ajaxForm({
@@ -303,6 +308,7 @@ var MLT = MLT || {};
             if (form.length) {
                 form.get(0).reset();
             }
+            $(document).unbind('keydown.closeAddLightbox');
         });
     },
 
@@ -312,6 +318,11 @@ var MLT = MLT || {};
         url = target.data('import-addresses-url'),
         success = function(data) {
             target.html(data.html);
+            $(document).bind('keydown.closeImportLightbox', function(event) {
+                if (event.keyCode === 27) {
+                    target.find('a[title*="close"]').click();
+                }
+            });
         };
 
         link.click(function() {
@@ -323,6 +334,7 @@ var MLT = MLT || {};
             if (form.length) {
                 form.get(0).reset();
             }
+            $(document).unbind('keydown.closeImportLightbox');
         });
     },
 
