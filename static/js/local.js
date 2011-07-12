@@ -3,7 +3,9 @@ MLT.MIN_PARCEL_ZOOM = 17;
 
 (function($) {
 
-    var initializeMap = function() {
+    var selectedParcelInfo,
+
+    initializeMap = function() {
         var layer = new L.TileLayer(
             MLT.tileServerUrl, {attribution: MLT.mapCredits}),
         map = new L.Map(
@@ -82,7 +84,7 @@ MLT.MIN_PARCEL_ZOOM = 17;
                                     if (selectedLayer) {
                                         selectedLayer.unselect();
                                     }
-                                    MLT.selectedProperties = e.properties;
+                                    selectedParcelInfo = e.properties;
                                     selectedId = id;
                                     selectedInfo = info;
                                     selectedLayer = this;
@@ -191,50 +193,50 @@ MLT.MIN_PARCEL_ZOOM = 17;
             var selectedAddressID = $('#addresstable .address input[id^="select"]:checked').map(function() {
                 return $(this).closest('.address').data('id');
             }).get(),
-            PL = MLT.selectedProperties.pl,
-            lat = MLT.selectedProperties.latitude,
-            lng = MLT.selectedProperties.longitude;
+            pl = selectedParcelInfo.pl,
+            lat = selectedParcelInfo.latitude,
+            lng = selectedParcelInfo.longitude;
             $.post(url, {
-                pl: PL,
+                pl: pl,
                 aid: selectedAddressID
             }, function(data) {
-                var pl = data.pl;
-                $('#mapinfo .mapped-addresses').prepend(ich.mapped_parcel());
-                $.each(data.addresses, function(i, address) {
-                    var id = address.id,
-                    needsReview = address.needs_review,
-                    user = address.mapped_by,
-                    timestamp = address.mapped_timestamp,
+                $.each(data.mapped_to, function(i, address) {
+                    var byline, web_ui,
+                    id = address.id,
                     thisAddress = $('#addresstable .address[data-id="' + id + '"]'),
-                    street = thisAddress.find('.street-address').html(),
-                    newMapping = ich.mapped_parcel_address({ street: street });
+                    index = thisAddress.find('.mapkey').html();
 
-                    thisAddress.find('label.value').html(pl);
-                    thisAddress.data('latitude', lat).data('longitude', lng);
-                    $('#mapinfo .mapped-addresses ul').append(newMapping);
+                    if (address.import_source || address.mapped_by) { byline = true; }
+                    if (address.import_source === 'web-ui') { web_ui = true; }
 
-                    if (thisAddress.find('.id').hasClass('unmapped')) {
-                        var flagInput = ich.address_flag_input({ id: id }),
-                        mappedBy = ich.address_mapped_by({
-                            mapped_by: user,
-                            mapped_timestamp: timestamp
-                        });
-                        thisAddress.find('.id').removeClass('unmapped').prepend(flagInput);
-                        thisAddress.find('.byline').append(mappedBy);
-                    } else {
-                        thisAddress.find('.byline .mapped-by').html(user);
-                        thisAddress.find('.byline .mapped').html(timestamp);
-                    }
+                    var updatedAddress = ich.address({
+                        id: id,
+                        pl: address.pl,
+                        latitude: lat,
+                        longitude: lng,
+                        index: index,
+                        street: address.street,
+                        city: address.city,
+                        state: address.state,
+                        complex_name: address.complex_name,
+                        needs_review: address.needs_review,
+                        multi_units: address.multi_units,
+                        notes: address.notes,
+                        byline: byline,
+                        import_source: address.import_source,
+                        web_ui: web_ui,
+                        imported_by: address.imported_by,
+                        import_timestamp: address.import_timestamp,
+                        mapped_by: address.mapped_by,
+                        mapped_timestamp: address.mapped_timestamp
+                    });
 
-                    if (needsReview) {
-                        thisAddress.find('.flag').prop('checked', true);
-                        thisAddress.find('.id').removeClass('approved');
-                        $('#mapinfo .mapped-addresses ul li:last-child').addClass('flagged');
-                    } else {
-                        thisAddress.find('.flag').prop('checked', false);
-                        thisAddress.find('.id').addClass('approved');
-                    }
+                    thisAddress.replaceWith(updatedAddress);
+                    updatedAddress.find('.details').html5accordion();
                 });
+
+                var updatedParcelInfo = ich.parcelinfo(data);
+                $('#mapinfo').html(updatedParcelInfo);
             });
         });
     },
@@ -397,6 +399,7 @@ MLT.MIN_PARCEL_ZOOM = 17;
         };
 
         // load some addresses to start out with
+        // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
         if(url) {
             currentlyLoading = true;
             $.get(url, newAddresses);
@@ -408,6 +411,7 @@ MLT.MIN_PARCEL_ZOOM = 17;
                     var count = container.find('.address').length + 1;
                     loading.animate({opacity: 1}, 'fast');
                     currentlyLoading = true;
+                    // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
                     $.get(url + '?start=' + count, newAddresses);
                 }
             });
