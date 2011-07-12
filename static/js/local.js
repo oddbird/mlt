@@ -1,21 +1,19 @@
 var MLT = MLT || {};
-MLT.MIN_PARCEL_ZOOM = 17;
 
 (function($) {
 
-    var selectedParcelInfo,
+    var mapping = function() {
 
-    initializeMap = function() {
-        var layer = new L.TileLayer(
+        var selectedParcelInfo,
+        MIN_PARCEL_ZOOM = 17,
+        layer = new L.TileLayer(
             MLT.tileServerUrl, {attribution: MLT.mapCredits}),
-        map = new L.Map(
-            'map',
-            {
-                center: new L.LatLng(MLT.mapDefaultLat, MLT.mapDefaultLon),
-                zoom: MLT.mapDefaultZoom,
-                layers: [layer],
-                closePopupOnClick: false
-            }),
+        map = new L.Map('map', {
+            center: new L.LatLng(MLT.mapDefaultLat, MLT.mapDefaultLon),
+            zoom: MLT.mapDefaultZoom,
+            layers: [layer],
+            closePopupOnClick: false
+        }),
         mapinfoHover = false,
         mapinfo = $("#mapinfo").hide().hover(
             function() { mapinfoHover = true; },
@@ -25,6 +23,22 @@ MLT.MIN_PARCEL_ZOOM = 17;
             }
         ),
         mapinfoTimeout = null,
+        geojson_url = $('#mapping').data('parcel-geojson-url'),
+        geojson = new L.GeoJSON(),
+        selectedLayer = null,
+        selectedId = null,
+        selectedInfo = null,
+
+        initializeMap = function() {
+            map.on(
+                'moveend',
+                function() {
+                    refreshParcels();
+                });
+
+            MLT.map = map;
+        },
+
         showInfo = function(newInfo, selected) {
             if (mapinfoTimeout) {
                 clearTimeout(mapinfoTimeout);
@@ -44,6 +58,7 @@ MLT.MIN_PARCEL_ZOOM = 17;
                 mapinfo.find('.mapit').hide();
             }
         },
+
         hideInfo = function() {
             if (!selectedInfo) {
                 mapinfoTimeout = setTimeout(function() {
@@ -53,17 +68,13 @@ MLT.MIN_PARCEL_ZOOM = 17;
                 }, 100);
             }
         },
-        geojson_url = $('#mapping').data('parcel-geojson-url'),
-        geojson = new L.GeoJSON(),
-        selectedLayer = null,
-        selectedId = null,
-        selectedInfo = null;
-        MLT.refreshParcels = function(unselect) {
+
+        refreshParcels = function(unselect) {
             var bounds = map.getBounds(),
             ne = bounds.getNorthEast(),
             sw = bounds.getSouthWest();
 
-            if (map.getZoom() >= MLT.MIN_PARCEL_ZOOM) {
+            if (map.getZoom() >= MIN_PARCEL_ZOOM) {
                 $.getJSON(
                     geojson_url +
                         "?southlat=" + sw.lat +
@@ -143,106 +154,104 @@ MLT.MIN_PARCEL_ZOOM = 17;
             } else {
                 map.removeLayer(geojson);
             };
-        };
+        },
 
-        map.on(
-            'moveend',
-            function() {
-                MLT.refreshParcels();
-            });
-
-        MLT.map = map;
-    },
-
-    mapPopups = function() {
-        $('#addresstable .managelist .address input[id^="select"]').live('change', function() {
-            var thisAddress = $(this).closest('.address'),
-            popupContent = thisAddress.find('.mapkey').html(),
-            lat = thisAddress.data('latitude'),
-            lng = thisAddress.data('longitude');
-            if ($(this).is(':checked')) {
-                if (lat && lng) {
-                    this.popup = new L.Popup({
-                        closeButton: false,
-                        autoPan: false
-                    });
-                    this.popup.setLatLng(new L.LatLng(lat, lng));
-                    this.popup.setContent(popupContent);
-                    MLT.map.addLayer(this.popup);
-                    MLT.map.panTo(new L.LatLng(lat, lng));
-                    if (MLT.map.getZoom() < MLT.MIN_PARCEL_ZOOM) {
-                        MLT.map.setZoom(MLT.MIN_PARCEL_ZOOM);
+        addressPopups = function() {
+            $('#addresstable .managelist .address input[id^="select"]').live('change', function() {
+                var thisAddress = $(this).closest('.address'),
+                popupContent = thisAddress.find('.mapkey').html(),
+                lat = thisAddress.data('latitude'),
+                lng = thisAddress.data('longitude');
+                if ($(this).is(':checked')) {
+                    if (lat && lng) {
+                        this.popup = new L.Popup({
+                            closeButton: false,
+                            autoPan: false
+                        });
+                        this.popup.setLatLng(new L.LatLng(lat, lng));
+                        this.popup.setContent(popupContent);
+                        map.addLayer(this.popup);
+                        map.panTo(new L.LatLng(lat, lng));
+                        if (map.getZoom() < MIN_PARCEL_ZOOM) {
+                            map.setZoom(MIN_PARCEL_ZOOM);
+                        }
+                    }
+                } else {
+                    if (this.popup) {
+                        map.removeLayer(this.popup);
                     }
                 }
-            } else {
-                if (this.popup) {
-                    MLT.map.removeLayer(this.popup);
+                // Only show `map to selected` button if an address is selected
+                if ($('#addresstable .address input[id^="select"]:checked').length) {
+                    $('#mapinfo .mapit').show();
+                } else {
+                    $('#mapinfo .mapit').hide();
                 }
-            }
-            // Only show `map to selected` button if an address is selected
-            if ($('#addresstable .address input[id^="select"]:checked').length) {
-                $('#mapinfo .mapit').show();
-            } else {
-                $('#mapinfo .mapit').hide();
-            }
-        });
-    },
+            });
+        },
 
-    addressMapping = function() {
-        var url = $('#mapping').data('associate-url');
-        $('#mapinfo .mapit').live('click', function() {
-            var selectedAddressID = $('#addresstable .address input[id^="select"]:checked').map(function() {
-                return $(this).closest('.address').data('id');
-            }).get(),
-            pl = selectedParcelInfo.pl,
-            lat = selectedParcelInfo.latitude,
-            lng = selectedParcelInfo.longitude;
-            $.post(url, {
-                pl: pl,
-                aid: selectedAddressID
-            }, function(data) {
-                $.each(data.mapped_to, function(i, address) {
-                    var byline, web_ui,
-                    id = address.id,
-                    thisAddress = $('#addresstable .address[data-id="' + id + '"]'),
-                    index = thisAddress.find('.mapkey').html();
+        addressMapping = function() {
+            var url = $('#mapping').data('associate-url');
+            $('#mapinfo .mapit').live('click', function() {
+                var selectedAddressID = $('#addresstable .address input[id^="select"]:checked').map(function() {
+                    return $(this).closest('.address').data('id');
+                }).get(),
+                pl = selectedParcelInfo.pl,
+                lat = selectedParcelInfo.latitude,
+                lng = selectedParcelInfo.longitude;
+                $.post(url, {
+                    pl: pl,
+                    aid: selectedAddressID
+                }, function(data) {
+                    $.each(data.mapped_to, function(i, address) {
+                        var byline, web_ui,
+                        id = address.id,
+                        thisAddress = $('#addresstable .address[data-id="' + id + '"]'),
+                        index = thisAddress.find('.mapkey').html();
 
-                    if (address.import_source || address.mapped_by) { byline = true; }
-                    if (address.import_source === 'web-ui') { web_ui = true; }
+                        if (address.import_source || address.mapped_by) { byline = true; }
+                        if (address.import_source === 'web-ui') { web_ui = true; }
 
-                    var updatedAddress = ich.address({
-                        id: id,
-                        pl: address.pl,
-                        latitude: lat,
-                        longitude: lng,
-                        index: index,
-                        street: address.street,
-                        city: address.city,
-                        state: address.state,
-                        complex_name: address.complex_name,
-                        needs_review: address.needs_review,
-                        multi_units: address.multi_units,
-                        notes: address.notes,
-                        byline: byline,
-                        import_source: address.import_source,
-                        web_ui: web_ui,
-                        imported_by: address.imported_by,
-                        import_timestamp: address.import_timestamp,
-                        mapped_by: address.mapped_by,
-                        mapped_timestamp: address.mapped_timestamp
+                        var updatedAddress = ich.address({
+                            id: id,
+                            pl: address.pl,
+                            latitude: lat,
+                            longitude: lng,
+                            index: index,
+                            street: address.street,
+                            city: address.city,
+                            state: address.state,
+                            complex_name: address.complex_name,
+                            needs_review: address.needs_review,
+                            multi_units: address.multi_units,
+                            notes: address.notes,
+                            byline: byline,
+                            import_source: address.import_source,
+                            web_ui: web_ui,
+                            imported_by: address.imported_by,
+                            import_timestamp: address.import_timestamp,
+                            mapped_by: address.mapped_by,
+                            mapped_timestamp: address.mapped_timestamp
+                        });
+
+                        thisAddress.find('input[id^="select"]').click();
+                        thisAddress.replaceWith(updatedAddress);
+                        updatedAddress.find('.details').html5accordion();
                     });
 
-                    thisAddress.find('input[id^="select"]').click();
-                    thisAddress.replaceWith(updatedAddress);
-                    updatedAddress.find('.details').html5accordion();
+                    var updatedParcelInfo = ich.parcelinfo(data);
+                    $('#mapinfo').html(updatedParcelInfo);
+                    $('#mapinfo .mapit').hide();
+                    refreshParcels(true);
                 });
-
-                var updatedParcelInfo = ich.parcelinfo(data);
-                $('#mapinfo').html(updatedParcelInfo);
-                $('#mapinfo .mapit').hide();
-                MLT.refreshParcels(true);
             });
-        });
+        };
+
+        if ($('#map').length) {
+            initializeMap();
+        }
+        addressPopups();
+        addressMapping();
     },
 
     addressListHeight = function() {
@@ -444,11 +453,7 @@ MLT.MIN_PARCEL_ZOOM = 17;
         addressListHeight();
         addAddressLightbox();
         importAddressesLightbox();
-        if ($('#map').length) {
-            initializeMap();
-        }
-        mapPopups();
-        addressMapping();
+        mapping();
         $('#addresstable .managelist .address .content .details .summary').live('click', function() {
             $(this).blur();
         });
