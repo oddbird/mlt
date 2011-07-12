@@ -4,8 +4,7 @@ var MLT = MLT || {};
 
     var mapping = function() {
 
-        var selectedParcelInfo,
-        MIN_PARCEL_ZOOM = 17,
+        var MIN_PARCEL_ZOOM = 17,
         layer = new L.TileLayer(
             MLT.tileServerUrl, {attribution: MLT.mapCredits}),
         map = new L.Map('map', {
@@ -28,6 +27,7 @@ var MLT = MLT || {};
         selectedLayer = null,
         selectedId = null,
         selectedInfo = null,
+        selectedParcelInfo,
 
         initializeMap = function() {
             map.on(
@@ -69,7 +69,7 @@ var MLT = MLT || {};
             }
         },
 
-        refreshParcels = function(unselect) {
+        refreshParcels = function() {
             var bounds = map.getBounds(),
             ne = bounds.getNorthEast(),
             sw = bounds.getSouthWest();
@@ -89,15 +89,15 @@ var MLT = MLT || {};
                         geojson.on(
                             'featureparse',
                             function(e) {
-                                var info = ich.parcelinfo(e.properties),
-                                id = e.id;
+                                var id = e.id;
+                                e.layer.info = ich.parcelinfo(e.properties);
                                 e.layer.select = function() {
                                     if (selectedLayer) {
                                         selectedLayer.unselect();
                                     }
                                     selectedParcelInfo = e.properties;
                                     selectedId = id;
-                                    selectedInfo = info;
+                                    selectedInfo = this.info;
                                     selectedLayer = this;
                                     this.selected = true;
                                     this.setStyle({
@@ -126,7 +126,7 @@ var MLT = MLT || {};
                                     'mouseover',
                                     function(ev) {
                                         if (!selectedInfo) {
-                                            showInfo(info, false);
+                                            showInfo(e.layer.info, false);
                                         }
                                     });
                                 e.layer.on(
@@ -139,13 +139,12 @@ var MLT = MLT || {};
                                     function(ev) {
                                         if (ev.target.selected) {
                                             ev.target.unselect();
-                                            showInfo(info, false);
+                                            showInfo(e.layer.info, false);
                                         } else {
                                             ev.target.select();
-                                            showInfo(info, true);
+                                            showInfo(e.layer.info, true);
                                         }
                                     });
-                                if (unselect) { e.layer.unselect(); }
                             });
 
                         geojson.addGeoJSON(data);
@@ -240,9 +239,10 @@ var MLT = MLT || {};
                     });
 
                     var updatedParcelInfo = ich.parcelinfo(data);
-                    $('#mapinfo').html(updatedParcelInfo);
+                    $('#mapinfo').removeClass('selected').html(updatedParcelInfo);
                     $('#mapinfo .mapit').hide();
-                    refreshParcels(true);
+                    selectedLayer.info = updatedParcelInfo;
+                    selectedLayer.unselect();
                 });
             });
         };
