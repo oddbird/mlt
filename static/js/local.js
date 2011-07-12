@@ -256,9 +256,7 @@ var MLT = MLT || {};
             });
         };
 
-        if ($('#map').length) {
-            initializeMap();
-        }
+        initializeMap();
         addressPopups();
         addressMapping();
     },
@@ -482,7 +480,9 @@ var MLT = MLT || {};
         addressListHeight();
         addAddressLightbox();
         importAddressesLightbox();
-        mapping();
+        if ($('#map').length) {
+            mapping();
+        }
         $('#addresstable .managelist .address .content .details .summary').live('click', function() {
             $(this).blur();
         });
