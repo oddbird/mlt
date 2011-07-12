@@ -440,6 +440,14 @@ var MLT = MLT || {};
                 $(this).closest('.address').removeClass('expanded');
             }
         });
+    },
+
+    addressSelect = function() {
+        $('#addresstable .managelist .address .content').live('click', function(event) {
+            if (!$(event.target).is('button, a, label, input, .summary, .adr, .street-address, .locality, .region')) {
+                $(this).closest('.address').find('input[id^="select"]').click();
+            }
+        });
     };
 
     $(function() {
@@ -460,6 +468,7 @@ var MLT = MLT || {};
         sorting();
         addressListLoading();
         addressDetails();
+        addressSelect();
     });
 
 })(jQuery);
