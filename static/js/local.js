@@ -57,8 +57,8 @@ MLT.MIN_PARCEL_ZOOM = 17;
         geojson = new L.GeoJSON(),
         selectedLayer = null,
         selectedId = null,
-        selectedInfo = null,
-        refreshParcels = function() {
+        selectedInfo = null;
+        MLT.refreshParcels = function(unselect) {
             var bounds = map.getBounds(),
             ne = bounds.getNorthEast(),
             sw = bounds.getSouthWest();
@@ -134,6 +134,7 @@ MLT.MIN_PARCEL_ZOOM = 17;
                                             showInfo(info, true);
                                         }
                                     });
+                                if (unselect) { e.layer.unselect(); }
                             });
 
                         geojson.addGeoJSON(data);
@@ -147,7 +148,7 @@ MLT.MIN_PARCEL_ZOOM = 17;
         map.on(
             'moveend',
             function() {
-                refreshParcels();
+                MLT.refreshParcels();
             });
 
         MLT.map = map;
@@ -239,6 +240,7 @@ MLT.MIN_PARCEL_ZOOM = 17;
                 var updatedParcelInfo = ich.parcelinfo(data);
                 $('#mapinfo').html(updatedParcelInfo);
                 $('#mapinfo .mapit').hide();
+                MLT.refreshParcels(true);
             });
         });
     },
