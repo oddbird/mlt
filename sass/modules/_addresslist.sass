@@ -23,16 +23,9 @@
   +icon('ui/info.png')
 
 .action-flag
-  +icon('ui/warning.png')
-  +opacity(0)
-
-.flag
-  +gone
-  &:checked
-    + .action-flag
-      +opacity(1)
-      #{$focus}
-        +opacity(.75)
+  .address &
+    +icon('ui/warning.png')
+    +opacity(0)
 
 // Map Key -------------------------------------------------------------------
 
@@ -83,6 +76,14 @@
   .address
     clear: both
     counter-increment: address
+
+    .flag
+      +gone
+      &:checked
+        + .action-flag
+          +opacity(1)
+          #{$focus}
+            +opacity(.75)
 
     &::before
       +cond
