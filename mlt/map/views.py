@@ -5,7 +5,6 @@ from django.shortcuts import render, redirect
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.utils.formats import date_format
 
 from vectorformats.Formats import Django, GeoJSON
 
@@ -70,6 +69,15 @@ def associate(request):
     if parcel and addresses:
         addresses.update(pl=pl, mapped_by=request.user, mapped_timestamp=datetime.datetime.utcnow())
         ret = serializers.ParcelSerializer(extra=["mapped_to"]).one(parcel)
+        messages.success(
+            request,
+            "Mapped %s address%s to PL %s"
+            % (
+                addresses.count(),
+                "es" if (addresses.count() != 1) else "",
+                pl
+                )
+            )
 
     return json_response(ret)
 
