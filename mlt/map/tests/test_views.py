@@ -336,11 +336,35 @@ class AddressesViewTest(AuthenticatedWebTest):
             res.json["messages"],
             [
                 {
-                    'message': "'bad' is not a valid sort field.",
-                    'level': 40,
-                    'tags': 'error'
+                    "message": "'bad' is not a valid sort field.",
+                    "level": 40,
+                    "tags": "error"
                     }
                 ]
+            )
+
+
+    def test_filter(self):
+        a1 = create_address(
+            input_street="123 N Main St",
+            city="Providence",
+            import_timestamp=datetime.datetime(2011, 7, 15, 1, 2, 3))
+        create_address(
+            input_street="456 N Main St",
+            city="Albuquerque",
+            import_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
+        create_address(
+            input_street="123 N Main St",
+            city="Albuquerque",
+            import_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
+
+        res = self.app.get(
+            self.url + "?city=Providence",
+            user=self.user)
+
+        self.assertEqual(
+            [a["id"] for a in res.json["addresses"]],
+            [a1.id]
             )
 
 
@@ -465,10 +489,11 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
 
 
     def test_filter(self):
+        blametern = create_user(username="blametern")
         create_address(
             input_street="123 N Main St",
             city="Providence",
-            imported_by=create_user(username="blametern"))
+            imported_by=blametern)
         create_address(
             input_street="456 N Main St",
             city="Albuquerque")
@@ -480,18 +505,24 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
 
         self.assertEqual(
             res.json["options"],
-            [{'desc': 'city', 'field': 'city', 'q': 'alb', 'rest': 'uquerque'}]
+            [{
+                    "desc": "city",
+                    "field": "city",
+                    "value": "Albuquerque",
+                    "q": "alb",
+                    "rest": "uquerque",
+                    }]
             )
 
         res = self.app.get(self.url + "?q=b", user=self.user)
 
         self.assertEqual(
             res.json["options"],
-            [{
-                    'q': 'b',
-                    'field': 'imported_by__username',
-                    'rest': 'lametern',
-                    'desc': 'imported by'
+            [{      "q": "b",
+                    "field": "imported_by",
+                    "value": blametern.id,
+                    "rest": "lametern",
+                    "desc": "imported by"
                     }]
             )
 
@@ -505,8 +536,8 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
         self.assertEqual(
             res.json["messages"],
             [{
-                    'message': "Filter autocomplete requires 'q' parameter.",
-                    'level': 40,
-                    'tags': 'error'
+                    "message": "Filter autocomplete requires 'q' parameter.",
+                    "level": 40,
+                    "tags": "error"
                     }]
             )

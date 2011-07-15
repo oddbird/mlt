@@ -14,7 +14,7 @@ from .forms import AddressForm, AddressImportForm
 from .importer import ImporterError
 from .models import Parcel, Address
 from .utils import letter_key
-from . import serializers
+from . import filters, serializers
 
 
 
@@ -122,7 +122,7 @@ def addresses(request):
                 messages.error(
                     request, "'%s' is not a valid sort field." % sortfield)
 
-    qs = sortqs[start-1:start+num-1]
+    qs = filters.apply(sortqs, request.GET)[start-1:start+num-1]
 
     # @@@ indexing on subsequent queries might break if addresses have been
     # added/deleted?
@@ -178,17 +178,6 @@ def geojson(request):
     return json_response(output)
 
 
-FILTER_FIELDS = {
-    "street": "street",
-    "city": "city",
-    "state": "state",
-    "pl": "pl",
-    "mapped_by__username": "mapped by",
-    "imported_by__username": "imported by",
-    "import_source": "import source",
-    "complex_name": "complex name",
-    }
-
 
 @login_required
 def filter_autocomplete(request):
@@ -199,17 +188,7 @@ def filter_autocomplete(request):
             request, "Filter autocomplete requires 'q' parameter.")
         return json_response({})
 
-    data = []
-    for field, desc in FILTER_FIELDS.items():
-        for option in Address.objects.filter(
-            **{"%s__istartswith" % field: q}).values_list(
-            field, flat=True).distinct():
-            data.append({
-                    "q": q,
-                    "rest": option[len(q):],
-                    "field": field,
-                    "desc": desc
-                    })
+    data = filters.autocomplete(q)
 
     return json_response({"options": data})
 
