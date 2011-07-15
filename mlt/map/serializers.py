@@ -1,5 +1,7 @@
 from django.utils.formats import date_format
 
+from ..dt import utc_to_local
+
 
 
 class Serializer(object):
@@ -67,7 +69,7 @@ class AddressSerializer(Serializer):
 
     def _encode_datetime(self, dt):
         if dt:
-            return date_format(dt, "DATETIME_FORMAT")
+            return date_format(utc_to_local(dt), "DATETIME_FORMAT")
         return dt
 
 
