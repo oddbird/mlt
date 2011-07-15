@@ -53,3 +53,54 @@
     +leader(.5)
     display: none
     width: 100%
+
+// Leaflet Override ----------------------------------------------------------
+
+.leaflet-popup-content-wrapper
+  padding: 0
+
+.leaflet-popup-content
+  margin: auto
+
+.leaflet-popup-tip-container
+  margin: auto
+  width: auto
+  height: auto
+  position: relative
+  overflow: hidden
+
+.leaflet-popup-tip
+  +rotate(0)
+  width: auto
+  height: rhythm(1)
+  padding: 0
+  margin: 0
+
+.leaflet-popup-content p
+  margin: 0
+
+.leaflet-popup-content-wrapper, .leaflet-popup-tip
+  +box-shadow(none)
+  background: none
+
+.leaflet-popup-content-wrapper
+  +border-radius(0)
+
+.leaflet-popup-content
+  font: inherit
+
+// Leaflet Styles ------------------------------------------------------------
+
+.leaflet-popup-content
+  +adjust-font-size-to($xlargepx,1.25)
+  +text-shadow(rgba($lighter,$small) 1px 1px 0, $lighter 1px 1px $xsmallem )
+  +border-radius
+  +cond
+  +bold
+  padding: rhythm(.25)
+  color: $accent
+  text-align: center
+
+.leaflet-popup-tip
+  +replace-text('ui/pin.png')
+  min-height: image-height('ui/pin.png')
