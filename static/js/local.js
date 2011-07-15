@@ -255,6 +255,147 @@ var MLT = MLT || {};
         addressMapping();
     },
 
+        addresses = function () {
+
+            var addressSorting = function () {
+                var list = $('.actions .listordering > ul'),
+                    item = list.find('li[class^="by"]'),
+                    field = item.find('.field'),
+                    direction = item.find('.dir'),
+                    resetList = function () {
+                        $('.actions .listordering > ul > li.none').insertAfter($('.actions .listordering > ul > li:not(.none)').last());
+                    };
+
+                field.click(function () {
+                    if (!($(this).closest('li[class^="by"]').hasClass('none'))) {
+                        $(this).closest('li[class^="by"]').find('.dir').removeClass('asc').removeClass('desc');
+                    } else {
+                        $(this).closest('li[class^="by"]').find('.dir').addClass('asc');
+                    }
+                    $(this).closest('li[class^="by"]').toggleClass('none');
+                    resetList();
+                    return false;
+                });
+
+                direction.click(function () {
+                    if ($(this).closest('li[class^="by"]').hasClass('none')) {
+                        $(this).closest('li[class^="by"]').removeClass('none');
+                    }
+                    if ($(this).hasClass('asc') || $(this).hasClass('desc')) {
+                        $(this).toggleClass('asc').toggleClass('desc');
+                    } else {
+                        $(this).addClass('asc');
+                    }
+                    resetList();
+                    return false;
+                });
+
+                $('.actions .listordering > ul').sortable({
+                    delay: 30,
+                    update: function (event, ui) {
+                        if (ui.item.hasClass('none')) {
+                            ui.item.removeClass('none').find('.dir').addClass('asc');
+                        }
+                        resetList();
+                    }
+                });
+            },
+
+                addressLoading = function () {
+                    var container = $('#addresstable .managelist'),
+                        url = container.data('addresses-url'),
+                        loading = container.find('.load'),
+                        moreAddresses = true,
+                        currentlyLoading,
+                        newAddresses = function (data) {
+                            if (data.addresses.length) {
+                                $.each(data.addresses, function (i, address) {
+                                    var byline, web_ui, lat, lng, addressHTML;
+
+                                    if (address.parcel) {
+                                        lat = address.parcel.latitude;
+                                        lng = address.parcel.longitude;
+                                    }
+                                    if (address.import_source || address.mapped_by) { byline = true; }
+                                    if (address.import_source === 'web-ui') { web_ui = true; }
+
+                                    addressHTML = ich.address({
+                                        id: address.id,
+                                        pl: address.pl,
+                                        latitude: lat,
+                                        longitude: lng,
+                                        index: address.index,
+                                        street: address.street,
+                                        city: address.city,
+                                        state: address.state,
+                                        complex_name: address.complex_name,
+                                        needs_review: address.needs_review,
+                                        multi_units: address.multi_units,
+                                        notes: address.notes,
+                                        byline: byline,
+                                        import_source: address.import_source,
+                                        web_ui: web_ui,
+                                        imported_by: address.imported_by,
+                                        import_timestamp: address.import_timestamp,
+                                        mapped_by: address.mapped_by,
+                                        mapped_timestamp: address.mapped_timestamp
+                                    });
+
+                                    loading.before(addressHTML).css('opacity', 0);
+                                    addressHTML.find('.details').html5accordion();
+                                });
+                            } else {
+                                loading.find('p').html('No more addresses');
+                                moreAddresses = false;
+                            }
+                            currentlyLoading = false;
+                        };
+
+                    // load some addresses to start out with
+                    // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
+                    if (url) {
+                        currentlyLoading = true;
+                        $.get(url, newAddresses);
+                    }
+
+                    container.scroll(function () {
+                        $.doTimeout('scroll', 150, function () {
+                            if ((container.get(0).scrollHeight - container.scrollTop() - container.outerHeight()) <= loading.outerHeight() && moreAddresses && !currentlyLoading) {
+                                var count = container.find('.address').length + 1;
+                                loading.animate({opacity: 1}, 'fast');
+                                currentlyLoading = true;
+                                // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
+                                $.get(url, {start: count}, newAddresses);
+                            }
+                        });
+                    });
+                },
+
+                addressDetails = function () {
+                    var info = $('#addresstable .managelist [id^="address-id"] .details .summary');
+                    info.live('click', function () {
+                        if ($(this).closest('.details').hasClass('open')) {
+                            $(this).closest('.address').addClass('expanded');
+                        } else {
+                            $(this).closest('.address').removeClass('expanded');
+                        }
+                    });
+                },
+
+                addressSelect = function () {
+                    $('#addresstable .managelist .address .content').live('click', function (event) {
+                        if (!$(event.target).is('button, a, label, input, .summary, .adr, .street-address, .locality, .region')) {
+                            $(this).closest('.address').find('input[id^="select"]').click();
+                        }
+                    });
+                };
+
+            addressSorting();
+            addressLoading();
+            addressDetails();
+            addressSelect();
+        },
+
         addressListHeight = function () {
             var headerHeight = $('header[role="banner"]').outerHeight(),
                 actionsHeight = $('.actions').outerHeight(),
@@ -335,139 +476,6 @@ var MLT = MLT || {};
                 }
                 $(document).unbind('keydown.closeImportLightbox');
             });
-        },
-
-        sorting = function () {
-            var list = $('.actions .listordering > ul'),
-                item = list.find('li[class^="by"]'),
-                field = item.find('.field'),
-                direction = item.find('.dir'),
-                resetList = function () {
-                    $('.actions .listordering > ul > li.none').insertAfter($('.actions .listordering > ul > li:not(.none)').last());
-                };
-
-            field.click(function () {
-                if (!($(this).closest('li[class^="by"]').hasClass('none'))) {
-                    $(this).closest('li[class^="by"]').find('.dir').removeClass('asc').removeClass('desc');
-                } else {
-                    $(this).closest('li[class^="by"]').find('.dir').addClass('asc');
-                }
-                $(this).closest('li[class^="by"]').toggleClass('none');
-                resetList();
-                return false;
-            });
-
-            direction.click(function () {
-                if ($(this).closest('li[class^="by"]').hasClass('none')) {
-                    $(this).closest('li[class^="by"]').removeClass('none');
-                }
-                if ($(this).hasClass('asc') || $(this).hasClass('desc')) {
-                    $(this).toggleClass('asc').toggleClass('desc');
-                } else {
-                    $(this).addClass('asc');
-                }
-                resetList();
-                return false;
-            });
-
-            $('.actions .listordering > ul').sortable({
-                delay: 30,
-                update: function (event, ui) {
-                    if (ui.item.hasClass('none')) {
-                        ui.item.removeClass('none').find('.dir').addClass('asc');
-                    }
-                    resetList();
-                }
-            });
-        },
-
-        addressListLoading = function () {
-            var container = $('#addresstable .managelist'),
-                url = container.data('addresses-url'),
-                loading = container.find('.load'),
-                moreAddresses = true,
-                currentlyLoading,
-                newAddresses = function (data) {
-                    if (data.addresses.length) {
-                        $.each(data.addresses, function (i, address) {
-                            var byline, web_ui, lat, lng, addressHTML;
-
-                            if (address.parcel) {
-                                lat = address.parcel.latitude;
-                                lng = address.parcel.longitude;
-                            }
-                            if (address.import_source || address.mapped_by) { byline = true; }
-                            if (address.import_source === 'web-ui') { web_ui = true; }
-
-                            addressHTML = ich.address({
-                                id: address.id,
-                                pl: address.pl,
-                                latitude: lat,
-                                longitude: lng,
-                                index: address.index,
-                                street: address.street,
-                                city: address.city,
-                                state: address.state,
-                                complex_name: address.complex_name,
-                                needs_review: address.needs_review,
-                                multi_units: address.multi_units,
-                                notes: address.notes,
-                                byline: byline,
-                                import_source: address.import_source,
-                                web_ui: web_ui,
-                                imported_by: address.imported_by,
-                                import_timestamp: address.import_timestamp,
-                                mapped_by: address.mapped_by,
-                                mapped_timestamp: address.mapped_timestamp
-                            });
-
-                            loading.before(addressHTML).css('opacity', 0);
-                            addressHTML.find('.details').html5accordion();
-                        });
-                    } else {
-                        loading.find('p').html('No more addresses');
-                        moreAddresses = false;
-                    }
-                    currentlyLoading = false;
-                };
-
-            // load some addresses to start out with
-            // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
-            if (url) {
-                currentlyLoading = true;
-                $.get(url, newAddresses);
-            }
-
-            container.scroll(function () {
-                $.doTimeout('scroll', 150, function () {
-                    if ((container.get(0).scrollHeight - container.scrollTop() - container.outerHeight()) <= loading.outerHeight() && moreAddresses && !currentlyLoading) {
-                        var count = container.find('.address').length + 1;
-                        loading.animate({opacity: 1}, 'fast');
-                        currentlyLoading = true;
-                        // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
-                        $.get(url, {start: count}, newAddresses);
-                    }
-                });
-            });
-        },
-
-        addressDetails = function () {
-            var info = $('#addresstable .managelist [id^="address-id"] .details .summary');
-            info.live('click', function () {
-                if ($(this).closest('.details').hasClass('open')) {
-                    $(this).closest('.address').addClass('expanded');
-                } else {
-                    $(this).closest('.address').removeClass('expanded');
-                }
-            });
-        },
-
-        addressSelect = function () {
-            $('#addresstable .managelist .address .content').live('click', function (event) {
-                if (!$(event.target).is('button, a, label, input, .summary, .adr, .street-address, .locality, .region')) {
-                    $(this).closest('.address').find('input[id^="select"]').click();
-                }
-            });
         };
 
     $(function () {
@@ -487,10 +495,7 @@ var MLT = MLT || {};
         $('#addresstable .managelist .address .content .details .summary').live('click', function () {
             $(this).blur();
         });
-        sorting();
-        addressListLoading();
-        addressDetails();
-        addressSelect();
+        addresses();
     });
 
 }(jQuery));
