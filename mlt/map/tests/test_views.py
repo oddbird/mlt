@@ -121,6 +121,8 @@ class AssociateViewTest(AuthenticatedWebTest):
 
 
     def test_associate_one(self):
+        from mlt.dt import utc_to_local
+
         create_parcel(pl="1234")
         a = create_address()
 
@@ -134,11 +136,13 @@ class AssociateViewTest(AuthenticatedWebTest):
         self.assertEqual(addy["id"], a.id)
         self.assertEqual(addy["mapped_by"], self.user.username)
         self.assertEqual(addy["mapped_timestamp"], date_format(
-                a.mapped_timestamp, "DATETIME_FORMAT"))
+                utc_to_local(a.mapped_timestamp), "DATETIME_FORMAT"))
         self.assertEqual(addy["needs_review"], True)
 
 
     def test_associate_another(self):
+        from mlt.dt import utc_to_local
+
         create_parcel(pl="1234")
         create_address(pl="1234")
         a2 = create_address()
@@ -153,11 +157,13 @@ class AssociateViewTest(AuthenticatedWebTest):
         self.assertEqual(addy["id"], a2.id)
         self.assertEqual(addy["mapped_by"], self.user.username)
         self.assertEqual(addy["mapped_timestamp"], date_format(
-                a2.mapped_timestamp, "DATETIME_FORMAT"))
+                utc_to_local(a2.mapped_timestamp), "DATETIME_FORMAT"))
         self.assertEqual(addy["needs_review"], True)
 
 
     def test_associate_multiple(self):
+        from mlt.dt import utc_to_local
+
         create_parcel(pl="1234")
         a1 = create_address()
         a2 = create_address()
@@ -177,7 +183,8 @@ class AssociateViewTest(AuthenticatedWebTest):
             )
         self.assertEqual(
             set([a["mapped_timestamp"] for a in mt]),
-            set([date_format(a1.mapped_timestamp, "DATETIME_FORMAT")])
+            set([date_format(utc_to_local(a1.mapped_timestamp),
+                             "DATETIME_FORMAT")])
             )
         self.assertTrue(all([a["needs_review"] for a in mt]))
 
