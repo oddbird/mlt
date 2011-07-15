@@ -444,7 +444,7 @@ var MLT = MLT || {};
                     loading.animate({opacity: 1}, 'fast');
                     currentlyLoading = true;
                     // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
-                    $.get(url + '?start=' + count, newAddresses);
+                    $.get(url, {start: count}, newAddresses);
                 }
             });
         });
