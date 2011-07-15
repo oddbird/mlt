@@ -58,7 +58,7 @@ class Parcel(models.Model):
 
 
 
-class AddressManager(models.Manager):
+class AddressManager(models.GeoManager):
     def create_from_input(self, **kwargs):
         """
         Create an address with the given data and return it, unless a duplicate
@@ -121,6 +121,9 @@ class Address(models.Model):
     street = models.CharField(
         max_length=200, blank=True, db_index=True)
 
+    # lat/lon data from geocoding
+    geocoded = models.PointField(blank=True, null=True)
+
     # mapping
     pl = models.CharField(max_length=8, blank=True, db_index=True)
 
@@ -154,11 +157,21 @@ class Address(models.Model):
 
 
     @property
+    def latitude(self):
+        return self.geocoded and self.geocoded.y or None
+
+
+    @property
+    def longitude(self):
+        return self.geocoded and self.geocoded.x or None
+
+
+    @property
     def parsed_street(self):
         return " ".join([
                 elem for elem in [
-                    self.street_prefix,
                     self.street_number,
+                    self.street_prefix,
                     self.street_name,
                     self.street_type,
                     self.street_suffix

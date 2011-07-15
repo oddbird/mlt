@@ -63,7 +63,9 @@ class AddressSerializer(Serializer):
         "needs_review",
         "imported_by",
         "import_timestamp",
-        "import_source"
+        "import_source",
+        "latitude",
+        "longitude",
         ]
 
 

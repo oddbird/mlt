@@ -222,8 +222,6 @@ def geocode(request):
 
     return json_response({
             "address": serializers.AddressSerializer().one(address),
-            "latitude": data["lat"],
-            "longitude": data["long"],
             })
 
 

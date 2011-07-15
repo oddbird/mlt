@@ -20,6 +20,7 @@ def update(address, data):
     address.street_suffix = data["suffix"]
     address.city = data["city"]
     address.state = data["state"]
+    address.geocoded = "POINT(%s %s)" % (data["long"], data["lat"])
 
 
 

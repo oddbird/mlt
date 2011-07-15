@@ -603,14 +603,15 @@ class GeocodeViewTest(AuthenticatedWebTest):
                     "notes": "",
                     "pl": "",
                     "state": "RI",
-                    "street": "S 123 Main St",
+                    "street": "123 S Main St",
                     "street_name": "Main",
                     "street_number": "123",
                     "street_prefix": "S",
                     "street_suffix": "",
-                    "street_type": "St"},
-                "latitude": "41.823991",
-                "longitude": "-71.406619",
+                    "street_type": "St",
+                    "latitude": 41.823991,
+                    "longitude": -71.406619,
+                    }
                 }
             )
 

@@ -65,6 +65,13 @@ class AddressTest(TestCase):
         return Address
 
 
+    def test_latlong(self):
+        a = create_address(geocoded="POINT(30 10)")
+
+        self.assertEqual(a.latitude, 10)
+        self.assertEqual(a.longitude, 30)
+
+
     def test_parsed_street(self):
         a = create_address(
             street_number="123",
