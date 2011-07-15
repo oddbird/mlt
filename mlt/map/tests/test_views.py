@@ -1,3 +1,4 @@
+import datetime
 import json
 import urllib
 
@@ -298,6 +299,48 @@ class AddressesViewTest(AuthenticatedWebTest):
         self.assertEqual(
             [a["index"] for a in res.json["addresses"]],
             [letter_key(i) for i in range(21, 31)])
+
+
+    def test_sort(self):
+        a1 = create_address(
+            input_street="123 N Main St",
+            city="Providence",
+            import_timestamp=datetime.datetime(2011, 7, 15, 1, 2, 3))
+        a2 = create_address(
+            input_street="456 N Main St",
+            city="Albuquerque",
+            import_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
+        a3 = create_address(
+            input_street="123 N Main St",
+            city="Albuquerque",
+            import_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
+
+        res = self.app.get(
+            self.url + "?sort=city&sort=-street&sort=import_timestamp",
+            user=self.user)
+
+        self.assertEqual(
+            [a["id"] for a in res.json["addresses"]],
+            [a2.id, a3.id, a1.id]
+            )
+
+
+    def test_sort_bad_field(self):
+        res = self.app.get(
+            self.url + "?sort=city&sort=bad",
+            extra_environ={"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
+            user=self.user)
+
+        self.assertEqual(
+            res.json["messages"],
+            [
+                {
+                    'message': "'bad' is not a valid sort field.",
+                    'level': 40,
+                    'tags': 'error'
+                    }
+                ]
+            )
 
 
 

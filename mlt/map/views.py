@@ -107,13 +107,22 @@ def addresses(request):
     qs = Address.objects.all()
 
     sort = request.GET.getlist("sort") or ["import_timestamp"]
-    for sortfield in sort:
-        try:
-            qs = qs.order_by(sortfield)
-        except FieldError:
-            pass
+    sortqs = qs.order_by(*sort)
 
-    qs = qs[start-1:start+num-1]
+    try:
+        # hack to force evaluation of the sort arguments
+        str(sortqs.query)
+    except FieldError:
+        sortqs = qs
+        # apply sorts one at a time to figure out which caused the error
+        for sortfield in sort:
+            try:
+                str(qs.order_by(sortfield).query)
+            except FieldError:
+                messages.error(
+                    request, "'%s' is not a valid sort field." % sortfield)
+
+    qs = sortqs[start-1:start+num-1]
 
     # @@@ indexing on subsequent queries might break if addresses have been
     # added/deleted?
