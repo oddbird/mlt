@@ -13,7 +13,7 @@
 
     <div class="textual">
       <label for="filter_input">filter</label>
-      <input type="text" name="filter" value="" id="filter_input" placeholder="filter by address, ID, date range, etc.">
+      <input type="text" name="filter" value="" id="filter_input" placeholder="filter by address, ID, date range, etc." data-autocomplete-url="{% url map_filter_autocomplete %}">
       <ul class="suggest">
         <li><a href="#"><b>Aug</b>usta Blvd. <i>[street]</i></a></li>
         <li><a href="#"><b>Aug</b>usta, GA <i>[city]</i></a></li>

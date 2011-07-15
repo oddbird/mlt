@@ -177,6 +177,42 @@ def geojson(request):
     return json_response(output)
 
 
+FILTER_FIELDS = {
+    "street": "street",
+    "city": "city",
+    "state": "state",
+    "pl": "pl",
+    "mapped_by__username": "mapped by",
+    "imported_by__username": "imported by",
+    "import_source": "import source",
+    "complex_name": "complex name",
+    }
+
+
+@login_required
+def filter_autocomplete(request):
+    q = request.GET.get("q", "")
+
+    if not q:
+        messages.error(
+            request, "Filter autocomplete requires 'q' parameter.")
+        return json_response({})
+
+    data = []
+    for field, desc in FILTER_FIELDS.items():
+        for option in Address.objects.filter(
+            **{"%s__istartswith" % field: q}).values_list(
+            field, flat=True).distinct():
+            data.append({
+                    "q": q,
+                    "rest": option[len(q):],
+                    "field": field,
+                    "desc": desc
+                    })
+
+    return json_response(data)
+
+
 
 def json_response(data):
     return HttpResponse(
