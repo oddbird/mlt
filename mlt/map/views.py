@@ -14,7 +14,7 @@ from .forms import AddressForm, AddressImportForm
 from .importer import ImporterError
 from .models import Parcel, Address
 from .utils import letter_key
-from . import filters, serializers
+from . import filters, serializers, geocoder
 
 
 
@@ -191,6 +191,40 @@ def filter_autocomplete(request):
     data = filters.autocomplete(q)
 
     return json_response({"options": data})
+
+
+
+@login_required
+def geocode(request):
+    address_id = request.GET.get("id")
+    if not address_id:
+        messages.error(
+            request, "Geocoding requires an address 'id' parameter.")
+        return json_response({})
+
+    try:
+        address = Address.objects.get(pk=address_id)
+    except Address.DoesNotExist:
+        messages.error(
+            request, "Geocoding: '%s' is not a valid address ID." % address_id)
+        return json_response({})
+
+    as_string = geocoder.prep(address)
+    data = geocoder.geocode(as_string)
+
+    if not data:
+        messages.info(
+            request, "Unable to geocode '%s'." % as_string)
+        return json_response({})
+
+    geocoder.update(address, data)
+    address.save()
+
+    return json_response({
+            "address": serializers.AddressSerializer().one(address),
+            "latitude": data["lat"],
+            "longitude": data["long"],
+            })
 
 
 
