@@ -1,5 +1,6 @@
 import json, datetime
 
+from django.core.exceptions import FieldError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -103,9 +104,21 @@ def addresses(request):
     except (ValueError, KeyError):
         num = 20
 
-    # @@@ indexing might break if addresses have been added/deleted?
+    qs = Address.objects.all()
+
+    sort = request.GET.getlist("sort") or ["import_timestamp"]
+    for sortfield in sort:
+        try:
+            qs = qs.order_by(sortfield)
+        except FieldError:
+            pass
+
+    qs = qs[start-1:start+num-1]
+
+    # @@@ indexing on subsequent queries might break if addresses have been
+    # added/deleted?
     ret = []
-    for i, address in enumerate(Address.objects.all()[start-1:start+num-1]):
+    for i, address in enumerate(qs):
         address.index = i + start
         ret.append(address)
 

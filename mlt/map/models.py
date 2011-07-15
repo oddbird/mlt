@@ -85,7 +85,7 @@ class AddressManager(models.Manager):
             dupes = self.filter(
                 (
                     models.Q(input_street__iexact=street) |
-                    models.Q(parsed_street__iexact=street)
+                    models.Q(street__iexact=street)
                     ) &
                 models.Q(city__iexact=city) &
                 models.Q(state__iexact=state)
@@ -117,8 +117,8 @@ class Address(models.Model):
     complex_name = models.CharField(max_length=250, blank=True)
     notes = models.TextField(blank=True)
 
-    # denormalized parsed address for matching with incoming
-    parsed_street = models.CharField(
+    # denormalized street address for sorting and matching with incoming
+    street = models.CharField(
         max_length=200, blank=True, db_index=True)
 
     # mapping
@@ -145,7 +145,7 @@ class Address(models.Model):
 
 
     def save(self, *args, **kwargs):
-        self.parsed_street = self._get_parsed_street()
+        self.street = self.parsed_street or self.input_street
         return super(Address, self).save(*args, **kwargs)
 
 
@@ -153,7 +153,8 @@ class Address(models.Model):
         verbose_name_plural = "addresses"
 
 
-    def _get_parsed_street(self):
+    @property
+    def parsed_street(self):
         return " ".join([
                 elem for elem in [
                     self.street_prefix,
@@ -164,13 +165,6 @@ class Address(models.Model):
                     ]
                 if elem
                 ])
-
-
-    @property
-    def street(self):
-        # use _get_parsed_street instead of denormalized parsed_street so it
-        # stays up to date even when not saved yet.
-        return self._get_parsed_street() or self.input_street
 
 
     @property

@@ -31,7 +31,7 @@ class AddressForm(forms.ModelForm):
     def save(self, user):
         address = super(AddressForm, self).save(commit=False)
 
-        address.input_street = address.street
+        address.input_street = address.parsed_street
 
         address.imported_by = user
         address.import_source = WEB_UI_IMPORT_SOURCE
