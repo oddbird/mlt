@@ -210,7 +210,7 @@ def filter_autocomplete(request):
                     "desc": desc
                     })
 
-    return json_response(data)
+    return json_response({"options": data})
 
 
 
