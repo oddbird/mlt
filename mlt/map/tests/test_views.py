@@ -7,6 +7,8 @@ from django.utils.formats import date_format
 
 from django_webtest import WebTest
 
+from mock import patch
+
 from .utils import create_address, create_parcel, create_mpolygon, create_user
 
 
@@ -18,6 +20,7 @@ __all__ = [
     "GeoJSONViewTest",
     "AddAddressViewTest",
     "FilterAutocompleteViewTest",
+    "GeocodeViewTest",
     ]
 
 
@@ -541,3 +544,143 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
                     "tags": "error"
                     }]
             )
+
+
+
+class GeocodeViewTest(AuthenticatedWebTest):
+    url_name = "map_geocode"
+
+    @patch("mlt.map.geocoder.geocode")
+    def test_geocode(self, geocode):
+        self.maxDiff = None
+        geocode.return_value = {
+            "city": "Providence",
+            "lat": "41.823991",
+            "long": "-71.406619",
+            "number": "123",
+            "prefix": "S",
+            "state": "RI",
+            "street": "Main",
+            "suffix": "",
+            "type": "St",
+            "zip": "02903"
+            }
+
+        a = create_address(
+            city="Providence",
+            input_street="123 S Main St",
+            state="RI",
+            street_number="",
+            street_name="",
+            street_prefix="",
+            street_suffix="",
+            street_type="",
+            )
+
+        res = self.app.get(self.url + "?id=%s" % a.id , user=self.user)
+
+        a = a.__class__.objects.get(pk=a.id)
+
+        self.assertEqual(a.street_number, "123")
+        self.assertEqual(a.street_prefix, "S")
+        self.assertEqual(a.street_name, "Main")
+        self.assertEqual(a.street_type, "St")
+
+        self.assertEqual(
+            res.json,
+            {
+                "address": {
+                    "city": "Providence",
+                    "complex_name": "",
+                    "id": a.id,
+                    "import_source": "test-created",
+                    "import_timestamp": "June 15, 2011 at 4:14 a.m.",
+                    "imported_by": a.imported_by.username,
+                    "mapped_by": None,
+                    "mapped_timestamp": None,
+                    "multi_units": False,
+                    "needs_review": True,
+                    "notes": "",
+                    "pl": "",
+                    "state": "RI",
+                    "street": "S 123 Main St",
+                    "street_name": "Main",
+                    "street_number": "123",
+                    "street_prefix": "S",
+                    "street_suffix": "",
+                    "street_type": "St"},
+                "latitude": "41.823991",
+                "longitude": "-71.406619",
+                }
+            )
+
+        geocode.assert_called_with("123 S Main St, Providence, RI")
+
+
+    def test_geocode_no_id(self):
+        res = self.app.get(
+            self.url,
+            extra_environ={"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
+            user=self.user)
+
+        self.assertEqual(
+            res.json["messages"],
+            [
+                {
+                    "message": "Geocoding requires an address 'id' parameter.",
+                    "level": 40,
+                    "tags": "error"
+                    }
+                ])
+
+
+    def test_geocode_bad_id(self):
+        res = self.app.get(
+            self.url + "?id=2100",
+            extra_environ={"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
+            user=self.user)
+
+        self.assertEqual(
+            res.json["messages"],
+            [
+                {
+                    "message": "Geocoding: '2100' is not a valid address ID.",
+                    "level": 40,
+                    "tags": "error"
+                    }
+                ])
+
+
+    @patch("mlt.map.geocoder.geocode")
+    def test_cant_geocode(self, geocode):
+        geocode.return_value = None
+
+        a = create_address(
+            city="Providence",
+            input_street="123 S Main St",
+            state="RI",
+            street_number="",
+            street_name="",
+            street_prefix="",
+            street_suffix="",
+            street_type="",
+            )
+
+        res = self.app.get(
+            self.url + "?id=%s" % a.id ,
+            extra_environ={"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
+            user=self.user)
+
+        self.assertEqual(
+            res.json["messages"],
+            [
+                {
+                    'level': 20,
+                    'message':
+                        "Unable to geocode '123 S Main St, Providence, RI'.",
+                    'tags': 'info'
+              }
+             ]
+            )
+
+        geocode.assert_called_with("123 S Main St, Providence, RI")
