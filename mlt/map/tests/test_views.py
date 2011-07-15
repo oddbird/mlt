@@ -16,7 +16,8 @@ __all__ = [
     "AssociateViewTest",
     "AddressesViewTest",
     "GeoJSONViewTest",
-    "AddAddressViewTest"
+    "AddAddressViewTest",
+    "FilterAutocompleteViewTest",
     ]
 
 
@@ -455,4 +456,57 @@ class GeoJSONViewTest(AuthenticatedWebTest):
                         }
                     ]
                 }
+            )
+
+
+
+class FilterAutocompleteViewTest(AuthenticatedWebTest):
+    url_name = "map_filter_autocomplete"
+
+
+    def test_filter(self):
+        create_address(
+            input_street="123 N Main St",
+            city="Providence",
+            imported_by=create_user(username="blametern"))
+        create_address(
+            input_street="456 N Main St",
+            city="Albuquerque")
+        create_address(
+            input_street="123 N Main St",
+            city="Albuquerque")
+
+        res = self.app.get(self.url + "?q=alb", user=self.user)
+
+        self.assertEqual(
+            res.json["options"],
+            [{'desc': 'city', 'field': 'city', 'q': 'alb', 'rest': 'uquerque'}]
+            )
+
+        res = self.app.get(self.url + "?q=b", user=self.user)
+
+        self.assertEqual(
+            res.json["options"],
+            [{
+                    'q': 'b',
+                    'field': 'imported_by__username',
+                    'rest': 'lametern',
+                    'desc': 'imported by'
+                    }]
+            )
+
+
+    def test_no_filter(self):
+        res = self.app.get(
+            self.url,
+            extra_environ={"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
+            user=self.user)
+
+        self.assertEqual(
+            res.json["messages"],
+            [{
+                    'message': "Filter autocomplete requires 'q' parameter.",
+                    'level': 40,
+                    'tags': 'error'
+                    }]
             )
