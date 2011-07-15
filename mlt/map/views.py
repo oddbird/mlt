@@ -145,8 +145,9 @@ def add_address(request):
     form = AddressForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         address = form.save(request.user)
-        return render(
-            request, "includes/add_address/success.html", {"address": address})
+        messages.success(
+            request, "Address &laquo;%s&raquo; added." % address.street)
+        return json_response({"added": True})
     return render(request, "includes/add_address/form.html", {"form": form})
 
 

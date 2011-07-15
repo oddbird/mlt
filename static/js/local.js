@@ -283,13 +283,17 @@ var MLT = MLT || {};
         target = $("#lightbox-add-address"),
         url = target.data('add-address-url'),
         success = function(data) {
-            target.html(data.html);
-            bootstrapForm();
-            $(document).bind('keydown.closeAddLightbox', function(event) {
-                if (event.keyCode === 27) {
-                    target.find('a[title*="close"]').click();
-                }
-            });
+            if (data.added) {
+                target.find('a[title*="close"]').click();
+            } else {
+                target.html(data.html);
+                bootstrapForm();
+                $(document).bind('keydown.closeAddLightbox', function(event) {
+                    if (event.keyCode === 27) {
+                        target.find('a[title*="close"]').click();
+                    }
+                });
+            };
         },
         bootstrapForm = function() {
             var form = target.find('form').ajaxForm({
