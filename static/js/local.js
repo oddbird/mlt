@@ -1,5 +1,6 @@
 /*jslint    browser:    true,
-            indent:     4 */
+            indent:     4,
+            confusion:  true */
 /*global    L, ich, jQuery */
 
 var MLT = MLT || {};
@@ -258,6 +259,77 @@ var MLT = MLT || {};
         addresses = function () {
 
             var sortData = {},
+                container = $('#addresstable .managelist'),
+                loadingURL = container.data('addresses-url'),
+                loadingMessage = container.find('.load'),
+
+                addressLoading = {
+                    moreAddresses: true,
+                    currentlyLoading: false,
+                    newAddresses: function (data) {
+                        if (data.addresses.length) {
+                            $.each(data.addresses, function (i, address) {
+                                var byline, web_ui, lat, lng, addressHTML;
+
+                                if (address.parcel) {
+                                    lat = address.parcel.latitude;
+                                    lng = address.parcel.longitude;
+                                } else {
+                                    lat = address.latitude;
+                                    lng = address.longitude;
+                                }
+                                if (address.import_source || address.mapped_by) { byline = true; }
+                                if (address.import_source === 'web-ui') { web_ui = true; }
+
+                                addressHTML = ich.address({
+                                    id: address.id,
+                                    pl: address.pl,
+                                    latitude: lat,
+                                    longitude: lng,
+                                    index: address.index,
+                                    street: address.street,
+                                    city: address.city,
+                                    state: address.state,
+                                    complex_name: address.complex_name,
+                                    needs_review: address.needs_review,
+                                    multi_units: address.multi_units,
+                                    notes: address.notes,
+                                    byline: byline,
+                                    import_source: address.import_source,
+                                    web_ui: web_ui,
+                                    imported_by: address.imported_by,
+                                    import_timestamp: address.import_timestamp,
+                                    mapped_by: address.mapped_by,
+                                    mapped_timestamp: address.mapped_timestamp
+                                });
+
+                                loadingMessage.before(addressHTML).css('opacity', 0);
+                                addressHTML.find('.details').html5accordion();
+                            });
+                        } else {
+                            loadingMessage.find('p').html('No more addresses');
+                            addressLoading.moreAddresses = false;
+                        }
+                        addressLoading.currentlyLoading = false;
+                    },
+                    // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
+                    reloadList: function () {
+                        container.find('.address').remove();
+                        if (loadingURL && sortData) {
+                            addressLoading.currentlyLoading = true;
+                            $.get(loadingURL, {sort: sortData}, addressLoading.newAddresses);
+                        }
+                    },
+                    addMore: function () {
+                        if (loadingURL && sortData) {
+                            var count = container.find('.address').length + 1;
+                            loadingMessage.animate({opacity: 1}, 'fast');
+                            addressLoading.currentlyLoading = true;
+                            // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
+                            $.get(loadingURL, {start: count, sort: sortData}, addressLoading.newAddresses);
+                        }
+                    }
+                },
 
                 addressSorting = function () {
                     var list = $('#addressform .actions .listordering > ul'),
@@ -275,6 +347,7 @@ var MLT = MLT || {};
                                 }
                                 return thisName;
                             }).get();
+                            addressLoading.reloadList();
                         };
 
                     fields.click(function () {
@@ -286,7 +359,6 @@ var MLT = MLT || {};
                         $(this).closest('li[class^="by"]').toggleClass('none');
                         resetList();
                         updateSortData();
-                        addressLoading(true);
                         return false;
                     });
 
@@ -301,7 +373,6 @@ var MLT = MLT || {};
                         }
                         resetList();
                         updateSortData();
-                        addressLoading(true);
                         return false;
                     });
 
@@ -313,85 +384,10 @@ var MLT = MLT || {};
                             }
                             resetList();
                             updateSortData();
-                            addressLoading(true);
                         }
                     });
 
                     updateSortData();
-                },
-
-                addressLoading = function (reload) {
-                    var container = $('#addresstable .managelist'),
-                        url = container.data('addresses-url'),
-                        loading = container.find('.load'),
-                        moreAddresses = true,
-                        currentlyLoading,
-                        newAddresses = function (data) {
-                            if (data.addresses.length) {
-                                $.each(data.addresses, function (i, address) {
-                                    var byline, web_ui, lat, lng, addressHTML;
-
-                                    if (address.parcel) {
-                                        lat = address.parcel.latitude;
-                                        lng = address.parcel.longitude;
-                                    }
-                                    if (address.import_source || address.mapped_by) { byline = true; }
-                                    if (address.import_source === 'web-ui') { web_ui = true; }
-
-                                    addressHTML = ich.address({
-                                        id: address.id,
-                                        pl: address.pl,
-                                        latitude: lat,
-                                        longitude: lng,
-                                        index: address.index,
-                                        street: address.street,
-                                        city: address.city,
-                                        state: address.state,
-                                        complex_name: address.complex_name,
-                                        needs_review: address.needs_review,
-                                        multi_units: address.multi_units,
-                                        notes: address.notes,
-                                        byline: byline,
-                                        import_source: address.import_source,
-                                        web_ui: web_ui,
-                                        imported_by: address.imported_by,
-                                        import_timestamp: address.import_timestamp,
-                                        mapped_by: address.mapped_by,
-                                        mapped_timestamp: address.mapped_timestamp
-                                    });
-
-                                    loading.before(addressHTML).css('opacity', 0);
-                                    addressHTML.find('.details').html5accordion();
-                                });
-                            } else {
-                                loading.find('p').html('No more addresses');
-                                moreAddresses = false;
-                            }
-                            currentlyLoading = false;
-                        };
-
-                    if (reload) {
-                        container.find('.address').remove();
-                    }
-
-                    // load some addresses to start out with
-                    // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
-                    if (url) {
-                        currentlyLoading = true;
-                        $.get(url, {sort: sortData}, newAddresses);
-                    }
-
-                    container.scroll(function () {
-                        $.doTimeout('scroll', 150, function () {
-                            if ((container.get(0).scrollHeight - container.scrollTop() - container.outerHeight()) <= loading.outerHeight() && moreAddresses && !currentlyLoading) {
-                                var count = container.find('.address').length + 1;
-                                loading.animate({opacity: 1}, 'fast');
-                                currentlyLoading = true;
-                                // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
-                                $.get(url, {start: count, sort: sortData}, newAddresses);
-                            }
-                        });
-                    });
                 },
 
                 addressDetails = function () {
@@ -414,9 +410,16 @@ var MLT = MLT || {};
                 };
 
             addressSorting();
-            addressLoading();
             addressDetails();
             addressSelect();
+
+            container.scroll(function () {
+                $.doTimeout('scroll', 150, function () {
+                    if ((container.get(0).scrollHeight - container.scrollTop() - container.outerHeight()) <= loadingMessage.outerHeight() && addressLoading.moreAddresses && !addressLoading.currentlyLoading) {
+                        addressLoading.addMore();
+                    }
+                });
+            });
         },
 
         addressListHeight = function () {
