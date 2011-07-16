@@ -371,6 +371,57 @@ class AddressesViewTest(AuthenticatedWebTest):
             )
 
 
+    def test_status_filter_unmapped(self):
+        create_address(pl="123", needs_review=True)
+        create_address(pl="345", needs_review=False)
+        a3 = create_address(pl="", needs_review=True)
+        a4 = create_address(pl="", needs_review=False)
+
+
+        res = self.app.get(
+            self.url + "?status=unmapped",
+            user=self.user)
+
+        self.assertEqual(
+            set([a["id"] for a in res.json["addresses"]]),
+            set([a3.id, a4.id])
+            )
+
+
+    def test_status_filter_flagged(self):
+        a1 = create_address(pl="123", needs_review=True)
+        create_address(pl="345", needs_review=False)
+        create_address(pl="", needs_review=True)
+        create_address(pl="", needs_review=False)
+
+
+        res = self.app.get(
+            self.url + "?status=flagged",
+            user=self.user)
+
+        self.assertEqual(
+            [a["id"] for a in res.json["addresses"]],
+            [a1.id] # not a3 because it is unmapped
+            )
+
+
+    def test_status_filter_approved(self):
+        create_address(pl="123", needs_review=True)
+        a2 = create_address(pl="345", needs_review=False)
+        create_address(pl="", needs_review=True)
+        create_address(pl="", needs_review=False)
+
+
+        res = self.app.get(
+            self.url + "?status=approved",
+            user=self.user)
+
+        self.assertEqual(
+            [a["id"] for a in res.json["addresses"]],
+            [a2.id]
+            )
+
+
     def test_count(self):
         create_address(
             input_street="123 N Main St",
