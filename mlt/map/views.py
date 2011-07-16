@@ -104,7 +104,11 @@ def addresses(request):
     except (ValueError, KeyError):
         num = 20
 
-    qs = Address.objects.all()
+    qs = filters.apply(Address.objects.all(), request.GET)
+
+    get_count = request.GET.get("count", "false").lower() not in ["false", "0"]
+    if get_count:
+        count = qs.count()
 
     sort = request.GET.getlist("sort") or ["import_timestamp"]
     sortqs = qs.order_by(*sort)
@@ -122,7 +126,8 @@ def addresses(request):
                 messages.error(
                     request, "'%s' is not a valid sort field." % sortfield)
 
-    qs = filters.apply(sortqs, request.GET)[start-1:start+num-1]
+
+    qs = sortqs[start-1:start+num-1]
 
     # @@@ indexing on subsequent queries might break if addresses have been
     # added/deleted?
@@ -131,12 +136,14 @@ def addresses(request):
         address.index = i + start
         ret.append(address)
 
-    return json_response(
-        {
-            "addresses": IndexedAddressSerializer(
-                extra=["parcel"]).many(ret)
-            }
-        )
+    data = {
+        "addresses": IndexedAddressSerializer(extra=["parcel"]).many(ret)
+        }
+
+    if get_count:
+        data["count"] = count
+
+    return json_response(data)
 
 
 

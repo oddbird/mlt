@@ -371,6 +371,27 @@ class AddressesViewTest(AuthenticatedWebTest):
             )
 
 
+    def test_count(self):
+        create_address(
+            input_street="123 N Main St",
+            city="Providence",
+            import_timestamp=datetime.datetime(2011, 7, 15, 1, 2, 3))
+        create_address(
+            input_street="456 N Main St",
+            city="Albuquerque",
+            import_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
+        create_address(
+            input_street="123 N Main St",
+            city="Albuquerque",
+            import_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
+
+        res = self.app.get(self.url + "?city=Albuquerque&num=1&count=true", user=self.user)
+
+        self.assertEqual(res.json["count"], 2)
+        self.assertEqual(len(res.json["addresses"]), 1)
+
+
+
 
 class AddAddressViewTest(AuthenticatedWebTest):
     url_name = "map_add_address"
