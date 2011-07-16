@@ -257,51 +257,70 @@ var MLT = MLT || {};
 
         addresses = function () {
 
-            var addressSorting = function () {
-                var list = $('.actions .listordering > ul'),
-                    item = list.find('li[class^="by"]'),
-                    field = item.find('.field'),
-                    direction = item.find('.dir'),
-                    resetList = function () {
-                        $('.actions .listordering > ul > li.none').insertAfter($('.actions .listordering > ul > li:not(.none)').last());
-                    };
+            var sortData = {},
 
-                field.click(function () {
-                    if (!($(this).closest('li[class^="by"]').hasClass('none'))) {
-                        $(this).closest('li[class^="by"]').find('.dir').removeClass('asc').removeClass('desc');
-                    } else {
-                        $(this).closest('li[class^="by"]').find('.dir').addClass('asc');
-                    }
-                    $(this).closest('li[class^="by"]').toggleClass('none');
-                    resetList();
-                    return false;
-                });
+                addressSorting = function () {
+                    var list = $('#addressform .actions .listordering > ul'),
+                        items = list.find('li[class^="by"]'),
+                        fields = items.find('.field'),
+                        directions = items.find('.dir'),
+                        resetList = function () {
+                            $('#addressform .actions .listordering > ul > li.none').insertAfter($('#addressform .actions .listordering > ul > li:not(.none)').last());
+                        },
+                        updateSortData = function () {
+                            sortData = list.find('li[class^="by"]').not('.none').map(function () {
+                                var thisName = $(this).find('.field').data('field');
+                                if ($(this).find('.dir').hasClass('desc')) {
+                                    thisName = '-' + thisName;
+                                }
+                                return thisName;
+                            }).get();
+                        };
 
-                direction.click(function () {
-                    if ($(this).closest('li[class^="by"]').hasClass('none')) {
-                        $(this).closest('li[class^="by"]').removeClass('none');
-                    }
-                    if ($(this).hasClass('asc') || $(this).hasClass('desc')) {
-                        $(this).toggleClass('asc').toggleClass('desc');
-                    } else {
-                        $(this).addClass('asc');
-                    }
-                    resetList();
-                    return false;
-                });
+                    fields.click(function () {
+                        if (!($(this).closest('li[class^="by"]').hasClass('none'))) {
+                            $(this).closest('li[class^="by"]').find('.dir').removeClass('asc desc');
+                        } else {
+                            $(this).closest('li[class^="by"]').find('.dir').addClass('asc');
+                        }
+                        $(this).closest('li[class^="by"]').toggleClass('none');
+                        resetList();
+                        updateSortData();
+                        addressLoading(true);
+                        return false;
+                    });
 
-                $('.actions .listordering > ul').sortable({
-                    delay: 30,
-                    update: function (event, ui) {
-                        if (ui.item.hasClass('none')) {
-                            ui.item.removeClass('none').find('.dir').addClass('asc');
+                    directions.click(function () {
+                        if ($(this).closest('li[class^="by"]').hasClass('none')) {
+                            $(this).closest('li[class^="by"]').removeClass('none');
+                        }
+                        if ($(this).hasClass('asc') || $(this).hasClass('desc')) {
+                            $(this).toggleClass('asc desc');
+                        } else {
+                            $(this).addClass('asc');
                         }
                         resetList();
-                    }
-                });
-            },
+                        updateSortData();
+                        addressLoading(true);
+                        return false;
+                    });
 
-                addressLoading = function () {
+                    list.sortable({
+                        delay: 30,
+                        update: function (event, ui) {
+                            if (ui.item.hasClass('none')) {
+                                ui.item.removeClass('none').find('.dir').addClass('asc');
+                            }
+                            resetList();
+                            updateSortData();
+                            addressLoading(true);
+                        }
+                    });
+
+                    updateSortData();
+                },
+
+                addressLoading = function (reload) {
                     var container = $('#addresstable .managelist'),
                         url = container.data('addresses-url'),
                         loading = container.find('.load'),
@@ -351,11 +370,15 @@ var MLT = MLT || {};
                             currentlyLoading = false;
                         };
 
+                    if (reload) {
+                        container.find('.address').remove();
+                    }
+
                     // load some addresses to start out with
                     // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
                     if (url) {
                         currentlyLoading = true;
-                        $.get(url, newAddresses);
+                        $.get(url, {sort: sortData}, newAddresses);
                     }
 
                     container.scroll(function () {
@@ -365,7 +388,7 @@ var MLT = MLT || {};
                                 loading.animate({opacity: 1}, 'fast');
                                 currentlyLoading = true;
                                 // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
-                                $.get(url, {start: count}, newAddresses);
+                                $.get(url, {start: count, sort: sortData}, newAddresses);
                             }
                         });
                     });
