@@ -21,6 +21,7 @@ __all__ = [
     "AddAddressViewTest",
     "FilterAutocompleteViewTest",
     "GeocodeViewTest",
+    "AddressActionsViewTest",
     ]
 
 
@@ -103,7 +104,31 @@ class ImportViewTest(AuthenticatedWebTest):
 
 
 
-class AssociateViewTest(AuthenticatedWebTest):
+class CSRFAuthenticatedWebTest(AuthenticatedWebTest):
+    url_name = "map_associate"
+
+
+    def setUp(self):
+        super(CSRFAuthenticatedWebTest, self).setUp()
+
+        res = self.app.get("/", user=self.user)
+        self.csrftoken = dict(
+            [i.strip() for i in c.split(";")[0].split("=")]
+            for c in res.headers.getall("set-cookie")
+            )["csrftoken"]
+
+
+    def post(self, url, data):
+        data["csrfmiddlewaretoken"] = self.csrftoken
+        return self.app.post(
+            url,
+            urllib.urlencode(data, doseq=True),
+            extra_environ={"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
+            user=self.user)
+
+
+
+class AssociateViewTest(CSRFAuthenticatedWebTest):
     url_name = "map_associate"
 
 
@@ -757,3 +782,120 @@ class GeocodeViewTest(AuthenticatedWebTest):
             )
 
         geocode.assert_called_with("123 S Main St, Providence, RI")
+
+
+
+class AddressActionsViewTest(CSRFAuthenticatedWebTest):
+    url_name = "map_address_actions"
+
+
+    def test_delete(self):
+        a1 = create_address()
+        a2 = create_address()
+
+        res = self.post(
+            self.url,
+            {"aid": [a1.id, a2.id], "action": "delete"},
+            )
+
+        self.assertEqual(
+            res.json,
+            {
+                'messages': [{
+                        'level': 25,
+                        'message': '2 addresses deleted.',
+                        'tags': 'success'
+                        }],
+                "success": True
+                }
+            )
+
+        self.assertEqual(a1.__class__.objects.count(), 0)
+
+
+    def test_approve(self):
+        a1 = create_address(pl="", needs_review=True)
+        a2 = create_address(pl="123", needs_review=True)
+        a3 = create_address(pl="234", needs_review=False)
+
+        res = self.post(
+            self.url,
+            {"aid": [a1.id, a2.id, a3.id], "action": "approve"},
+            )
+
+        self.assertEqual(
+            res.json["messages"],
+            [{
+                    "level": 25,
+                    "message": "1 mapping approved.",
+                    "tags": "success",
+                    }],
+            )
+        self.assertTrue(res.json["success"])
+        self.assertEqual(len(res.json["addresses"]), 1)
+
+        a2 = a2.__class__.objects.get(pk=a2.pk)
+        self.assertEqual(a2.needs_review, False)
+
+
+    def test_flag(self):
+        a1 = create_address(pl="", needs_review=False)
+        a2 = create_address(pl="123", needs_review=True)
+        a3 = create_address(pl="234", needs_review=False)
+
+        res = self.post(
+            self.url,
+            {"aid": [a1.id, a2.id, a3.id], "action": "flag"},
+            )
+
+        self.assertEqual(
+            res.json["messages"],
+            [{
+                    "level": 25,
+                    "message": "1 mapping flagged.",
+                    "tags": "success",
+                    }],
+            )
+        self.assertTrue(res.json["success"])
+        self.assertEqual(len(res.json["addresses"]), 1)
+
+        a3 = a3.__class__.objects.get(pk=a3.pk)
+        self.assertEqual(a3.needs_review, True)
+
+
+    def test_no_ids(self):
+        res = self.post(self.url, {})
+
+        self.assertEqual(
+            res.json,
+            {"messages": [{"level": 40,
+                           "message": "No addresses with given IDs ()",
+                           "tags": "error"}],
+             "success": False}
+            )
+
+
+    def test_bad_ids(self):
+        res = self.post(self.url, {"aid": [1001]})
+
+        self.assertEqual(
+            res.json,
+            {"messages": [{"level": 40,
+                           "message": "No addresses with given IDs (1001)",
+                           "tags": "error"}],
+             "success": False}
+            )
+
+
+    def test_bad_action(self):
+        a1 = create_address()
+
+        res = self.post(self.url, {"aid": [a1.id], "action": "bad"})
+
+        self.assertEqual(
+            res.json,
+            {"messages": [{"level": 40,
+                           "message": "Unknown action 'bad'",
+                           "tags": "error"}],
+             "success": False}
+            )

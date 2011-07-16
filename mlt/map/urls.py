@@ -13,4 +13,5 @@ urlpatterns = patterns(
     url(r"^_geojson/$", "geojson", name="map_geojson"),
     url(r"^_filter_autocomplete/$", "filter_autocomplete", name="map_filter_autocomplete"),
     url(r"^_geocode/$", "geocode", name="map_geocode"),
+    url(r"^_action/$", "address_actions", name="map_address_actions"),
     )

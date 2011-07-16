@@ -233,6 +233,56 @@ def geocode(request):
 
 
 
+@login_required
+def address_actions(request):
+    aids = request.POST.getlist("aid")
+    addresses = Address.objects.filter(id__in=aids)
+    if not addresses:
+        messages.error(
+            request, "No addresses with given IDs (%s)" % ", ".join(aids))
+        return json_response({"success": False})
+
+    action = request.POST.get("action")
+
+    if action == "delete":
+        count = addresses.count()
+        addresses.delete()
+        messages.success(
+            request, "%s address%s deleted."
+            % (count, "es" if (count != 1) else ""))
+        return json_response({"success": True})
+
+    if action == "approve":
+        addresses = addresses.filter(needs_review=True).exclude(pl="")
+        count = addresses.count()
+        Address.objects.filter(
+            id__in=[a.id for a in addresses]).update(needs_review=False)
+        messages.success(
+            request, "%s mapping%s approved."
+            % (count, "s" if (count != 1) else ""))
+        return json_response({
+                "success": True,
+                "addresses": serializers.AddressSerializer().many(addresses),
+                })
+
+    if action == "flag":
+        addresses = addresses.filter(needs_review=False).exclude(pl="")
+        count = addresses.count()
+        Address.objects.filter(
+            id__in=[a.id for a in addresses]).update(needs_review=True)
+        messages.success(
+            request, "%s mapping%s flagged."
+            % (count, "s" if (count != 1) else ""))
+        return json_response({
+                "success": True,
+                "addresses": serializers.AddressSerializer().many(addresses),
+                })
+
+    messages.error(request, "Unknown action '%s'" % action)
+    return json_response({"success": False})
+
+
+
 def json_response(data):
     return HttpResponse(
         json.dumps(data, cls=IterEncoder),
