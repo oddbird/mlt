@@ -313,20 +313,32 @@ var MLT = MLT || {};
                         addressLoading.currentlyLoading = false;
                     },
                     // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
-                    reloadList: function () {
+                    reloadList: function (opts) {
+                        var defaults = {
+                            sort: sortData,
+                            start: 1,
+                            num: 20
+                        },
+                            options = $.extend({}, defaults, opts);
                         container.find('.address').remove();
                         if (loadingURL && sortData) {
                             addressLoading.currentlyLoading = true;
-                            $.get(loadingURL, {sort: sortData}, addressLoading.newAddresses);
+                            $.get(loadingURL, options, addressLoading.newAddresses);
                         }
                     },
-                    addMore: function () {
+                    addMore: function (opts) {
+                        var count = container.find('.address').length + 1,
+                            defaults = {
+                                sort: sortData,
+                                start: count
+                            },
+                            options = $.extend({}, defaults, opts);
                         if (loadingURL && sortData) {
                             var count = container.find('.address').length + 1;
                             loadingMessage.animate({opacity: 1}, 'fast');
                             addressLoading.currentlyLoading = true;
                             // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
-                            $.get(loadingURL, {start: count, sort: sortData}, addressLoading.newAddresses);
+                            $.get(loadingURL, options, addressLoading.newAddresses);
                         }
                     }
                 },
@@ -336,7 +348,7 @@ var MLT = MLT || {};
                         items = list.find('li[class^="by"]'),
                         fields = items.find('.field'),
                         directions = items.find('.dir'),
-                        resetList = function () {
+                        sortList = function () {
                             $('#addressform .actions .listordering > ul > li.none').insertAfter($('#addressform .actions .listordering > ul > li:not(.none)').last());
                         },
                         updateSortData = function () {
@@ -357,7 +369,7 @@ var MLT = MLT || {};
                             $(this).closest('li[class^="by"]').find('.dir').addClass('asc');
                         }
                         $(this).closest('li[class^="by"]').toggleClass('none');
-                        resetList();
+                        sortList();
                         updateSortData();
                         return false;
                     });
@@ -371,7 +383,7 @@ var MLT = MLT || {};
                         } else {
                             $(this).addClass('asc');
                         }
-                        resetList();
+                        sortList();
                         updateSortData();
                         return false;
                     });
@@ -382,7 +394,7 @@ var MLT = MLT || {};
                             if (ui.item.hasClass('none')) {
                                 ui.item.removeClass('none').find('.dir').addClass('asc');
                             }
-                            resetList();
+                            sortList();
                             updateSortData();
                         }
                     });
@@ -407,11 +419,53 @@ var MLT = MLT || {};
                             $(this).closest('.address').find('input[id^="select"]').click();
                         }
                     });
+                },
+
+                addAddress = function () {
+                    var success, bootstrapForm,
+                        link = $('a[href=#lightbox-add-address]'),
+                        target = $("#lightbox-add-address"),
+                        url = target.data('add-address-url');
+
+                    success = function (data) {
+                        var number = container.find('.address').length;
+                        if (data.added) {
+                            target.find('a[title*="close"]').click();
+                            addressLoading.reloadList({num: number});
+                        } else {
+                            target.html(data.html);
+                            bootstrapForm();
+                            $(document).bind('keydown.closeAddLightbox', function (event) {
+                                if (event.keyCode === 27) {
+                                    target.find('a[title*="close"]').click();
+                                }
+                            });
+                        }
+                    };
+
+                    bootstrapForm = function () {
+                        var form = target.find('form').ajaxForm({
+                            success: success
+                        });
+                    };
+
+                    link.click(function () {
+                        $.get(url, success);
+                    });
+
+                    target.find('a[title*="close"]').live('click', function () {
+                        var form = target.find('form');
+                        if (form.length) {
+                            form.get(0).reset();
+                        }
+                        $(document).unbind('keydown.closeAddLightbox');
+                    });
                 };
 
             addressSorting();
             addressDetails();
             addressSelect();
+            addAddress();
 
             container.scroll(function () {
                 $.doTimeout('scroll', 150, function () {
@@ -436,45 +490,6 @@ var MLT = MLT || {};
                 $.doTimeout(250, function () {
                     updateHeight();
                 });
-            });
-        },
-
-        addAddressLightbox = function () {
-            var success, bootstrapForm,
-                link = $('a[href=#lightbox-add-address]'),
-                target = $("#lightbox-add-address"),
-                url = target.data('add-address-url');
-
-            success = function (data) {
-                if (data.added) {
-                    target.find('a[title*="close"]').click();
-                } else {
-                    target.html(data.html);
-                    bootstrapForm();
-                    $(document).bind('keydown.closeAddLightbox', function (event) {
-                        if (event.keyCode === 27) {
-                            target.find('a[title*="close"]').click();
-                        }
-                    });
-                }
-            };
-
-            bootstrapForm = function () {
-                var form = target.find('form').ajaxForm({
-                    success: success
-                });
-            };
-
-            link.click(function () {
-                $.get(url, success);
-            });
-
-            target.find('a[title*="close"]').live('click', function () {
-                var form = target.find('form');
-                if (form.length) {
-                    form.get(0).reset();
-                }
-                $(document).unbind('keydown.closeAddLightbox');
             });
         },
 
@@ -513,15 +528,14 @@ var MLT = MLT || {};
             closeLink: '.message'
         });
         addressListHeight();
-        addAddressLightbox();
-        importAddressesLightbox();
-        if ($('#map').length) {
-            mapping();
-        }
         $('#addresstable .managelist .address .content .details .summary').live('click', function () {
             $(this).blur();
         });
+        if ($('#map').length) {
+            mapping();
+        }
         addresses();
+        importAddressesLightbox();
     });
 
 }(jQuery));
