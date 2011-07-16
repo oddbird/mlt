@@ -131,7 +131,7 @@ class Address(models.Model):
         User, blank=True, null=True, on_delete=models.PROTECT,
         related_name="addresses_mapped")
     mapped_timestamp = models.DateTimeField(blank=True, null=True)
-    needs_review = models.BooleanField(default=True, db_index=True)
+    needs_review = models.BooleanField(default=False, db_index=True)
 
     # import
     imported_by = models.ForeignKey(
