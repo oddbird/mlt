@@ -54,18 +54,17 @@ def associate(request):
 
     parcel = None
     try:
-        pl = request.POST["pl"]
+        pl = request.POST["maptopl"]
         parcel = Parcel.objects.get(pl=pl)
     except KeyError:
         messages.error(request, "No PL provided.")
     except Parcel.DoesNotExist:
         messages.error(request, "No parcel with PL '%s'" % pl)
 
-    aids = request.POST.getlist("aid")
-    addresses = Address.objects.filter(id__in=aids)
+    addresses = filters.apply(Address.objects.all(), request.POST)
     if not addresses:
         messages.error(
-            request, "No addresses with given IDs (%s)" % ", ".join(aids))
+            request, "No addresses selected.")
 
     if parcel and addresses:
         addresses.update(
