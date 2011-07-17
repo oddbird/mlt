@@ -142,12 +142,13 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
             )["csrftoken"]
 
 
-    def post(self, url, data):
+    def post(self, url, data, user=None):
         data["csrfmiddlewaretoken"] = self.csrftoken
         return self.app.post(
             url,
             urllib.urlencode(data, doseq=True),
-            extra_environ={"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"})
+            extra_environ={"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
+            user=user or self.user)
 
 
     def test_associate_one(self):
@@ -168,6 +169,23 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
         self.assertEqual(addy["mapped_timestamp"], date_format(
                 utc_to_local(a.mapped_timestamp), "DATETIME_FORMAT"))
         self.assertEqual(addy["needs_review"], True)
+
+
+    def test_associate_trusted(self):
+        create_parcel(pl="1234")
+        a = create_address()
+        u = create_user(is_staff=True)
+
+        res = self.post(self.url, {"pl": "1234", "aid": a.id}, user=u)
+
+        a = a.__class__.objects.get(id=a.id)
+        self.assertEqual(a.pl, "1234")
+        self.assertEqual(res.json["pl"], "1234")
+        self.assertEqual(len(res.json["mapped_to"]), 1)
+        addy = res.json["mapped_to"][0]
+        self.assertEqual(addy["id"], a.id)
+        self.assertEqual(addy["mapped_by"], u.username)
+        self.assertEqual(addy["needs_review"], False)
 
 
     def test_associate_another(self):
