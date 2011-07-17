@@ -396,6 +396,27 @@ class AddressesViewTest(AuthenticatedWebTest):
             )
 
 
+    def test_filter_multiple(self):
+        a1 = create_address(
+            city="Providence",
+            )
+        a2 = create_address(
+            city="Albuquerque",
+            )
+        create_address(
+            city="Rapid City",
+            )
+
+        res = self.app.get(
+            self.url + "?city=Providence&city=Albuquerque",
+            user=self.user)
+
+        self.assertEqual(
+            [a["id"] for a in res.json["addresses"]],
+            [a1.id, a2.id]
+            )
+
+
     def test_status_filter_unmapped(self):
         create_address(pl="123", needs_review=True)
         create_address(pl="345", needs_review=False)

@@ -52,7 +52,7 @@ def apply(qs, filter_data):
     filters = {}
     for field in LOCAL_FIELDS:
         if field in filter_data:
-            filters[field] = filter_data[field]
+            filters["%s__in" % field] = filter_data.getlist(field)
     qs = qs.filter(**filters)
 
     status = filter_data.get("status", None)
