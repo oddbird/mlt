@@ -26,6 +26,10 @@ __all__ = [
 
 
 
+def refresh(obj):
+    return obj.__class__._base_manager.get(pk=obj.pk)
+
+
 class AuthenticatedWebTest(WebTest):
     url_name = None
 
@@ -159,7 +163,7 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
 
         res = self.post(self.url, {"pl": "1234", "aid": a.id})
 
-        a = a.__class__.objects.get(id=a.id)
+        a = refresh(a)
         self.assertEqual(a.pl, "1234")
         self.assertEqual(res.json["pl"], "1234")
         self.assertEqual(len(res.json["mapped_to"]), 1)
@@ -178,7 +182,7 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
 
         res = self.post(self.url, {"pl": "1234", "aid": a.id}, user=u)
 
-        a = a.__class__.objects.get(id=a.id)
+        a = refresh(a)
         self.assertEqual(a.pl, "1234")
         self.assertEqual(res.json["pl"], "1234")
         self.assertEqual(len(res.json["mapped_to"]), 1)
@@ -197,7 +201,7 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
 
         res = self.post(self.url, {"pl": "1234", "aid": a2.id})
 
-        a2 = a2.__class__.objects.get(id=a2.id)
+        a2 = refresh(a2)
         self.assertEqual(a2.pl, "1234")
         self.assertEqual(res.json["pl"], "1234")
         self.assertEqual(len(res.json["mapped_to"]), 2)
@@ -218,8 +222,8 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
 
         res = self.post(self.url, {"pl": "1234", "aid": [a1.id, a2.id]})
 
-        a1 = a1.__class__.objects.get(id=a1.id)
-        a2 = a2.__class__.objects.get(id=a2.id)
+        a1 = refresh(a1)
+        a2 = refresh(a2)
         self.assertEqual(a1.pl, "1234")
         self.assertEqual(a2.pl, "1234")
         self.assertEqual(res.json["pl"], "1234")
@@ -242,7 +246,7 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
 
         res = self.post(self.url, {"pl": "1234", "aid": a.id})
 
-        self.assertEqual(a.__class__.objects.get(id=a.id).pl, "")
+        self.assertEqual(refresh(a).pl, "")
         self.assertEqual(
             json.loads(res.body),
             {
@@ -262,7 +266,7 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
 
         res = self.post(self.url, {"aid": a.id})
 
-        self.assertEqual(a.__class__.objects.get(id=a.id).pl, "")
+        self.assertEqual(refresh(a).pl, "")
         self.assertEqual(
             json.loads(res.body),
             {
@@ -748,7 +752,7 @@ class GeocodeViewTest(AuthenticatedWebTest):
 
         res = self.app.get(self.url + "?id=%s" % a.id , user=self.user)
 
-        a = a.__class__.objects.get(pk=a.id)
+        a = refresh(a)
 
         self.assertEqual(a.street_number, "123")
         self.assertEqual(a.street_prefix, "S")
@@ -885,6 +889,30 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
         self.assertEqual(a1.__class__.objects.count(), 0)
 
 
+    def test_delete_by_filter(self):
+        a1 = create_address(city="Providence")
+        a2 = create_address(city="Pawtucket")
+
+        res = self.post(
+            self.url,
+            {"action": "delete", "city": "Providence"},
+            )
+
+        self.assertEqual(
+            res.json,
+            {
+                'messages': [{
+                        'level': 25,
+                        'message': '1 address deleted.',
+                        'tags': 'success'
+                        }],
+                "success": True
+                }
+            )
+
+        self.assertEqual(a1.__class__.objects.count(), 1)
+
+
     def test_approve(self):
         a1 = create_address(pl="", needs_review=True)
         a2 = create_address(pl="123", needs_review=True)
@@ -906,8 +934,37 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
         self.assertTrue(res.json["success"])
         self.assertEqual(len(res.json["addresses"]), 1)
 
-        a2 = a2.__class__.objects.get(pk=a2.pk)
+        a2 = refresh(a2)
         self.assertEqual(a2.needs_review, False)
+
+
+    def test_approve_by_filter(self):
+        a1 = create_address(city="Providence", pl="123", needs_review=True)
+        a2 = create_address(city="Pawtucket", pl="123", needs_review=True)
+        create_address(city="Providence", pl="123", needs_review=False)
+        create_address(city="Providence", pl="")
+
+        res = self.post(
+            self.url,
+            {"action": "approve", "city": "Providence"},
+            )
+
+        self.assertEqual(
+            res.json["messages"],
+            [{
+                    "level": 25,
+                    "message": "1 mapping approved.",
+                    "tags": "success",
+                    }],
+            )
+        self.assertTrue(res.json["success"])
+        self.assertEqual(len(res.json["addresses"]), 1)
+
+        a1 = refresh(a1)
+        self.assertEqual(a1.needs_review, False)
+
+        a2 = refresh(a2)
+        self.assertEqual(a2.needs_review, True)
 
 
     def test_flag(self):
@@ -931,8 +988,34 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
         self.assertTrue(res.json["success"])
         self.assertEqual(len(res.json["addresses"]), 1)
 
-        a3 = a3.__class__.objects.get(pk=a3.pk)
+        a3 = refresh(a3)
         self.assertEqual(a3.needs_review, True)
+
+
+    def test_flag_by_filter(self):
+        a1 = create_address(pl="123", needs_review=False, city="Providence")
+        a2 = create_address(pl="234", needs_review=False, city="Pawtucket")
+        create_address(pl="123", needs_review=True, city="Providence")
+        create_address(pl="", needs_review=False, city="Providence")
+
+        res = self.post(
+            self.url,
+            {"action": "flag", "city": "Providence"},
+            )
+
+        self.assertEqual(
+            res.json["messages"],
+            [{
+                    "level": 25,
+                    "message": "1 mapping flagged.",
+                    "tags": "success",
+                    }],
+            )
+        self.assertTrue(res.json["success"])
+        self.assertEqual(len(res.json["addresses"]), 1)
+
+        self.assertEqual(refresh(a1).needs_review, True)
+        self.assertEqual(refresh(a2).needs_review, False)
 
 
     def test_no_ids(self):
@@ -941,7 +1024,7 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
         self.assertEqual(
             res.json,
             {"messages": [{"level": 40,
-                           "message": "No addresses with given IDs ()",
+                           "message": "No addresses selected.",
                            "tags": "error"}],
              "success": False}
             )
@@ -953,7 +1036,7 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
         self.assertEqual(
             res.json,
             {"messages": [{"level": 40,
-                           "message": "No addresses with given IDs (1001)",
+                           "message": "No addresses selected.",
                            "tags": "error"}],
              "success": False}
             )
