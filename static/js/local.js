@@ -266,6 +266,7 @@ var MLT = MLT || {};
                 addressLoading = {
                     moreAddresses: true,
                     currentlyLoading: false,
+                    scroll: false,
                     newAddresses: function (data) {
                         if (data.addresses.length) {
                             $.each(data.addresses, function (i, address) {
@@ -306,20 +307,27 @@ var MLT = MLT || {};
                                 loadingMessage.before(addressHTML).css('opacity', 0);
                                 addressHTML.find('.details').html5accordion();
                             });
+                            if (addressLoading.scroll) {
+                                container.scrollTop(addressLoading.scroll);
+                            }
                         } else {
                             loadingMessage.find('p').html('No more addresses');
                             addressLoading.moreAddresses = false;
                         }
                         addressLoading.currentlyLoading = false;
+                        addressLoading.scroll = false;
                     },
                     // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
-                    reloadList: function (opts) {
+                    reloadList: function (opts, preserveScroll) {
                         var defaults = {
                             sort: sortData,
                             start: 1,
                             num: 20
                         },
                             options = $.extend({}, defaults, opts);
+                        if (preserveScroll) {
+                            addressLoading.scroll = container.scrollTop();
+                        }
                         container.find('.address').remove();
                         if (loadingURL && sortData) {
                             addressLoading.currentlyLoading = true;
@@ -431,7 +439,7 @@ var MLT = MLT || {};
                         var number = container.find('.address').length;
                         if (data.added) {
                             target.find('a[title*="close"]').click();
-                            addressLoading.reloadList({num: number});
+                            addressLoading.reloadList({num: number}, true);
                         } else {
                             target.html(data.html);
                             bootstrapForm();
