@@ -372,31 +372,32 @@ class AddressesViewTest(AuthenticatedWebTest):
             )
 
 
+    def assertAddresses(self, response, ids):
+        self.assertEqual(
+            set([a["id"] for a in response.json["addresses"]]),
+            set(ids)
+            )
+
+
     def test_filter(self):
         a1 = create_address(
-            input_street="123 N Main St",
             city="Providence",
-            import_timestamp=datetime.datetime(2011, 7, 15, 1, 2, 3))
+            )
         create_address(
-            input_street="456 N Main St",
             city="Albuquerque",
-            import_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
+            )
         create_address(
-            input_street="123 N Main St",
             city="Albuquerque",
-            import_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
+            )
 
         res = self.app.get(
             self.url + "?city=Providence",
             user=self.user)
 
-        self.assertEqual(
-            [a["id"] for a in res.json["addresses"]],
-            [a1.id]
-            )
+        self.assertAddresses(res, [a1.id])
 
 
-    def test_filter_multiple(self):
+    def test_filter_multiple_same_field(self):
         a1 = create_address(
             city="Providence",
             )
@@ -411,10 +412,48 @@ class AddressesViewTest(AuthenticatedWebTest):
             self.url + "?city=Providence&city=Albuquerque",
             user=self.user)
 
-        self.assertEqual(
-            [a["id"] for a in res.json["addresses"]],
-            [a1.id, a2.id]
+        self.assertAddresses(res, [a1.id, a2.id])
+
+
+    def test_filter_multiple(self):
+        a1 = create_address(
+            state="RI",
+            city="Providence",
             )
+        create_address(
+            state="NM",
+            city="Providence",
+            )
+        create_address(
+            state="RI",
+            city="Pawtucket",
+            )
+
+        res = self.app.get(
+            self.url + "?city=Providence&state=RI",
+            user=self.user)
+
+        self.assertAddresses(res, [a1.id])
+
+
+    def test_filter_user(self):
+        u1 = create_user()
+        u2 = create_user()
+        a1 = create_address(
+            imported_by=u1,
+            )
+        a2 = create_address(
+            imported_by=u1,
+            )
+        create_address(
+            imported_by=u2
+            )
+
+        res = self.app.get(
+            self.url + "?imported_by=%s" % u1.id,
+            user=self.user)
+
+        self.assertAddresses(res, [a1.id, a2.id])
 
 
     def test_status_filter_unmapped(self):
@@ -428,10 +467,7 @@ class AddressesViewTest(AuthenticatedWebTest):
             self.url + "?status=unmapped",
             user=self.user)
 
-        self.assertEqual(
-            set([a["id"] for a in res.json["addresses"]]),
-            set([a3.id, a4.id])
-            )
+        self.assertAddresses(res, [a3.id, a4.id])
 
 
     def test_status_filter_flagged(self):
@@ -462,10 +498,7 @@ class AddressesViewTest(AuthenticatedWebTest):
             self.url + "?status=approved",
             user=self.user)
 
-        self.assertEqual(
-            [a["id"] for a in res.json["addresses"]],
-            [a2.id]
-            )
+        self.assertAddresses(res, [a2.id])
 
 
     def test_count(self):
