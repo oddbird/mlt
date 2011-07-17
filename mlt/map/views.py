@@ -68,7 +68,11 @@ def associate(request):
             request, "No addresses with given IDs (%s)" % ", ".join(aids))
 
     if parcel and addresses:
-        addresses.update(pl=pl, mapped_by=request.user, mapped_timestamp=datetime.datetime.utcnow())
+        addresses.update(
+            pl=pl,
+            mapped_by=request.user,
+            mapped_timestamp=datetime.datetime.utcnow(),
+            needs_review=True)
         ret = serializers.ParcelSerializer(extra=["mapped_to"]).one(parcel)
         messages.success(
             request,

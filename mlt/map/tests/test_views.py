@@ -696,7 +696,7 @@ class GeocodeViewTest(AuthenticatedWebTest):
                     "mapped_by": None,
                     "mapped_timestamp": None,
                     "multi_units": False,
-                    "needs_review": True,
+                    "needs_review": False,
                     "notes": "",
                     "pl": "",
                     "state": "RI",
