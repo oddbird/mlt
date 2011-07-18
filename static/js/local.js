@@ -152,10 +152,15 @@ var MLT = MLT || {};
 
                 addressPopups = function () {
                     $('#addresstable .managelist .address input[id^="select"]').live('change', function () {
-                        var thisAddress = $(this).closest('.address'),
+                        var input,
+                            thisAddress = $(this).closest('.address'),
+                            id = thisAddress.data('id'),
                             popupContent = thisAddress.find('.mapkey').html(),
                             lat = thisAddress.data('latitude'),
-                            lng = thisAddress.data('longitude');
+                            lng = thisAddress.data('longitude'),
+                            geolat = thisAddress.data('geocode-latitude'),
+                            geolng = thisAddress.data('geocode-longitude'),
+                            geoURL = $('#addresstable .managelist').data('geocode-url');
                         if ($(this).is(':checked')) {
                             if (lat && lng) {
                                 this.popup = new L.Popup({
@@ -168,6 +173,79 @@ var MLT = MLT || {};
                                 map.panTo(new L.LatLng(lat, lng));
                                 if (map.getZoom() < MIN_PARCEL_ZOOM) {
                                     map.setZoom(MIN_PARCEL_ZOOM);
+                                }
+                            } else {
+                                if (geolat && geolng) {
+                                    this.popup = new L.Popup({
+                                        closeButton: false,
+                                        autoPan: false
+                                    });
+                                    this.popup.setLatLng(new L.LatLng(geolat, geolng));
+                                    this.popup.setContent(popupContent);
+                                    map.addLayer(this.popup);
+                                    map.panTo(new L.LatLng(geolat, geolng));
+                                    if (map.getZoom() < MIN_PARCEL_ZOOM) {
+                                        map.setZoom(MIN_PARCEL_ZOOM);
+                                    }
+                                } else {
+                                    if (geoURL && id) {
+                                        $.get(geoURL, {id: id}, function (data) {
+                                            var byline, web_ui, updatedAddress, newlat, newlng,
+                                                index = thisAddress.find('.mapkey').html();
+
+                                            if (data.address.parcel) {
+                                                newlat = data.address.parcel.latitude;
+                                                newlng = data.address.parcel.longitude;
+                                            }
+                                            if (data.address.latitude && data.address.longitude) {
+                                                geolat = data.address.latitude;
+                                                geolng = data.address.longitude;
+                                            }
+                                            if (data.address.import_source || data.address.mapped_by) { byline = true; }
+                                            if (data.address.import_source === 'web-ui') { web_ui = true; }
+
+                                            updatedAddress = ich.address({
+                                                id: id,
+                                                pl: data.address.pl,
+                                                checked: true,
+                                                latitude: newlat,
+                                                longitude: newlng,
+                                                geolat: geolat,
+                                                geolng: geolng,
+                                                index: index,
+                                                street: data.address.street,
+                                                city: data.address.city,
+                                                state: data.address.state,
+                                                complex_name: data.address.complex_name,
+                                                needs_review: data.address.needs_review,
+                                                multi_units: data.address.multi_units,
+                                                notes: data.address.notes,
+                                                byline: byline,
+                                                import_source: data.address.import_source,
+                                                web_ui: web_ui,
+                                                imported_by: data.address.imported_by,
+                                                import_timestamp: data.address.import_timestamp,
+                                                mapped_by: data.address.mapped_by,
+                                                mapped_timestamp: data.address.mapped_timestamp
+                                            });
+
+                                            thisAddress.replaceWith(updatedAddress);
+                                            updatedAddress.find('.details').html5accordion();
+
+                                            input = updatedAddress.find('input[id^="select"]');
+                                            input.popup = new L.Popup({
+                                                closeButton: false,
+                                                autoPan: false
+                                            });
+                                            input.popup.setLatLng(new L.LatLng(geolat, geolng));
+                                            input.popup.setContent(popupContent);
+                                            map.addLayer(input.popup);
+                                            map.panTo(new L.LatLng(geolat, geolng));
+                                            if (map.getZoom() < MIN_PARCEL_ZOOM) {
+                                                map.setZoom(MIN_PARCEL_ZOOM);
+                                            }
+                                        });
+                                    }
                                 }
                             }
                         } else {
@@ -287,14 +365,15 @@ var MLT = MLT || {};
                     newAddresses: function (data) {
                         if (data.addresses.length) {
                             $.each(data.addresses, function (i, address) {
-                                var byline, web_ui, lat, lng, addressHTML;
+                                var byline, web_ui, lat, lng, geolat, geolng, addressHTML;
 
                                 if (address.parcel) {
                                     lat = address.parcel.latitude;
                                     lng = address.parcel.longitude;
-                                } else {
-                                    lat = address.latitude;
-                                    lng = address.longitude;
+                                }
+                                if (address.latitude && address.longitude && !lat && !lng) {
+                                    geolat = address.latitude;
+                                    geolng = address.longitude;
                                 }
                                 if (address.import_source || address.mapped_by) { byline = true; }
                                 if (address.import_source === 'web-ui') { web_ui = true; }
@@ -304,6 +383,8 @@ var MLT = MLT || {};
                                     pl: address.pl,
                                     latitude: lat,
                                     longitude: lng,
+                                    geolat: geolat,
+                                    geolng: geolng,
                                     index: address.index,
                                     street: address.street,
                                     city: address.city,
