@@ -621,14 +621,21 @@ var MLT = MLT || {};
                             var newFilter,
                                 field = $(this).data('field'),
                                 value = $(this).data('value');
-                            if (field && value && !filterList.find('input[type="checkbox"][name="' + value + '"]').length) {
-                                newFilter = ich.filter_applied({
-                                    field: field,
-                                    value: value
-                                });
-                                if (newFilter.length) {
-                                    filterList.append(newFilter);
-                                    updateFilters();
+                            if (field && value) {
+                                if (filterList.find('input[type="checkbox"][name="' + value + '"]').length) {
+                                    if (filterList.find('input[type="checkbox"][name="' + value + '"]').not(':checked').length) {
+                                        filterList.find('input[type="checkbox"][name="' + value + '"]').not(':checked').prop('checked', true);
+                                        updateFilters();
+                                    }
+                                } else {
+                                    newFilter = ich.filter_applied({
+                                        field: field,
+                                        value: value
+                                    });
+                                    if (newFilter.length) {
+                                        filterList.append(newFilter);
+                                        updateFilters();
+                                    }
                                 }
                             }
 
