@@ -531,3 +531,13 @@ h1 a:link, h1 a:visited { display: block; }
 #import-page #import-address-form label { font-weight: 700; position: absolute; top: 0.405em; right: 101.563%; width: 60.938%; text-align: right; }
 #import-page #import-address-form li { margin-bottom: 0.809em; position: relative; }
 #import-page #import-address-form .errorlist:not(.nonfield) { position: absolute; top: 0.405em; left: 101.563%; width: 60.938%; }
+
+#import-errors { margin-top: 1.618em; margin-bottom: 1.618em; }
+#import-errors ul { margin: 0; padding: 0; border: 0; list-style: none; }
+#import-errors ul li { list-style-image: none; list-style-type: none; margin-left: 0px; }
+#import-errors .line-errors { *zoom: 1; margin-top: 1.618em; position: relative; }
+#import-errors .line-errors:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
+#import-errors .line-number { font-weight: 700; font-style: normal; position: absolute; top: 0; right: 101.563%; width: 60.938%; text-align: right; }
+#import-errors .fieldname { display: inline; float: left; width: 15.254%; margin-right: 1.695%; margin-top: 0em; clear: both; }
+#import-errors .fieldname::after { content: ":"; }
+#import-errors dd { display: inline; float: left; width: 83.051%; margin-right: 1.695%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; margin-left: 0; }

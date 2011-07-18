@@ -7,12 +7,12 @@
   {% include "import/_form.html" %}
 
   {% if errors %}
-  <section class="import-errors">
+  <section id="import-errors">
     <h4>The selected file had the following errors:</h4>
     <ul>
       {% for lineno, errordict in errors %}
       <li class="line-errors">
-        <span class="line-number">Input line {{ lineno }}</span>
+        <h5 class="line-number">Input line {{ lineno }}</h5>
         <dl>
           {% for fieldname, errormsgs in errordict.items %}
           <dt class="fieldname">{{ fieldname }}</dt>
