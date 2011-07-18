@@ -68,7 +68,11 @@ def associate(request):
             request, "No addresses with given IDs (%s)" % ", ".join(aids))
 
     if parcel and addresses:
-        addresses.update(pl=pl, mapped_by=request.user, mapped_timestamp=datetime.datetime.utcnow())
+        addresses.update(
+            pl=pl,
+            mapped_by=request.user,
+            mapped_timestamp=datetime.datetime.utcnow(),
+            needs_review=not request.user.is_staff)
         ret = serializers.ParcelSerializer(extra=["mapped_to"]).one(parcel)
         messages.success(
             request,
@@ -235,11 +239,10 @@ def geocode(request):
 
 @login_required
 def address_actions(request):
-    aids = request.POST.getlist("aid")
-    addresses = Address.objects.filter(id__in=aids)
+    addresses = filters.apply(Address.objects.all(), request.POST)
     if not addresses:
         messages.error(
-            request, "No addresses with given IDs (%s)" % ", ".join(aids))
+            request, "No addresses selected.")
         return json_response({"success": False})
 
     action = request.POST.get("action")

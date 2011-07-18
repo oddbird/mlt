@@ -1,55 +1,53 @@
 {% load mltforms %}
 
-<div>
-  <h3>add an address</h3>
-  <form method="POST" action="{% url map_add_address %}" id="add-address-form">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
-    <ul class="adr">
-      <li class="street-number">
-        {{ form.street_number.errors }}
-        {{ form.street_number|label:"number" }}
-        {{ form.street_number|placeholder:"number" }}
-      </li>
-      <li class="street-name">
-        {{ form.street_name.errors }}
-        {{ form.street_name|label:"street" }}
-        {{ form.street_name|placeholder:"street name" }}
-      </li>
-      <li class="street-type">
-        {{ form.street_type.errors }}
-        {{ form.street_type|label:"street type" }}
-        {{ form.street_type|placeholder:"st, ave, etc." }}
-      </li>
-      <li class="locality">
-        {{ form.city.errors }}
-        {{ form.city|label:"city" }}
-        {{ form.city|placeholder:"city" }}
-      </li>
-      <li class="region">
-        {{ form.state.errors }}
-        {{ form.state|label:"state" }}
-        {{ form.state }}
-      </li>
-      <li class="units">
-        {{ form.multi_units.errors }}
-        {{ form.multi_units }}
-        {{ form.multi_units|label:"multi units" }}
-      </li>
-      <li class="complex">
-        {{ form.complex_name.errors }}
-        {{ form.complex_name|label:"complex name" }}
-        {{ form.complex_name|placeholder:"complex name" }}
-      </li>
-    </ul>
-    <p class="note">
-      {{ form.notes.errors }}
-      {{ form.notes|label:"notes" }}
-      {{ form.notes|placeholder:"optionally add a note" }}
-    </p>
-    <div class="form-actions">
-      <a href="#" title="close the address form lightbox">cancel</a> or
-      <button type="submit">add address</button>
-    </div>
-  </form>
-</div>
+<h3>add an address</h3>
+<form method="POST" action="{% url map_add_address %}" id="add-address-form">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <ul class="adr">
+    <li class="street-number">
+      {{ form.street_number.errors }}
+      {{ form.street_number|label:"number" }}
+      {{ form.street_number|placeholder:"number" }}
+    </li>
+    <li class="street-name">
+      {{ form.street_name.errors }}
+      {{ form.street_name|label:"street" }}
+      {{ form.street_name|placeholder:"street name" }}
+    </li>
+    <li class="street-type">
+      {{ form.street_type.errors }}
+      {{ form.street_type|label:"street type" }}
+      {{ form.street_type|placeholder:"st, ave, etc." }}
+    </li>
+    <li class="locality">
+      {{ form.city.errors }}
+      {{ form.city|label:"city" }}
+      {{ form.city|placeholder:"city" }}
+    </li>
+    <li class="region">
+      {{ form.state.errors }}
+      {{ form.state|label:"state" }}
+      {{ form.state }}
+    </li>
+    <li class="units">
+      {{ form.multi_units.errors }}
+      {{ form.multi_units }}
+      {{ form.multi_units|label:"multi units" }}
+    </li>
+    <li class="complex">
+      {{ form.complex_name.errors }}
+      {{ form.complex_name|label:"complex name" }}
+      {{ form.complex_name|placeholder:"complex name" }}
+    </li>
+  </ul>
+  <p class="note">
+    {{ form.notes.errors }}
+    {{ form.notes|label:"notes" }}
+    {{ form.notes|placeholder:"optionally add a note" }}
+  </p>
+  <div class="form-actions">
+    <a href="#" title="close the address form lightbox">cancel</a> or
+    <button type="submit">add address</button>
+  </div>
+</form>

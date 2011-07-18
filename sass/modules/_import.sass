@@ -1,0 +1,27 @@
+// import --------------------------------------------------------------------
+
+#import-page
+  +full(29)
+  +pad(8,8,29)
+  +padding-leader
+  +padding-trailer
+  max-width: fixed(12)
+
+  #import-address-form
+    +leader
+    label
+      +bold
+      position: absolute
+      top: rhythm(.25)
+      right: 100% + gutter(13)
+      width: columns(8,13)
+      text-align: right
+    li
+      +trailer(.5)
+      position: relative
+
+    .errorlist:not(.nonfield)
+      position: absolute
+      top: rhythm(.25)
+      left: 100% + gutter(13)
+      width: columns(8,13)
