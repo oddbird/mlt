@@ -441,7 +441,7 @@ var MLT = MLT || {};
                             target.find('a[title*="close"]').click();
                             addressLoading.reloadList({num: number}, true);
                         } else {
-                            target.html(data.html);
+                            target.find('> div').html(data.html);
                             bootstrapForm();
                             $(document).bind('keydown.closeAddLightbox', function (event) {
                                 if (event.keyCode === 27) {
@@ -506,7 +506,7 @@ var MLT = MLT || {};
                 target = $("#lightbox-import-addresses"),
                 url = target.data('import-addresses-url'),
                 success = function (data) {
-                    target.html(data.html);
+                    target.find('> div').html(data.html);
                     $(document).bind('keydown.closeImportLightbox', function (event) {
                         if (event.keyCode === 27) {
                             target.find('a[title*="close"]').click();
