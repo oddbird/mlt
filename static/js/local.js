@@ -432,7 +432,8 @@ var MLT = MLT || {};
                         if (preserveScroll) {
                             addressLoading.scroll = container.scrollTop();
                         }
-                        loadingMessage.find('p').html('loading addresses...');
+                        container.find('.address input[id^="select"]:checked').click();
+                        loadingMessage.css('opacity', 1).find('p').html('loading addresses...');
                         container.find('.address').remove();
                         if (loadingURL && sortData) {
                             addressLoading.currentlyLoading = true;
