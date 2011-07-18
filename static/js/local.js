@@ -324,11 +324,13 @@ var MLT = MLT || {};
                                 loadingMessage.before(addressHTML).css('opacity', 0);
                                 addressHTML.find('.details').html5accordion();
                             });
+                            loadingMessage.find('p').html('loading addresses...');
+                            addressLoading.moreAddresses = true;
                             if (addressLoading.scroll) {
                                 container.scrollTop(addressLoading.scroll);
                             }
                         } else {
-                            loadingMessage.find('p').html('No more addresses');
+                            loadingMessage.find('p').html('no more addresses');
                             addressLoading.moreAddresses = false;
                         }
                         addressLoading.currentlyLoading = false;
@@ -341,10 +343,11 @@ var MLT = MLT || {};
                             start: 1,
                             num: 20
                         },
-                            options = $.extend({}, defaults, opts);
+                            options = $.extend({}, defaults, filters, opts);
                         if (preserveScroll) {
                             addressLoading.scroll = container.scrollTop();
                         }
+                        loadingMessage.find('p').html('loading addresses...');
                         container.find('.address').remove();
                         if (loadingURL && sortData) {
                             addressLoading.currentlyLoading = true;
@@ -357,7 +360,7 @@ var MLT = MLT || {};
                                 sort: sortData,
                                 start: count
                             },
-                            options = $.extend({}, defaults, opts);
+                            options = $.extend({}, defaults, filters, opts);
                         if (loadingURL && sortData) {
                             loadingMessage.animate({opacity: 1}, 'fast');
                             addressLoading.currentlyLoading = true;
@@ -511,7 +514,7 @@ var MLT = MLT || {};
                                     filters[field] = [value];
                                 }
                             });
-                            addressLoading.reloadList(filters);
+                            addressLoading.reloadList();
                         };
 
                     textbox.keyup(function (event) {
