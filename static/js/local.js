@@ -500,6 +500,7 @@ var MLT = MLT || {};
                         suggestionList = $('#filter .textual .suggest').hide(),
                         filterList = $('#filter .visual > ul'),
                         refresh = $('#filter .refresh'),
+                        status = $('#filter .bystatus a'),
 
                         updateSuggestions = function (data) {
                             var newSuggestions = ich.filter_suggestion(data);
@@ -509,7 +510,14 @@ var MLT = MLT || {};
                         },
 
                         updateFilters = function () {
-                            filters = {};
+                            var currentStatus;
+                            if (filters["status"]) {
+                                currentStatus = filters["status"];
+                                filters = {};
+                                filters["status"] = currentStatus;
+                            } else {
+                                filters = {};
+                            }
                             filterList.find('input[id$="filter"]:checked').each(function () {
                                 var field = $(this).data('field'),
                                     value = $(this).data('value');
@@ -664,6 +672,21 @@ var MLT = MLT || {};
                         addressLoading.reloadList({num: number}, true);
                         return false;
                     });
+
+                    status.click(function () {
+                        var thisStatus = $(this).attr('class');
+                        if (!$(this).closest('.bystatus').hasClass(thisStatus)) {
+                            if (thisStatus === 'none') {
+                                delete filters["status"];
+                            } else {
+                                filters["status"] = thisStatus;
+                            }
+                            $(this).closest('.bystatus').removeClass('approved flagged unmapped none').addClass(thisStatus);
+                            addressLoading.reloadList();
+                        }
+                        $(this).blur();
+                        return false;
+                    })
                 };
 
             addressSorting();
