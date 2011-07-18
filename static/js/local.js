@@ -500,16 +500,17 @@ var MLT = MLT || {};
                         },
 
                         submitFilters = function () {
-                            var filters = filterList.find('input[id$="filter"]').map(function () {
+                            var filters = {};
+                            filterList.find('input[id$="filter"]:checked').each(function () {
                                 var field = $(this).data('field'),
-                                    value = $(this).data('value'),
-                                    thisFilter = {};
-                                if (field && value) {
-                                    thisFilter[field] = value;
+                                    value = $(this).data('value');
+                                if (filters[field]) {
+                                    filters[field].push(value);
+                                } else {
+                                    filters[field] = [value];
                                 }
-                                return thisFilter;
-                            }).get();
-                            if (filters.length) {
+                            });
+                            if (!$.isEmptyObject(filters)) {
                                 addressLoading.reloadList(filters);
                             }
                         };
