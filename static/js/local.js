@@ -495,6 +495,7 @@ var MLT = MLT || {};
                         url = textbox.data('autocomplete-url'),
                         suggestionList = $('#filter .textual .suggest').hide(),
                         filterList = $('#filter .visual > ul'),
+                        refresh = $('#filter .refresh'),
 
                         updateSuggestions = function (data) {
                             var newSuggestions = ich.filter_suggestion(data);
@@ -652,6 +653,12 @@ var MLT = MLT || {};
 
                     filterList.find('input[id$="filter"]').live('change', function () {
                         updateFilters();
+                    });
+
+                    refresh.click(function () {
+                        var number = container.find('.address').length;
+                        addressLoading.reloadList({num: number}, true);
+                        return false;
                     });
                 };
 
