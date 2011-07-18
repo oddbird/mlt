@@ -333,6 +333,9 @@ var MLT = MLT || {};
                             loadingMessage.find('p').html('no more addresses');
                             addressLoading.moreAddresses = false;
                         }
+                        if (data.count) {
+                            $('#addressform .actions .listlength').html(data.count);
+                        }
                         addressLoading.currentlyLoading = false;
                         addressLoading.scroll = false;
                     },
@@ -341,7 +344,8 @@ var MLT = MLT || {};
                         var defaults = {
                             sort: sortData,
                             start: 1,
-                            num: 20
+                            num: 20,
+                            count: true
                         },
                             options = $.extend({}, defaults, filters, opts);
                         if (preserveScroll) {
