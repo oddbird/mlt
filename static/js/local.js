@@ -275,6 +275,7 @@ var MLT = MLT || {};
         addresses = function () {
 
             var sortData = {},
+                filters = {},
                 container = $('#addresstable .managelist'),
                 loadingURL = container.data('addresses-url'),
                 loadingMessage = container.find('.load'),
@@ -499,8 +500,8 @@ var MLT = MLT || {};
                             }
                         },
 
-                        submitFilters = function () {
-                            var filters = {};
+                        updateFilters = function () {
+                            filters = {};
                             filterList.find('input[id$="filter"]:checked').each(function () {
                                 var field = $(this).data('field'),
                                     value = $(this).data('value');
@@ -510,9 +511,7 @@ var MLT = MLT || {};
                                     filters[field] = [value];
                                 }
                             });
-                            if (!$.isEmptyObject(filters)) {
-                                addressLoading.reloadList(filters);
-                            }
+                            addressLoading.reloadList(filters);
                         };
 
                     textbox.keyup(function (event) {
@@ -597,8 +596,7 @@ var MLT = MLT || {};
                     }).focus(function () {
                         // Resets textbox data-clicked to ``false`` (becomes ``true`` when an autocomplete suggestion is clicked)
                         textbox.data('clicked', false);
-                    // On blur, removes fake placeholder text, and hides the suggestion
-                    // list after 150 ms if textbox data-clicked is ``false``
+                    // On blur, hides the suggestion list after 150 ms if textbox data-clicked is ``false``
                     }).blur(function () {
                         function hideList() {
                             if (textbox.data('clicked') !== true) {
@@ -630,7 +628,7 @@ var MLT = MLT || {};
                                 });
                                 if (newFilter.length) {
                                     filterList.append(newFilter);
-                                    submitFilters();
+                                    updateFilters();
                                 }
                             }
 
@@ -640,6 +638,10 @@ var MLT = MLT || {};
                             suggestionList.empty().hide();
                             return false;
                         }
+                    });
+
+                    filterList.find('input[id$="filter"]').live('change', function () {
+                        updateFilters();
                     });
                 };
 
