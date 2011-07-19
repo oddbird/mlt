@@ -98,9 +98,13 @@
   +cond
   +bold
   padding: rhythm(.25)
-  color: $accent
+  color: $alt
   text-align: center
+  .geocoded &
+    color: $accent
 
 .leaflet-popup-tip
-  +replace-text('ui/pin.png')
-  min-height: image-height('ui/pin.png')
+  +replace-text('ui/pin_blue.png')
+  min-height: image-height('ui/pin_blue.png')
+  .geocoded &
+    background-image: image-url('ui/pin_red.png')
