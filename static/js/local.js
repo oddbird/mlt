@@ -619,7 +619,8 @@ var MLT = MLT || {};
                     $('#addressform .actions .bools .approval button').live('click', function () {
                         var action,
                             selectedAddressID,
-                            options;
+                            options,
+                            number = addressContainer.find('.address').length;
                         if ($(this).hasClass('action-flag')) {
                             action = "flag";
                         }
@@ -630,17 +631,8 @@ var MLT = MLT || {};
                             options = $.extend({action: action}, filters);
                             $.post(url, options, function (data) {
                                 if (data.success) {
-                                    addressContainer.find('.address input[id^="select"]:checked').each(function () {
-                                        var thisDiv = $(this).closest('.address').find('.id');
-                                        if (!thisDiv.hasClass('unmapped')) {
-                                            if (action === "flag") {
-                                                thisDiv.removeClass('approved').find('input[name="flag_for_review"]').prop('checked', true);
-                                            }
-                                            if (action === "approve") {
-                                                thisDiv.addClass('approved').find('input[name="flag_for_review"]').prop('checked', false);
-                                            }
-                                        }
-                                    });
+                                    preserveSelectAll = true;
+                                    addressLoading.reloadList({num: number}, true);
                                 }
                             });
                         } else {
