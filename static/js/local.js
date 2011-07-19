@@ -363,6 +363,7 @@ var MLT = MLT || {};
                 container = $('#addresstable .managelist'),
                 loadingURL = container.data('addresses-url'),
                 loadingMessage = container.find('.load'),
+                preserveSelectAll,
 
                 addressLoading = {
                     moreAddresses: true,
@@ -416,6 +417,9 @@ var MLT = MLT || {};
                             if (addressLoading.scroll) {
                                 container.scrollTop(addressLoading.scroll);
                             }
+                            if ($('#addressform .actions .bulkselect').data('selectall')) {
+                                container.find('.address input[id^="select"]').prop('checked', true);
+                            }
                         } else {
                             loadingMessage.find('p').html('no more addresses');
                             addressLoading.moreAddresses = false;
@@ -439,6 +443,10 @@ var MLT = MLT || {};
                             addressLoading.scroll = container.scrollTop();
                         }
                         container.find('.address input[id^="select"]:checked').click();
+                        if (!preserveSelectAll) {
+                            $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
+                        }
+                        preserveSelectAll = false;
                         loadingMessage.css('opacity', 1).find('p').html('loading addresses...');
                         container.find('.address').remove();
                         if (loadingURL && sortData) {
@@ -478,6 +486,7 @@ var MLT = MLT || {};
                                 }
                                 return thisName;
                             }).get();
+                            preserveSelectAll = true;
                             addressLoading.reloadList();
                         };
 
@@ -586,14 +595,25 @@ var MLT = MLT || {};
 
                     $('#addressform .actions .bools .addremove .delete_selected').live('click', function () {
                         var number = container.find('.address').length,
+                            selectedAddressID,
+                            options;
+                        if ($('#addressform .actions .bulkselect').data('selectall')) {
+                            options = $.extend({action: "delete"}, filters);
+                            $.post(url, options, function (data) {
+                                if (data.success) {
+                                    addressLoading.reloadList({num: number}, true);
+                                }
+                            });
+                        } else {
                             selectedAddressID = container.find('.address input[id^="select"]:checked').map(function () {
                                 return $(this).closest('.address').data('id');
                             }).get();
-                        $.post(url, { aid: selectedAddressID, action: "delete" }, function (data) {
-                            if (data.success) {
-                                addressLoading.reloadList({num: number}, true);
-                            }
-                        });
+                            $.post(url, { aid: selectedAddressID, action: "delete" }, function (data) {
+                                if (data.success) {
+                                    addressLoading.reloadList({num: number}, true);
+                                }
+                            });
+                        }
                         return false;
                     });
 
@@ -610,30 +630,51 @@ var MLT = MLT || {};
 
                     $('#addressform .actions .bools .approval button').live('click', function () {
                         var action,
-                            selectedAddressID = container.find('.address input[id^="select"]:checked').map(function () {
-                                return $(this).closest('.address').data('id');
-                            }).get();
+                            selectedAddressID,
+                            options;
                         if ($(this).hasClass('action-flag')) {
                             action = "flag";
                         }
                         if ($(this).hasClass('approve')) {
                             action = "approve";
                         }
-                        $.post(url, { aid: selectedAddressID, action: action }, function (data) {
-                            if (data.success) {
-                                container.find('.address input[id^="select"]:checked').each(function () {
-                                    var thisDiv = $(this).closest('.address').find('.id');
-                                    if (!thisDiv.hasClass('unmapped')) {
-                                        if (action === "flag") {
-                                            thisDiv.removeClass('approved').find('input[name="flag_for_review"]').prop('checked', true);
+                        if ($('#addressform .actions .bulkselect').data('selectall')) {
+                            options = $.extend({action: action}, filters);
+                            $.post(url, options, function (data) {
+                                if (data.success) {
+                                    container.find('.address input[id^="select"]:checked').each(function () {
+                                        var thisDiv = $(this).closest('.address').find('.id');
+                                        if (!thisDiv.hasClass('unmapped')) {
+                                            if (action === "flag") {
+                                                thisDiv.removeClass('approved').find('input[name="flag_for_review"]').prop('checked', true);
+                                            }
+                                            if (action === "approve") {
+                                                thisDiv.addClass('approved').find('input[name="flag_for_review"]').prop('checked', false);
+                                            }
                                         }
-                                        if (action === "approve") {
-                                            thisDiv.addClass('approved').find('input[name="flag_for_review"]').prop('checked', false);
+                                    });
+                                }
+                            });
+                        } else {
+                            selectedAddressID = container.find('.address input[id^="select"]:checked').map(function () {
+                                return $(this).closest('.address').data('id');
+                            }).get();
+                            $.post(url, { aid: selectedAddressID, action: action }, function (data) {
+                                if (data.success) {
+                                    container.find('.address input[id^="select"]:checked').each(function () {
+                                        var thisDiv = $(this).closest('.address').find('.id');
+                                        if (!thisDiv.hasClass('unmapped')) {
+                                            if (action === "flag") {
+                                                thisDiv.removeClass('approved').find('input[name="flag_for_review"]').prop('checked', true);
+                                            }
+                                            if (action === "approve") {
+                                                thisDiv.addClass('approved').find('input[name="flag_for_review"]').prop('checked', false);
+                                            }
                                         }
-                                    }
-                                });
-                            }
-                        });
+                                    });
+                                }
+                            });
+                        }
                         return false;
                     });
 
@@ -835,6 +876,7 @@ var MLT = MLT || {};
 
                     refresh.click(function () {
                         var number = container.find('.address').length;
+                        preserveSelectAll = true;
                         addressLoading.reloadList({num: number}, true);
                         return false;
                     });
@@ -852,7 +894,19 @@ var MLT = MLT || {};
                         }
                         $(this).blur();
                         return false;
-                    })
+                    });
+                },
+
+                selectAll = function () {
+                    $('#addressform .actions .bulkselect #select_all_none').change(function () {
+                        if ($(this).is(':checked')) {
+                            $(this).closest('.bulkselect').data('selectall', true);
+                            container.find('.address input[id^="select"]').prop('checked', true);
+                        } else {
+                            $(this).closest('.bulkselect').data('selectall', false);
+                            container.find('.address input[id^="select"]').prop('checked', false);
+                        }
+                    });
                 };
 
             addressSorting();
@@ -861,6 +915,7 @@ var MLT = MLT || {};
             addAddress();
             addressActions();
             filtering();
+            selectAll();
 
             container.scroll(function () {
                 $.doTimeout('scroll', 150, function () {
