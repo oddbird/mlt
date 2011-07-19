@@ -278,7 +278,7 @@ var MLT = MLT || {};
                             lat = selectedParcelInfo.latitude,
                             lng = selectedParcelInfo.longitude;
                         $.post(url, {
-                            pl: pl,
+                            maptopl: pl,
                             aid: selectedAddressID
                         }, function (data) {
                             $.each(data.mapped_to, function (i, address) {
