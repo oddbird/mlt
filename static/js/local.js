@@ -607,6 +607,56 @@ var MLT = MLT || {};
                         });
                         return false;
                     });
+
+                    $('#addressform .actions .bools .approval button').live('click', function () {
+                        var action,
+                            selectedAddressID = container.find('.address input[id^="select"]:checked').map(function () {
+                                return $(this).closest('.address').data('id');
+                            }).get();
+                        if ($(this).hasClass('action-flag')) {
+                            action = "flag";
+                        }
+                        if ($(this).hasClass('approve')) {
+                            action = "approve";
+                        }
+                        $.post(url, { aid: selectedAddressID, action: action }, function (data) {
+                            if (data.success) {
+                                container.find('.address input[id^="select"]:checked').each(function () {
+                                    var thisDiv = $(this).closest('.address').find('.id');
+                                    if (!thisDiv.hasClass('unmapped')) {
+                                        if (action === "flag") {
+                                            thisDiv.removeClass('approved').find('input[name="flag_for_review"]').prop('checked', true);
+                                        }
+                                        if (action === "approve") {
+                                            thisDiv.addClass('approved').find('input[name="flag_for_review"]').prop('checked', false);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        return false;
+                    });
+
+                    container.find('.address input[name="flag_for_review"]').live('change', function () {
+                        var action,
+                            selectedAddressID = $(this).closest('.address').data('id'),
+                            thisDiv = $(this).closest('.id');
+                        if ($(this).is(':checked')) {
+                            action = "flag";
+                        } else {
+                            action = "approve";
+                        }
+                        $.post(url, { aid: selectedAddressID, action: action }, function (data) {
+                            if (data.success) {
+                                if (action === "flag") {
+                                    thisDiv.removeClass('approved');
+                                }
+                                if (action === "approve") {
+                                    thisDiv.addClass('approved');
+                                }
+                            }
+                        });
+                    });
                 },
 
                 filtering = function () {
