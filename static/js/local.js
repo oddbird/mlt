@@ -691,6 +691,10 @@ var MLT = MLT || {};
 
                         updateSuggestions = function (data) {
                             var newSuggestions = ich.filter_suggestion(data);
+                            newSuggestions = newSuggestions.filter(function (index) {
+                                var thisSuggestion = $(this).find('a').data('value');
+                                return !(filterList.find('input[id$="filter"][data-value="' + thisSuggestion + '"]:checked').length);
+                            });
                             if (newSuggestions.length) {
                                 suggestionList.html(newSuggestions).show().find('li:first-child a').addClass('selected');
                             }
