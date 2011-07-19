@@ -25,7 +25,7 @@ var MLT = MLT || {};
         DOWN: 40
     },
 
-        mapping = function () {
+        addressMapping = function () {
 
             var MIN_PARCEL_ZOOM = 17,
                 layer = new L.TileLayer(MLT.tileServerUrl, {attribution: MLT.mapCredits}),
@@ -44,6 +44,12 @@ var MLT = MLT || {};
                 selectedId = null,
                 selectedInfo = null,
                 selectedParcelInfo,
+                sortData = {},
+                filters = {},
+                addressContainer = $('#addresstable .managelist'),
+                loadingURL = addressContainer.data('addresses-url'),
+                loadingMessage = addressContainer.find('.load'),
+                preserveSelectAll,
 
                 showInfo = function (newInfo, selected) {
                     if (mapinfoTimeout) {
@@ -268,61 +274,74 @@ var MLT = MLT || {};
                     });
                 },
 
-                addressMapping = function () {
+                mapAddress = function () {
                     var url = $('#mapping').data('associate-url');
                     $('#mapinfo .mapit').live('click', function () {
-                        var selectedAddressID = $('#addresstable .address input[id^="select"]:checked').map(function () {
-                            return $(this).closest('.address').data('id');
-                        }).get(),
+                        var selectedAddressID,
+                            options,
                             pl = selectedParcelInfo.pl,
                             lat = selectedParcelInfo.latitude,
-                            lng = selectedParcelInfo.longitude;
-                        $.post(url, {
-                            maptopl: pl,
-                            aid: selectedAddressID
-                        }, function (data) {
-                            $.each(data.mapped_to, function (i, address) {
-                                var byline, web_ui, updatedAddress,
-                                    id = address.id,
-                                    thisAddress = $('#addresstable .address[data-id="' + id + '"]'),
-                                    index = thisAddress.find('.mapkey').html();
+                            lng = selectedParcelInfo.longitude,
+                            success = function (data) {
+                                $.each(data.mapped_to, function (i, address) {
+                                    var byline, web_ui, updatedAddress,
+                                        id = address.id,
+                                        thisAddress = $('#addresstable .address[data-id="' + id + '"]'),
+                                        index = thisAddress.find('.mapkey').html();
 
-                                if (address.import_source || address.mapped_by) { byline = true; }
-                                if (address.import_source === 'web-ui') { web_ui = true; }
+                                    if (address.import_source || address.mapped_by) { byline = true; }
+                                    if (address.import_source === 'web-ui') { web_ui = true; }
 
-                                updatedAddress = ich.address({
-                                    id: id,
-                                    pl: address.pl,
-                                    latitude: lat,
-                                    longitude: lng,
-                                    index: index,
-                                    street: address.street,
-                                    city: address.city,
-                                    state: address.state,
-                                    complex_name: address.complex_name,
-                                    needs_review: address.needs_review,
-                                    multi_units: address.multi_units,
-                                    notes: address.notes,
-                                    byline: byline,
-                                    import_source: address.import_source,
-                                    web_ui: web_ui,
-                                    imported_by: address.imported_by,
-                                    import_timestamp: address.import_timestamp,
-                                    mapped_by: address.mapped_by,
-                                    mapped_timestamp: address.mapped_timestamp
+                                    if (thisAddress.length) {
+                                        updatedAddress = ich.address({
+                                            id: id,
+                                            pl: address.pl,
+                                            latitude: lat,
+                                            longitude: lng,
+                                            index: index,
+                                            street: address.street,
+                                            city: address.city,
+                                            state: address.state,
+                                            complex_name: address.complex_name,
+                                            needs_review: address.needs_review,
+                                            multi_units: address.multi_units,
+                                            notes: address.notes,
+                                            byline: byline,
+                                            import_source: address.import_source,
+                                            web_ui: web_ui,
+                                            imported_by: address.imported_by,
+                                            import_timestamp: address.import_timestamp,
+                                            mapped_by: address.mapped_by,
+                                            mapped_timestamp: address.mapped_timestamp
+                                        });
+
+                                        thisAddress.find('input[id^="select"]').click();
+                                        thisAddress.replaceWith(updatedAddress);
+                                        updatedAddress.find('.details').html5accordion();
+                                    }
                                 });
 
-                                thisAddress.find('input[id^="select"]').click();
-                                thisAddress.replaceWith(updatedAddress);
-                                updatedAddress.find('.details').html5accordion();
-                            });
-
-                            var updatedParcelInfo = ich.parcelinfo(data);
-                            $('#mapinfo').removeClass('selected').html(updatedParcelInfo);
-                            $('#mapinfo .mapit').hide();
-                            selectedLayer.info = updatedParcelInfo;
-                            selectedLayer.unselect();
-                        });
+                                var updatedParcelInfo = ich.parcelinfo(data);
+                                $('#mapinfo').removeClass('selected').html(updatedParcelInfo);
+                                $('#mapinfo .mapit').hide();
+                                selectedLayer.info = updatedParcelInfo;
+                                selectedLayer.unselect();
+                                if ($('#addressform .actions .bulkselect').data('selectall')) {
+                                    $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
+                                }
+                            };
+                        if ($('#addressform .actions .bulkselect').data('selectall')) {
+                            options = $.extend({ maptopl: pl }, filters);
+                            $.post(url, options, success);
+                        } else {
+                            selectedAddressID = $('#addresstable .address input[id^="select"]:checked').map(function () {
+                                return $(this).closest('.address').data('id');
+                            }).get();
+                            $.post(url, {
+                                maptopl: pl,
+                                aid: selectedAddressID
+                            }, success);
+                        }
                     });
                 },
 
@@ -332,38 +351,7 @@ var MLT = MLT || {};
                     });
 
                     MLT.map = map;
-                };
-
-            mapinfo.hide().hover(
-                function () { mapinfoHover = true; },
-                function () {
-                    mapinfoHover = false;
-                    hideInfo();
-                }
-            ).click(function (event) {
-                if ($(this).hasClass('selected') && !$(event.target).is('.mapit')) {
-                    var lat = selectedParcelInfo.latitude,
-                        lng = selectedParcelInfo.longitude;
-                    map.panTo(new L.LatLng(lat, lng));
-                    if (map.getZoom() < MIN_PARCEL_ZOOM) {
-                        map.setZoom(MIN_PARCEL_ZOOM);
-                    }
-                }
-            });
-
-            initializeMap();
-            addressPopups();
-            addressMapping();
-        },
-
-        addresses = function () {
-
-            var sortData = {},
-                filters = {},
-                container = $('#addresstable .managelist'),
-                loadingURL = container.data('addresses-url'),
-                loadingMessage = container.find('.load'),
-                preserveSelectAll,
+                },
 
                 addressLoading = {
                     moreAddresses: true,
@@ -415,10 +403,10 @@ var MLT = MLT || {};
                             loadingMessage.find('p').html('loading addresses...');
                             addressLoading.moreAddresses = true;
                             if (addressLoading.scroll) {
-                                container.scrollTop(addressLoading.scroll);
+                                addressContainer.scrollTop(addressLoading.scroll);
                             }
                             if ($('#addressform .actions .bulkselect').data('selectall')) {
-                                container.find('.address input[id^="select"]').prop('checked', true);
+                                addressContainer.find('.address input[id^="select"]').prop('checked', true);
                             }
                         } else {
                             loadingMessage.find('p').html('no more addresses');
@@ -440,22 +428,22 @@ var MLT = MLT || {};
                         },
                             options = $.extend({}, defaults, filters, opts);
                         if (preserveScroll) {
-                            addressLoading.scroll = container.scrollTop();
+                            addressLoading.scroll = addressContainer.scrollTop();
                         }
-                        container.find('.address input[id^="select"]:checked').click();
+                        addressContainer.find('.address input[id^="select"]:checked').click();
                         if (!preserveSelectAll) {
                             $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
                         }
                         preserveSelectAll = false;
                         loadingMessage.css('opacity', 1).find('p').html('loading addresses...');
-                        container.find('.address').remove();
+                        addressContainer.find('.address').remove();
                         if (loadingURL && sortData) {
                             addressLoading.currentlyLoading = true;
                             $.get(loadingURL, options, addressLoading.newAddresses);
                         }
                     },
                     addMore: function (opts) {
-                        var count = container.find('.address').length + 1,
+                        var count = addressContainer.find('.address').length + 1,
                             defaults = {
                                 sort: sortData,
                                 start: count
@@ -556,7 +544,7 @@ var MLT = MLT || {};
                         url = target.data('add-address-url');
 
                     success = function (data) {
-                        var number = container.find('.address').length;
+                        var number = addressContainer.find('.address').length;
                         if (data.added) {
                             target.find('a[title*="close"]').click();
                             addressLoading.reloadList({num: number}, true);
@@ -591,10 +579,10 @@ var MLT = MLT || {};
                 },
 
                 addressActions = function () {
-                    var url = container.data('actions-url');
+                    var url = addressContainer.data('actions-url');
 
                     $('#addressform .actions .bools .addremove .delete_selected').live('click', function () {
-                        var number = container.find('.address').length,
+                        var number = addressContainer.find('.address').length,
                             selectedAddressID,
                             options;
                         if ($('#addressform .actions .bulkselect').data('selectall')) {
@@ -605,7 +593,7 @@ var MLT = MLT || {};
                                 }
                             });
                         } else {
-                            selectedAddressID = container.find('.address input[id^="select"]:checked').map(function () {
+                            selectedAddressID = addressContainer.find('.address input[id^="select"]:checked').map(function () {
                                 return $(this).closest('.address').data('id');
                             }).get();
                             $.post(url, { aid: selectedAddressID, action: "delete" }, function (data) {
@@ -617,8 +605,8 @@ var MLT = MLT || {};
                         return false;
                     });
 
-                    container.find('.address .content .controls .action-delete').live('click', function () {
-                        var number = container.find('.address').length,
+                    addressContainer.find('.address .content .controls .action-delete').live('click', function () {
+                        var number = addressContainer.find('.address').length,
                             selectedAddressID = $(this).closest('.address').data('id');
                         $.post(url, { aid: selectedAddressID, action: "delete" }, function (data) {
                             if (data.success) {
@@ -642,7 +630,7 @@ var MLT = MLT || {};
                             options = $.extend({action: action}, filters);
                             $.post(url, options, function (data) {
                                 if (data.success) {
-                                    container.find('.address input[id^="select"]:checked').each(function () {
+                                    addressContainer.find('.address input[id^="select"]:checked').each(function () {
                                         var thisDiv = $(this).closest('.address').find('.id');
                                         if (!thisDiv.hasClass('unmapped')) {
                                             if (action === "flag") {
@@ -656,12 +644,12 @@ var MLT = MLT || {};
                                 }
                             });
                         } else {
-                            selectedAddressID = container.find('.address input[id^="select"]:checked').map(function () {
+                            selectedAddressID = addressContainer.find('.address input[id^="select"]:checked').map(function () {
                                 return $(this).closest('.address').data('id');
                             }).get();
                             $.post(url, { aid: selectedAddressID, action: action }, function (data) {
                                 if (data.success) {
-                                    container.find('.address input[id^="select"]:checked').each(function () {
+                                    addressContainer.find('.address input[id^="select"]:checked').each(function () {
                                         var thisDiv = $(this).closest('.address').find('.id');
                                         if (!thisDiv.hasClass('unmapped')) {
                                             if (action === "flag") {
@@ -678,7 +666,7 @@ var MLT = MLT || {};
                         return false;
                     });
 
-                    container.find('.address input[name="flag_for_review"]').live('change', function () {
+                    addressContainer.find('.address input[name="flag_for_review"]').live('change', function () {
                         var action,
                             selectedAddressID = $(this).closest('.address').data('id'),
                             thisDiv = $(this).closest('.id');
@@ -718,10 +706,10 @@ var MLT = MLT || {};
 
                         updateFilters = function () {
                             var currentStatus;
-                            if (filters["status"]) {
-                                currentStatus = filters["status"];
+                            if (filters.status) {
+                                currentStatus = filters.status;
                                 filters = {};
-                                filters["status"] = currentStatus;
+                                filters.status = currentStatus;
                             } else {
                                 filters = {};
                             }
@@ -875,7 +863,7 @@ var MLT = MLT || {};
                     });
 
                     refresh.click(function () {
-                        var number = container.find('.address').length;
+                        var number = addressContainer.find('.address').length;
                         preserveSelectAll = true;
                         addressLoading.reloadList({num: number}, true);
                         return false;
@@ -885,9 +873,9 @@ var MLT = MLT || {};
                         var thisStatus = $(this).attr('class');
                         if (!$(this).closest('.bystatus').hasClass(thisStatus)) {
                             if (thisStatus === 'none') {
-                                delete filters["status"];
+                                delete filters.status;
                             } else {
-                                filters["status"] = thisStatus;
+                                filters.status = thisStatus;
                             }
                             $(this).closest('.bystatus').removeClass('approved flagged unmapped none').addClass(thisStatus);
                             addressLoading.reloadList();
@@ -901,14 +889,42 @@ var MLT = MLT || {};
                     $('#addressform .actions .bulkselect #select_all_none').change(function () {
                         if ($(this).is(':checked')) {
                             $(this).closest('.bulkselect').data('selectall', true);
-                            container.find('.address input[id^="select"]').prop('checked', true);
+                            addressContainer.find('.address input[id^="select"]').prop('checked', true);
                         } else {
                             $(this).closest('.bulkselect').data('selectall', false);
-                            container.find('.address input[id^="select"]').prop('checked', false);
+                            addressContainer.find('.address input[id^="select"]').prop('checked', false);
                         }
                     });
                 };
 
+            mapinfo.hide().hover(
+                function () { mapinfoHover = true; },
+                function () {
+                    mapinfoHover = false;
+                    hideInfo();
+                }
+            ).click(function (event) {
+                if ($(this).hasClass('selected') && !$(event.target).is('.mapit')) {
+                    var lat = selectedParcelInfo.latitude,
+                        lng = selectedParcelInfo.longitude;
+                    map.panTo(new L.LatLng(lat, lng));
+                    if (map.getZoom() < MIN_PARCEL_ZOOM) {
+                        map.setZoom(MIN_PARCEL_ZOOM);
+                    }
+                }
+            });
+
+            addressContainer.scroll(function () {
+                $.doTimeout('scroll', 150, function () {
+                    if ((addressContainer.get(0).scrollHeight - addressContainer.scrollTop() - addressContainer.outerHeight()) <= loadingMessage.outerHeight() && addressLoading.moreAddresses && !addressLoading.currentlyLoading) {
+                        addressLoading.addMore();
+                    }
+                });
+            });
+
+            initializeMap();
+            addressPopups();
+            mapAddress();
             addressSorting();
             addressDetails();
             addressSelect();
@@ -916,14 +932,6 @@ var MLT = MLT || {};
             addressActions();
             filtering();
             selectAll();
-
-            container.scroll(function () {
-                $.doTimeout('scroll', 150, function () {
-                    if ((container.get(0).scrollHeight - container.scrollTop() - container.outerHeight()) <= loadingMessage.outerHeight() && addressLoading.moreAddresses && !addressLoading.currentlyLoading) {
-                        addressLoading.addMore();
-                    }
-                });
-            });
         },
 
         addressListHeight = function () {
@@ -982,9 +990,8 @@ var MLT = MLT || {};
             $(this).blur();
         });
         if ($('#map').length) {
-            mapping();
+            addressMapping();
         }
-        addresses();
         importAddressesLightbox();
     });
 
