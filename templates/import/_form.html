@@ -1,23 +1,22 @@
 {% load mltforms %}
 
-<div>
-  <h3>import addresses</h3>
-  <form method="POST" action="{% url map_import_addresses %}" id="import-address-form" enctype="multipart/form-data">
-    {% csrf_token %}
-    <ul>
-      <li class="csv-file">
-        {{ form.file.errors }}
-        {{ form.file|label:"select a CSV file to import" }}
-        {{ form.file }}
-      </li>
-      <li class="source">
-        {{ form.source.errors }}
-        {{ form.source|label:"source tag for this import" }}
-        {{ form.source }}
-      </li>
-    <div class="form-actions">
-      <a href="#" title="close the import addresses lightbox">cancel</a> or
-      <button title="import addresses" type="submit">import</button>
-    </div>
-  </form>
-</div>
+<h3>import addresses</h3>
+<form method="POST" action="{% url map_import_addresses %}" id="import-address-form" enctype="multipart/form-data">
+  {% csrf_token %}
+  <ul>
+    <li class="csv-file">
+      {{ form.file.errors }}
+      {{ form.file|label:"select a CSV file to import" }}
+      {{ form.file }}
+    </li>
+    <li class="source">
+      {{ form.source.errors }}
+      {{ form.source|label:"source tag for this import" }}
+      {{ form.source }}
+    </li>
+  </ul>
+  <div class="form-actions">
+    <a href="#" title="close the import addresses lightbox">cancel</a> or
+    <button title="import addresses" type="submit">import</button>
+  </div>
+</form>

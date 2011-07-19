@@ -1,0 +1,55 @@
+// import --------------------------------------------------------------------
+
+#import-page
+  +full(29)
+  +pad(8,8,29)
+  +padding-leader
+  +padding-trailer
+  max-width: fixed(12)
+
+  #import-address-form
+    +leader
+    label
+      +bold
+      position: absolute
+      top: rhythm(.25)
+      right: 100% + gutter(13)
+      width: columns(8,13)
+      text-align: right
+    li
+      +trailer(.5)
+      position: relative
+
+    .errorlist:not(.nonfield)
+      position: absolute
+      top: rhythm(.25)
+      left: 100% + gutter(13)
+      width: columns(8,13)
+
+#import-errors
+  +leader
+  +trailer
+  ul
+    +no-style-list
+  .line-errors
+    +pie-clearfix
+    +leader
+    position: relative
+  .line-number
+    +bold
+    +font-style-normal
+    position: absolute
+    top: 0
+    right: 100% + gutter(13)
+    width: columns(8,13)
+    text-align: right
+  .fieldname
+    +columns(2,12)
+    +leader(0)
+    clear: both
+    &::after
+      content: ":"
+  dd
+    +columns(10,12)
+    +omega(12)
+    margin-left: 0

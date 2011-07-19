@@ -1,5 +1,5 @@
-<article id="address-id-{{ id }}" class="address" data-id="{{ id }}"{{# pl }} data-latitude="{{ latitude }}" data-longitude="{{ longitude }}"{{/ pl }}>
-  <input type="checkbox" id="select_{{ id }}" name="select" value="{{ id }}" class="item-select">
+<article id="address-id-{{ id }}" class="address" data-id="{{ id }}"{{# latitude }}{{# longitude }} data-latitude="{{ latitude }}" data-longitude="{{ longitude }}"{{/ longitude }}{{/ latitude }}{{# geolat }}{{# geolng }} data-geocode-latitude="{{ geolat }}" data-geocode-longitude="{{ geolng }}"{{/ geolng }}{{/ geolat }}>
+  <input type="checkbox" id="select_{{ id }}" name="select" value="{{ id }}" class="item-select"{{# checked }} checked="checked"{{/ checked }}>
 
   <div class="content"> {{! @@@ editing: 'editing' }}
     <span class="mapkey">{{ index }}</span>
