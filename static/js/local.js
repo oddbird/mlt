@@ -232,7 +232,7 @@ var MLT = MLT || {};
                                             thisAddress.replaceWith(updatedAddress);
                                             updatedAddress.find('.details').html5accordion();
 
-                                            input = updatedAddress.find('input[id^="select"]');
+                                            input = updatedAddress.find('input[id^="select"]').get(0);
                                             input.popup = new L.Popup({
                                                 closeButton: false,
                                                 autoPan: false
@@ -414,7 +414,7 @@ var MLT = MLT || {};
                             loadingMessage.find('p').html('no more addresses');
                             addressLoading.moreAddresses = false;
                         }
-                        if (data.count) {
+                        if (data.count || data.count === 0) {
                             $('#addressform .actions .listlength').html(data.count);
                         }
                         addressLoading.currentlyLoading = false;
@@ -572,6 +572,34 @@ var MLT = MLT || {};
                             form.get(0).reset();
                         }
                         $(document).unbind('keydown.closeAddLightbox');
+                    });
+                },
+
+                addressActions = function () {
+                    var url = container.data('actions-url');
+
+                    $('#addressform .actions .bools .addremove .delete_selected').live('click', function () {
+                        var number = container.find('.address').length,
+                            selectedAddressID = container.find('.address input[id^="select"]:checked').map(function () {
+                                return $(this).closest('.address').data('id');
+                            }).get();
+                        $.post(url, { aid: selectedAddressID, action: "delete" }, function (data) {
+                            if (data.success) {
+                                addressLoading.reloadList({num: number}, true);
+                            }
+                        });
+                        return false;
+                    });
+
+                    container.find('.address .content .controls .action-delete').live('click', function () {
+                        var number = container.find('.address').length,
+                            selectedAddressID = $(this).closest('.address').data('id');
+                        $.post(url, { aid: selectedAddressID, action: "delete" }, function (data) {
+                            if (data.success) {
+                                addressLoading.reloadList({num: number}, true);
+                            }
+                        });
+                        return false;
                     });
                 },
 
@@ -775,6 +803,7 @@ var MLT = MLT || {};
             addressDetails();
             addressSelect();
             addAddress();
+            addressActions();
             filtering();
 
             container.scroll(function () {
