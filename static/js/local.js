@@ -721,16 +721,18 @@ var MLT = MLT || {};
                             addressLoading.reloadList();
                         };
 
-                    textbox.keyup(function (event) {
-                        // Updates suggestion-list if typed-text has changed
-                        if ($(this).val() !== typedText) {
-                            typedText = $(this).val();
-                            if (typedText.length) {
-                                $.get(url, {q: typedText}, updateSuggestions);
-                            } else {
-                                suggestionList.empty().hide();
+                    textbox.keyup(function () {
+                        $(this).doTimeout(300, function () {
+                            // Updates suggestion-list if typed-text has changed
+                            if ($(this).val() !== typedText) {
+                                typedText = $(this).val();
+                                if (typedText.length) {
+                                    $.get(url, {q: typedText}, updateSuggestions);
+                                } else {
+                                    suggestionList.empty().hide();
+                                }
                             }
-                        }
+                        });
                     }).keydown(function (event) {
                         // If the suggestion list is not visible...
                         if (!suggestionList.is(':visible')) {
