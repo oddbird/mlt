@@ -288,6 +288,13 @@ h1 a:link, h1 a:visited { display: block; }
 #filter .visual input { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #filter .visual input:checked + label { display: block; }
 #filter .bystatus { display: inline; float: left; width: 2.427em; background: url('../images/ui/filter.png?1308258200') no-repeat scroll center; }
+#filter .bystatus.none .none { font-weight: 700; }
+#filter .bystatus.approved { background-image: url('../images/ui/thumb_up.png?1307644308'); }
+#filter .bystatus.approved .approved { font-weight: 700; }
+#filter .bystatus.flagged { background-image: url('../images/ui/warning.png?1305750015'); }
+#filter .bystatus.flagged .flagged { font-weight: 700; }
+#filter .bystatus.unmapped { background-image: url('../images/ui/x.png?1307817035'); }
+#filter .bystatus.unmapped .unmapped { font-weight: 700; }
 #filter .bystatus ul { left: 0; }
 #filter .bystatus a:link, #filter .bystatus a:visited { display: block; padding: 0.405em 0.809em 0.405em 26.833px; background: url('../images/ui/filter.png?1308258200') no-repeat scroll 7.417px; }
 #filter .bystatus a:link.approved, #filter .bystatus a:visited.approved { background-image: url('../images/ui/thumb_up.png?1307644308'); }

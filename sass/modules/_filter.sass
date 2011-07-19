@@ -89,6 +89,20 @@
     +float(left)
     width: rhythm(1.5)
     background: image-url('ui/filter.png') no-repeat scroll center
+    &.none .none
+      +bold
+    &.approved
+      background-image: image-url('ui/thumb_up.png')
+      .approved
+        +bold
+    &.flagged
+      background-image: image-url('ui/warning.png')
+      .flagged
+        +bold
+    &.unmapped
+      background-image: image-url('ui/x.png')
+      .unmapped
+        +bold
     ul
       left: 0
     a
