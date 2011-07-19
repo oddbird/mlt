@@ -161,7 +161,7 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
         create_parcel(pl="1234")
         a = create_address()
 
-        res = self.post(self.url, {"pl": "1234", "aid": a.id})
+        res = self.post(self.url, {"maptopl": "1234", "aid": a.id})
 
         a = refresh(a)
         self.assertEqual(a.pl, "1234")
@@ -180,7 +180,7 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
         a = create_address()
         u = create_user(is_staff=True)
 
-        res = self.post(self.url, {"pl": "1234", "aid": a.id}, user=u)
+        res = self.post(self.url, {"maptopl": "1234", "aid": a.id}, user=u)
 
         a = refresh(a)
         self.assertEqual(a.pl, "1234")
@@ -199,7 +199,7 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
         create_address(pl="1234")
         a2 = create_address()
 
-        res = self.post(self.url, {"pl": "1234", "aid": a2.id})
+        res = self.post(self.url, {"maptopl": "1234", "aid": a2.id})
 
         a2 = refresh(a2)
         self.assertEqual(a2.pl, "1234")
@@ -220,7 +220,7 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
         a1 = create_address()
         a2 = create_address()
 
-        res = self.post(self.url, {"pl": "1234", "aid": [a1.id, a2.id]})
+        res = self.post(self.url, {"maptopl": "1234", "aid": [a1.id, a2.id]})
 
         a1 = refresh(a1)
         a2 = refresh(a2)
@@ -241,10 +241,41 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
         self.assertTrue(all([a["needs_review"] for a in mt]))
 
 
+    def test_associate_by_filter(self):
+        from mlt.dt import utc_to_local
+
+        create_parcel(pl="1234")
+        a1 = create_address(city="Providence")
+        a2 = create_address(city="Providence")
+        a3 = create_address(city="Pawtucket")
+
+        res = self.post(self.url, {"maptopl": "1234", "city": "Providence"})
+
+        a1 = refresh(a1)
+        a2 = refresh(a2)
+        a3 = refresh(a3)
+        self.assertEqual(a1.pl, "1234")
+        self.assertEqual(a2.pl, "1234")
+        self.assertEqual(a3.pl, "")
+        self.assertEqual(res.json["pl"], "1234")
+        mt = res.json["mapped_to"]
+        self.assertEqual(len(mt), 2)
+        self.assertEqual(set([a["id"] for a in mt]), set([a1.id, a2.id]))
+        self.assertEqual(
+            set([a["mapped_by"] for a in mt]), set([self.user.username])
+            )
+        self.assertEqual(
+            set([a["mapped_timestamp"] for a in mt]),
+            set([date_format(utc_to_local(a1.mapped_timestamp),
+                             "DATETIME_FORMAT")])
+            )
+        self.assertTrue(all([a["needs_review"] for a in mt]))
+
+
     def test_no_such_parcel(self):
         a = create_address()
 
-        res = self.post(self.url, {"pl": "1234", "aid": a.id})
+        res = self.post(self.url, {"maptopl": "1234", "aid": a.id})
 
         self.assertEqual(refresh(a).pl, "")
         self.assertEqual(
@@ -284,7 +315,7 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
     def test_no_addresses(self):
         create_parcel(pl="1234")
 
-        res = self.post(self.url, {"pl": "1234"})
+        res = self.post(self.url, {"maptopl": "1234"})
 
         self.assertEqual(
             json.loads(res.body),
@@ -293,7 +324,7 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
                     {
                         "level": 40,
                         "tags": "error",
-                        "message": "No addresses with given IDs ()"
+                        "message": "No addresses selected."
                         }
                     ]
                 }
@@ -303,7 +334,7 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
     def test_no_such_addresses(self):
         create_parcel(pl="1234")
 
-        res = self.post(self.url, {"pl": "1234", "aid": "123"})
+        res = self.post(self.url, {"maptopl": "1234", "aid": "123"})
 
         self.assertEqual(
             json.loads(res.body),
@@ -312,7 +343,7 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
                     {
                         "level": 40,
                         "tags": "error",
-                        "message": "No addresses with given IDs (123)"
+                        "message": "No addresses selected."
                         }
                     ]
                 }
