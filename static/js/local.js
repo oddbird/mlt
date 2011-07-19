@@ -183,6 +183,9 @@ var MLT = MLT || {};
                                     this.popup.setLatLng(new L.LatLng(geolat, geolng));
                                     this.popup.setContent(popupContent);
                                     map.addLayer(this.popup);
+                                    $('#map .leaflet-map-pane .leaflet-objects-pane .leaflet-popup-pane .leaflet-popup-content').filter(function (index) {
+                                        return $(this).html() === popupContent;
+                                    }).closest('.leaflet-popup').addClass('geocoded');
                                     map.panTo(new L.LatLng(geolat, geolng));
                                     if (map.getZoom() < MIN_PARCEL_ZOOM) {
                                         map.setZoom(MIN_PARCEL_ZOOM);
@@ -244,6 +247,9 @@ var MLT = MLT || {};
                                             if (map.getZoom() < MIN_PARCEL_ZOOM) {
                                                 map.setZoom(MIN_PARCEL_ZOOM);
                                             }
+                                            $('#map .leaflet-map-pane .leaflet-objects-pane .leaflet-popup-pane .leaflet-popup-content').filter(function (index) {
+                                                return $(this).html() === popupContent;
+                                            }).closest('.leaflet-popup').addClass('geocoded');
                                         });
                                     }
                                 }
