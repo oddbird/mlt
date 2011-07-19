@@ -38,13 +38,8 @@
         border: 1px solid $light
           color: transparent $mid $light
           width: 0 1px 1px
-      #{$focus}
+      &.selected
         background: $light
-    &:not(:hover)
-      li:first-child
-        a
-          #{$link}
-            background: $light
     li:last-child
       a
         #{$link}
