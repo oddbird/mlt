@@ -17,17 +17,6 @@ FILTER_FIELDS = {
 
 
 
-LOCAL_FIELDS = [f.split("__")[0] for f in FILTER_FIELDS]
-
-
-STATUS_FILTERS = {
-    "unmapped": Q(pl=""),
-    "flagged": ~Q(pl="") & Q(needs_review=True),
-    "approved": ~Q(pl="") & Q(needs_review=False),
-    }
-
-
-
 def autocomplete(q):
     data = []
     for field, desc in FILTER_FIELDS.items():
@@ -48,17 +37,29 @@ def autocomplete(q):
 
 
 
+STATUS_FILTERS = {
+    "unmapped": Q(pl=""),
+    "flagged": ~Q(pl="") & Q(needs_review=True),
+    "approved": ~Q(pl="") & Q(needs_review=False),
+    }
+
+
+
 def apply(qs, filter_data):
-    filters = {}
-    for field in LOCAL_FIELDS:
-        if field in filter_data:
-            filters["%s__in" % field] = filter_data.getlist(field)
+    filters = Q()
+    for field in FILTER_FIELDS:
+        local_part = field.split("__")[0]
+        if local_part in filter_data:
+            filters = filters & Q(
+                **{"%s__in" % local_part: filter_data.getlist(local_part)})
+
     if "aid" in filter_data:
-        filters["id__in"] = filter_data.getlist("aid")
-    qs = qs.filter(**filters)
+        filters = filters & Q(id__in=filter_data.getlist("aid"))
 
     status = filter_data.get("status", None)
     if status in STATUS_FILTERS:
-        qs = qs.filter(STATUS_FILTERS[status])
+        filters = filters & STATUS_FILTERS[status]
+
+    qs = qs.filter(filters)
 
     return qs
