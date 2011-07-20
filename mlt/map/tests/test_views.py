@@ -450,6 +450,24 @@ class AddressesViewTest(AuthenticatedWebTest):
         self.assertAddresses(res, [a1.id])
 
 
+    def test_filter_case_insensitive(self):
+        a1 = create_address(
+            city="Providence",
+            )
+        create_address(
+            city="Albuquerque",
+            )
+        create_address(
+            city="Albuquerque",
+            )
+
+        res = self.app.get(
+            self.url + "?city=providence",
+            user=self.user)
+
+        self.assertAddresses(res, [a1.id])
+
+
     def test_filter_multiple_same_field(self):
         a1 = create_address(
             city="Providence",
@@ -715,7 +733,7 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
             [{
                     "desc": "city",
                     "field": "city",
-                    "value": "Albuquerque",
+                    "value": "albuquerque",
                     "q": "alb",
                     "rest": "uquerque",
                     }]
@@ -730,6 +748,31 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
                     "value": blametern.id,
                     "rest": "lametern",
                     "desc": "imported by"
+                    }]
+            )
+
+
+    def test_filter_case(self):
+        create_address(
+            input_street="123 N Main St",
+            city="Providence")
+        create_address(
+            input_street="456 N Main St",
+            city="providence")
+        create_address(
+            input_street="123 N Main St",
+            city="Albuquerque")
+
+        res = self.app.get(self.url + "?q=prov", user=self.user)
+
+        self.assertEqual(
+            res.json["options"],
+            [{
+                    "desc": "city",
+                    "field": "city",
+                    "value": "providence",
+                    "q": "prov",
+                    "rest": "idence",
                     }]
             )
 
