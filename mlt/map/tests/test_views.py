@@ -757,7 +757,7 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
                     "field": "city",
                     "value": "Albuquerque",
                     "q": "alb",
-                    "rest": "uquerque",
+                    "display": "Albuquerque",
                     }]
             )
 
@@ -768,7 +768,7 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
             [{      "q": "b",
                     "field": "imported_by",
                     "value": blametern.id,
-                    "rest": "lametern",
+                    "display": "blametern",
                     "desc": "imported by"
                     }]
             )

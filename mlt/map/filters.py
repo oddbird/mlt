@@ -27,7 +27,7 @@ def autocomplete(q):
             display, submit = option
             data.append({
                     "q": q,
-                    "rest": display[len(q):],
+                    "display": display,
                     "value": submit,
                     "field": local_field,
                     "desc": desc
