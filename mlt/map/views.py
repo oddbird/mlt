@@ -231,6 +231,10 @@ def geocode(request):
     geocoder.update(address, data)
     address.save()
 
+    messages.success(
+        request, "Address &laquo;%s&raquo; geocoded and updated to &laquo;%s&raquo;" % (as_string, geocoder.prep(address))
+        )
+
     return json_response({
             "address": serializers.AddressSerializer().one(address),
             })
