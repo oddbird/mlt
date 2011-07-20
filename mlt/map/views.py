@@ -67,6 +67,7 @@ def associate(request):
             request, "No addresses selected.")
 
     if parcel and addresses:
+        count = addresses.count()
         addresses.update(
             pl=pl,
             mapped_by=request.user,
@@ -77,8 +78,8 @@ def associate(request):
             request,
             "Mapped %s address%s to PL %s"
             % (
-                addresses.count(),
-                "es" if (addresses.count() != 1) else "",
+                count,
+                "es" if (count != 1) else "",
                 pl
                 )
             )

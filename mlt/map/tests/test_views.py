@@ -272,6 +272,28 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
         self.assertTrue(all([a["needs_review"] for a in mt]))
 
 
+    def test_associate_by_filter_unmapped(self):
+        create_parcel(pl="1234")
+        create_address(city="Providence")
+        create_address(city="Providence")
+        create_address(city="Pawtucket")
+
+        res = self.post(
+            self.url,
+            {"maptopl": "1234", "city": "Providence", "status": "unmapped"})
+
+        self.assertEqual(
+            res.json["messages"],
+            [
+                {
+                    "level": 25,
+                    "message": "Mapped 2 addresses to PL 1234",
+                    "tags": "success"
+                    }
+                ]
+            )
+
+
     def test_no_such_parcel(self):
         a = create_address()
 
