@@ -472,6 +472,24 @@ class AddressesViewTest(AuthenticatedWebTest):
         self.assertAddresses(res, [a1.id])
 
 
+    def test_filter_by_not_ids(self):
+        create_address(
+            city="Providence",
+            )
+        a2 = create_address(
+            city="Albuquerque",
+            )
+        a3 = create_address(
+            city="Albuquerque",
+            )
+
+        res = self.app.get(
+            self.url + "?city=Albuquerque&notid=%s" % a2.id,
+            user=self.user)
+
+        self.assertAddresses(res, [a3.id])
+
+
     def test_filter_multiple_same_field(self):
         a1 = create_address(
             city="Providence",

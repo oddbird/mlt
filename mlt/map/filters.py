@@ -56,6 +56,9 @@ def apply(qs, filter_data):
     if "aid" in filter_data:
         filters = filters & Q(id__in=filter_data.getlist("aid"))
 
+    if "notid" in filter_data:
+        filters = filters & ~Q(id__in=filter_data.getlist("notid"))
+
     status = filter_data.get("status", None)
     if status in STATUS_FILTERS:
         filters = filters & STATUS_FILTERS[status]
