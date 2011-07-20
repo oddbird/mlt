@@ -480,9 +480,9 @@ var MLT = MLT || {};
 
                     fields.click(function () {
                         if (!($(this).closest('li[class^="by"]').hasClass('none'))) {
-                            $(this).closest('li[class^="by"]').find('.dir').removeClass('asc desc');
+                            $(this).closest('li[class^="by"]').find('.dir').removeClass('asc desc').html('none');
                         } else {
-                            $(this).closest('li[class^="by"]').find('.dir').addClass('asc');
+                            $(this).closest('li[class^="by"]').find('.dir').addClass('asc').html('ascending');
                         }
                         $(this).closest('li[class^="by"]').toggleClass('none');
                         sortList();
@@ -495,9 +495,15 @@ var MLT = MLT || {};
                             $(this).closest('li[class^="by"]').removeClass('none');
                         }
                         if ($(this).hasClass('asc') || $(this).hasClass('desc')) {
+                            if ($(this).hasClass('asc')) {
+                                $(this).html('descending');
+                            }
+                            if ($(this).hasClass('desc')) {
+                                $(this).html('ascending');
+                            }
                             $(this).toggleClass('asc desc');
                         } else {
-                            $(this).addClass('asc');
+                            $(this).addClass('asc').html('ascending');
                         }
                         sortList();
                         updateSortData();
@@ -508,7 +514,7 @@ var MLT = MLT || {};
                         delay: 30,
                         update: function (event, ui) {
                             if (ui.item.hasClass('none')) {
-                                ui.item.removeClass('none').find('.dir').addClass('asc');
+                                ui.item.removeClass('none').find('.dir').addClass('asc').html('ascending');
                             }
                             sortList();
                             updateSortData();
