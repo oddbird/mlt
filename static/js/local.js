@@ -425,6 +425,54 @@ var MLT = MLT || {};
                         addressLoading.currentlyLoading = false;
                         addressLoading.scroll = false;
                     },
+                    replaceAddresses: function (data) {
+                        addressContainer.find('.address input[id^="select"]:checked').click();
+                        if (data.addresses.length) {
+                            $.each(data.addresses, function (i, address) {
+                                var byline, web_ui, lat, lng, geolat, geolng, updatedAddress,
+                                    id = address.id,
+                                    thisAddress = $('#addresstable .address[data-id="' + id + '"]'),
+                                    index = thisAddress.find('.mapkey').html();
+
+                                if (address.pl) {
+                                    lat = address.latitude;
+                                    lng = address.longitude;
+                                } else {
+                                    geolat = address.latitude;
+                                    geolng = address.longitude;
+                                }
+                                if (address.import_source || address.mapped_by) { byline = true; }
+                                if (address.import_source === 'web-ui') { web_ui = true; }
+
+                                updatedAddress = ich.address({
+                                    id: id,
+                                    pl: address.pl,
+                                    latitude: lat,
+                                    longitude: lng,
+                                    geolat: geolat,
+                                    geolng: geolng,
+                                    index: index,
+                                    street: address.street,
+                                    city: address.city,
+                                    state: address.state,
+                                    complex_name: address.complex_name,
+                                    needs_review: address.needs_review,
+                                    multi_units: address.multi_units,
+                                    notes: address.notes,
+                                    byline: byline,
+                                    import_source: address.import_source,
+                                    web_ui: web_ui,
+                                    imported_by: address.imported_by,
+                                    import_timestamp: address.import_timestamp,
+                                    mapped_by: address.mapped_by,
+                                    mapped_timestamp: address.mapped_timestamp
+                                });
+
+                                thisAddress.replaceWith(updatedAddress);
+                                updatedAddress.find('.details').html5accordion();
+                            });
+                        }
+                    },
                     // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
                     reloadList: function (opts, preserveScroll) {
                         var defaults = {
@@ -665,44 +713,21 @@ var MLT = MLT || {};
                             selectedAddressID = addressContainer.find('.address input[id^="select"]:checked').map(function () {
                                 return $(this).closest('.address').data('id');
                             }).get();
-                            $.post(url, { aid: selectedAddressID, action: action }, function (data) {
-                                if (data.success) {
-                                    addressContainer.find('.address input[id^="select"]:checked').each(function () {
-                                        var thisDiv = $(this).closest('.address').find('.id');
-                                        if (!thisDiv.hasClass('unmapped')) {
-                                            if (action === "flag") {
-                                                thisDiv.removeClass('approved').find('input[name="flag_for_review"]').prop('checked', true);
-                                            }
-                                            if (action === "approve") {
-                                                thisDiv.addClass('approved').find('input[name="flag_for_review"]').prop('checked', false);
-                                            }
-                                        }
-                                    });
-                                }
-                            });
+                            $.post(url, { aid: selectedAddressID, action: action }, addressLoading.replaceAddresses);
                         }
                         return false;
                     });
 
-                    addressContainer.find('.address input[name="flag_for_review"]').live('change', function () {
+                    addressContainer.find('.address label.action-flag[for^="flag_for_review"]').live('click', function () {
                         var action,
                             selectedAddressID = $(this).closest('.address').data('id'),
                             thisDiv = $(this).closest('.id');
-                        if ($(this).is(':checked')) {
+                        if (thisDiv.hasClass('approved')) {
                             action = "flag";
                         } else {
                             action = "approve";
                         }
-                        $.post(url, { aid: selectedAddressID, action: action }, function (data) {
-                            if (data.success) {
-                                if (action === "flag") {
-                                    thisDiv.removeClass('approved');
-                                }
-                                if (action === "approve") {
-                                    thisDiv.addClass('approved');
-                                }
-                            }
-                        });
+                        $.post(url, { aid: selectedAddressID, action: action }, addressLoading.replaceAddresses);
                     });
                 },
 
