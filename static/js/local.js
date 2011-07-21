@@ -728,6 +728,7 @@ var MLT = MLT || {};
                             action = "approve";
                         }
                         $.post(url, { aid: selectedAddressID, action: action }, addressLoading.replaceAddresses);
+                        return false;
                     });
                 },
 
