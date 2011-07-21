@@ -261,6 +261,9 @@ def address_actions(request):
         return json_response({"success": True})
 
     if action == "approve":
+        if not request.user.has_perm("map.mappings_trusted"):
+            messages.error( request, "Insufficient permissions.")
+            return json_response({"success": False})
         addresses = addresses.filter(needs_review=True).exclude(pl="")
         count = addresses.count()
         Address.objects.filter(
