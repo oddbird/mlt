@@ -738,6 +738,11 @@ var MLT = MLT || {};
                                     filters[field] = [value];
                                 }
                             });
+                            if (filterList.find('input[id$="filter"]:checked').length) {
+                                $('#filter .visual').addClass('active-filters');
+                            } else {
+                                $('#filter .visual').removeClass('active-filters');
+                            }
                             addressLoading.reloadList();
                         };
 
