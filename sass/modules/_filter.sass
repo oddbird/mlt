@@ -71,8 +71,11 @@
 
   .visual
     +float(left)
+    +opacity(.5)
     width: rhythm(1.5)
     background: image-url('ui/list.png') no-repeat scroll center
+    &.active-filters
+      +opacity(1)
     ul
       right: 0
     label

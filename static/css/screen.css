@@ -281,7 +281,8 @@ h1 a:link, h1 a:visited { display: block; }
 #filter .visual, #filter .bystatus { position: relative; height: 2.427em; }
 #filter .visual ul, #filter .bystatus ul { display: none; position: absolute; top: 100%; width: 11.326em; background: white; z-index: 900; }
 #filter .visual:hover ul, #filter .bystatus:hover ul { -moz-box-shadow: 0px 0px 5px #333333; -webkit-box-shadow: 0px 0px 5px #333333; -o-box-shadow: 0px 0px 5px #333333; box-shadow: 0px 0px 5px #333333; display: block; }
-#filter .visual { display: inline; float: left; width: 2.427em; background: url('../images/ui/list.png?1307817035') no-repeat scroll center; }
+#filter .visual { display: inline; float: left; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; width: 2.427em; background: url('../images/ui/list.png?1307817035') no-repeat scroll center; }
+#filter .visual.active-filters { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 #filter .visual ul { right: 0; }
 #filter .visual label { display: none; padding: 0.405em 0.809em; }
 #filter .visual label:focus, #filter .visual label:hover, #filter .visual label:active { background: url('../images/ui/x.png?1307817035') no-repeat scroll 95% center; }
