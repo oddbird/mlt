@@ -256,6 +256,9 @@ var MLT = MLT || {};
                                             $('#map .leaflet-map-pane .leaflet-objects-pane .leaflet-popup-pane .leaflet-popup-content').filter(function (index) {
                                                 return $(this).html() === popupContent;
                                             }).closest('.leaflet-popup').addClass('geocoded');
+                                            if (addressContainer.data('trusted') !== 'trusted') {
+                                                addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
+                                            }
                                         });
                                     }
                                 }
@@ -329,6 +332,9 @@ var MLT = MLT || {};
                                 selectedLayer.unselect();
                                 if ($('#addressform .actions .bulkselect').data('selectall')) {
                                     $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
+                                }
+                                if (addressContainer.data('trusted') !== 'trusted') {
+                                    addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
                                 }
                             };
                         if ($('#addressform .actions .bulkselect').data('selectall')) {
@@ -422,6 +428,9 @@ var MLT = MLT || {};
                         if (data.count || data.count === 0) {
                             $('#addressform .actions .listlength').html(data.count);
                         }
+                        if (addressContainer.data('trusted') !== 'trusted') {
+                            addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
+                        }
                         addressLoading.currentlyLoading = false;
                         addressLoading.scroll = false;
                     },
@@ -471,6 +480,9 @@ var MLT = MLT || {};
                                 thisAddress.replaceWith(updatedAddress);
                                 updatedAddress.find('.details').html5accordion();
                             });
+                            if (addressContainer.data('trusted') !== 'trusted') {
+                                addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
+                            }
                         }
                     },
                     // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
@@ -684,12 +696,17 @@ var MLT = MLT || {};
                         return false;
                     });
 
-                    $('#addressform .actions .bools .approval button').live('click', function () {
+                    $('#addressform .actions .bools .approval button').click(function () {
                         var action,
                             selectedAddressID,
                             options,
                             notID,
                             number = addressContainer.find('.address').length;
+                        if ($(this).hasClass('disabled')) {
+                            $(ich.message({message: "Insufficient permissions.", tags: "error"})).appendTo($('#messages'));
+                            $('#messages').messages();
+                            return false;
+                        }
                         if ($(this).hasClass('action-flag')) {
                             action = "flag";
                         }
@@ -722,6 +739,11 @@ var MLT = MLT || {};
                         var action,
                             selectedAddressID = $(this).closest('.address').data('id'),
                             thisDiv = $(this).closest('.id');
+                        if ($(this).siblings('input[name="flag_for_review"]').attr('disabled') === 'disabled') {
+                            $(ich.message({message: "Insufficient permissions.", tags: "error"})).appendTo($('#messages'));
+                            $('#messages').messages();
+                            return false;
+                        }
                         if (thisDiv.hasClass('approved')) {
                             action = "flag";
                         } else {
@@ -730,6 +752,10 @@ var MLT = MLT || {};
                         $.post(url, { aid: selectedAddressID, action: action }, addressLoading.replaceAddresses);
                         return false;
                     });
+
+                    if (addressContainer.data('trusted') !== 'trusted') {
+                        $('#addressform .actions .bools .approval .approve').addClass('disabled');
+                    }
                 },
 
                 filtering = function () {
