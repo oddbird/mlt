@@ -89,6 +89,13 @@
 .leaflet-popup-content
   font: inherit
 
+.leaflet-popup-close-button
+  top: 0
+  right: 0
+  width: auto
+  height: auto
+  background: none
+
 // Leaflet Styles ------------------------------------------------------------
 
 .leaflet-popup-content
@@ -108,3 +115,16 @@
   min-height: image-height('ui/pin_blue.png')
   .geocoded &
     background-image: image-url('ui/pin_red.png')
+
+.leaflet-popup-close-button
+  #{$link}
+    +replace-text-with-dimensions('ui/x.png')
+    +transition(opacity,300ms)
+    +opacity(0)
+    top: rhythm(.25)
+    right: rhythm(.25)
+    .leaflet-popup:hover &
+      +opacity(.75)
+  #{$focus}
+    &, .leaflet-popup:hover &
+      +opacity(1)
