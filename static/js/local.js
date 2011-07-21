@@ -169,10 +169,7 @@ var MLT = MLT || {};
                             geoURL = $('#addresstable .managelist').data('geocode-url');
                         if ($(this).is(':checked')) {
                             if (lat && lng) {
-                                this.popup = new L.Popup({
-                                    closeButton: false,
-                                    autoPan: false
-                                });
+                                this.popup = new L.Popup({ autoPan: false });
                                 this.popup.setLatLng(new L.LatLng(lat, lng));
                                 this.popup.setContent(popupContent);
                                 map.addLayer(this.popup);
@@ -182,10 +179,7 @@ var MLT = MLT || {};
                                 }
                             } else {
                                 if (geolat && geolng) {
-                                    this.popup = new L.Popup({
-                                        closeButton: false,
-                                        autoPan: false
-                                    });
+                                    this.popup = new L.Popup({ autoPan: false });
                                     this.popup.setLatLng(new L.LatLng(geolat, geolng));
                                     this.popup.setContent(popupContent);
                                     map.addLayer(this.popup);
@@ -242,10 +236,7 @@ var MLT = MLT || {};
                                             updatedAddress.find('.details').html5accordion();
 
                                             input = updatedAddress.find('input[id^="select"]').get(0);
-                                            input.popup = new L.Popup({
-                                                closeButton: false,
-                                                autoPan: false
-                                            });
+                                            input.popup = new L.Popup({ autoPan: false });
                                             input.popup.setLatLng(new L.LatLng(geolat, geolng));
                                             input.popup.setContent(popupContent);
                                             map.addLayer(input.popup);
