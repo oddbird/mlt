@@ -176,9 +176,16 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
 
 
     def test_associate_trusted(self):
+        from django.contrib.auth.models import Permission
+
         create_parcel(pl="1234")
         a = create_address()
-        u = create_user(is_staff=True)
+        u = create_user()
+        p = Permission.objects.get_by_natural_key(
+            "mappings_trusted",
+            "map",
+            "address")
+        u.user_permissions.add(p)
 
         res = self.post(self.url, {"maptopl": "1234", "aid": a.id}, user=u)
 
@@ -270,6 +277,28 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
                              "DATETIME_FORMAT")])
             )
         self.assertTrue(all([a["needs_review"] for a in mt]))
+
+
+    def test_associate_by_filter_unmapped(self):
+        create_parcel(pl="1234")
+        create_address(city="Providence")
+        create_address(city="Providence")
+        create_address(city="Pawtucket")
+
+        res = self.post(
+            self.url,
+            {"maptopl": "1234", "city": "Providence", "status": "unmapped"})
+
+        self.assertEqual(
+            res.json["messages"],
+            [
+                {
+                    "level": 25,
+                    "message": "Mapped 2 addresses to PL 1234",
+                    "tags": "success"
+                    }
+                ]
+            )
 
 
     def test_no_such_parcel(self):
@@ -466,6 +495,24 @@ class AddressesViewTest(AuthenticatedWebTest):
             user=self.user)
 
         self.assertAddresses(res, [a1.id])
+
+
+    def test_filter_by_not_ids(self):
+        create_address(
+            city="Providence",
+            )
+        a2 = create_address(
+            city="Albuquerque",
+            )
+        a3 = create_address(
+            city="Albuquerque",
+            )
+
+        res = self.app.get(
+            self.url + "?city=Albuquerque&notid=%s" % a2.id,
+            user=self.user)
+
+        self.assertAddresses(res, [a3.id])
 
 
     def test_filter_multiple_same_field(self):
@@ -965,7 +1012,7 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
 
     def test_delete_by_filter(self):
         a1 = create_address(city="Providence")
-        a2 = create_address(city="Pawtucket")
+        create_address(city="Pawtucket")
 
         res = self.post(
             self.url,
@@ -992,6 +1039,11 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
         a2 = create_address(pl="123", needs_review=True)
         a3 = create_address(pl="234", needs_review=False)
 
+        from django.contrib.auth.models import Permission
+        p = Permission.objects.get_by_natural_key(
+            "mappings_trusted", "map", "address")
+        self.user.user_permissions.add(p)
+
         res = self.post(
             self.url,
             {"aid": [a1.id, a2.id, a3.id], "action": "approve"},
@@ -1012,11 +1064,38 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
         self.assertEqual(a2.needs_review, False)
 
 
+    def test_approve_no_perm(self):
+        a1 = create_address(pl="123", needs_review=True)
+
+        res = self.post(
+            self.url,
+            {"aid": [a1.id], "action": "approve"},
+            )
+
+        self.assertEqual(
+            res.json["messages"],
+            [{
+                    "level": 40,
+                    "message": "Insufficient permissions.",
+                    "tags": "error",
+                    }],
+            )
+        self.assertFalse(res.json["success"])
+
+        a1 = refresh(a1)
+        self.assertEqual(a1.needs_review, True)
+
+
     def test_approve_by_filter(self):
         a1 = create_address(city="Providence", pl="123", needs_review=True)
         a2 = create_address(city="Pawtucket", pl="123", needs_review=True)
         create_address(city="Providence", pl="123", needs_review=False)
         create_address(city="Providence", pl="")
+
+        from django.contrib.auth.models import Permission
+        p = Permission.objects.get_by_natural_key(
+            "mappings_trusted", "map", "address")
+        self.user.user_permissions.add(p)
 
         res = self.post(
             self.url,

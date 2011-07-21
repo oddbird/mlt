@@ -154,6 +154,11 @@ class Address(models.Model):
 
     class Meta:
         verbose_name_plural = "addresses"
+        permissions = [
+            (
+                "mappings_trusted",
+                "Can approve addresses and map with no approval.")
+            ]
 
 
     @property

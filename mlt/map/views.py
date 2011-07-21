@@ -67,18 +67,20 @@ def associate(request):
             request, "No addresses selected.")
 
     if parcel and addresses:
+        count = addresses.count()
         addresses.update(
             pl=pl,
             mapped_by=request.user,
             mapped_timestamp=datetime.datetime.utcnow(),
-            needs_review=not request.user.is_staff)
+            needs_review=not request.user.has_perm(
+                "map.mappings_trusted"))
         ret = serializers.ParcelSerializer(extra=["mapped_to"]).one(parcel)
         messages.success(
             request,
             "Mapped %s address%s to PL %s"
             % (
-                addresses.count(),
-                "es" if (addresses.count() != 1) else "",
+                count,
+                "es" if (count != 1) else "",
                 pl
                 )
             )
@@ -230,6 +232,10 @@ def geocode(request):
     geocoder.update(address, data)
     address.save()
 
+    messages.success(
+        request, "Address &laquo;%s&raquo; geocoded and updated to &laquo;%s&raquo;" % (as_string, geocoder.prep(address))
+        )
+
     return json_response({
             "address": serializers.AddressSerializer().one(address),
             })
@@ -255,6 +261,9 @@ def address_actions(request):
         return json_response({"success": True})
 
     if action == "approve":
+        if not request.user.has_perm("map.mappings_trusted"):
+            messages.error( request, "Insufficient permissions.")
+            return json_response({"success": False})
         addresses = addresses.filter(needs_review=True).exclude(pl="")
         count = addresses.count()
         Address.objects.filter(

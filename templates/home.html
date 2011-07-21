@@ -8,7 +8,7 @@
 
     {% include "includes/actions.html" %}
 
-    <div class="managelist" data-addresses-url="{% url map_addresses %}" data-geocode-url="{% url map_geocode %}" data-actions-url="{% url map_address_actions %}">
+    <div class="managelist" data-addresses-url="{% url map_addresses %}" data-geocode-url="{% url map_geocode %}" data-actions-url="{% url map_address_actions %}"{% if user_trusted %} data-trusted="trusted"{% endif %}>
 
       <aside class="load">
         <p>loading addresses...</p>
