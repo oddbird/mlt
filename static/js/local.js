@@ -279,6 +279,7 @@ var MLT = MLT || {};
                     $('#mapinfo .mapit').live('click', function () {
                         var selectedAddressID,
                             options,
+                            notID,
                             pl = selectedParcelInfo.pl,
                             lat = selectedParcelInfo.latitude,
                             lng = selectedParcelInfo.longitude,
@@ -332,6 +333,12 @@ var MLT = MLT || {};
                             };
                         if ($('#addressform .actions .bulkselect').data('selectall')) {
                             options = $.extend({ maptopl: pl }, filters);
+                            if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
+                                notID = addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
+                                    return $(this).closest('.address').data('id');
+                                }).get();
+                                options = $.extend(options, { notid: notID });
+                            }
                             $.post(url, options, success);
                         } else {
                             selectedAddressID = $('#addresstable .address input[id^="select"]:checked').map(function () {
@@ -590,9 +597,16 @@ var MLT = MLT || {};
                     $('#addressform .actions .bools .addremove .delete_selected').live('click', function () {
                         var number = addressContainer.find('.address').length,
                             selectedAddressID,
-                            options;
+                            options,
+                            notID;
                         if ($('#addressform .actions .bulkselect').data('selectall')) {
                             options = $.extend({action: "delete"}, filters);
+                            if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
+                                notID = addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
+                                    return $(this).closest('.address').data('id');
+                                }).get();
+                                options = $.extend(options, { notid: notID });
+                            }
                             $.post(url, options, function (data) {
                                 if (data.success) {
                                     addressLoading.reloadList({num: number}, true);
@@ -626,6 +640,7 @@ var MLT = MLT || {};
                         var action,
                             selectedAddressID,
                             options,
+                            notID,
                             number = addressContainer.find('.address').length;
                         if ($(this).hasClass('action-flag')) {
                             action = "flag";
@@ -635,9 +650,14 @@ var MLT = MLT || {};
                         }
                         if ($('#addressform .actions .bulkselect').data('selectall')) {
                             options = $.extend({action: action}, filters);
+                            if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
+                                notID = addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
+                                    return $(this).closest('.address').data('id');
+                                }).get();
+                                options = $.extend(options, { notid: notID });
+                            }
                             $.post(url, options, function (data) {
                                 if (data.success) {
-                                    preserveSelectAll = true;
                                     addressLoading.reloadList({num: number}, true);
                                 }
                             });
