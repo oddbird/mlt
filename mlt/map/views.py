@@ -72,7 +72,8 @@ def associate(request):
             pl=pl,
             mapped_by=request.user,
             mapped_timestamp=datetime.datetime.utcnow(),
-            needs_review=not request.user.is_staff)
+            needs_review=not request.user.has_perm(
+                "map.mappings_trusted"))
         ret = serializers.ParcelSerializer(extra=["mapped_to"]).one(parcel)
         messages.success(
             request,

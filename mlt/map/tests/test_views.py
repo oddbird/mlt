@@ -176,9 +176,16 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
 
 
     def test_associate_trusted(self):
+        from django.contrib.auth.models import Permission
+
         create_parcel(pl="1234")
         a = create_address()
-        u = create_user(is_staff=True)
+        u = create_user()
+        p = Permission.objects.get_by_natural_key(
+            "mappings_trusted",
+            "map",
+            "address")
+        u.user_permissions.add(p)
 
         res = self.post(self.url, {"maptopl": "1234", "aid": a.id}, user=u)
 
