@@ -192,9 +192,12 @@ var MLT = MLT || {};
                                     }
                                 } else {
                                     if (geoURL && id) {
+                                        thisAddress.loadingOverlay();
                                         $.get(geoURL, {id: id}, function (data) {
                                             var byline, web_ui, updatedAddress, newlat, newlng,
                                                 index = thisAddress.find('.mapkey').html();
+
+                                            thisAddress.loadingOverlay('remove');
 
                                             if (data.address.parcel) {
                                                 newlat = data.address.parcel.latitude;

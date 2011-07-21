@@ -7,7 +7,7 @@
     'use strict';
 
     $.ajaxSettings.traditional = true;
-    $("body").ajaxError(function (event, request, settings, error) {
+    $('body').ajaxError(function (event, request, settings, error) {
         var login_url;
         $('body').loadingOverlay('remove');
         if (error === "UNAUTHORIZED") {
