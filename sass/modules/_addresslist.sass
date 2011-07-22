@@ -56,6 +56,21 @@
   background: rgba($light,.25)
   text-align: center
 
+.loading
+  position: relative
+  > *
+    +opacity($xxsmall)
+  .overlay
+    +stretch
+    +boldcond
+    +padding-leader(.25)
+    +text-shadow($lighter 0 1px 0)
+    display: block
+    color: rgba($base,$small)
+    background: rgba($lighter,$small)
+    text-align: center
+    z-index: 50
+
 // Address List --------------------------------------------------------------
 
 #addresstable
