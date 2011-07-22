@@ -99,6 +99,11 @@
           +opacity(1)
           #{$focus}
             +opacity(.75)
+        &[disabled]
+          + .action-flag
+            #{$focus}
+              +opacity(1)
+              cursor: inherit
 
     &::before
       +cond
@@ -141,10 +146,14 @@
         +opacity(.75)
         #{$focus}
           +opacity(1)
-      .action-flag
-        +opacity(.5)
-        #{$focus}
-          +opacity(1)
+      .flag
+        + .action-flag
+          +opacity(.5)
+          #{$focus}
+            +opacity(1)
+        &[disabled]
+          + .action-flag
+            display: none
       &::before
         color: rgba($base,.5)
 

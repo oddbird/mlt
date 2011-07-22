@@ -159,6 +159,8 @@ button,  input[type="reset"], input[type="submit"], input[type="button"], input[
 
 button
   @extend .button
+  &[disabled]
+    +opacity(.5)
 
 input
   &[type="reset"], &[type="submit"], &[type="button"]
