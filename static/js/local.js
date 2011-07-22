@@ -274,9 +274,11 @@ var MLT = MLT || {};
                 mapAddress = function () {
                     var url = $('#mapping').data('associate-url');
                     $('#mapinfo .mapit').live('click', function () {
-                        var selectedAddressID,
-                            options,
+                        var options,
                             notID,
+                            selectedAddressID = $('#addresstable .address input[id^="select"]:checked').map(function () {
+                                return $(this).closest('.address').data('id');
+                            }).get(),
                             pl = selectedParcelInfo.pl,
                             lat = selectedParcelInfo.latitude,
                             lng = selectedParcelInfo.longitude,
@@ -331,8 +333,9 @@ var MLT = MLT || {};
                                     addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
                                 }
                             };
+
                         if ($('#addressform .actions .bulkselect').data('selectall')) {
-                            options = $.extend({ maptopl: pl }, filters);
+                            options = $.extend(filters, { maptopl: pl, aid: selectedAddressID });
                             if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
                                 notID = addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
                                     return $(this).closest('.address').data('id');
@@ -341,13 +344,7 @@ var MLT = MLT || {};
                             }
                             $.post(url, options, success);
                         } else {
-                            selectedAddressID = $('#addresstable .address input[id^="select"]:checked').map(function () {
-                                return $(this).closest('.address').data('id');
-                            }).get();
-                            $.post(url, {
-                                maptopl: pl,
-                                aid: selectedAddressID
-                            }, success);
+                            $.post(url, { maptopl: pl, aid: selectedAddressID }, success);
                         }
                     });
                 },
@@ -474,6 +471,9 @@ var MLT = MLT || {};
                                 thisAddress.replaceWith(updatedAddress);
                                 updatedAddress.find('.details').html5accordion();
                             });
+                            if ($('#addressform .actions .bulkselect').data('selectall')) {
+                                $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
+                            }
                             if (addressContainer.data('trusted') !== 'trusted') {
                                 addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
                             }
@@ -651,12 +651,14 @@ var MLT = MLT || {};
 
                     $('#addressform .actions .bools .addremove .delete_selected').live('click', function () {
                         var number = addressContainer.find('.address').length,
-                            selectedAddressID,
+                            selectedAddressID = addressContainer.find('.address input[id^="select"]:checked').map(function () {
+                                return $(this).closest('.address').data('id');
+                            }).get(),
                             options,
                             notID;
                         if (number < 20) { number = 20; }
                         if ($('#addressform .actions .bulkselect').data('selectall')) {
-                            options = $.extend({action: "delete"}, filters);
+                            options = $.extend(filters, { aid: selectedAddressID, action: "delete" });
                             if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
                                 notID = addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
                                     return $(this).closest('.address').data('id');
@@ -669,9 +671,6 @@ var MLT = MLT || {};
                                 }
                             });
                         } else {
-                            selectedAddressID = addressContainer.find('.address input[id^="select"]:checked').map(function () {
-                                return $(this).closest('.address').data('id');
-                            }).get();
                             $.post(url, { aid: selectedAddressID, action: "delete" }, function (data) {
                                 if (data.success) {
                                     addressLoading.reloadList({num: number}, true);
@@ -695,7 +694,9 @@ var MLT = MLT || {};
 
                     $('#addressform .actions .bools .approval button').click(function () {
                         var action,
-                            selectedAddressID,
+                            selectedAddressID = addressContainer.find('.address input[id^="select"]:checked').map(function () {
+                                return $(this).closest('.address').data('id');
+                            }).get(),
                             options,
                             notID,
                             number = addressContainer.find('.address').length;
@@ -712,22 +713,15 @@ var MLT = MLT || {};
                             action = "approve";
                         }
                         if ($('#addressform .actions .bulkselect').data('selectall')) {
-                            options = $.extend({action: action}, filters);
+                            options = $.extend(filters, { aid: selectedAddressID, action: action });
                             if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
                                 notID = addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
                                     return $(this).closest('.address').data('id');
                                 }).get();
                                 options = $.extend(options, { notid: notID });
                             }
-                            $.post(url, options, function (data) {
-                                if (data.success) {
-                                    addressLoading.reloadList({num: number}, true);
-                                }
-                            });
+                            $.post(url, options, addressLoading.replaceAddresses);
                         } else {
-                            selectedAddressID = addressContainer.find('.address input[id^="select"]:checked').map(function () {
-                                return $(this).closest('.address').data('id');
-                            }).get();
                             $.post(url, { aid: selectedAddressID, action: action }, addressLoading.replaceAddresses);
                         }
                         return false;
@@ -760,8 +754,8 @@ var MLT = MLT || {};
                     var typedText,
                         textbox = $('#filter_input'),
                         url = textbox.data('autocomplete-url'),
-                        suggestionList = $('#filter .textual .suggest').hide(),
                         filterList = $('#filter .visual > ul'),
+                        suggestionList = $('#filter .textual .suggest').hide(),
                         refresh = $('#filter .refresh'),
                         status = $('#filter .bystatus a'),
 
