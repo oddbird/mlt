@@ -612,6 +612,7 @@ var MLT = MLT || {};
 
                     success = function (data) {
                         var number = addressContainer.find('.address').length;
+                        if (number < 20) { number = 20; }
                         if (data.added) {
                             target.find('a[title*="close"]').click();
                             addressLoading.reloadList({num: number}, true);
@@ -653,6 +654,7 @@ var MLT = MLT || {};
                             selectedAddressID,
                             options,
                             notID;
+                        if (number < 20) { number = 20; }
                         if ($('#addressform .actions .bulkselect').data('selectall')) {
                             options = $.extend({action: "delete"}, filters);
                             if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
@@ -682,6 +684,7 @@ var MLT = MLT || {};
                     addressContainer.find('.address .content .controls .action-delete').live('click', function () {
                         var number = addressContainer.find('.address').length,
                             selectedAddressID = $(this).closest('.address').data('id');
+                        if (number < 20) { number = 20; }
                         $.post(url, { aid: selectedAddressID, action: "delete" }, function (data) {
                             if (data.success) {
                                 addressLoading.reloadList({num: number}, true);
@@ -696,6 +699,7 @@ var MLT = MLT || {};
                             options,
                             notID,
                             number = addressContainer.find('.address').length;
+                        if (number < 20) { number = 20; }
                         if ($(this).hasClass('disabled')) {
                             $(ich.message({message: "Insufficient permissions.", tags: "error"})).appendTo($('#messages'));
                             $('#messages').messages();
@@ -939,6 +943,7 @@ var MLT = MLT || {};
 
                     refresh.click(function () {
                         var number = addressContainer.find('.address').length;
+                        if (number < 20) { number = 20; }
                         preserveSelectAll = true;
                         addressLoading.reloadList({num: number}, true);
                         return false;
