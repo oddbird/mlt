@@ -69,7 +69,7 @@ def apply(qs, filter_data):
                     **{"%s__in" % local_part: filter_data.getlist(local_part)})
 
     if "aid" in filter_data:
-        filters = filters & Q(id__in=filter_data.getlist("aid"))
+        filters = filters | Q(id__in=filter_data.getlist("aid"))
 
     if "notid" in filter_data:
         filters = filters & ~Q(id__in=filter_data.getlist("notid"))
