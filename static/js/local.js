@@ -250,6 +250,9 @@ var MLT = MLT || {};
                                             $('#map .leaflet-map-pane .leaflet-objects-pane .leaflet-popup-pane .leaflet-popup-content').filter(function (index) {
                                                 return $(this).html() === popupContent;
                                             }).closest('.leaflet-popup').addClass('geocoded');
+                                            if (addressContainer.data('trusted') !== 'trusted') {
+                                                addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
+                                            }
                                         });
                                     }
                                 }
@@ -323,6 +326,9 @@ var MLT = MLT || {};
                                 selectedLayer.unselect();
                                 if ($('#addressform .actions .bulkselect').data('selectall')) {
                                     $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
+                                }
+                                if (addressContainer.data('trusted') !== 'trusted') {
+                                    addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
                                 }
                             };
                         if ($('#addressform .actions .bulkselect').data('selectall')) {
@@ -416,8 +422,62 @@ var MLT = MLT || {};
                         if (data.count || data.count === 0) {
                             $('#addressform .actions .listlength').html(data.count);
                         }
+                        if (addressContainer.data('trusted') !== 'trusted') {
+                            addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
+                        }
                         addressLoading.currentlyLoading = false;
                         addressLoading.scroll = false;
+                    },
+                    replaceAddresses: function (data) {
+                        addressContainer.find('.address input[id^="select"]:checked').click();
+                        if (data.addresses.length) {
+                            $.each(data.addresses, function (i, address) {
+                                var byline, web_ui, lat, lng, geolat, geolng, updatedAddress,
+                                    id = address.id,
+                                    thisAddress = $('#addresstable .address[data-id="' + id + '"]'),
+                                    index = thisAddress.find('.mapkey').html();
+
+                                if (address.pl) {
+                                    lat = address.latitude;
+                                    lng = address.longitude;
+                                } else {
+                                    geolat = address.latitude;
+                                    geolng = address.longitude;
+                                }
+                                if (address.import_source || address.mapped_by) { byline = true; }
+                                if (address.import_source === 'web-ui') { web_ui = true; }
+
+                                updatedAddress = ich.address({
+                                    id: id,
+                                    pl: address.pl,
+                                    latitude: lat,
+                                    longitude: lng,
+                                    geolat: geolat,
+                                    geolng: geolng,
+                                    index: index,
+                                    street: address.street,
+                                    city: address.city,
+                                    state: address.state,
+                                    complex_name: address.complex_name,
+                                    needs_review: address.needs_review,
+                                    multi_units: address.multi_units,
+                                    notes: address.notes,
+                                    byline: byline,
+                                    import_source: address.import_source,
+                                    web_ui: web_ui,
+                                    imported_by: address.imported_by,
+                                    import_timestamp: address.import_timestamp,
+                                    mapped_by: address.mapped_by,
+                                    mapped_timestamp: address.mapped_timestamp
+                                });
+
+                                thisAddress.replaceWith(updatedAddress);
+                                updatedAddress.find('.details').html5accordion();
+                            });
+                            if (addressContainer.data('trusted') !== 'trusted') {
+                                addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
+                            }
+                        }
                     },
                     // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
                     reloadList: function (opts, preserveScroll) {
@@ -630,12 +690,17 @@ var MLT = MLT || {};
                         return false;
                     });
 
-                    $('#addressform .actions .bools .approval button').live('click', function () {
+                    $('#addressform .actions .bools .approval button').click(function () {
                         var action,
                             selectedAddressID,
                             options,
                             notID,
                             number = addressContainer.find('.address').length;
+                        if ($(this).hasClass('disabled')) {
+                            $(ich.message({message: "Insufficient permissions.", tags: "error"})).appendTo($('#messages'));
+                            $('#messages').messages();
+                            return false;
+                        }
                         if ($(this).hasClass('action-flag')) {
                             action = "flag";
                         }
@@ -659,45 +724,32 @@ var MLT = MLT || {};
                             selectedAddressID = addressContainer.find('.address input[id^="select"]:checked').map(function () {
                                 return $(this).closest('.address').data('id');
                             }).get();
-                            $.post(url, { aid: selectedAddressID, action: action }, function (data) {
-                                if (data.success) {
-                                    addressContainer.find('.address input[id^="select"]:checked').each(function () {
-                                        var thisDiv = $(this).closest('.address').find('.id');
-                                        if (!thisDiv.hasClass('unmapped')) {
-                                            if (action === "flag") {
-                                                thisDiv.removeClass('approved').find('input[name="flag_for_review"]').prop('checked', true);
-                                            }
-                                            if (action === "approve") {
-                                                thisDiv.addClass('approved').find('input[name="flag_for_review"]').prop('checked', false);
-                                            }
-                                        }
-                                    });
-                                }
-                            });
+                            $.post(url, { aid: selectedAddressID, action: action }, addressLoading.replaceAddresses);
                         }
                         return false;
                     });
 
-                    addressContainer.find('.address input[name="flag_for_review"]').live('change', function () {
+                    addressContainer.find('.address label.action-flag[for^="flag_for_review"]').live('click', function () {
                         var action,
                             selectedAddressID = $(this).closest('.address').data('id'),
                             thisDiv = $(this).closest('.id');
-                        if ($(this).is(':checked')) {
+                        if ($(this).siblings('input[name="flag_for_review"]').attr('disabled') === 'disabled') {
+                            $(ich.message({message: "Insufficient permissions.", tags: "error"})).appendTo($('#messages'));
+                            $('#messages').messages();
+                            return false;
+                        }
+                        if (thisDiv.hasClass('approved')) {
                             action = "flag";
                         } else {
                             action = "approve";
                         }
-                        $.post(url, { aid: selectedAddressID, action: action }, function (data) {
-                            if (data.success) {
-                                if (action === "flag") {
-                                    thisDiv.removeClass('approved');
-                                }
-                                if (action === "approve") {
-                                    thisDiv.addClass('approved');
-                                }
-                            }
-                        });
+                        $.post(url, { aid: selectedAddressID, action: action }, addressLoading.replaceAddresses);
+                        return false;
                     });
+
+                    if (addressContainer.data('trusted') !== 'trusted') {
+                        $('#addressform .actions .bools .approval .approve').addClass('disabled');
+                    }
                 },
 
                 filtering = function () {

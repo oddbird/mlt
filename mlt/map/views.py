@@ -266,27 +266,29 @@ def address_actions(request):
             return json_response({"success": False})
         addresses = addresses.filter(needs_review=True).exclude(pl="")
         count = addresses.count()
-        Address.objects.filter(
-            id__in=[a.id for a in addresses]).update(needs_review=False)
+        updated = Address.objects.filter(
+            id__in=[a.id for a in addresses])
+        updated.update(needs_review=False)
         messages.success(
             request, "%s mapping%s approved."
             % (count, "s" if (count != 1) else ""))
         return json_response({
                 "success": True,
-                "addresses": serializers.AddressSerializer().many(addresses),
+                "addresses": serializers.AddressSerializer().many(updated),
                 })
 
     if action == "flag":
         addresses = addresses.filter(needs_review=False).exclude(pl="")
         count = addresses.count()
-        Address.objects.filter(
-            id__in=[a.id for a in addresses]).update(needs_review=True)
+        updated = Address.objects.filter(
+            id__in=[a.id for a in addresses])
+        updated.update(needs_review=True)
         messages.success(
             request, "%s mapping%s flagged."
             % (count, "s" if (count != 1) else ""))
         return json_response({
                 "success": True,
-                "addresses": serializers.AddressSerializer().many(addresses),
+                "addresses": serializers.AddressSerializer().many(updated),
                 })
 
     messages.error(request, "Unknown action '%s'" % action)
