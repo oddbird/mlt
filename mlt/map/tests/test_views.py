@@ -497,6 +497,27 @@ class AddressesViewTest(AuthenticatedWebTest):
         self.assertAddresses(res, [a1.id, a2.id])
 
 
+    def test_filter_status_plus_ids(self):
+        a1 = create_address(
+            pl="123",
+            needs_review=False,
+            )
+        a2 = create_address(
+            pl="234",
+            needs_review=True,
+            )
+        create_address(
+            pl="",
+            needs_review=False,
+            )
+
+        res = self.app.get(
+            self.url + "?status=approved&aid=%s" % a2.id,
+            user=self.user)
+
+        self.assertAddresses(res, [a1.id, a2.id])
+
+
     def test_filter_case_insensitive(self):
         a1 = create_address(
             city="Providence",
