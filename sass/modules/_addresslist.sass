@@ -153,7 +153,10 @@
             +opacity(1)
         &[disabled]
           + .action-flag
-            display: none
+            +opacity(1)
+          &:not([checked])
+            + .action-flag
+              display: none
       &::before
         color: rgba($base,.5)
 

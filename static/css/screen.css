@@ -455,7 +455,8 @@ h1 a:link, h1 a:visited { display: block; }
 .managelist .address:hover .summary:focus, .managelist .address:hover .summary:hover, .managelist .address:hover .summary:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .managelist .address:hover .flag + .action-flag { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; }
 .managelist .address:hover .flag + .action-flag:focus, .managelist .address:hover .flag + .action-flag:hover, .managelist .address:hover .flag + .action-flag:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
-.managelist .address:hover .flag[disabled] + .action-flag { display: none; }
+.managelist .address:hover .flag[disabled] + .action-flag { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
+.managelist .address:hover .flag[disabled]:not([checked]) + .action-flag { display: none; }
 .managelist .address:hover::before { color: rgba(76, 76, 76, 0.5); }
 .managelist .address.expanded .controls { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; }
 .managelist .address.expanded .summary { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=25)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=25); opacity: 0.25; }
