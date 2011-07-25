@@ -1117,7 +1117,8 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
             res.json["messages"],
             [{
                     "level": 40,
-                    "message": "Insufficient permissions.",
+                    "message":
+                        "You don't have permission to approve this mapping.",
                     "tags": "error",
                     }],
             )

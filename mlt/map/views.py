@@ -261,11 +261,14 @@ def address_actions(request):
         return json_response({"success": True})
 
     if action == "approve":
-        if not request.user.has_perm("map.mappings_trusted"):
-            messages.error( request, "Insufficient permissions.")
-            return json_response({"success": False})
         addresses = addresses.filter(needs_review=True).exclude(pl="")
         count = addresses.count()
+        if not request.user.has_perm("map.mappings_trusted"):
+            messages.error(
+                request,
+                "You don't have permission to approve %s."
+                % ("this mapping" if count == 1 else "these mappings"))
+            return json_response({"success": False})
         updated = Address.objects.filter(
             id__in=[a.id for a in addresses])
         updated.update(needs_review=False)
