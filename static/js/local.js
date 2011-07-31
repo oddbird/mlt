@@ -702,7 +702,7 @@ var MLT = MLT || {};
                             number = addressContainer.find('.address').length;
                         if (number < 20) { number = 20; }
                         if ($(this).hasClass('disabled')) {
-                            $(ich.message({message: "Insufficient permissions.", tags: "error"})).appendTo($('#messages'));
+                            $(ich.message({message: "You don't have permission to perform this action.", tags: "error"})).appendTo($('#messages'));
                             $('#messages').messages();
                             return false;
                         }
@@ -732,7 +732,7 @@ var MLT = MLT || {};
                             selectedAddressID = $(this).closest('.address').data('id'),
                             thisDiv = $(this).closest('.id');
                         if ($(this).siblings('input[name="flag_for_review"]').attr('disabled') === 'disabled') {
-                            $(ich.message({message: "Insufficient permissions.", tags: "error"})).appendTo($('#messages'));
+                            $(ich.message({message: "You don't have permission to approve this mapping.", tags: "error"})).appendTo($('#messages'));
                             $('#messages').messages();
                             return false;
                         }
