@@ -426,8 +426,8 @@ var MLT = MLT || {};
                         addressLoading.scroll = false;
                     },
                     replaceAddresses: function (data) {
-                        addressContainer.find('.address input[id^="select"]:checked').click();
                         if (data.addresses.length) {
+                            addressContainer.find('.address input[id^="select"]:checked').click();
                             $.each(data.addresses, function (i, address) {
                                 var byline, web_ui, lat, lng, geolat, geolng, updatedAddress,
                                     id = address.id,
