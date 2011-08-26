@@ -1,3 +1,5 @@
+--find-links https://raw.github.com/oddbird/mlt/master/requirements/dist/index.html
+
 Django==1.3
 
 South==0.7.3
@@ -6,7 +8,7 @@ BeautifulSoup==3.2.0
 slimmer==0.1.30
 django-floppyforms==0.4.2
 django-classy-tags==0.3.0
-django-secure==0.1.0a1
+django-secure==0.1.0.post2
 simplejson==2.1.6
 vectorformats==0.1
 django-icanhaz==0.2.0
