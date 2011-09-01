@@ -5,6 +5,9 @@
       background-color: rgba($alt,$xxxsmall)
       .mapkey
         color: $accent
+        &:hover
+          +replace-text('ui/target.png')
+          background-position: right
 
 .address
   +pie-clearfix
