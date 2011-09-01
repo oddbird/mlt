@@ -99,12 +99,12 @@
 // Leaflet Styles ------------------------------------------------------------
 
 .leaflet-popup-content
-  +adjust-font-size-to($xlargepx,1.25)
+  +adjust-font-size-to($largepx,1)
   +text-shadow(rgba($lighter,$small) 1px 1px 0, $lighter 1px 1px $xsmallem )
   +border-radius
+  +padding-trailer(.125)
   +cond
   +bold
-  padding: rhythm(.25)
   color: $alt
   text-align: center
   .geocoded &
@@ -121,8 +121,8 @@
     +replace-text-with-dimensions('ui/x.png')
     +transition(opacity,300ms)
     +opacity(0)
-    top: rhythm(.25)
-    right: rhythm(.25)
+    top: - image-height('ui/x.png')
+    right: - image-height('ui/x.png')
     .leaflet-popup:hover &
       +opacity(.75)
   #{$focus}
