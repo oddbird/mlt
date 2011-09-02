@@ -485,17 +485,19 @@ h1 a:link, h1 a:visited { display: block; }
 .complex mark { display: block; }
 
 #history { clear: both; margin-left: 0.685%; margin-right: 0.685%; }
+#history h2 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 
-.revisionlist { margin-bottom: 1.618em; }
-.revisionlist .content { clear: both; padding-left: 10.417%; padding-right: 13.889%; padding-top: 0.809em; padding-bottom: 0.809em; *zoom: 1; -moz-border-radius: 5px; -webkit-border-radius: 5px; -o-border-radius: 5px; -ms-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
+.revisionlist .content { clear: both; *zoom: 1; border-bottom: 1px solid #dddddd; background: rgba(221, 221, 221, 0.236); }
 .revisionlist .content:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
-.revisionlist .changes { display: inline; float: left; width: 91.228%; margin-right: 0.877%; }
-.revisionlist .new, .revisionlist .old { -moz-border-radius: 5px; -webkit-border-radius: 5px; -o-border-radius: 5px; -ms-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; display: inline; float: left; width: 37.5%; margin-right: 0.962%; border-style: solid; border-width: 0.083em; padding: 0.726em; border-color: #dddddd; background: rgba(255, 255, 255, 0.618); }
-.revisionlist .old { display: inline; float: right; margin-right: 0; #margin-left: -0.809em; position: relative; }
-.revisionlist .old::before { font-size: 4.236em; line-height: 1.146em; font-family: "CambridgeRoundCond", "Helvetica Neue", Helvetica, Arial, sans-serif; position: absolute; content: "{"; right: 102.564%; width: 10.256%; text-align: center; }
-.revisionlist .blame { display: inline; float: left; width: 18.269%; margin-right: 0.962%; padding-top: 1.214em; font-weight: normal; text-align: right; }
+.revisionlist .changes { display: inline; float: left; width: 96.528%; margin-right: 0.694%; position: relative; }
+.revisionlist .new, .revisionlist .old { padding-top: 0.809em; padding-bottom: 0.809em; }
+.revisionlist .new { display: inline; float: left; position: relative; width: 28.058%; margin-left: 20.863%; padding-left: 0.719%; padding-right: 3.597%; background: rgba(255, 255, 255, 0.85); }
+.revisionlist .new::before { background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, rgba(255, 255, 255, 0.85)), color-stop(25%, rgba(255, 255, 255, 0.85)), color-stop(25%, rgba(255, 255, 255, 0)), color-stop(100%, rgba(255, 255, 255, 0))), -webkit-gradient(linear, 0% 100%, 100% 0%, color-stop(0%, rgba(255, 255, 255, 0.85)), color-stop(25%, rgba(255, 255, 255, 0.85)), color-stop(25%, rgba(255, 255, 255, 0)), color-stop(100%, rgba(255, 255, 255, 0))); background-image: -webkit-linear-gradient(top left, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85) 25%, rgba(255, 255, 255, 0) 25%, rgba(255, 255, 255, 0)), -webkit-linear-gradient(bottom left, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85) 25%, rgba(255, 255, 255, 0) 25%, rgba(255, 255, 255, 0)); background-image: -moz-linear-gradient(top left, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85) 25%, rgba(255, 255, 255, 0) 25%, rgba(255, 255, 255, 0)), -moz-linear-gradient(bottom left, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85) 25%, rgba(255, 255, 255, 0) 25%, rgba(255, 255, 255, 0)); background-image: -o-linear-gradient(top left, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85) 25%, rgba(255, 255, 255, 0) 25%, rgba(255, 255, 255, 0)), -o-linear-gradient(bottom left, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85) 25%, rgba(255, 255, 255, 0) 25%, rgba(255, 255, 255, 0)); background-image: linear-gradient(top left, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85) 25%, rgba(255, 255, 255, 0) 25%, rgba(255, 255, 255, 0)), linear-gradient(bottom left, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85) 25%, rgba(255, 255, 255, 0) 25%, rgba(255, 255, 255, 0)); position: absolute; top: 0; bottom: 0; content: " "; left: 100%; width: 23.077%; }
+.revisionlist .old { display: inline; float: left; width: 28.058%; margin-right: 0.719%; padding-right: 10.791%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; position: relative; }
+.revisionlist .blame, .revisionlist .controls { padding-top: 1.092em; padding-bottom: 1.092em; }
+.revisionlist .blame { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; font-weight: normal; position: absolute; top: 0; bottom: 0; left: 0; width: 20.863%; padding-right: 0.719%; background: rgba(255, 255, 255, 0.85); text-align: right; }
 .revisionlist .blame time, .revisionlist .blame cite { font-style: normal; font-weight: 700; }
-.revisionlist .controls { display: inline; float: left; width: 7.895%; margin-right: 0.877%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; }
+.revisionlist .controls { display: inline; float: left; width: 2.778%; margin-right: 0.694%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; }
 .revisionlist .adr { display: inline; float: left; width: 61.538%; margin-right: 2.564%; padding-left: 0; padding-right: 0; }
 .revisionlist .locality, .revisionlist .region, .revisionlist .postal-code, .revisionlist .complex-name { display: inline; }
 .revisionlist .notes { font-style: italic; clear: both; margin: 0; color: #949494; }

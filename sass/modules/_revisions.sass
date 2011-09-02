@@ -19,47 +19,59 @@
 
 #history
   +full
+  h2
+    +gone
 
 .revisionlist
-  +trailer
   .content
     +full(29)
-    +pad(3,4,29)
+    +pie-clearfix
+    border-bottom: 1px solid $light
+    background: rgba($light,$xxsmall)
+  .changes
+    +columns(28,29)
+    position: relative
+  .new, .old
     +padding-leader(.5)
     +padding-trailer(.5)
-    +pie-clearfix
-    +border-radius
-  .changes
-    +columns(21,23)
-  .new, .old
-    +border-radius
-    +box-sizing('border-box')
-    +columns(8,21)
-    +rhythm-borders(1px,.5)
-    border-color: $light
-    background: rgba(#fff,$small)
-  .old
-    +omega(21)
+  .new
+    +float(left)
     position: relative
+    width: columns(8,28)
+    margin-left: columns(6,28)
+    padding:
+      left: gutter(28)
+      right: columns(1,28) + gutter(28)
+    background: rgba(#fff,.85)
     &::before
-      +adjust-font-size-to($xlargepx)
-      +cond
-      position: absolute
-      content: "{"
-      right: 100% + gutter(8)
-      width: columns(1,8)
-      text-align: center
+      +background-image(linear-gradient(top left, rgba(#fff,.85), rgba(#fff,.85) 25%, rgba(#fff,0) 25%, rgba(#fff,0)),linear-gradient(bottom left, rgba(#fff,.85), rgba(#fff,.85) 25%, rgba(#fff,0) 25%, rgba(#fff,0)))
+      +stretch-y
+      content: " "
+      left: 100%
+      width: columns(2,8)
+  .old
+    +columns(8,28)
+    +suffix(3,28)
+    +omega(28)
+    position: relative
+  .blame, .controls
+    +padding-leader(.675)
+    +padding-trailer(.675)
   .blame
-    +columns(4,21)
-    +padding-leader(.75)
+    +box-sizing('border-box')
     +font-weight-normal
+    +stretch-y
+    left: 0
+    width: columns(6,28)
+    padding-right: gutter(28)
+    background: rgba(#fff,.85)
     text-align: right
     time, cite
       +font-style-normal
       +bold
   .controls
-    +columns(2,23)
-    +omega(27)
+    +columns(1,29)
+    +omega(29)
 
   .adr
     +columns(5,8)
