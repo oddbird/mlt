@@ -3,15 +3,21 @@
 #filter
   +float(left)
   +background-image(linear-gradient(right,rgba($light,.5),rgba($light,0) rhythm(3),rgba($light,0)))
-  width: rhythm(17.5)
   position: relative
+  #addresstable &
+    width: rhythm(17.5)
+  #history &
+    width: columns(20,29)
 
   // Textual -----------------------------------------------------------------
 
   .textual
     +float(left)
     position: relative
-    width: rhythm(13)
+    #addresstable &
+      width: rhythm(13)
+    #history &
+      width: columns(8,20)
     label
       +gone
     input

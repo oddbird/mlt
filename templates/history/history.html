@@ -5,6 +5,8 @@
 <section id="history">
   <h2>Revision History</h2>
 
+  {% include "history/_history_actions.html" %}
+
   <form method="POST" id="history-form" class="revisionlist">
 
     {% include "includes/revision.html" with id="01" %}

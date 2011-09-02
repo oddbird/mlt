@@ -1,84 +1,91 @@
 <section class="actions">
   <h3>List Actions</h3>
 
-  <p class="bulkselect">
-    <input type="checkbox" name="select_all_none" value="" id="select_all_none">
-    <label for="select_all_none" title="select all/none">select all/none</label>
-  </p>
+  {% block bulkselect %}
+    <p class="bulkselect">
+      <input type="checkbox" name="select_all_none" value="" id="select_all_none">
+      <label for="select_all_none" title="select all/none">select all/none</label>
+    </p>
+  {% endblock bulkselect %}
 
-  <nav class="listordering">
-    <h4>sort by</h4>
-    <ul>
-      <li class="by">
-        <a href="#" class="field" data-field="import_timestamp">import timestamp</a>
-        <a href="#" class="dir desc">descending</a>
+  {% block listordering %}
+    <nav class="listordering">
+      <h4>sort by</h4>
+      <ul>
+        <li class="by">
+          <a href="#" class="field" data-field="import_timestamp">import timestamp</a>
+          <a href="#" class="dir desc">descending</a>
+        </li>
+        <li class="byneedsreview">
+          <a href="#" class="field" data-field="needs_review">needs review</a>
+          <a href="#" class="dir desc">descending</a>
+        </li>
+        <li class="bypropertyID">
+          <a href="#" class="field" data-field="pl">pl</a>
+          <a href="#" class="dir asc">ascending</a>
+        </li>
+        <li class="bystate">
+          <a href="#" class="field" data-field="state">state</a>
+          <a href="#" class="dir asc">ascending</a>
+        </li>
+        <li class="bycity">
+          <a href="#" class="field" data-field="city">city</a>
+          <a href="#" class="dir asc">ascending</a>
+        </li>
+        <li class="bystreet">
+          <a href="#" class="field" data-field="street">street</a>
+          <a href="#" class="dir asc">ascending</a>
+        </li>
+        <li class="bymulti_units none">
+          <a href="#" class="field" data-field="multi_units">multi-units</a>
+          <a href="#" class="dir">none</a>
+        </li>
+        <li class="bycomplex none">
+          <a href="#" class="field" data-field="complex_name">complex name</a>
+          <a href="#" class="dir">none</a>
+        </li>
+        <li class="by none">
+          <a href="#" class="field" data-field="imported_by__username">imported-by username</a>
+          <a href="#" class="dir">none</a>
+        </li>
+        <li class="by none">
+          <a href="#" class="field" data-field="import_source">import source</a>
+          <a href="#" class="dir">none</a>
+        </li>
+        <li class="by none">
+          <a href="#" class="field" data-field="mapped_timestamp">mapped timestamp</a>
+          <a href="#" class="dir">none</a>
+        </li>
+        <li class="by none">
+          <a href="#" class="field" data-field="mapped_by__username">mapped-by username</a>
+          <a href="#" class="dir">none</a>
+        </li>
+      </ul>
+    </nav>
+  {% endblock listordering %}
+
+  {% block addressbools %}
+    <ul class="bools">
+      <li class="importexport">
+        <a href="#lightbox-import-addresses" title="import addresses">import addresses</a>
+        <a href="#lightbox-export-addresses" title="export addresses">export addresses</a>
       </li>
-      <li class="byneedsreview">
-        <a href="#" class="field" data-field="needs_review">needs review</a>
-        <a href="#" class="dir desc">descending</a>
+
+      <li class="approval">
+        <button class="approve" type="submit" title="approve selected mappings">approve selected mappings</button>
+        <button class="action-flag" type="submit" title="flag selected mappings">flag selected mappings</button>
       </li>
-      <li class="bypropertyID">
-        <a href="#" class="field" data-field="pl">pl</a>
-        <a href="#" class="dir asc">ascending</a>
-      </li>
-      <li class="bystate">
-        <a href="#" class="field" data-field="state">state</a>
-        <a href="#" class="dir asc">ascending</a>
-      </li>
-      <li class="bycity">
-        <a href="#" class="field" data-field="city">city</a>
-        <a href="#" class="dir asc">ascending</a>
-      </li>
-      <li class="bystreet">
-        <a href="#" class="field" data-field="street">street</a>
-        <a href="#" class="dir asc">ascending</a>
-      </li>
-      <li class="bymulti_units none">
-        <a href="#" class="field" data-field="multi_units">multi-units</a>
-        <a href="#" class="dir">none</a>
-      </li>
-      <li class="bycomplex none">
-        <a href="#" class="field" data-field="complex_name">complex name</a>
-        <a href="#" class="dir">none</a>
-      </li>
-      <li class="by none">
-        <a href="#" class="field" data-field="imported_by__username">imported-by username</a>
-        <a href="#" class="dir">none</a>
-      </li>
-      <li class="by none">
-        <a href="#" class="field" data-field="import_source">import source</a>
-        <a href="#" class="dir">none</a>
-      </li>
-      <li class="by none">
-        <a href="#" class="field" data-field="mapped_timestamp">mapped timestamp</a>
-        <a href="#" class="dir">none</a>
-      </li>
-      <li class="by none">
-        <a href="#" class="field" data-field="mapped_by__username">mapped-by username</a>
-        <a href="#" class="dir">none</a>
+
+      <li class="addremove">
+        <button class="delete_selected" type="submit" title="delete selected">delete selected</button>
+        <a href="#lightbox-add-address" class="create" title="add address">add address</a>
       </li>
     </ul>
-  </nav>
+  {% endblock addressbools %}
 
-  <ul class="bools">
-    <li class="importexport">
-      <a href="#lightbox-import-addresses" title="import addresses">import addresses</a>
-      <a href="#lightbox-export-addresses" title="export addresses">export addresses</a>
-    </li>
-
-    <li class="approval">
-      <button class="approve" type="submit" title="approve selected mappings">approve selected mappings</button>
-      <button class="action-flag" type="submit" title="flag selected mappings">flag selected mappings</button>
-    </li>
-
-    <li class="addremove">
-      <button class="delete_selected" type="submit" title="delete selected">delete selected</button>
-      <a href="#lightbox-add-address" class="create" title="add address">add address</a>
-    </li>
-  </ul>
-
-  {% include "includes/filter.html" %}
-
-  <p class="listlength">0</p>
+  {% block filtering %}
+    {% include "includes/filter.html" %}
+    <p class="listlength">0</p>
+  {% endblock filtering %}
 
 </section>

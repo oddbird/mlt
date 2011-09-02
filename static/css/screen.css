@@ -270,8 +270,12 @@ h1 a:link, h1 a:visited { display: block; }
 #login .errorlist:not(.nonfield), #password_change .errorlist:not(.nonfield), #password_reset .errorlist:not(.nonfield), #password_reset_confirm .errorlist:not(.nonfield) { position: absolute; top: 0.405em; left: 101.563%; width: 60.938%; }
 
 /* Filtering ----------------------------------------------------------------- */
-#filter { display: inline; float: left; background-image: -webkit-gradient(linear, 100% 50%, 0% 50%, color-stop(0%, rgba(221, 221, 221, 0.5)), color-stop(4.854em, rgba(221, 221, 221, 0)), color-stop(100%, rgba(221, 221, 221, 0))); background-image: -webkit-linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0) 4.854em, rgba(221, 221, 221, 0)); background-image: -moz-linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0) 4.854em, rgba(221, 221, 221, 0)); background-image: -o-linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0) 4.854em, rgba(221, 221, 221, 0)); background-image: linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0) 4.854em, rgba(221, 221, 221, 0)); width: 28.315em; position: relative; }
-#filter .textual { display: inline; float: left; position: relative; width: 21.034em; }
+#filter { display: inline; float: left; background-image: -webkit-gradient(linear, 100% 50%, 0% 50%, color-stop(0%, rgba(221, 221, 221, 0.5)), color-stop(4.854em, rgba(221, 221, 221, 0)), color-stop(100%, rgba(221, 221, 221, 0))); background-image: -webkit-linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0) 4.854em, rgba(221, 221, 221, 0)); background-image: -moz-linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0) 4.854em, rgba(221, 221, 221, 0)); background-image: -o-linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0) 4.854em, rgba(221, 221, 221, 0)); background-image: linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0) 4.854em, rgba(221, 221, 221, 0)); position: relative; }
+#addresstable #filter { width: 28.315em; }
+#history #filter { width: 68.75%; }
+#filter .textual { display: inline; float: left; position: relative; }
+#addresstable #filter .textual { width: 21.034em; }
+#history #filter .textual { width: 39.394%; }
 #filter .textual label { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #filter .textual input { clear: both; margin: 0; background: rgba(255, 255, 255, 0.125); }
 #filter .suggest { display: none; position: absolute; left: 0; right: 0; top: 2.427em; background: white; z-index: 900; }
@@ -344,7 +348,9 @@ h1 a:link, h1 a:visited { display: block; }
 .actions .listlength::before { content: "("; }
 .actions .listlength::after { content: ")"; }
 
-.listordering { display: inline; float: left; position: relative; width: 16.18em; height: 2.427em; }
+.listordering { display: inline; float: left; position: relative; height: 2.427em; }
+#addresstable .listordering { width: 16.18em; }
+#history .listordering { width: 17.361%; }
 .listordering h4 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 .listordering ul { position: absolute; left: 0; padding: 0.202em 0 0.809em; width: 100%; }
 .listordering li { display: none; position: relative; }
