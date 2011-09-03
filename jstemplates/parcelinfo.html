@@ -10,7 +10,7 @@
   <h4>Mapped To:</h4>
   <ul>
     {{# mapped_to }}
-    <li{{# needs_review }} class="flagged"{{/ needs_review }}>{{ street }}</li>
+    <li{{# needs_review }} class="flagged"{{/ needs_review }} data-id="{{ id }}">{{ street }}</li>
     {{/ mapped_to }}
   </ul>
   {{/ mapped }}

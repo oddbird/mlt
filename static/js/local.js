@@ -52,6 +52,8 @@ var MLT = MLT || {};
                 preserveSelectAll,
 
                 showInfo = function (newInfo, selected) {
+                    var mapped_toIDs, i, already_mapped,
+                        selectedAddresses = $('#addresstable .address input[id^="select"]:checked');
                     if (mapinfoTimeout) {
                         clearTimeout(mapinfoTimeout);
                         mapinfoTimeout = null;
@@ -59,8 +61,22 @@ var MLT = MLT || {};
                     mapinfo.html(newInfo).show();
                     if (selected) {
                         mapinfo.addClass("selected");
+                        mapped_toIDs = mapinfo.find('.mapped-addresses ul li').map(function () {
+                            return $(this).data('id');
+                        }).get();
+                        selectedAddresses.each(function () {
+                            var this_is_mapped;
+                            for (i = 0; i < mapped_toIDs.length; i = i + 1) {
+                                if ($(this).closest('.address').data('id') === mapped_toIDs[i]) {
+                                    this_is_mapped = true;
+                                }
+                            }
+                            if (this_is_mapped !== true) {
+                                already_mapped = false;
+                            }
+                        });
                         // Only show `map to selected` button if an address is selected
-                        if ($('#addresstable .address input[id^="select"]:checked').length) {
+                        if (selectedAddresses.length && already_mapped === false) {
                             mapinfo.find('.mapit').show();
                         } else {
                             mapinfo.find('.mapit').hide();
@@ -158,7 +174,7 @@ var MLT = MLT || {};
 
                 addressPopups = function () {
                     $('#addresstable .managelist .address input[id^="select"]').live('change', function () {
-                        var input,
+                        var input, mapped_toIDs, i, already_mapped,
                             thisAddress = $(this).closest('.address'),
                             id = thisAddress.data('id'),
                             popupContent = thisAddress.find('.mapkey').html(),
@@ -262,8 +278,24 @@ var MLT = MLT || {};
                                 map.removeLayer(this.popup);
                             }
                         }
+
                         // Only show `map to selected` button if an address is selected
-                        if ($('#addresstable .address input[id^="select"]:checked').length) {
+                        // and isn't already mapped to the selected parcel
+                        mapped_toIDs = $('#mapinfo .mapped-addresses ul li').map(function () {
+                            return $(this).data('id');
+                        }).get();
+                        $('#addresstable .address input[id^="select"]:checked').each(function () {
+                            var this_is_mapped;
+                            for (i = 0; i < mapped_toIDs.length; i = i + 1) {
+                                if ($(this).closest('.address').data('id') === mapped_toIDs[i]) {
+                                    this_is_mapped = true;
+                                }
+                            }
+                            if (this_is_mapped !== true) {
+                                already_mapped = false;
+                            }
+                        });
+                        if ($('#addresstable .address input[id^="select"]:checked').length && already_mapped === false) {
                             $('#mapinfo .mapit').show();
                         } else {
                             $('#mapinfo .mapit').hide();
