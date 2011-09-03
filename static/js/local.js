@@ -598,8 +598,27 @@ var MLT = MLT || {};
 
                 addressSelect = function () {
                     $('#addresstable .managelist .address .content').live('click', function (event) {
-                        if (!$(event.target).is('button, a, label, input, .summary, .adr, .street-address, .locality, .region')) {
+                        if (!$(event.target).is('button, a, label, input, .summary, .adr, .street-address, .locality, .region, .mapkey')) {
                             $(this).closest('.address').find('input[id^="select"]').click();
+                        }
+                    });
+                },
+
+                addressZoom = function () {
+                    $('#addresstable .managelist .address .content .mapkey').live('click', function (event) {
+                        var lat, lng,
+                            thisAddress = $(this).closest('.address');
+                        if (thisAddress.find('input[name="select"]:checked').length) {
+                            lat = thisAddress.data('latitude') || thisAddress.data('geocode-latitude');
+                            lng = thisAddress.data('longitude') || thisAddress.data('geocode-longitude');
+                            if (lat && lng) {
+                                map.panTo(new L.LatLng(lat, lng));
+                                if (map.getZoom() < MIN_PARCEL_ZOOM) {
+                                    map.setZoom(MIN_PARCEL_ZOOM);
+                                }
+                            }
+                        } else {
+                            thisAddress.find('input[name="select"]').click();
                         }
                     });
                 },
@@ -1002,6 +1021,7 @@ var MLT = MLT || {};
             addressSorting();
             addressDetails();
             addressSelect();
+            addressZoom();
             addAddress();
             addressActions();
             filtering();
