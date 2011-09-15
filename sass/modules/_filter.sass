@@ -1,13 +1,13 @@
 /* Filtering -----------------------------------------------------------------
 
 #filter
-  +float(left)
   +background-image(linear-gradient(right,rgba($light,.5),rgba($light,0) rhythm(3),rgba($light,0)))
   position: relative
   #addresstable &
-    width: rhythm(17.5)
+    +full(8)
   #history &
-    width: columns(20,29)
+    +columns(23,29)
+    +omega(29)
 
   // Textual -----------------------------------------------------------------
 
@@ -131,3 +131,18 @@
     +icon('ui/refresh.png')
     width: rhythm(1.5)
     height: rhythm(1.5)
+
+  .listlength
+    +box-sizing(border-box)
+    +float(right)
+    +background-image(linear-gradient(right,rgba($light,.5),rgba($light,0)))
+    margin: 0
+    padding: rhythm(.25)
+    width: rhythm(3)
+    height: rhythm(1.5)
+    text-align: center
+    &::before
+      content: "("
+    &::after
+      content: ")"
+

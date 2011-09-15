@@ -17,6 +17,7 @@
 
 .actions
   +pie-clearfix
+  position: relative
   background-color: rgba($light,$xxsmall)
   border-bottom: 1px solid $light
   h3
@@ -42,6 +43,10 @@
 
   .bools
     +clearfix
+    position: absolute
+    top: 0
+    right: 0
+    width: rhythm(9)
     background-color: rgba($light,$xxsmall)
 
   .addremove
@@ -79,30 +84,21 @@
     +icon('ui/warning.png')
     width: 50%
 
-  .listlength
-    +box-sizing(border-box)
-    +float(right)
-    +background-image(linear-gradient(right,rgba($light,.5),rgba($light,0)))
-    margin: 0
-    padding: rhythm(.25)
-    width: rhythm(3)
-    height: rhythm(1.5)
-    text-align: center
-    &::before
-      content: "("
-    &::after
-      content: ")"
-
 // List Ordering -------------------------------------------------------------
 
+#history
+  .listcontrols
+    +columns(6,29)
+
 .listordering
-  +float(left)
   position: relative
   height: rhythm(1.5)
+  margin-left: rhythm(1.5)
+  z-index: 600
   #addresstable &
-    width: rhythm(10)
+    margin-right: rhythm(9)
   #history &
-    width: columns(5,29) + gutter(29)
+    margin-right: rhythm(1.5)
   h4
     +gone
   ul
