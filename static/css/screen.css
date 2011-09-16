@@ -273,9 +273,8 @@ h1 a:link, h1 a:visited { display: block; }
 #filter { background-image: -webkit-gradient(linear, 100% 50%, 0% 50%, color-stop(0%, rgba(221, 221, 221, 0.5)), color-stop(4.854em, rgba(221, 221, 221, 0)), color-stop(100%, rgba(221, 221, 221, 0))); background-image: -webkit-linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0) 4.854em, rgba(221, 221, 221, 0)); background-image: -moz-linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0) 4.854em, rgba(221, 221, 221, 0)); background-image: -o-linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0) 4.854em, rgba(221, 221, 221, 0)); background-image: linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0) 4.854em, rgba(221, 221, 221, 0)); position: relative; }
 #addresstable #filter { clear: both; }
 #history #filter { display: inline; float: left; width: 79.167%; margin-right: 0.694%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; }
-#filter .textual { display: inline; float: left; position: relative; }
-#addresstable #filter .textual { width: 21.034em; }
-#history #filter .textual { width: 39.394%; }
+#filter .textual { position: relative; margin-left: 2.427em; margin-right: 9.708em; }
+#history #filter .textual { margin-right: 17.544%; }
 #filter .textual label { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #filter .textual input { clear: both; margin: 0; background: rgba(255, 255, 255, 0.125); }
 #filter .suggest { display: none; position: absolute; left: 0; right: 0; top: 2.427em; background: white; z-index: 900; }
@@ -284,6 +283,8 @@ h1 a:link, h1 a:visited { display: block; }
 #filter .suggest li:last-child a:link, #filter .suggest li:last-child a:visited { border-bottom-color: #949494; }
 #filter .suggest i { display: inline; float: right; padding-left: 1em; font-style: normal; color: #949494; }
 #filter .suggest small { color: #949494; font-size: inherit; line-height: inherit; }
+#filter .filtercontrols { position: absolute; top: 0; right: 0; width: 9.708em; }
+#history #filter .filtercontrols { width: 16.667%; min-width: 9.708em; }
 #filter .visual, #filter .bystatus { position: relative; height: 2.427em; }
 #filter .visual ul, #filter .bystatus ul { display: none; position: absolute; top: 100%; width: 11.326em; background: white; z-index: 900; }
 #filter .visual:hover ul, #filter .bystatus:hover ul { -moz-box-shadow: 0px 0px 5px #333333; -webkit-box-shadow: 0px 0px 5px #333333; -o-box-shadow: 0px 0px 5px #333333; box-shadow: 0px 0px 5px #333333; display: block; }
@@ -309,7 +310,7 @@ h1 a:link, h1 a:visited { display: block; }
 #filter .bystatus a:link.unmapped, #filter .bystatus a:visited.unmapped { background-image: url('../images/ui/x.png?1307817035'); }
 #filter .refresh { display: inline; float: left; text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/refresh.png?1308260377'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 19.417px; width: 2.427em; height: 2.427em; }
 #filter .refresh:focus, #filter .refresh:hover, #filter .refresh:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
-#filter .listlength { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; display: inline; float: right; background-image: -webkit-gradient(linear, 100% 50%, 0% 50%, color-stop(0%, rgba(221, 221, 221, 0.5)), color-stop(100%, rgba(221, 221, 221, 0))); background-image: -webkit-linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0)); background-image: -moz-linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0)); background-image: -o-linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0)); background-image: linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0)); margin: 0; padding: 0.405em; width: 4.854em; height: 2.427em; text-align: center; }
+#filter .listlength { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; display: inline; float: right; background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, rgba(221, 221, 221, 0.5)), color-stop(100%, rgba(221, 221, 221, 0))); background-image: -webkit-linear-gradient(left, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0)); background-image: -moz-linear-gradient(left, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0)); background-image: -o-linear-gradient(left, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0)); background-image: linear-gradient(left, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0)); margin: 0; padding: 0.405em; width: 4.854em; height: 2.427em; text-align: center; }
 #filter .listlength::before { content: "("; }
 #filter .listlength::after { content: ")"; }
 

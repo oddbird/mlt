@@ -12,12 +12,12 @@
   // Textual -----------------------------------------------------------------
 
   .textual
-    +float(left)
     position: relative
-    #addresstable &
-      width: rhythm(13)
+    margin:
+      left: rhythm(1.5)
+      right: rhythm(6)
     #history &
-      width: columns(8,20)
+      margin-right: columns(4,23) + gutter(23)
     label
       +gone
     input
@@ -59,6 +59,15 @@
       color: $mid
       font-size: inherit
       line-height: inherit
+
+  .filtercontrols
+    position: absolute
+    top: 0
+    right: 0
+    width: rhythm(6)
+    #history &
+      width: columns(4,23)
+      min-width: rhythm(6)
 
   .visual, .bystatus
     position: relative
@@ -135,7 +144,7 @@
   .listlength
     +box-sizing(border-box)
     +float(right)
-    +background-image(linear-gradient(right,rgba($light,.5),rgba($light,0)))
+    +background-image(linear-gradient(left,rgba($light,.5),rgba($light,0)))
     margin: 0
     padding: rhythm(.25)
     width: rhythm(3)
