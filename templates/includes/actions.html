@@ -7,6 +7,9 @@
         <input type="checkbox" name="select_all_none" value="" id="select_all_none">
         <label for="select_all_none" title="select all/none">select all/none</label>
       </p>
+
+      {% block historycontrols %}
+      {% endblock historycontrols %}
     {% endblock bulkselect %}
 
     {% block listordering %}
@@ -83,9 +86,6 @@
         </li>
       </ul>
     {% endblock addressbools %}
-
-    {% block historycontrols %}
-    {% endblock historycontrols %}
   </div>
 
   {% block filtering %}

@@ -334,6 +334,8 @@ h1 a:link, h1 a:visited { display: block; }
 .actions [for="select_all_none"]:focus, .actions [for="select_all_none"]:hover, .actions [for="select_all_none"]:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .actions [id="select_all_none"] { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 .actions [id="select_all_none"]:checked + [for="select_all_none"] { background-color: #a7cff0; }
+.actions .action-revert-all { display: inline; float: left; text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/undo_med.png?1310161194'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 26.417px; height: 2.427em; width: 2.427em; background-color: rgba(152, 68, 0, 0.25); }
+.actions .action-revert-all:focus, .actions .action-revert-all:hover, .actions .action-revert-all:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .actions .bools { overflow: hidden; *zoom: 1; position: absolute; top: 0; right: 0; width: 14.562em; background-color: rgba(221, 221, 221, 0.236); }
 .actions .delete_selected { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/trash.png?1305749914'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 19.417px; width: 50%; }
 .actions .delete_selected:focus, .actions .delete_selected:hover, .actions .delete_selected:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
@@ -351,9 +353,8 @@ h1 a:link, h1 a:visited { display: block; }
 
 #history .listcontrols { display: inline; float: left; width: 20.139%; margin-right: 0.694%; }
 
-.listordering { position: relative; height: 2.427em; margin-left: 2.427em; z-index: 600; }
-#addresstable .listordering { margin-right: 14.562em; }
-#history .listordering { margin-right: 2.427em; }
+.listordering { position: relative; height: 2.427em; margin-left: 2.427em; margin-right: 14.562em; z-index: 600; }
+#history .listordering { margin-left: 4.854em; margin-right: 0; }
 .listordering h4 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 .listordering ul { position: absolute; left: 0; padding: 0.202em 0 0.809em; width: 100%; }
 .listordering li { display: none; position: relative; }

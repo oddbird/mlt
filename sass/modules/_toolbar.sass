@@ -41,6 +41,13 @@
     &:checked + [for="select_all_none"]
       background-color: desaturate(lighten($alt,50),30)
 
+  .action-revert-all
+    +float(left)
+    +icon('ui/undo_med.png')
+    height: rhythm(1.5)
+    width: rhythm(1.5)
+    background-color: rgba($accent,.25)
+
   .bools
     +clearfix
     position: absolute
@@ -93,12 +100,14 @@
 .listordering
   position: relative
   height: rhythm(1.5)
-  margin-left: rhythm(1.5)
+  margin:
+    left: rhythm(1.5)
+    right: rhythm(9)
   z-index: 600
-  #addresstable &
-    margin-right: rhythm(9)
   #history &
-    margin-right: rhythm(1.5)
+    margin:
+      left: rhythm(3)
+      right: 0
   h4
     +gone
   ul
