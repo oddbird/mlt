@@ -526,6 +526,8 @@ h1 a:link, h1 a:visited { display: block; }
 .revisionlist .id .flag-for-review, .revisionlist .id .value { *display: inline; }
 .revisionlist .id .flag-for-review { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/warning.png?1305750015'); background-repeat: no-repeat; background-position: 50% 50%; width: 2.427em; }
 .revisionlist .id mark { padding-left: 0.405em; padding-right: 0.405em; display: block; }
+.revisionlist mark.keep { background: rgba(0, 128, 0, 0.125); }
+.revisionlist mark.change { background: rgba(255, 0, 0, 0.125); }
 
 /* Map ----------------------------------------------------------------------- */
 #mapping { position: absolute; top: 0; right: 0; bottom: 0; left: 33.169em; }
