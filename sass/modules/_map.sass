@@ -46,8 +46,17 @@
       +no-style-list
 
   .flagged
-    background: image-url('ui/warning.png') no-repeat scroll right
-    padding-right: image-width('ui/warning.png') + $smallpx
+    background: image-url('ui/warning.png') no-repeat scroll left
+    padding-left: image-width('ui/warning.png') + $smallpx
+
+  .action-reject
+    +float(right)
+
+  li:hover
+    .action-reject
+      +opacity(.75)
+      &:hover
+        +opacity(1)
 
   .mapit
     +leader(.5)

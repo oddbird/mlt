@@ -27,6 +27,12 @@
     +icon('ui/warning.png')
     +opacity(0)
 
+.action-reject
+  @extend .actionbutton
+  +icon('ui/x.png')
+  +inline-block
+  +opacity(0)
+
 // Map Key -------------------------------------------------------------------
 
 .mapkey
@@ -148,9 +154,13 @@
         +opacity(.75)
         #{$focus}
           +opacity(1)
+      .action-reject
+        +opacity(.75)
+        #{$focus}
+          +opacity(1)
       .flag
         + .action-flag
-          +opacity(.5)
+          +opacity(.75)
           #{$focus}
             +opacity(1)
         &[disabled]

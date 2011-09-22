@@ -11,6 +11,14 @@
     &:nth-child(2n)
       +float(right)
 
+.actiontri
+  +float(left)
+  +background-image(linear-gradient(left,rgba($light,.5),rgba($light,0)))
+  width: rhythm(4.5)
+  &:hover
+    +background-image(linear-gradient(-25deg,rgba($alt,.125),rgba($alt,.125) 34%,rgba($alt,0) 34%,rgba($alt,0) 65%,rgba($alt,.125) 65%,rgba($alt,.125)))
+    background-color: desaturate(lighten($alt,60),30)
+
 .iconaction
   +float(left)
   height: rhythm(1.5)
@@ -53,7 +61,7 @@
     position: absolute
     top: 0
     right: 0
-    width: rhythm(9)
+    width: rhythm(10.5)
     background-color: rgba($light,$xxsmall)
 
   .addremove
@@ -79,17 +87,21 @@
     width: 50%
 
   .approval
-    @extend .actionboolian
+    @extend .actiontri
   .approve
     @extend .iconaction
     +icon('ui/thumb_up.png')
-    width: 50%
+    width: 33%
     &.disabled
       +opacity(.25)
   .action-flag
     @extend .iconaction
     +icon('ui/warning.png')
-    width: 50%
+    width: 33%
+  .action-reject
+    @extend .iconaction
+    +icon('ui/x.png')
+    width: 33%
 
 // List Ordering -------------------------------------------------------------
 
@@ -102,7 +114,7 @@
   height: rhythm(1.5)
   margin:
     left: rhythm(1.5)
-    right: rhythm(9)
+    right: rhythm(10.5)
   z-index: 600
   #history &
     margin:

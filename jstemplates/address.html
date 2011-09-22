@@ -20,6 +20,8 @@
 
     <div class="id{{^ pl }} unmapped{{/ pl }}{{# pl }}{{^ needs_review }} approved{{/ needs_review }}{{/ pl }}">
       {{# pl }}
+        <button class="action-reject" type="submit" title="reject mapping">reject mapping</button>
+
         <input type="checkbox" name="flag_for_review" value="{{ id }}" id="flag_for_review_{{ id }}"{{# needs_review }} checked="checked"{{/ needs_review }} class="flag">
         <label for="flag_for_review_{{ id }}" class="action-flag">flag for review</label>
 
