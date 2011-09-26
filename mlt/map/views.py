@@ -2,7 +2,8 @@ import json, datetime
 
 from django.core.exceptions import FieldError
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -161,6 +162,20 @@ def add_address(request):
             request, "Address &laquo;%s&raquo; added." % address.street)
         return json_response({"added": True})
     return render(request, "includes/add_address/form.html", {"form": form})
+
+
+
+@login_required
+@require_POST
+def edit_address(request, address_id):
+    address = get_object_or_404(Address, pk=address_id)
+    form = AddressForm(request.POST, instance=address)
+    if form.is_valid():
+        address = form.save(request.user)
+        messages.success(
+            request, "Address &laquo;%s&raquo; saved." % address.street)
+        return json_response({"saved": address.id})
+    return json_response({"errors": form.errors})
 
 
 

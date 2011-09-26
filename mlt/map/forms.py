@@ -31,11 +31,12 @@ class AddressForm(forms.ModelForm):
     def save(self, user):
         address = super(AddressForm, self).save(commit=False)
 
-        address.input_street = address.parsed_street
+        if address.pk is None:
+            address.input_street = address.parsed_street
 
-        address.imported_by = user
-        address.import_source = WEB_UI_IMPORT_SOURCE
-        address.import_timestamp = datetime.utcnow()
+            address.imported_by = user
+            address.import_source = WEB_UI_IMPORT_SOURCE
+            address.import_timestamp = datetime.utcnow()
 
         address.save()
 

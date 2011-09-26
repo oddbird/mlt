@@ -19,6 +19,7 @@ __all__ = [
     "AddressesViewTest",
     "GeoJSONViewTest",
     "AddAddressViewTest",
+    "EditAddressViewTest",
     "FilterAutocompleteViewTest",
     "GeocodeViewTest",
     "AddressActionsViewTest",
@@ -679,7 +680,6 @@ class AddressesViewTest(AuthenticatedWebTest):
 
 
 
-
 class AddAddressViewTest(AuthenticatedWebTest):
     url_name = "map_add_address"
 
@@ -718,6 +718,76 @@ class AddAddressViewTest(AuthenticatedWebTest):
         self.assertEqual(response.status_int, 200)
         from mlt.map.models import Address
         self.assertEqual(Address.objects.count(), 1, response.body)
+
+
+
+class EditAddressViewTest(CSRFAuthenticatedWebTest):
+    def setUp(self):
+        super(EditAddressViewTest, self).setUp()
+        self.address = create_address(city="Albuquerque")
+
+
+    @property
+    def url(self):
+        return reverse(
+            "map_edit_address", kwargs={"address_id": self.address.id})
+
+
+    def test_post(self):
+        data = {}
+        data["city"] = "Providence"
+        data["state"] = "RI"
+        data["street_number"] = "3635"
+        data["street_name"] = "Van Gordon",
+        data["street_type"] = "St"
+
+        response = self.post(self.url, data)
+
+        self.assertEqual(response.status_int, 200)
+
+        self.assertEqual(
+            response.json,
+            {
+                "saved": self.address.id,
+                "messages": [
+                    {
+                        "level": 25,
+                        "message":
+                            "Address &laquo;3635 Van Gordon St&raquo; saved.",
+                        "tags": "success"
+                        }
+                    ],
+                }
+            )
+
+        a = refresh(self.address)
+
+        self.assertEqual(a.city, "Providence")
+
+
+    def test_errors(self):
+        data = {}
+        data["city"] = ""
+        data["state"] = "RI"
+        data["street_number"] = "3635"
+        data["street_name"] = "Van Gordon",
+        data["street_type"] = "St"
+
+        response = self.post(self.url, data)
+
+        self.assertEqual(response.status_int, 200)
+
+        self.assertEqual(
+            response.json,
+            {
+                "errors": {'city': ['This field is required.']},
+                "messages": []
+                }
+            )
+
+        a = refresh(self.address)
+
+        self.assertEqual(a.city, "Albuquerque")
 
 
 

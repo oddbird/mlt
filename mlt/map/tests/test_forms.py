@@ -6,7 +6,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
 from .backports import override_settings
-from .utils import create_user
+from .utils import create_user, create_address
 
 
 
@@ -86,7 +86,7 @@ class AddressFormTest(TestCase):
             )
 
 
-    def test_save(self):
+    def test_create(self):
         u = create_user(username="blametern")
         f = self.form(
             {
@@ -117,4 +117,52 @@ class AddressFormTest(TestCase):
         self.assertEqual(a.import_source, "web-ui")
         self.assertEqual(a.imported_by, u)
         self.assertEqual(a.import_timestamp, datetime(2011, 6, 17, 10, 14, 25))
+
+
+    def test_edit(self):
+        u1 = create_user(username="someone")
+        a = create_address(
+            street_number="1234",
+            street_name="Van Heusen",
+            street_type="Ave",
+            city="Albuquerque",
+            state="NM",
+            multi_units=False,
+            complex_name="",
+            notes="",
+            imported_by=u1,
+            import_source="big batch",
+            import_timestamp=datetime(2011, 8, 1, 10, 0, 0))
+
+        u2 = create_user(username="blametern")
+        f = self.form(
+            {
+                "street_number": "3635",
+                "street_name": "Van Gordon",
+                "street_type": "St",
+                "city": "Providence",
+                "state": "RI",
+                "multi_units": 1,
+                "complex_name": "The Van Gordon Building",
+                "notes": "some notes",
+                },
+            instance=a)
+
+        self.assertTrue(f.is_valid())
+
+        a = f.save(u2)
+
+        self.assertEqual(a.street_number, "3635")
+        self.assertEqual(a.street_name, "Van Gordon")
+        self.assertEqual(a.street_type, "St")
+        self.assertEqual(a.input_street, "3635 Van Gordon St")
+        self.assertEqual(a.parsed_street, "3635 Van Gordon St")
+        self.assertEqual(a.notes, "some notes")
+        self.assertEqual(a.complex_name, "The Van Gordon Building")
+        self.assertEqual(a.multi_units, True)
+
+        # editing doesn't change these fields
+        self.assertEqual(a.import_source, "big batch")
+        self.assertEqual(a.imported_by, u1)
+        self.assertEqual(a.import_timestamp, datetime(2011, 8, 1, 10, 0, 0))
 
