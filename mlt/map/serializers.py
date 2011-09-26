@@ -3,9 +3,11 @@ class Serializer(object):
 
 
     def __init__(self, fields=None, extra=None, exclude=None):
-        self.fields = set(
-            (fields or self.default_fields) + (extra or [])
-            ).difference(set(exclude or []))
+        exclude = set(exclude or [])
+        self.fields = [
+            f for f in list(fields or self.default_fields) + list(extra or [])
+            if f not in exclude
+            ]
 
 
     def one(self, obj):

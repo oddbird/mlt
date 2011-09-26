@@ -68,6 +68,11 @@ class SerializerTest(TestCase):
         self.assertEqual(s.one(self.mock()), {"field2": "val2"})
 
 
+    def test_fields_ordered(self):
+        s = self.serializer(fields=["one", "two", "three"], extra=["four"])
+        self.assertEqual(s.fields, ["one", "two", "three", "four"])
+
+
 
 
 
