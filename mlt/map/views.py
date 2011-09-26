@@ -3,6 +3,7 @@ import json, datetime
 from django.core.exceptions import FieldError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.formats import date_format
 from django.views.decorators.http import require_POST
 
 from django.contrib import messages
@@ -10,12 +11,33 @@ from django.contrib.auth.decorators import login_required
 
 from vectorformats.Formats import Django, GeoJSON
 
+from ..dt import utc_to_local
+
 from .encoder import IterEncoder
 from .forms import AddressForm, AddressImportForm
 from .importer import ImporterError
 from .models import Parcel, Address
 from .utils import letter_key
 from . import filters, serializers, geocoder
+
+
+
+class UIAddressSerializer(serializers.AddressSerializer):
+    def _encode_datetime(self, dt):
+        if dt:
+            return date_format(utc_to_local(dt), "DATETIME_FORMAT")
+        return dt
+
+
+
+class UIParcelSerializer(serializers.ParcelSerializer):
+    default_fields = serializers.ParcelSerializer.default_fields + ["mapped_to"]
+
+    address_serializer = UIAddressSerializer()
+
+
+    def encode_mapped_to(self, addresses):
+        return self.address_serializer.many(addresses)
 
 
 
@@ -75,7 +97,7 @@ def associate(request):
             mapped_timestamp=datetime.datetime.utcnow(),
             needs_review=not request.user.has_perm(
                 "map.mappings_trusted"))
-        ret = serializers.ParcelSerializer(extra=["mapped_to"]).one(parcel)
+        ret = UIParcelSerializer().one(parcel)
         messages.success(
             request,
             "Mapped %s address%s to PL %s"
@@ -90,8 +112,8 @@ def associate(request):
 
 
 
-class IndexedAddressSerializer(serializers.AddressSerializer):
-    default_fields = serializers.AddressSerializer.default_fields + ["index"]
+class IndexedAddressSerializer(UIAddressSerializer):
+    default_fields = UIAddressSerializer.default_fields + ["index"]
 
 
     def encode_index(self, val):
@@ -201,7 +223,7 @@ def geojson(request):
     qs = Parcel.objects.filter(geom__intersects=wkt)
     source = Django.Django(
         geodjango="geom",
-        properties=serializers.ParcelSerializer.default_fields + ["mapped_to"])
+        properties=UIParcelSerializer.default_fields)
     output = GeoJSON.GeoJSON().encode(source.decode(qs), to_string=False)
     return json_response(output)
 
@@ -253,7 +275,7 @@ def geocode(request):
         )
 
     return json_response({
-            "address": serializers.AddressSerializer().one(address),
+            "address": UIAddressSerializer().one(address),
             })
 
 
@@ -293,7 +315,7 @@ def address_actions(request):
             % (count, "s" if (count != 1) else ""))
         return json_response({
                 "success": True,
-                "addresses": serializers.AddressSerializer().many(updated),
+                "addresses": UIAddressSerializer().many(updated),
                 })
 
     if action == "flag":
@@ -307,7 +329,7 @@ def address_actions(request):
             % (count, "s" if (count != 1) else ""))
         return json_response({
                 "success": True,
-                "addresses": serializers.AddressSerializer().many(updated),
+                "addresses": UIAddressSerializer().many(updated),
                 })
 
     messages.error(request, "Unknown action '%s'" % action)

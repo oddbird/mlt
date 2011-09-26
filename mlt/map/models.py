@@ -4,8 +4,6 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.contrib.localflavor.us.models import USStateField
 
-from . import serializers
-
 
 
 class Parcel(models.Model):
@@ -33,7 +31,7 @@ class Parcel(models.Model):
 
 
     @property
-    def mapped_addresses(self):
+    def mapped_to(self):
         """
         QuerySet of Addresses mapped to this Parcel.
 
@@ -42,21 +40,12 @@ class Parcel(models.Model):
 
 
     @property
-    def mapped_to(self):
-        """
-        List of mapped addresses as serialized dictionaries rather than models.
-
-        """
-        return serializers.AddressSerializer().many(self.mapped_addresses)
-
-
-    @property
     def mapped(self):
         """
         Boolean indicator if this parcel is mapped to any addresses.
 
         """
-        return bool(self.mapped_addresses)
+        return bool(self.mapped_to)
 
 
 

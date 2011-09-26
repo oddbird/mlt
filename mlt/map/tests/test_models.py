@@ -50,9 +50,7 @@ class ParcelTest(TestCase):
         parcel2 = create_parcel(pl="4321")
 
         self.assertEqual(
-            set(parcel.mapped_addresses), set([address1, address3]))
-        self.assertEqual(
-            set([a["pl"] for a in parcel.mapped_to]), set(["1234"]))
+            set(parcel.mapped_to), set([address1, address3]))
         self.assertTrue(parcel.mapped)
         self.assertFalse(parcel2.mapped)
 

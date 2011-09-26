@@ -1,9 +1,3 @@
-from django.utils.formats import date_format
-
-from ..dt import utc_to_local
-
-
-
 class Serializer(object):
     default_fields = []
 
@@ -71,14 +65,16 @@ class AddressSerializer(Serializer):
 
     def _encode_datetime(self, dt):
         if dt:
-            return date_format(utc_to_local(dt), "DATETIME_FORMAT")
+            return dt.isoformat()
         return dt
 
 
-    encode_mapped_timestamp = _encode_datetime
+    def encode_mapped_timestamp(self, dt):
+        return self._encode_datetime(dt)
 
 
-    encode_import_timestamp = _encode_datetime
+    def encode_import_timestamp(self, dt):
+        return self._encode_datetime(dt)
 
 
     def encode_parcel(self, parcel):
@@ -93,8 +89,9 @@ class AddressSerializer(Serializer):
         return user
 
 
-    encode_mapped_by = _encode_user
+    def encode_mapped_by(self, user):
+        return self._encode_user(user)
 
 
-    encode_imported_by = _encode_user
-
+    def encode_imported_by(self, user):
+        return self._encode_user(user)

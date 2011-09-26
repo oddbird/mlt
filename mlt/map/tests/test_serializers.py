@@ -90,7 +90,7 @@ class AddressSerializerTest(TestCase):
 
         self.assertEqual(
             self.serializer(["import_timestamp"]).one(a),
-            {"import_timestamp": "July 7, 2011 at 7:02 p.m."}
+            {"import_timestamp": "2011-07-08T01:02:03"}
             )
 
 
