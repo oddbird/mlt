@@ -143,7 +143,8 @@ def addresses(request):
         ret.append(address)
 
     data = {
-        "addresses": IndexedAddressSerializer(extra=["parcel"]).many(ret)
+        "addresses": IndexedAddressSerializer(
+            extra=["edit_url", "parcel"]).many(ret)
         }
 
     if get_count:

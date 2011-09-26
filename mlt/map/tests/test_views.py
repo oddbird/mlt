@@ -398,6 +398,44 @@ class AddressesViewTest(AuthenticatedWebTest):
             [letter_key(i) for i in range(1, 21)])
 
 
+    def test_address_serialization(self):
+        a = create_address()
+
+        res = self.app.get(self.url, user=self.user)
+
+        from django.utils.formats import date_format
+        from mlt.dt import utc_to_local
+
+        self.assertEqual(
+            res.json["addresses"],
+            [{"city": a.city,
+              "complex_name": a.complex_name,
+              "edit_url": a.edit_url,
+              "id": a.id,
+              "import_source": a.import_source,
+              "import_timestamp": date_format(
+                        utc_to_local(a.import_timestamp), "DATETIME_FORMAT"),
+              "imported_by": a.imported_by.username,
+              "index": "A",
+              "latitude": None,
+              "longitude": None,
+              "mapped_by": None,
+              "mapped_timestamp": None,
+              "multi_units": a.multi_units,
+              "needs_review": a.needs_review,
+              "notes": a.notes,
+              "parcel": None,
+              "pl": "",
+              "state": a.state,
+              "street": a.street,
+              "street_name": a.street_name,
+              "street_number": a.street_number,
+              "street_prefix": a.street_prefix,
+              "street_suffix": a.street_suffix,
+              "street_type": a.street_type}]
+            )
+
+
     def test_get_specific_addresses(self):
         for i in range(50):
             create_address(street_number=str(i+1))

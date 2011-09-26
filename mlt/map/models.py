@@ -1,3 +1,5 @@
+from django.core.urlresolvers import reverse
+
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.contrib.localflavor.us.models import USStateField
@@ -191,3 +193,8 @@ class Address(models.Model):
             return Parcel.objects.get(pl=self.pl)
         except Parcel.DoesNotExist:
             return None
+
+
+    @property
+    def edit_url(self):
+        return reverse("map_edit_address", kwargs={"address_id": self.id})
