@@ -18,7 +18,8 @@ class AddressForm(forms.ModelForm):
         model = models.Address
         widgets = {"notes": BareTextarea}
         fields = [
-            "street_number", "street_name", "street_type",
+            "street_prefix", "street_number", "street_name", "street_type",
+            "street_suffix", "edited_street",
             "city", "state", "multi_units", "complex_name", "notes"]
 
 
@@ -28,11 +29,22 @@ class AddressForm(forms.ModelForm):
             self.fields["state"].initial = conf.MLT_DEFAULT_STATE
 
 
+    def clean(self):
+        if not (
+            self.cleaned_data["street_name"] or
+            self.cleaned_data["edited_street"]
+            ):
+            raise forms.ValidationError("Please enter a street address.")
+
+        return self.cleaned_data
+
+
     def save(self, user):
         address = super(AddressForm, self).save(commit=False)
 
         if address.pk is None:
-            address.input_street = address.parsed_street
+            address.input_street = (
+                address.parsed_street or address.edited_street)
 
             address.imported_by = user
             address.import_source = WEB_UI_IMPORT_SOURCE
