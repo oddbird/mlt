@@ -715,7 +715,7 @@ var MLT = MLT || {};
 
                 addressSelect = function () {
                     $('#addresstable .managelist .address .content').live('click', function (event) {
-                        if (!$(event.target).is('button, a, label, input, .summary, .adr, .street-address, .street-number, .street-prefix, .street-name, .street-type, .street-suffix, .locality, .region, .mapkey, [contenteditable]')) {
+                        if (!$(event.target).is('button, a, label, input, .summary, .adr, .street-address, .street-number, .street-prefix, .street-name, .street-type, .street-suffix, .locality, .region, .mapkey, .error, [contenteditable]')) {
                             $(this).closest('.address').find('input[id^="select"]').click();
                         }
                     });
@@ -751,7 +751,8 @@ var MLT = MLT || {};
                             notes = address.find('.notes');
 
                         content.addClass('editing').append('<button class="savechanges" title="save changes">save changes</button>');
-                        addressInfo.unwrap().find('.locality, .region, .complex-name').each(function () {
+                        addressInfo.find('.complex-name.empty').show();
+                        addressInfo.unwrap().find('.locality, .region, .complex-name span').each(function () {
                             $(this).attr('contenteditable', true).data('original', $(this).text());
                         });
                         if (street.data('parsed')) {
@@ -778,9 +779,11 @@ var MLT = MLT || {};
 
                         content.removeClass('editing');
                         save.remove();
+                        address.find('.error').remove();
                         button.removeClass('action-cancel').addClass('action-edit').attr('title', 'edit').html('edit');
                         notes.removeAttr('contenteditable').text(notes.data('original'));
-                        addressInfo.wrap('<label for="select_' + id + '" />').find('.locality, .region, .complex-name').each(function () {
+                        addressInfo.find('.complex-name.empty').hide();
+                        addressInfo.wrap('<label for="select_' + id + '" />').find('.locality, .region, .complex-name span').each(function () {
                             $(this).removeAttr('contenteditable').text($(this).data('original'));
                         });
                         if (street.data('parsed')) {
@@ -800,10 +803,10 @@ var MLT = MLT || {};
                             street = addressInfo.find('.street-address'),
                             content = address.find('.content'),
                             notes = address.find('.notes'),
-                            data;
+                            edits;
 
                         if (street.data('parsed')) {
-                            data = {
+                            edits = {
                                 street_number: street.find('.street-number').text(),
                                 street_prefix: street.find('.street-prefix').text(),
                                 street_name: street.find('.street-name').text(),
@@ -811,22 +814,55 @@ var MLT = MLT || {};
                                 street_suffix: street.find('.street-suffix').text(),
                                 city: addressInfo.find('.locality').text(),
                                 state: addressInfo.find('.region').text(),
-                                complex_name: addressInfo.find('.complex-name').text(),
+                                complex_name: addressInfo.find('.complex-name span').text(),
                                 notes: notes.text()
                             };
                         } else {
-                            data = {
+                            edits = {
                                 edited_street: street.text(),
                                 city: addressInfo.find('.locality').text(),
                                 state: addressInfo.find('.region').text(),
-                                complex_name: addressInfo.find('.complex-name').text(),
+                                complex_name: addressInfo.find('.complex-name span').text(),
                                 notes: notes.text()
                             };
                         }
 
                         if (url) {
                             address.loadingOverlay();
-                            $.post(url, data, addressLoading.replaceAddress);
+                            $.post(url, edits, function (data) {
+                                if (data.errors) {
+                                    address.loadingOverlay('remove');
+                                    $.each(data.errors, function (field, errors) {
+                                        if (field === "__all__") {
+                                            $.each(errors, function (i, error) {
+                                                street.before('<span class="error">' + error + '</span>');
+                                            });
+                                        }
+                                        if (field === "city") {
+                                            $.each(errors, function (i, error) {
+                                                addressInfo.find('.locality').before('<span class="error">' + error + '</span>');
+                                            });
+                                        }
+                                        if (field === "state") {
+                                            $.each(errors, function (i, error) {
+                                                addressInfo.find('.region').before('<span class="error">' + error + '</span>');
+                                            });
+                                        }
+                                        if (field === "complex_name") {
+                                            $.each(errors, function (i, error) {
+                                                addressInfo.find('.complex-name').before('<span class="error">' + error + '</span>');
+                                            });
+                                        }
+                                        if (field === "notes") {
+                                            $.each(errors, function (i, error) {
+                                                notes.before('<span class="error">' + error + '</span>');
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    addressLoading.replaceAddress(data);
+                                }
+                            });
                         }
                     });
                 },

@@ -19,9 +19,7 @@
         {{/ street_is_parsed }}
         <div class="locality">{{ city }}</div>,
         <div class="region">{{ state }}</div>
-        {{# complex_name }}
-          [<div class="complex-name">{{ complex_name }}</div>]
-        {{/ complex_name }}
+        <div class="complex-name{{^ complex_name }} empty{{/ complex_name }}">[<span>{{ complex_name }}</span>]</div>
       </h3>
     </label>
 
