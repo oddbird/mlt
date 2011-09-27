@@ -754,6 +754,7 @@ class AddAddressViewTest(AuthenticatedWebTest):
         response = form.submit()
 
         self.assertEqual(response.status_int, 200)
+        self.assertEqual(response.json["success"], True)
         from mlt.map.models import Address
         self.assertEqual(Address.objects.count(), 1, response.body)
 
@@ -785,6 +786,7 @@ class EditAddressViewTest(CSRFAuthenticatedWebTest):
 
         self.assertEqual(response.json["address"]["city"], "Providence")
         self.assertEqual(len(response.json["messages"]), 1)
+        self.assertEqual(response.json["success"], True)
 
         a = refresh(self.address)
 
@@ -807,7 +809,8 @@ class EditAddressViewTest(CSRFAuthenticatedWebTest):
             response.json,
             {
                 "errors": {'city': ['This field is required.']},
-                "messages": []
+                "messages": [],
+                "success": False,
                 }
             )
 
@@ -1040,7 +1043,8 @@ class GeocodeViewTest(AuthenticatedWebTest):
                     "street_type": "St",
                     "latitude": 41.823991,
                     "longitude": -71.406619,
-                    }
+                    },
+                "success": True,
                 }
             )
 
@@ -1063,6 +1067,8 @@ class GeocodeViewTest(AuthenticatedWebTest):
                     }
                 ])
 
+        self.assertFalse(res.json["success"])
+
 
     def test_geocode_bad_id(self):
         res = self.app.get(
@@ -1079,6 +1085,8 @@ class GeocodeViewTest(AuthenticatedWebTest):
                     "tags": "error"
                     }
                 ])
+
+        self.assertFalse(res.json["success"])
 
 
     @patch("mlt.map.geocoder.geocode")
@@ -1112,6 +1120,8 @@ class GeocodeViewTest(AuthenticatedWebTest):
               }
              ]
             )
+
+        self.assertFalse(res.json["success"])
 
         geocode.assert_called_with("123 S Main St, Providence, RI")
 

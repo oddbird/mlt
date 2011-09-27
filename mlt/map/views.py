@@ -183,7 +183,7 @@ def add_address(request):
         address = form.save(request.user)
         messages.success(
             request, "Address &laquo;%s&raquo; added." % address.street)
-        return json_response({"added": True})
+        return json_response({"success": True})
     return render(request, "includes/add_address/form.html", {"form": form})
 
 
@@ -197,8 +197,14 @@ def edit_address(request, address_id):
         address = form.save(request.user)
         messages.success(
             request, "Address &laquo;%s&raquo; saved." % address.street)
-        return json_response({"address": UIAddressSerializer().one(address)})
-    return json_response({"errors": form.errors})
+        return json_response({
+                "address": UIAddressSerializer().one(address),
+                "success": True,
+                })
+    return json_response({
+            "errors": form.errors,
+            "success": False,
+            })
 
 
 
@@ -250,14 +256,14 @@ def geocode(request):
     if not address_id:
         messages.error(
             request, "Geocoding requires an address 'id' parameter.")
-        return json_response({})
+        return json_response({"success": False})
 
     try:
         address = Address.objects.get(pk=address_id)
     except Address.DoesNotExist:
         messages.error(
             request, "Geocoding: '%s' is not a valid address ID." % address_id)
-        return json_response({})
+        return json_response({"success": False})
 
     as_string = geocoder.prep(address)
     data = geocoder.geocode(as_string)
@@ -265,7 +271,7 @@ def geocode(request):
     if not data:
         messages.info(
             request, "Unable to geocode '%s'." % as_string)
-        return json_response({})
+        return json_response({"success": False})
 
     geocoder.update(address, data)
     address.save()
@@ -276,6 +282,7 @@ def geocode(request):
 
     return json_response({
             "address": UIAddressSerializer().one(address),
+            "success": True
             })
 
 
