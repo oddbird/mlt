@@ -251,6 +251,7 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 [role="main"] { overflow: hidden; *zoom: 1; position: relative; background: white; }
 
 [role="contentinfo"] { -moz-border-radius-topright: 5px; -webkit-border-top-right-radius: 5px; -o-border-top-right-radius: 5px; -ms-border-top-right-radius: 5px; -khtml-border-top-right-radius: 5px; border-top-right-radius: 5px; -moz-transition-property: width 300ms; -webkit-transition-property: width 300ms; -o-transition-property: width 300ms; transition-property: width 300ms; -moz-transition-duration: 1s; -webkit-transition-duration: 1s; -o-transition-duration: 1s; transition-duration: 1s; position: fixed; left: 33.169em; bottom: 0; padding: 0.405em 0.809em; background: rgba(162, 208, 245, 0.85); overflow: hidden; width: 1.214em; white-space: nowrap; z-index: 900; }
+.section-history [role="contentinfo"] { left: 0; }
 [role="contentinfo"]:hover { width: auto; min-width: 50%; }
 [role="contentinfo"]:hover .author { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 [role="contentinfo"] .copy { font-size: 1.618em; line-height: 1em; font-weight: 700; margin-right: 0.405em; }
