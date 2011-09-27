@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+     {% for address in addresses %}
+     <Placemark id="{{ address.id }}">
+       <name>{{ address.street }}, {{ address.city }}, {{ address.state }}</name>
+       <ExtendedData>
+         {% for key, value in address.serialized.items %}
+         <Data name="{{ key }}">
+           <value>{{ value }}</value>
+         </Data>
+         {% endfor %}
+       </ExtendedData>
+       {% if address.parcel %}
+       {{ address.parcel.geom.kml|safe }}
+       {% endif %}
+     </Placemark>
+     {% endfor %}
+</kml>
