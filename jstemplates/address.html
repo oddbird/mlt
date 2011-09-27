@@ -1,19 +1,26 @@
 <article id="address-id-{{ id }}" class="address" data-id="{{ id }}"{{# latitude }}{{# longitude }} data-latitude="{{ latitude }}" data-longitude="{{ longitude }}"{{/ longitude }}{{/ latitude }}{{# geolat }}{{# geolng }} data-geocode-latitude="{{ geolat }}" data-geocode-longitude="{{ geolng }}"{{/ geolng }}{{/ geolat }}>
   <input type="checkbox" id="select_{{ id }}" name="select" value="{{ id }}" class="item-select"{{# checked }} checked="checked"{{/ checked }}>
 
-  <div class="content"> {{! @@@ editing: 'editing' }}
+  <div class="content">
     <span class="mapkey">{{ index }}</span>
-    {{! @@@ editing: remove label wrapper }}
     <label for="select_{{ id }}">
       <h3 class="adr">
-        {{! @@@ editing: split into component parts with 'contenteditable' }}
-        <div class="street-address">{{ street }}</div>
-        {{! @@@ editing: add 'contenteditable' attribute to all these }}
+        {{# street_is_parsed }}
+          <div class="street-address" data-parsed="true">
+            <span class="street-number">{{ street_number }}</span>
+            <span class="street-prefix">{{ street_prefix }}</span>
+            <span class="street-name">{{ street_name }}</span>
+            <span class="street-type">{{ street_type }}</span>
+            <span class="street-suffix">{{ street_suffix }}</span>
+          </div>
+        {{/ street_is_parsed }}
+        {{^ street_is_parsed }}
+          <div class="street-address">{{ street }}</div>
+        {{/ street_is_parsed }}
         <div class="locality">{{ city }}</div>,
         <div class="region">{{ state }}</div>
         {{# complex_name }}
-          {{! @@@ contenteditable }}
-          <div class="complex-name">[{{ complex_name }}]</div>
+          [<div class="complex-name">{{ complex_name }}</div>]
         {{/ complex_name }}
       </h3>
     </label>
@@ -33,8 +40,7 @@
     </div>
 
     <ul class="controls">
-      {{! @@@ editing: change class, title and text to '[action-]cancel' }}
-      <li><a href="#" title="edit" class="action-edit">edit</a></li>
+      <li><a href="#" title="edit" class="action-edit" data-url="{{ edit_url }}">edit</a></li>
       <li><a href="#{{! @@@ link to revision history }}" title="history" class="action-history">history</a></li>
       <li><button type="submit" name="delete" value="{{ id }}" title="delete" class="action-delete">delete</button></li>
       <li>
@@ -51,10 +57,7 @@
       <p class="summary action-info" title="show details">details</p>
       <div class="more">
 
-        {{# notes }}
-          {{! @@@ contenteditable }}
-          <p class="notes">{{ notes }}</p>
-        {{/ notes }}
+        <p class="notes">{{ notes }}</p>
 
         {{# byline }}
           <div class="byline">
@@ -88,8 +91,6 @@
         {{/ byline }}
       </div>
     </div>
-
-    {{! @@@ editing: <button class="savechanges" title="save changes">save changes<end button> }}
 
   </div>
 </article>

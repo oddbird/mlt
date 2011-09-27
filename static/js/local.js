@@ -213,8 +213,6 @@ var MLT = MLT || {};
                                             var byline, web_ui, updatedAddress, newlat, newlng,
                                                 index = thisAddress.find('.mapkey').html();
 
-                                            thisAddress.loadingOverlay('remove');
-
                                             if (data.address.parcel) {
                                                 newlat = data.address.parcel.latitude;
                                                 newlng = data.address.parcel.longitude;
@@ -235,7 +233,14 @@ var MLT = MLT || {};
                                                 geolat: geolat,
                                                 geolng: geolng,
                                                 index: index,
+                                                edit_url: data.address.edit_url,
                                                 street: data.address.street,
+                                                street_is_parsed: data.address.street_is_parsed,
+                                                street_number: data.address.street_number,
+                                                street_prefix: data.address.street_prefix,
+                                                street_name: data.address.street_name,
+                                                street_type: data.address.street_type,
+                                                street_suffix: data.address.street_suffix,
                                                 city: data.address.city,
                                                 state: data.address.state,
                                                 complex_name: data.address.complex_name,
@@ -331,7 +336,14 @@ var MLT = MLT || {};
                                             latitude: lat,
                                             longitude: lng,
                                             index: index,
+                                            edit_url: address.edit_url,
                                             street: address.street,
+                                            street_is_parsed: address.street_is_parsed,
+                                            street_number: address.street_number,
+                                            street_prefix: address.street_prefix,
+                                            street_name: address.street_name,
+                                            street_type: address.street_type,
+                                            street_suffix: address.street_suffix,
                                             city: address.city,
                                             state: address.state,
                                             complex_name: address.complex_name,
@@ -417,7 +429,14 @@ var MLT = MLT || {};
                                     geolat: geolat,
                                     geolng: geolng,
                                     index: address.index,
+                                    edit_url: address.edit_url,
                                     street: address.street,
+                                    street_is_parsed: address.street_is_parsed,
+                                    street_number: address.street_number,
+                                    street_prefix: address.street_prefix,
+                                    street_name: address.street_name,
+                                    street_type: address.street_type,
+                                    street_suffix: address.street_suffix,
                                     city: address.city,
                                     state: address.state,
                                     complex_name: address.complex_name,
@@ -457,14 +476,73 @@ var MLT = MLT || {};
                         addressLoading.currentlyLoading = false;
                         addressLoading.scroll = false;
                     },
+                    replaceAddress: function (data) {
+                        if (data.success) {
+                            var byline, web_ui, lat, lng, geolat, geolng, updatedAddress,
+                                address = data.address,
+                                id = address.id,
+                                thisAddress = addressContainer.find('.address[data-id="' + id + '"]'),
+                                index = thisAddress.find('.mapkey').text();
+
+                            if (address.pl) {
+                                lat = address.latitude;
+                                lng = address.longitude;
+                            } else {
+                                geolat = address.latitude;
+                                geolng = address.longitude;
+                            }
+                            if (address.import_source || address.mapped_by) { byline = true; }
+                            if (address.import_source === 'web-ui') { web_ui = true; }
+
+                            updatedAddress = ich.address({
+                                id: id,
+                                pl: address.pl,
+                                latitude: lat,
+                                longitude: lng,
+                                geolat: geolat,
+                                geolng: geolng,
+                                index: index,
+                                edit_url: address.edit_url,
+                                street: address.street,
+                                street_is_parsed: address.street_is_parsed,
+                                street_number: address.street_number,
+                                street_prefix: address.street_prefix,
+                                street_name: address.street_name,
+                                street_type: address.street_type,
+                                street_suffix: address.street_suffix,
+                                city: address.city,
+                                state: address.state,
+                                complex_name: address.complex_name,
+                                needs_review: address.needs_review,
+                                multi_units: address.multi_units,
+                                notes: address.notes,
+                                byline: byline,
+                                import_source: address.import_source,
+                                web_ui: web_ui,
+                                imported_by: address.imported_by,
+                                import_timestamp: address.import_timestamp,
+                                mapped_by: address.mapped_by,
+                                mapped_timestamp: address.mapped_timestamp
+                            });
+
+                            thisAddress.replaceWith(updatedAddress);
+                            updatedAddress.find('.details').html5accordion();
+                            if ($('#addressform .actions .bulkselect').data('selectall')) {
+                                $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
+                            }
+                            if (addressContainer.data('trusted') !== 'trusted') {
+                                addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
+                            }
+                        }
+                    },
                     replaceAddresses: function (data) {
                         if (data.addresses.length) {
                             addressContainer.find('.address input[id^="select"]:checked').click();
                             $.each(data.addresses, function (i, address) {
                                 var byline, web_ui, lat, lng, geolat, geolng, updatedAddress,
                                     id = address.id,
-                                    thisAddress = $('#addresstable .address[data-id="' + id + '"]'),
-                                    index = thisAddress.find('.mapkey').html();
+                                    thisAddress = addressContainer.find('.address[data-id="' + id + '"]'),
+                                    index = thisAddress.find('.mapkey').text();
 
                                 if (address.pl) {
                                     lat = address.latitude;
@@ -484,7 +562,14 @@ var MLT = MLT || {};
                                     geolat: geolat,
                                     geolng: geolng,
                                     index: index,
+                                    edit_url: address.edit_url,
                                     street: address.street,
+                                    street_is_parsed: address.street_is_parsed,
+                                    street_number: address.street_number,
+                                    street_prefix: address.street_prefix,
+                                    street_name: address.street_name,
+                                    street_type: address.street_type,
+                                    street_suffix: address.street_suffix,
                                     city: address.city,
                                     state: address.state,
                                     complex_name: address.complex_name,
@@ -630,7 +715,7 @@ var MLT = MLT || {};
 
                 addressSelect = function () {
                     $('#addresstable .managelist .address .content').live('click', function (event) {
-                        if (!$(event.target).is('button, a, label, input, .summary, .adr, .street-address, .locality, .region, .mapkey')) {
+                        if (!$(event.target).is('button, a, label, input, .summary, .adr, .street-address, .street-number, .street-prefix, .street-name, .street-type, .street-suffix, .locality, .region, .mapkey, [contenteditable]')) {
                             $(this).closest('.address').find('input[id^="select"]').click();
                         }
                     });
@@ -655,6 +740,97 @@ var MLT = MLT || {};
                     });
                 },
 
+                editAddress = function () {
+                    addressContainer.delegate('.action-edit', 'click', function (e) {
+                        e.preventDefault();
+                        var button = $(this),
+                            address = button.closest('.address'),
+                            addressInfo = address.find('.adr'),
+                            street = addressInfo.find('.street-address'),
+                            content = address.find('.content'),
+                            notes = address.find('.notes');
+
+                        content.addClass('editing').append('<button class="savechanges" title="save changes">save changes</button>');
+                        addressInfo.unwrap().find('.locality, .region, .complex-name').each(function () {
+                            $(this).attr('contenteditable', true).data('original', $(this).text());
+                        });
+                        if (street.data('parsed')) {
+                            street.find('span[class^="street-"]').each(function () {
+                                $(this).attr('contenteditable', true).data('original', $(this).text());
+                            });
+                        } else {
+                            street.attr('contenteditable', true).data('original', street.text());
+                        }
+                        button.removeClass('action-edit').addClass('action-cancel').attr('title', 'cancel').html('cancel');
+                        notes.attr('contenteditable', true).data('original', notes.text());
+                    });
+
+                    addressContainer.delegate('.action-cancel', 'click', function (e) {
+                        e.preventDefault();
+                        var button = $(this),
+                            address = button.closest('.address'),
+                            id = address.data('id'),
+                            addressInfo = address.find('.adr'),
+                            street = addressInfo.find('.street-address'),
+                            content = address.find('.content'),
+                            notes = address.find('.notes'),
+                            save = address.find('.savechanges');
+
+                        content.removeClass('editing');
+                        save.remove();
+                        button.removeClass('action-cancel').addClass('action-edit').attr('title', 'edit').html('edit');
+                        notes.removeAttr('contenteditable').text(notes.data('original'));
+                        addressInfo.wrap('<label for="select_' + id + '" />').find('.locality, .region, .complex-name').each(function () {
+                            $(this).removeAttr('contenteditable').text($(this).data('original'));
+                        });
+                        if (street.data('parsed')) {
+                            street.find('span[class^="street-"]').each(function () {
+                                $(this).removeAttr('contenteditable').text($(this).data('original'));
+                            });
+                        } else {
+                            street.removeAttr('contenteditable').text(street.data('original'));
+                        }
+                    });
+
+                    addressContainer.delegate('.savechanges', 'click', function () {
+                        var button = $(this),
+                            address = button.closest('.address'),
+                            url = address.find('.action-cancel').data('url'),
+                            addressInfo = address.find('.adr'),
+                            street = addressInfo.find('.street-address'),
+                            content = address.find('.content'),
+                            notes = address.find('.notes'),
+                            data;
+
+                        if (street.data('parsed')) {
+                            data = {
+                                street_number: street.find('.street-number').text(),
+                                street_prefix: street.find('.street-prefix').text(),
+                                street_name: street.find('.street-name').text(),
+                                street_type: street.find('.street-type').text(),
+                                street_suffix: street.find('.street-suffix').text(),
+                                city: addressInfo.find('.locality').text(),
+                                state: addressInfo.find('.region').text(),
+                                complex_name: addressInfo.find('.complex-name').text(),
+                                notes: notes.text()
+                            };
+                        } else {
+                            data = {
+                                edited_street: street.text(),
+                                city: addressInfo.find('.locality').text(),
+                                state: addressInfo.find('.region').text(),
+                                complex_name: addressInfo.find('.complex-name').text(),
+                                notes: notes.text()
+                            };
+                        }
+
+                        if (url) {
+                            address.loadingOverlay();
+                            $.post(url, data, addressLoading.replaceAddress);
+                        }
+                    });
+                },
+
                 addAddress = function () {
                     var success, bootstrapForm,
                         link = $('a[href=#lightbox-add-address]'),
@@ -664,7 +840,7 @@ var MLT = MLT || {};
                     success = function (data) {
                         var number = addressContainer.find('.address').length;
                         if (number < 20) { number = 20; }
-                        if (data.added) {
+                        if (data.success) {
                             target.find('a[title*="close"]').click();
                             addressLoading.reloadList({num: number}, true);
                         } else {
@@ -1054,6 +1230,7 @@ var MLT = MLT || {};
             addressDetails();
             addressSelect();
             addressZoom();
+            editAddress();
             addAddress();
             addressActions();
             filtering();
