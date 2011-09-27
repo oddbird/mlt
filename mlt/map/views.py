@@ -197,7 +197,7 @@ def edit_address(request, address_id):
         address = form.save(request.user)
         messages.success(
             request, "Address &laquo;%s&raquo; saved." % address.street)
-        return json_response({"saved": address.id})
+        return json_response({"address": UIAddressSerializer().one(address)})
     return json_response({"errors": form.errors})
 
 

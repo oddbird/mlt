@@ -783,20 +783,8 @@ class EditAddressViewTest(CSRFAuthenticatedWebTest):
 
         self.assertEqual(response.status_int, 200)
 
-        self.assertEqual(
-            response.json,
-            {
-                "saved": self.address.id,
-                "messages": [
-                    {
-                        "level": 25,
-                        "message":
-                            "Address &laquo;3635 Van Gordon St&raquo; saved.",
-                        "tags": "success"
-                        }
-                    ],
-                }
-            )
+        self.assertEqual(response.json["address"]["city"], "Providence")
+        self.assertEqual(len(response.json["messages"]), 1)
 
         a = refresh(self.address)
 
