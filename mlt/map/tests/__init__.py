@@ -8,3 +8,4 @@ from .test_utils import *
 from .test_views import *
 from .writers.test_base import *
 from .writers.test_csv import *
+from .writers.test_xls import *

@@ -17,3 +17,4 @@ django-messages-ui==0.1.4
 django-ajax-loading-overlay==0.1.1
 geopy==0.94.1
 python-dateutil==2.0
+xlwt==0.7.2
