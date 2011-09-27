@@ -162,7 +162,10 @@ INSTALLED_APPS += ["mlt.account"]
 LOGIN_URL = "/account/login/"
 
 INSTALLED_APPS += ["django.contrib.gis", "mlt.map"]
-TEMPLATE_CONTEXT_PROCESSORS += ["mlt.map.context_processors.map"]
+TEMPLATE_CONTEXT_PROCESSORS += [
+    "mlt.map.context_processors.map",
+    "mlt.map.context_processors.export",
+    ]
 TILE_SERVER_URL = "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 MAP_CREDITS = "Map data and imagery &copy; 2011 OpenStreetMap contributors"
 # Currently defaults to centered on Providence, RI

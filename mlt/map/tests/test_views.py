@@ -15,6 +15,7 @@ from .utils import create_address, create_parcel, create_mpolygon, create_user
 
 __all__ = [
     "ImportViewTest",
+    "ExportViewTest",
     "AssociateViewTest",
     "AddressesViewTest",
     "GeoJSONViewTest",
@@ -42,6 +43,10 @@ class AuthenticatedWebTest(WebTest):
     @property
     def url(self):
         return reverse(self.url_name)
+
+
+    def get(self):
+        return self.app.get(self.url, user=self.user)
 
 
     def test_login_required(self):
@@ -106,6 +111,62 @@ class ImportViewTest(AuthenticatedWebTest):
         self.assertEqual(
             res.html.findAll("li", "success")[0].p.text,
             "Successfully imported 1 addresses (0 duplicates).")
+
+
+
+class MockWriter(object):
+    mimetype = "text/mock"
+    extension = "mck"
+
+    def __init__(self, addresses):
+        self.addresses = addresses
+
+
+    def save(self, stream):
+        stream.write(",".join([str(a.id) for a in self.addresses]))
+
+
+
+@patch("mlt.map.views.EXPORT_FORMATS", ["foo"])
+@patch("mlt.map.views.EXPORT_WRITERS", {"foo": MockWriter})
+class ExportViewTest(AuthenticatedWebTest):
+    url_name = "map_export_addresses"
+
+
+    def _basic_test(self, querystring):
+        res = self.app.get(self.url + querystring, user=self.user)
+
+        self.assertEqual(res.headers["Content-Type"], "text/mock")
+        self.assertEqual(
+            res.headers["Content-Disposition"],
+            "attachment; filename=addresses.mck")
+
+        return res
+
+
+    def test_export(self, querystring="?export_format=foo"):
+        a1 = create_address()
+        a2 = create_address()
+
+        res = self._basic_test(querystring)
+        self.assertEqual(res.body, "%s,%s" % (a1.id, a2.id))
+
+
+    def test_no_format(self):
+        self.test_export("")
+
+
+    def test_bad_format(self):
+        self.test_export("?export_format=blah")
+
+
+    def test_filter(self):
+        a1 = create_address(city="Providence")
+        create_address(city="Albuquerque")
+
+        res = self._basic_test("?export_format=foo&city=Providence")
+
+        self.assertEqual(res.body, str(a1.id))
 
 
 
@@ -389,7 +450,7 @@ class AddressesViewTest(AuthenticatedWebTest):
         for i in range(50):
             create_address(street_number=str(i+1))
 
-        res = self.app.get(self.url, user=self.user)
+        res = self.get()
 
         from mlt.map.utils import letter_key
 
@@ -401,7 +462,7 @@ class AddressesViewTest(AuthenticatedWebTest):
     def test_address_serialization(self):
         a = create_address()
 
-        res = self.app.get(self.url, user=self.user)
+        res = self.get()
 
         from django.utils.formats import date_format
         from mlt.dt import utc_to_local
@@ -723,7 +784,7 @@ class AddAddressViewTest(AuthenticatedWebTest):
 
 
     def test_get_form(self):
-        response = self.app.get(self.url, user=self.user)
+        response = self.get()
 
         self.assertEqual(
             sorted(response.form.fields.keys()),
@@ -743,7 +804,7 @@ class AddAddressViewTest(AuthenticatedWebTest):
 
 
     def test_post(self):
-        response = self.app.get(self.url, user=self.user)
+        response = self.get()
         form = response.form
         form["city"] = "Providence"
         form["state"] = "RI"

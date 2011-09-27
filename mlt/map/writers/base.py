@@ -14,6 +14,10 @@ class BaseWriter(object):
         self.objects = objects
 
 
+    mimetype = "text/plain"
+    extension = "txt"
+
+
     serializer = serializers.Serializer()
 
 

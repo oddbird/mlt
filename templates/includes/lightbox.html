@@ -13,13 +13,12 @@
 <aside id="lightbox-export-addresses">
 <div>
   <h3>export addresses</h3>
-  <form id="export-address-form">
+  <form id="export-address-form" action="{% url map_export_addresses %}" method="GET">
     <label for="export_addresses">select an export file format</label>
-    <select name="export_addresses" id="export_addresses">
-      <option value="XLS">XLS</option>
-      <option value="KML">KML</option>
-      <option value="CSV">CSV</option>
-      <option value="SHP">SHP</option>
+    <select name="export_format" id="export_addresses">
+      {% for format in EXPORT_FORMATS %}
+      <option value="{{ format }}">{{ format }}</option>
+      {% endfor %}
     </select>
     <div class="form-actions">
       <a href="#" title="close">cancel</a> or

@@ -14,6 +14,7 @@ from vectorformats.Formats import Django, GeoJSON
 from ..dt import utc_to_local
 
 from .encoder import IterEncoder
+from .export import EXPORT_FORMATS, EXPORT_WRITERS
 from .forms import AddressForm, AddressImportForm
 from .importer import ImporterError
 from .models import Parcel, Address
@@ -68,6 +69,25 @@ def import_addresses(request):
         request,
         template_name,
         {"form": form, "errors": errors})
+
+
+
+@login_required
+def export_addresses(request):
+    format = request.GET.get("export_format", EXPORT_FORMATS[0])
+    writer_class = EXPORT_WRITERS.get(format, EXPORT_WRITERS[EXPORT_FORMATS[0]])
+
+    addresses = filters.apply(Address.objects.all(), request.GET)
+
+    writer = writer_class(addresses)
+
+    response = HttpResponse(content_type=writer.mimetype)
+    response['Content-Disposition'] = (
+        'attachment; filename=addresses.%s' % writer.extension)
+
+    writer.save(response)
+
+    return response
 
 
 

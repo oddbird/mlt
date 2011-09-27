@@ -20,6 +20,14 @@ class BaseWriterTest(TestCase):
         return TestWriter
 
 
+    def test_mimetype(self):
+        self.assertEqual(self.writer_class.mimetype, "text/plain")
+
+
+    def test_extension(self):
+        self.assertEqual(self.writer_class.extension, "txt")
+
+
     def test_field_names(self):
         writer = self.writer_class([])
 

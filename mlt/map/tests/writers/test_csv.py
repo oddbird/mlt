@@ -18,6 +18,14 @@ class CSVWriterTest(TestCase):
         return CSVWriter
 
 
+    def test_mimetype(self):
+        self.assertEqual(self.writer_class.mimetype, "text/csv")
+
+
+    def test_extension(self):
+        self.assertEqual(self.writer_class.extension, "csv")
+
+
     def test_save(self):
         a1 = create_address()
         a2 = create_address()

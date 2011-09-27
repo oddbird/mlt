@@ -7,6 +7,10 @@ from .base import AddressWriter
 
 
 class CSVWriter(AddressWriter):
+    mimetype = "text/csv"
+    extension = "csv"
+
+
     def save(self, stream):
         writer = csv.writer(stream)
 
