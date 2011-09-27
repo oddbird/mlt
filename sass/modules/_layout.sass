@@ -16,25 +16,21 @@ $side-gutter-width  : $gutter-width
 
 #messages
   +no-style-list
-  +stretch-x
-  +box-shadow
-  +bold
-  z-index: 900
+  +columns(15)
   p
     margin: 0
 
   .message
-    +adjust-font-size-to($medpx,1.5)
+    padding: rhythm(.25) rhythm(.5,$medpx)
+    background: rgba($light,.25)
     position: relative
-    padding: rhythm(.5,$medpx) rhythm(1,$medpx)
-    background: rgba($light,.95)
     cursor: pointer
     &:hover
       &::after
         position: absolute
         right: rhythm(1,$medpx)
         top: rhythm(.5,$medpx)
-        content: "(dismiss)"
+        content: image-url('ui/x.png')
 
   .success
     background: rgba(200,250,200,.95)
@@ -51,41 +47,41 @@ $side-gutter-width  : $gutter-width
   border-color: $light
 
 h1
-  +fixed-columns(8)
+  +columns(5)
+  +alpha
   +padding-leader(.25)
   +padding-trailer(.25)
-  margin-left: $side-gutter-width
   a
     #{$link}
       display: block
 
 .nav
-  +pie-clearfix
-  padding-left: fixed(8) + $side-gutter-width
-  margin-right: $side-gutter-width
+  +columns(9)
+  +omega
 
 [role="navigation"]
-  +float(right)
-  a
-    #{$link}
-      +float(right)
-      +border-radius($xsmallem)
-      +padding-leader(.25)
-      +padding-trailer(.25)
-      text-align: center
-      padding:
-        left: $normpx + image-width('ui/history.png') + $xsmallpx
-        right: $normpx
-      white-space: nowrap
-      background: rgba($light,$xsmall) image-url('ui/history.png') no-repeat scroll $normpx
-    #{$focus}, &.active
-      background-color: rgba($light,$small)
+  +columns(2,9)
+  +omega(9)
+  .history
+    a
+      #{$link}
+        +border-radius($xsmallem)
+        +padding-leader(.25)
+        +padding-trailer(.25)
+        display: block
+        padding:
+          left: $normpx + image-width('ui/history.png') + $xsmallpx
+          right: $normpx
+        text-align: center
+        background: rgba($light,$xsmall) image-url('ui/history.png') no-repeat scroll $normpx
+      #{$focus}, &.active
+        background-color: rgba($light,$small)
 
 .meta
-  +float(right)
+  +columns(7,9)
   +padding-leader(.25)
   +padding-trailer(.25)
-  padding-right: $normpx
+  text-align: right
 
 [role="main"]
   @extend .container

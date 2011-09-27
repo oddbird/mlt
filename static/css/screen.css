@@ -233,28 +233,27 @@ button[disabled] { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=
 .container, [role="banner"], [role="main"], [role="contentinfo"] { *zoom: 1; width: 100%; min-width: 65em; }
 .container:after, [role="banner"]:after, [role="main"]:after, [role="contentinfo"]:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
-#messages { margin: 0; padding: 0; border: 0; list-style: none; position: absolute; left: 0; right: 0; -moz-box-shadow: 0px 0px 5px #333333; -webkit-box-shadow: 0px 0px 5px #333333; -o-box-shadow: 0px 0px 5px #333333; box-shadow: 0px 0px 5px #333333; font-weight: 700; z-index: 900; }
+#messages { margin: 0; padding: 0; border: 0; list-style: none; display: inline; float: left; width: 50.685%; margin-right: 0.685%; }
 #messages li { list-style-image: none; list-style-type: none; margin-left: 0px; }
 #messages p { margin: 0; }
-#messages .message { font-size: 1.618em; line-height: 1.5em; position: relative; padding: 0.5em 1em; background: rgba(221, 221, 221, 0.95); cursor: pointer; }
-#messages .message:hover::after { position: absolute; right: 1em; top: 0.5em; content: "(dismiss)"; }
+#messages .message { padding: 0.405em 0.5em; background: rgba(221, 221, 221, 0.25); position: relative; cursor: pointer; }
+#messages .message:hover::after { position: absolute; right: 1em; top: 0.5em; content: url('../images/ui/x.png?1307817035'); }
 #messages .success { background: rgba(200, 250, 200, 0.95); }
 #messages .warning { background: rgba(250, 250, 200, 0.95); }
 #messages .error { background: rgba(250, 200, 200, 0.95); }
 
 [role="banner"] { overflow: hidden; *zoom: 1; padding-top: 0.405em; padding-bottom: 0.405em; border-color: #dddddd; }
 
-h1 { display: inline; float: left; width: 31.551em; margin-right: 0.809em; padding-top: 0.405em; padding-bottom: 0.405em; margin-left: 0.809em; }
+h1 { display: inline; float: left; width: 16.438%; margin-right: 0.685%; margin-left: 0.685%; padding-top: 0.405em; padding-bottom: 0.405em; }
 h1 a:link, h1 a:visited { display: block; }
 
-.nav { *zoom: 1; padding-left: 32.36em; margin-right: 0.809em; }
-.nav:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
+.nav { display: inline; float: left; width: 30.137%; margin-right: 0.685%; display: inline; float: right; margin-right: 0.685%; #margin-left: -0.809em; }
 
-[role="navigation"] { display: inline; float: right; }
-[role="navigation"] a:link, [role="navigation"] a:visited { display: inline; float: right; -moz-border-radius: 0.382em; -webkit-border-radius: 0.382em; -o-border-radius: 0.382em; -ms-border-radius: 0.382em; -khtml-border-radius: 0.382em; border-radius: 0.382em; padding-top: 0.405em; padding-bottom: 0.405em; text-align: center; padding-left: 28.584px; padding-right: 12px; white-space: nowrap; background: rgba(221, 221, 221, 0.382) url('../images/ui/history.png?1305749879') no-repeat scroll 12px; }
-[role="navigation"] a:focus, [role="navigation"] a:hover, [role="navigation"] a:active, [role="navigation"] a.active { background-color: rgba(221, 221, 221, 0.618); }
+[role="navigation"] { display: inline; float: left; width: 20.455%; margin-right: 2.273%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; }
+[role="navigation"] .history a:link, [role="navigation"] .history a:visited { -moz-border-radius: 0.382em; -webkit-border-radius: 0.382em; -o-border-radius: 0.382em; -ms-border-radius: 0.382em; -khtml-border-radius: 0.382em; border-radius: 0.382em; padding-top: 0.405em; padding-bottom: 0.405em; display: block; padding-left: 28.584px; padding-right: 12px; text-align: center; background: rgba(221, 221, 221, 0.382) url('../images/ui/history.png?1305749879') no-repeat scroll 12px; }
+[role="navigation"] .history a:focus, [role="navigation"] .history a:hover, [role="navigation"] .history a:active, [role="navigation"] .history a.active { background-color: rgba(221, 221, 221, 0.618); }
 
-.meta { display: inline; float: right; padding-top: 0.405em; padding-bottom: 0.405em; padding-right: 12px; }
+.meta { display: inline; float: left; width: 77.273%; margin-right: 2.273%; padding-top: 0.405em; padding-bottom: 0.405em; text-align: right; }
 
 [role="main"] { overflow: hidden; *zoom: 1; position: relative; border: 1px solid #dddddd; border-width: 1px 0; }
 

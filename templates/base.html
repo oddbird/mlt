@@ -78,10 +78,10 @@
 <body id="client-url" class="{% block bodyclasses %}{% endblock %}" data-login-url="{% url account_login %}">
 {% block body %}
 
-{% include "_messages.html" %}
-
 <header role="banner">
   <h1><a href="/" rel="home">Master Lookup Table</a></h1>
+
+  {% include "_messages.html" %}
 
   <div class="nav">
     <nav role="navigation">
@@ -89,7 +89,7 @@
       <ul>
         {% if user.is_authenticated %}
         <li class="history">
-          <a href="/history/">Revision History</a>
+          <a href="/history/">History</a>
         </li>
         {% endif %}
       </ul>
