@@ -96,6 +96,9 @@ class Address(models.Model):
     # unmodified input data
     input_street = models.CharField(max_length=200, db_index=True)
 
+    # edited full street, only used if unparsed addresses are edited
+    edited_street = models.CharField(max_length=200, blank=True)
+
     # core address info
     street_prefix = models.CharField(max_length=20, blank=True, db_index=True)
     street_number = models.CharField(max_length=50, blank=True, db_index=True)
@@ -139,7 +142,8 @@ class Address(models.Model):
 
 
     def save(self, *args, **kwargs):
-        self.street = self.parsed_street or self.input_street
+        self.street = (
+            self.parsed_street or self.edited_street or self.input_street)
         return super(Address, self).save(*args, **kwargs)
 
 
