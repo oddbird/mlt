@@ -1,5 +1,6 @@
 from .writers.csv import CSVWriter
 from .writers.kml import KMLWriter
+from .writers.shp import SHPWriter
 from .writers.xls import XLSWriter
 
 
@@ -8,6 +9,7 @@ EXPORT_WRITER_LIST = [
     ("CSV", CSVWriter),
     ("XLS", XLSWriter),
     ("KML", KMLWriter),
+    ("SHP", SHPWriter),
     ]
 
 

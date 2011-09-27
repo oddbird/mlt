@@ -9,4 +9,5 @@ from .test_views import *
 from .writers.test_base import *
 from .writers.test_csv import *
 from .writers.test_kml import *
+from .writers.test_shp import *
 from .writers.test_xls import *
