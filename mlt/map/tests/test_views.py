@@ -493,7 +493,8 @@ class AddressesViewTest(AuthenticatedWebTest):
               "street_number": a.street_number,
               "street_prefix": a.street_prefix,
               "street_suffix": a.street_suffix,
-              "street_type": a.street_type}]
+              "street_type": a.street_type,
+              "street_is_parsed": a.street_is_parsed}]
             )
 
 
@@ -1102,6 +1103,7 @@ class GeocodeViewTest(AuthenticatedWebTest):
                     "street_prefix": "S",
                     "street_suffix": "",
                     "street_type": "St",
+                    "street_is_parsed": True,
                     "latitude": 41.823991,
                     "longitude": -71.406619,
                     },

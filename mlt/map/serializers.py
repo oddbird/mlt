@@ -48,6 +48,7 @@ class AddressSerializer(Serializer):
         "street_name",
         "street_type",
         "street_suffix",
+        "street_is_parsed",
         "multi_units",
         "city",
         "state",

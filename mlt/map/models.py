@@ -177,6 +177,16 @@ class Address(models.Model):
 
 
     @property
+    def street_is_parsed(self):
+        """
+        Returns True if the street address is parsed into its constituent bits,
+        False otherwise.
+
+        """
+        return bool(self.parsed_street)
+
+
+    @property
     def parcel(self):
         try:
             return Parcel.objects.get(pl=self.pl)

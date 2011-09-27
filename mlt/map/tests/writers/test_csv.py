@@ -51,7 +51,7 @@ class CSVWriterTest(TestCase):
 
         self.assertEqual(
             stream.read(),
-            "id,street,street_prefix,street_number,street_name,street_type,street_suffix,multi_units,city,state,complex_name,notes,pl,mapped_by,mapped_timestamp,needs_review,imported_by,import_timestamp,import_source,latitude,longitude\r\n" +
-            "%(id)s,%(street)s,%(street_prefix)s,%(street_number)s,%(street_name)s,%(street_type)s,%(street_suffix)s,%(multi_units)s,%(city)s,%(state)s,%(complex_name)s,%(notes)s,%(pl)s,%(mapped_by)s,%(mapped_timestamp)s,%(needs_review)s,%(imported_by)s,%(import_timestamp)s,%(import_source)s,%(latitude)s,%(longitude)s\r\n" % strip_none(serializer.one(a1)) +
-            "%(id)s,%(street)s,%(street_prefix)s,%(street_number)s,%(street_name)s,%(street_type)s,%(street_suffix)s,%(multi_units)s,%(city)s,%(state)s,%(complex_name)s,%(notes)s,%(pl)s,%(mapped_by)s,%(mapped_timestamp)s,%(needs_review)s,%(imported_by)s,%(import_timestamp)s,%(import_source)s,%(latitude)s,%(longitude)s\r\n" % strip_none(serializer.one(a2))
+            "id,street,street_prefix,street_number,street_name,street_type,street_suffix,street_is_parsed,multi_units,city,state,complex_name,notes,pl,mapped_by,mapped_timestamp,needs_review,imported_by,import_timestamp,import_source,latitude,longitude\r\n" +
+            "%(id)s,%(street)s,%(street_prefix)s,%(street_number)s,%(street_name)s,%(street_type)s,%(street_suffix)s,%(street_is_parsed)s,%(multi_units)s,%(city)s,%(state)s,%(complex_name)s,%(notes)s,%(pl)s,%(mapped_by)s,%(mapped_timestamp)s,%(needs_review)s,%(imported_by)s,%(import_timestamp)s,%(import_source)s,%(latitude)s,%(longitude)s\r\n" % strip_none(serializer.one(a1)) +
+            "%(id)s,%(street)s,%(street_prefix)s,%(street_number)s,%(street_name)s,%(street_type)s,%(street_suffix)s,%(street_is_parsed)s,%(multi_units)s,%(city)s,%(state)s,%(complex_name)s,%(notes)s,%(pl)s,%(mapped_by)s,%(mapped_timestamp)s,%(needs_review)s,%(imported_by)s,%(import_timestamp)s,%(import_source)s,%(latitude)s,%(longitude)s\r\n" % strip_none(serializer.one(a2))
             )

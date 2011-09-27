@@ -77,6 +77,7 @@ class AddressTest(TestCase):
             street_type="St")
 
         self.assertEqual(a.parsed_street, "123 Main St")
+        self.assertEqual(a.street_is_parsed, True)
 
 
     def test_street_property(self):
@@ -86,6 +87,7 @@ class AddressTest(TestCase):
             street_type="St")
 
         self.assertEqual(a.street, "123 Main St")
+        self.assertEqual(a.street_is_parsed, True)
 
 
     def test_street_property_unparsed(self):
@@ -99,6 +101,7 @@ class AddressTest(TestCase):
             )
 
         self.assertEqual(a.street, "123 Main St")
+        self.assertEqual(a.street_is_parsed, False)
 
 
     def test_parcel_property(self):
