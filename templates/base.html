@@ -83,31 +83,29 @@
 
   {% include "_messages.html" %}
 
-  <div class="nav">
-    <nav role="navigation">
-      <h2 class="navhead">Primary Navigation</h2>
-      <ul>
-        {% if user.is_authenticated %}
-        <li class="history">
-          <a href="/history/">History</a>
-        </li>
-        {% endif %}
-      </ul>
-    </nav>
-
-    <nav class="meta">
-      <h2 class="navhead">Account Navigation</h2>
+  <nav role="navigation">
+    <h2 class="navhead">Primary Navigation</h2>
+    <ul>
       {% if user.is_authenticated %}
-      <p>
-        Welcome {{ request.user.first_name|default:request.user.username }}
-        [
-        <a href="{% url account_logout %}">Sign Out</a>,
-        <a href="{% url account_password_change %}">Change password</a>
-        ]
-      </p>
+      <li class="history">
+        <a href="/history/">History</a>
+      </li>
       {% endif %}
-    </nav>
-  </div>
+    </ul>
+  </nav>
+
+  <nav class="meta">
+    <h2 class="navhead">Account Navigation</h2>
+    {% if user.is_authenticated %}
+    <p>
+      Welcome {{ request.user.first_name|default:request.user.username }}
+      [
+      <a href="{% url account_logout %}">Sign Out</a>,
+      <a href="{% url account_password_change %}">Change password</a>
+      ]
+    </p>
+    {% endif %}
+  </nav>
 </header>
 
 <div id="main" role="main">
@@ -117,8 +115,9 @@
 </div><!-- /~main -->
 
 <footer role="contentinfo">
+  <span class="copy">&copy;</span>
   <div id="hcard-client-name" class="author vcard">
-    <small>copyright &copy; 2011</small>
+    <small>copyright 2011</small>
     <strong class="fn org">The Providence Plan</strong> |
     <span class="adr">
       <span class="street-address">10 Davol Square Suite 300</span>,

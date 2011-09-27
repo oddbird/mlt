@@ -10,7 +10,13 @@ $base   : $dark
 $alt    : #005498
 $accent : complement($alt)
 
-$lighter : lighten($light,15)
+$alt-light  : desaturate(lighten($alt,15),5)
+$alt-lighter: desaturate(lighten($alt,30),10)
+$alt-lightest: desaturate(lighten($alt,50),20)
+
+$lighter: lighten($light,15)
+
+$green  : hsl(110, 60%, 25%)
 
 $contrasted-dark-default  : $base
 $contrasted-light-default : $light
