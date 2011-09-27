@@ -1,3 +1,27 @@
+/* Typography ----------------------------------------------------------------
+
+.serif
+  +serif-family
+
+.sans
+  +sans-family
+
+.mono
+  +monospace-family
+
+.caps
+  letter-spacing: .1em
+
+.allcaps
+  @extend .caps
+  text-transform: uppercase
+
+.smallcaps
+  @extend .caps
+  font-variant: small-caps
+
+// ellipsis ------------------------------------------------------------------
+
 =ellipsis($r:1)
   overflow: hidden
   max-height: rhythm($r)
@@ -5,3 +29,4 @@
   word-wrap: break-word
   -o-text-overflow: ellipsis
   text-overflow: ellipsis
+

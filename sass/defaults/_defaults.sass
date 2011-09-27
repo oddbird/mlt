@@ -1,72 +1,9 @@
 // Imports -------------------------------------------------------------------
 
-@import base
 @import compass/reset
-
-/* Typography ----------------------------------------------------------------
-
-.serif
-  +serif-family
-
-.sans
-  +sans-family
-
-.mono
-  +monospace-family
-
-.caps
-  letter-spacing: .1em
-
-.allcaps
-  @extend .caps
-  text-transform: uppercase
-
-.smallcaps
-  @extend .caps
-  font-variant: small-caps
-
-/* Helpers -------------------------------------------------------------------
-
-.full
-  display: block
-  float: none
-  width: auto
-
-.half
-  max-width: 50%
-
-.left
-  +float(left)
-  margin:
-    right: 1em
-    bottom: 0.5em
-
-.right
-  +float(right)
-  margin:
-    left: 1em
-    bottom: 0.5em
-
-[contenteditable]
-  color: $alt !important
-  text-align: left
-  min-width: 1em
-
-/* Root ----------------------------------------------------------------------
-
-+establish-baseline
-
-html
-  text-rendering: optimizeLegibility
-  -webkit-font-smoothing: antialiased
-  -webkit-text-size-adjust: 100%
-  -ms-text-size-adjust: 100%
-
-body
-  @extend .sans
-  +baseline-grid-background
-  +text-shadow(rgba(white,$small) 0 1px 0)
-  color: $base
+@import ../settings/settings
+@import ../helpers/helpers
+@import root
 
 /* Selected Text -------------------------------------------------------------
 
@@ -108,7 +45,11 @@ a
 
 /* Headings ------------------------------------------------------------------
 
-h1, h2
+h1
+  +adjust-font-size-to($medpx,1)
+  +bold
+
+h2
   @extend .allcaps
 
 h3, h4
@@ -277,4 +218,4 @@ caption
 
 /* Forms ---------------------------------------------------------------------
 
-@import modules/forms
+@import forms

@@ -1,27 +1,3 @@
-@font-face { font-family: "CambridgeRound"; src: url('../fonts/cambridgeround_regular_macroman/cambridge_round-webfont.woff') format('woff'), url('../fonts/cambridgeround_regular_macroman/cambridge_round-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_regular_macroman/cambridge_round-webfont.svg#CambridgeRound') format('svg'); font-weight: normal; font-style: normal; }
-
-@font-face { font-family: "CambridgeRound"; src: url('../fonts/cambridgeround_light_macroman/cambridge_round_light-webfont.woff') format('woff'), url('../fonts/cambridgeround_light_macroman/cambridge_round_light-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_light_macroman/cambridge_round_light-webfont.svg#CambridgeRoundLight') format('svg'); font-weight: 200; font-style: normal; }
-
-@font-face { font-family: "CambridgeRound"; src: url('../fonts/cambridgeround_semibold_macroman/cambridge_round_semibold-webfont.woff') format('woff'), url('../fonts/cambridgeround_semibold_macroman/cambridge_round_semibold-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_semibold_macroman/cambridge_round_semibold-webfont.svg#CambridgeRoundSemibold') format('svg'); font-weight: 500; font-style: normal; }
-
-@font-face { font-family: "CambridgeRound"; src: url('../fonts/cambridgeround_bold_macroman/cambridge_round_bold-webfont.woff') format('woff'), url('../fonts/cambridgeround_bold_macroman/cambridge_round_bold-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_bold_macroman/cambridge_round_bold-webfont.svg#CambridgeRoundBold') format('svg'); font-weight: 700; font-style: normal; }
-
-@font-face { font-family: "CambridgeRound"; src: url('../fonts/cambridgeround_italic_macroman/cambridge_round_it-webfont.woff') format('woff'), url('../fonts/cambridgeround_italic_macroman/cambridge_round_it-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_italic_macroman/cambridge_round_it-webfont.svg#CambridgeRoundItalic') format('svg'); font-weight: normal; font-style: italic; }
-
-@font-face { font-family: "CambridgeRoundCond"; src: url('../fonts/cambridgeround_condensed_macroman/cambridge_round_cond-webfont.woff') format('woff'), url('../fonts/cambridgeround_condensed_macroman/cambridge_round_cond-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_condensed_macroman/cambridge_round_cond-webfont.svg#CambridgeRoundCondensed') format('svg'); font-weight: normal; font-style: normal; }
-
-@font-face { font-family: "CambridgeRoundCond"; src: url('../fonts/cambridgeround_boldcondensed_macroman/cambridge_round_bold_cond-webfont.woff') format('woff'), url('../fonts/cambridgeround_boldcondensed_macroman/cambridge_round_bold_cond-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_boldcondensed_macroman/cambridge_round_bold_cond-webfont.svg#CambridgeRoundBoldCondensed') format('svg'); font-weight: 700; font-style: normal; }
-
-@font-face { font-family: "CambridgeRoundCond"; src: url('../fonts/cambridgeround_semiboldcondensed_macroman/cambridge_round_semibold_cond-webfont.woff') format('woff'), url('../fonts/cambridgeround_semiboldcondensed_macroman/cambridge_round_semibold_cond-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_semiboldcondensed_macroman/cambridge_round_semibold_cond-webfont.svg#CambridgeRoundBoldCondensed') format('svg'); font-weight: 500; font-style: normal; }
-
-/* ! Web Fonts from fontspring.com  All OpenType features and all extended glyphs have been removed. Fully installable fonts can be purchased at http://www.fontspring.com  The fonts included in this stylesheet are subject to the End User License you purchased from Fontspring. The fonts are protected under domestic and international trademark and copyright law. You are prohibited from modifying, reverse engineering, duplicating, or distributing this font software.  (c) 2010-2011 Fontspring     The fonts included are copyrighted by the vendor listed below.  Vendor:      Aviation Partners License URL: http://www.fontspring.com/fflicense/aviation-partners   */
-/* Lightboxes -------------------------------------------------------------- */
-#lightboxes h2 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
-#lightboxes aside { margin: 0; padding: 0; border: 0; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; position: absolute; top: 0; right: 0; bottom: 0; left: 0; display: block; z-index: -1; }
-#lightboxes aside:target { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; z-index: 999; }
-#lightboxes aside.active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; z-index: 999; }
-#lightboxes aside > div { -moz-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); -webkit-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); -o-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); position: relative; margin: 3em auto; padding: 1.618em; width: 52.236em; border: 1em solid; background: white; text-align: left; }
-
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0; padding: 0; border: 0; font-size: 100%; font: inherit; vertical-align: baseline; }
 
 body { line-height: 1; }
@@ -39,6 +15,23 @@ a img { border: none; }
 
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
 
+@font-face { font-family: "CambridgeRound"; src: url('../fonts/cambridgeround_regular_macroman/cambridge_round-webfont.woff') format('woff'), url('../fonts/cambridgeround_regular_macroman/cambridge_round-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_regular_macroman/cambridge_round-webfont.svg#CambridgeRound') format('svg'); font-weight: normal; font-style: normal; }
+
+@font-face { font-family: "CambridgeRound"; src: url('../fonts/cambridgeround_light_macroman/cambridge_round_light-webfont.woff') format('woff'), url('../fonts/cambridgeround_light_macroman/cambridge_round_light-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_light_macroman/cambridge_round_light-webfont.svg#CambridgeRoundLight') format('svg'); font-weight: 200; font-style: normal; }
+
+@font-face { font-family: "CambridgeRound"; src: url('../fonts/cambridgeround_semibold_macroman/cambridge_round_semibold-webfont.woff') format('woff'), url('../fonts/cambridgeround_semibold_macroman/cambridge_round_semibold-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_semibold_macroman/cambridge_round_semibold-webfont.svg#CambridgeRoundSemibold') format('svg'); font-weight: 500; font-style: normal; }
+
+@font-face { font-family: "CambridgeRound"; src: url('../fonts/cambridgeround_bold_macroman/cambridge_round_bold-webfont.woff') format('woff'), url('../fonts/cambridgeround_bold_macroman/cambridge_round_bold-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_bold_macroman/cambridge_round_bold-webfont.svg#CambridgeRoundBold') format('svg'); font-weight: 700; font-style: normal; }
+
+@font-face { font-family: "CambridgeRound"; src: url('../fonts/cambridgeround_italic_macroman/cambridge_round_it-webfont.woff') format('woff'), url('../fonts/cambridgeround_italic_macroman/cambridge_round_it-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_italic_macroman/cambridge_round_it-webfont.svg#CambridgeRoundItalic') format('svg'); font-weight: normal; font-style: italic; }
+
+@font-face { font-family: "CambridgeRoundCond"; src: url('../fonts/cambridgeround_condensed_macroman/cambridge_round_cond-webfont.woff') format('woff'), url('../fonts/cambridgeround_condensed_macroman/cambridge_round_cond-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_condensed_macroman/cambridge_round_cond-webfont.svg#CambridgeRoundCondensed') format('svg'); font-weight: normal; font-style: normal; }
+
+@font-face { font-family: "CambridgeRoundCond"; src: url('../fonts/cambridgeround_boldcondensed_macroman/cambridge_round_bold_cond-webfont.woff') format('woff'), url('../fonts/cambridgeround_boldcondensed_macroman/cambridge_round_bold_cond-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_boldcondensed_macroman/cambridge_round_bold_cond-webfont.svg#CambridgeRoundBoldCondensed') format('svg'); font-weight: 700; font-style: normal; }
+
+@font-face { font-family: "CambridgeRoundCond"; src: url('../fonts/cambridgeround_semiboldcondensed_macroman/cambridge_round_semibold_cond-webfont.woff') format('woff'), url('../fonts/cambridgeround_semiboldcondensed_macroman/cambridge_round_semibold_cond-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_semiboldcondensed_macroman/cambridge_round_semibold_cond-webfont.svg#CambridgeRoundBoldCondensed') format('svg'); font-weight: 500; font-style: normal; }
+
+/* ! Web Fonts from fontspring.com  All OpenType features and all extended glyphs have been removed. Fully installable fonts can be purchased at http://www.fontspring.com  The fonts included in this stylesheet are subject to the End User License you purchased from Fontspring. The fonts are protected under domestic and international trademark and copyright law. You are prohibited from modifying, reverse engineering, duplicating, or distributing this font software.  (c) 2010-2011 Fontspring     The fonts included are copyrighted by the vendor listed below.  Vendor:      Aviation Partners License URL: http://www.fontspring.com/fflicense/aviation-partners   */
 /* Typography ---------------------------------------------------------------- */
 .serif { font-family: Cambria, Georgia, serif; }
 
@@ -46,20 +39,18 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 
 .mono, pre, code, tt { font-family: "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, Courier, monospace, sans-serif; }
 
-.caps, .allcaps, h1, h2, caption, .smallcaps { letter-spacing: 0.1em; }
+.caps, .allcaps, h2, caption, .smallcaps { letter-spacing: 0.1em; }
 
-.allcaps, h1, h2, caption { text-transform: uppercase; }
+.allcaps, h2, caption { text-transform: uppercase; }
 
 .smallcaps { font-variant: small-caps; }
 
-/* Helpers ------------------------------------------------------------------- */
-.full { display: block; float: none; width: auto; }
-
-.half { max-width: 50%; }
-
-.left { display: inline; float: left; margin-right: 1em; margin-bottom: 0.5em; }
-
-.right { display: inline; float: right; margin-left: 1em; margin-bottom: 0.5em; }
+/* Lightboxes -------------------------------------------------------------- */
+#lightboxes h2 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
+#lightboxes aside { margin: 0; padding: 0; border: 0; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; position: absolute; top: 0; right: 0; bottom: 0; left: 0; display: block; z-index: -1; }
+#lightboxes aside:target { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; z-index: 999; }
+#lightboxes aside.active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; z-index: 999; }
+#lightboxes aside > div { -moz-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); -webkit-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); -o-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); position: relative; margin: 3em auto; padding: 1.618em; width: 52.236em; border: 1em solid; background: white; text-align: left; }
 
 [contenteditable] { color: #005498 !important; text-align: left; min-width: 1em; }
 
@@ -85,6 +76,8 @@ a:link, a:visited { color: #005498; text-decoration: none; }
 a:focus, a:hover, a:active { color: #984400; }
 
 /* Headings ------------------------------------------------------------------ */
+h1 { font-size: 1.618em; line-height: 1em; font-weight: 700; }
+
 h3, h4 { font-weight: 700; }
 
 h5, h6 { font-style: italic; }
@@ -230,35 +223,41 @@ button[disabled] { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=
 
 /* Modules ------------------------------------------------------------------- */
 /* Layout -------------------------------------------------------------- */
-.container, [role="banner"], [role="main"], [role="contentinfo"] { *zoom: 1; width: 100%; min-width: 65em; }
-.container:after, [role="banner"]:after, [role="main"]:after, [role="contentinfo"]:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
+.container, [role="banner"], [role="main"] { *zoom: 1; width: 100%; min-width: 65em; }
+.container:after, [role="banner"]:after, [role="main"]:after { content: "\0020"; display: block; height: 0; clear: both; overflow: hidden; visibility: hidden; }
 
-#messages { margin: 0; padding: 0; border: 0; list-style: none; display: inline; float: left; width: 50.685%; margin-right: 0.685%; }
+[role="banner"] { overflow: hidden; *zoom: 1; padding-top: 0.809em; padding-bottom: 0.809em; }
+
+h1 { display: inline; float: left; width: 19.863%; margin-right: 0.685%; margin-left: 0.685%; padding-top: 0.25em; padding-bottom: 0.25em; }
+h1 a:link, h1 a:visited { display: block; color: #266619; }
+h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
+
+#messages { margin: 0; padding: 0; border: 0; list-style: none; display: inline; float: left; width: 47.26%; margin-right: 0.685%; }
 #messages li { list-style-image: none; list-style-type: none; margin-left: 0px; }
 #messages p { margin: 0; }
-#messages .message { padding: 0.405em 0.5em; background: rgba(221, 221, 221, 0.25); position: relative; cursor: pointer; }
+#messages .message { padding: 0.405em 0.809em; background: rgba(221, 221, 221, 0.25); position: relative; cursor: pointer; }
 #messages .message:hover::after { position: absolute; right: 1em; top: 0.5em; content: url('../images/ui/x.png?1307817035'); }
 #messages .success { background: rgba(200, 250, 200, 0.95); }
 #messages .warning { background: rgba(250, 250, 200, 0.95); }
 #messages .error { background: rgba(250, 200, 200, 0.95); }
 
-[role="banner"] { overflow: hidden; *zoom: 1; padding-top: 0.405em; padding-bottom: 0.405em; border-color: #dddddd; }
+[role="navigation"] { display: inline; float: left; width: 6.164%; margin-right: 0.685%; display: inline; float: right; margin-right: 0.685%; #margin-left: -0.809em; }
+[role="navigation"] a:link, [role="navigation"] a:visited { -moz-border-radius: 0.382em; -webkit-border-radius: 0.382em; -o-border-radius: 0.382em; -ms-border-radius: 0.382em; -khtml-border-radius: 0.382em; border-radius: 0.382em; padding-top: 0.405em; padding-bottom: 0.405em; padding-left: 12px; padding-right: 12px; display: block; text-align: center; background: rgba(221, 221, 221, 0.382) no-repeat scroll 12px; }
+[role="navigation"] a:focus, [role="navigation"] a:hover, [role="navigation"] a:active, [role="navigation"] a.active { background-color: rgba(221, 221, 221, 0.618); }
+[role="navigation"] .history a:link, [role="navigation"] .history a:visited { padding-left: 28.584px; background-image: url('../images/ui/history.png?1305749879'); }
 
-h1 { display: inline; float: left; width: 16.438%; margin-right: 0.685%; margin-left: 0.685%; padding-top: 0.405em; padding-bottom: 0.405em; }
-h1 a:link, h1 a:visited { display: block; }
+.meta { display: inline; float: left; width: 23.288%; margin-right: 0.685%; display: inline; float: right; padding-top: 0.405em; padding-bottom: 0.405em; text-align: right; }
 
-.nav { display: inline; float: left; width: 30.137%; margin-right: 0.685%; display: inline; float: right; margin-right: 0.685%; #margin-left: -0.809em; }
+[role="main"] { overflow: hidden; *zoom: 1; position: relative; background: white; }
 
-[role="navigation"] { display: inline; float: left; width: 20.455%; margin-right: 2.273%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; }
-[role="navigation"] .history a:link, [role="navigation"] .history a:visited { -moz-border-radius: 0.382em; -webkit-border-radius: 0.382em; -o-border-radius: 0.382em; -ms-border-radius: 0.382em; -khtml-border-radius: 0.382em; border-radius: 0.382em; padding-top: 0.405em; padding-bottom: 0.405em; display: block; padding-left: 28.584px; padding-right: 12px; text-align: center; background: rgba(221, 221, 221, 0.382) url('../images/ui/history.png?1305749879') no-repeat scroll 12px; }
-[role="navigation"] .history a:focus, [role="navigation"] .history a:hover, [role="navigation"] .history a:active, [role="navigation"] .history a.active { background-color: rgba(221, 221, 221, 0.618); }
-
-.meta { display: inline; float: left; width: 77.273%; margin-right: 2.273%; padding-top: 0.405em; padding-bottom: 0.405em; text-align: right; }
-
-[role="main"] { overflow: hidden; *zoom: 1; position: relative; border: 1px solid #dddddd; border-width: 1px 0; }
-
-[role="contentinfo"] { padding-top: 0.809em; padding-bottom: 0.809em; }
-[role="contentinfo"] .author { margin: 0 0.809em; }
+[role="contentinfo"] { -moz-border-radius-topright: 5px; -webkit-border-top-right-radius: 5px; -o-border-top-right-radius: 5px; -ms-border-top-right-radius: 5px; -khtml-border-top-right-radius: 5px; border-top-right-radius: 5px; -moz-transition-property: width 300ms; -webkit-transition-property: width 300ms; -o-transition-property: width 300ms; transition-property: width 300ms; -moz-transition-duration: 1s; -webkit-transition-duration: 1s; -o-transition-duration: 1s; transition-duration: 1s; position: fixed; left: 33.169em; bottom: 0; padding: 0.405em 0.809em; background: rgba(162, 208, 245, 0.85); overflow: hidden; width: 1.214em; white-space: nowrap; z-index: 900; }
+.section-history [role="contentinfo"] { left: 0; }
+[role="contentinfo"]:hover { width: auto; min-width: 50%; }
+[role="contentinfo"]:hover .author { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
+[role="contentinfo"] .copy { font-size: 1.618em; line-height: 1em; font-weight: 700; margin-right: 0.405em; }
+[role="contentinfo"] .copy, [role="contentinfo"] .author { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; }
+[role="contentinfo"] .copy, [role="contentinfo"] .author { *display: inline; }
+[role="contentinfo"] .author { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=10)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=10); opacity: 0.1; -moz-transition-property: opacity 300ms; -webkit-transition-property: opacity 300ms; -o-transition-property: opacity 300ms; transition-property: opacity 300ms; -moz-transition-duration: 1s; -webkit-transition-duration: 1s; -o-transition-duration: 1s; transition-duration: 1s; }
 [role="contentinfo"] small { font: inherit; }
 
 /* Login --------------------------------------------------------------------- */
@@ -413,7 +412,7 @@ h1 a:link, h1 a:visited { display: block; }
 .action-history { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/history.png?1305749879'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 19.417px; }
 .action-history:focus, .action-history:hover, .action-history:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 
-.action-delete { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/trash.png?1305749914'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 19.417px; height: 1.618em; }
+.action-delete { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/trash.png?1305749914'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 19.417px; height: 1.5em; }
 .action-delete:focus, .action-delete:hover, .action-delete:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 
 .action-edit { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/pencil.png?1305749898'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 19.417px; }

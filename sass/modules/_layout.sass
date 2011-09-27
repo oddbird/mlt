@@ -14,14 +14,32 @@ $side-gutter-width  : $gutter-width
   width: 100%
   min-width: 65em
 
+[role="banner"]
+  @extend .container
+  +clearfix
+  +padding-leader(.5)
+  +padding-trailer(.5)
+
+h1
+  +columns(6)
+  +alpha
+  +padding-leader(.25,$medpx)
+  +padding-trailer(.25,$medpx)
+  a
+    #{$link}
+      display: block
+      color: $green
+    #{$focus}
+      color: $accent
+
 #messages
   +no-style-list
-  +columns(15)
+  +columns(14)
   p
     margin: 0
 
   .message
-    padding: rhythm(.25) rhythm(.5,$medpx)
+    padding: rhythm(.25) rhythm(.5)
     background: rgba($light,.25)
     position: relative
     cursor: pointer
@@ -39,46 +57,30 @@ $side-gutter-width  : $gutter-width
   .error
     background: rgba(250,200,200,.95)
 
-[role="banner"]
-  @extend .container
-  +clearfix
-  +padding-leader(.25)
-  +padding-trailer(.25)
-  border-color: $light
-
-h1
-  +columns(5)
-  +alpha
-  +padding-leader(.25)
-  +padding-trailer(.25)
+[role="navigation"]
+  +columns(2)
+  +omega
   a
     #{$link}
+      +border-radius($xsmallem)
+      +padding-leader(.25)
+      +padding-trailer(.25)
+      +hpadding($normpx)
       display: block
+      text-align: center
+      background: rgba($light,$xsmall) no-repeat scroll $normpx
+    #{$focus}, &.active
+      background-color: rgba($light,$small)
 
-.nav
-  +columns(9)
-  +omega
-
-[role="navigation"]
-  +columns(2,9)
-  +omega(9)
   .history
     a
       #{$link}
-        +border-radius($xsmallem)
-        +padding-leader(.25)
-        +padding-trailer(.25)
-        display: block
-        padding:
-          left: $normpx + image-width('ui/history.png') + $xsmallpx
-          right: $normpx
-        text-align: center
-        background: rgba($light,$xsmall) image-url('ui/history.png') no-repeat scroll $normpx
-      #{$focus}, &.active
-        background-color: rgba($light,$small)
+        padding-left: $normpx + image-width('ui/history.png') + $xsmallpx
+        background-image: image-url('ui/history.png')
 
 .meta
-  +columns(7,9)
+  +columns(7)
+  +float(right)
   +padding-leader(.25)
   +padding-trailer(.25)
   text-align: right
@@ -87,14 +89,35 @@ h1
   @extend .container
   +clearfix
   position: relative
-  border: 1px solid $light
-    width: 1px 0
+  background: #fff
 
 [role="contentinfo"]
-  @extend .container
-  +padding-leader(.5)
-  +padding-trailer(.5)
+  +border-top-right-radius
+  +transition(width 300ms)
+  position: fixed
+  left: rhythm(20.5)
+  bottom: 0
+  padding: rhythm(.25) rhythm(.5)
+  background: rgba($alt-lightest,.85)
+  overflow: hidden
+  width: rhythm(.75)
+  white-space: nowrap
+  z-index: 900
+  .section-history &
+    left: 0
+  &:hover
+    width: auto
+    min-width: 50%
+    .author
+      +opacity(1)
+  .copy
+    +adjust-font-size-to($medpx,1)
+    +bold
+    margin-right: rhythm(.25)
+  .copy, .author
+    +inline-block
   .author
-    margin: 0 $side-gutter-width
+    +opacity(.1)
+    +transition(opacity 300ms)
   small
     font: inherit
