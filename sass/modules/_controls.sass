@@ -1,0 +1,64 @@
+// templates -----------------------------------------------------------------
+
+.actionbutton
+  +no-style-button
+  &.disabled
+    +opacity(.25)
+
+// actions -------------------------------------------------------------------
+
+.action-history
+  +icon('ui/history.png')
+
+.action-delete
+  @extend .actionbutton
+  +icon('ui/trash.png')
+
+.action-edit
+  +icon('ui/pencil.png')
+
+.action-cancel
+  +icon('ui/x.png')
+
+.action-complex
+  @extend .actionbutton
+  +icon('ui/house.png','ui/bldg.png')
+  &.single
+    +icon('ui/bldg.png','ui/house.png')
+
+.action-info
+  +icon('ui/angle_right.png')
+  .open &
+    background-image: image-url('ui/angle_down.png')
+
+.action-flag
+  .address &
+    +icon('ui/warning.png')
+    +opacity(0)
+
+.action-revert-all
+  @extend .actionbutton
+  +icon('ui/undo_med.png')
+  height: rhythm(1.5)
+  width: rhythm(1.5)
+
+.action-delete
+  @extend .actionbutton
+  +icon('ui/trash.png')
+.action-create
+  +icon('ui/add.png')
+
+.action-import
+  +icon('ui/import.png')
+.action-export
+  +icon('ui/export.png')
+
+.action-approve
+  @extend .actionbutton
+  +icon('ui/thumb_up.png')
+.action-flag
+  @extend .actionbutton
+  +icon('ui/warning.png')
+.action-reject
+  @extend .actionbutton
+  +icon('ui/thumb_down.png')

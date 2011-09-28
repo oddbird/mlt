@@ -131,9 +131,8 @@ input
 =no-style-button
   +button-reset
   text-align: left
-  &:hover, &:focus
-    +box-shadow(none)
-
+  &:active
+    background-image: none
 
 button,  input[type="reset"], input[type="submit"], input[type="button"], input[type="image"]
   +button-reset
@@ -152,7 +151,7 @@ button,  input[type="reset"], input[type="submit"], input[type="button"], input[
   color: contrast-color($alt)
   &:active
     +transition(none)
-    +background(linear-gradient(bottom, rgba($light,.25), rgba($light,0) 100%), $alt)
+    +background-image(linear-gradient(bottom, rgba($light,.25), rgba($light,0) 100%))
   &[disabled]
     color: #888
 

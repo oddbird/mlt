@@ -13,6 +13,14 @@
   +pie-clearfix
   +transition(all,300ms)
   position: relative
+  counter-increment: address
+  .managelist &::before
+    +cond
+    content: counter(address, decimal-leading-zero) "."
+    position: absolute
+    right: columns(7,8) + gutter(8)
+    top: rhythm(1.3)
+    color: rgba($base,0)
 
   .content
     +clearfix
@@ -44,3 +52,115 @@
     &.unmapped
       .value
         display: block
+
+  .flag
+    +gone
+    &:checked
+      + .action-flag
+        +opacity(1)
+        #{$focus}
+          +opacity(.75)
+      &[disabled]
+        + .action-flag
+          #{$focus}
+            +opacity(1)
+            cursor: inherit
+
+  .content
+    padding-right: $gutter-width
+
+  .locality, .region, .postal-code, .complex-name
+    +inline-block
+
+  .id
+    color: $alt
+    .value
+      +inline-block
+    &.unmapped
+      .value
+        color: $accent
+
+  .controls, .action-info
+    +opacity(0)
+    +transition(opacity,.3s)
+  .controls
+    +no-style-list
+    +float(left)
+    clear: right
+    li
+      +float(left)
+  .action-info
+    +float(right)
+    margin: 0
+  .action-reject
+    +float(left)
+    +opacity(0)
+  .action-flag
+    +float(left)
+
+  &:hover
+    .controls
+      +opacity(1)
+    .action-info
+      +opacity(.75)
+      #{$focus}
+        +opacity(1)
+    .action-reject
+      +opacity(.75)
+      #{$focus}
+        +opacity(1)
+    .flag
+      + .action-flag
+        +opacity(.75)
+        #{$focus}
+          +opacity(1)
+      &[disabled]
+        + .action-flag
+          +opacity(1)
+        &:not([checked])
+          + .action-flag
+            display: none
+    &::before
+      color: rgba($base,.5)
+
+  &.expanded
+    .controls
+      +opacity(.5)
+    .summary
+      +opacity(.25)
+    &:hover
+      .controls
+        +opacity(1)
+      .summary
+        +opacity(.75)
+
+  .more
+    clear: both
+    padding-left: columns(1,8) + gutter(8)
+    color: $mid
+
+  .byline
+    +padding-leader(.5)
+    +trailer(.5)
+    +italic
+    cite, time, .from
+      +demi
+      +font-style-normal
+      color: $base
+
+  .savechanges
+    @extend .actionbutton
+    +icon('ui/disk_med.png')
+    +opacity(0)
+    +transition(all,300ms)
+    height: rhythm(1)
+    position: absolute
+    top: rhythm(.25)
+    right: columns(7,8) + gutter(8)
+
+  .editing
+    background: rgba(mix(yellow,#eee), $xxxsmall)
+    .mapkey
+      +opacity(0)
+    .savechanges
+      +opacity(1)
