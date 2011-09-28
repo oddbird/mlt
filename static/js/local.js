@@ -1266,11 +1266,10 @@ var MLT = MLT || {};
 
         addressListHeight = function () {
             var headerHeight = $('header[role="banner"]').outerHeight(),
-                actionsHeight = $('.actions').outerHeight(),
-                footerHeight = $('footer[role="contentinfo"]').outerHeight(),
+                actionsHeight = $('#addressform').outerHeight(),
                 addressListHeight,
                 updateHeight = function () {
-                    addressListHeight = $(window).height() - headerHeight - actionsHeight - footerHeight - 2;
+                    addressListHeight = $(window).height() - headerHeight - actionsHeight;
                     $('.managelist').css('height', addressListHeight.toString() + 'px');
                 };
             updateHeight();
