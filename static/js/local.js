@@ -213,6 +213,8 @@ var MLT = MLT || {};
                                             var byline, web_ui, updatedAddress, newlat, newlng,
                                                 index = thisAddress.find('.mapkey').html();
 
+                                            thisAddress.loadingOverlay('remove');
+
                                             if (data.address.parcel) {
                                                 newlat = data.address.parcel.latitude;
                                                 newlng = data.address.parcel.longitude;
