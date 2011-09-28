@@ -740,6 +740,32 @@ var MLT = MLT || {};
                     });
                 },
 
+                exportAddresses = function () {
+                    var form = $('#export-address-form'),
+                        url = form.attr('action');
+
+                    form.submit(function () {
+                        form.find('.export-filter').remove();
+                        $.each(filters, function (field, filter) {
+                            if (field === 'status') {
+                                var input = ich.export_filter({
+                                    field: field,
+                                    filter: filter
+                                });
+                                form.append(input);
+                            } else {
+                                for (var i = 0; i < filter.length; i = i + 1) {
+                                    var input = ich.export_filter({
+                                        field: field,
+                                        filter: filter[i]
+                                    });
+                                    form.append(input);
+                                }
+                            }
+                        });
+                    });
+                },
+
                 editAddress = function () {
                     addressContainer.delegate('.action-edit', 'click', function (e) {
                         e.preventDefault();
@@ -1230,6 +1256,7 @@ var MLT = MLT || {};
             addressDetails();
             addressSelect();
             addressZoom();
+            exportAddresses();
             editAddress();
             addAddress();
             addressActions();
