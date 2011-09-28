@@ -752,7 +752,7 @@ var MLT = MLT || {};
 
                         content.addClass('editing').append('<button class="savechanges" title="save changes">save changes</button>');
                         addressInfo.find('.complex-name.empty').show();
-                        addressInfo.unwrap().find('.locality, .region, .complex-name span').each(function () {
+                        addressInfo.unwrap().find('.locality, .region, .complex').each(function () {
                             $(this).attr('contenteditable', true).data('original', $(this).text());
                         });
                         if (street.data('parsed')) {
@@ -783,7 +783,7 @@ var MLT = MLT || {};
                         button.removeClass('action-cancel').addClass('action-edit').attr('title', 'edit').html('edit');
                         notes.removeAttr('contenteditable').text(notes.data('original'));
                         addressInfo.find('.complex-name.empty').hide();
-                        addressInfo.wrap('<label for="select_' + id + '" />').find('.locality, .region, .complex-name span').each(function () {
+                        addressInfo.wrap('<label for="select_' + id + '" />').find('.locality, .region, .complex').each(function () {
                             $(this).removeAttr('contenteditable').text($(this).data('original'));
                         });
                         if (street.data('parsed')) {
@@ -814,7 +814,7 @@ var MLT = MLT || {};
                                 street_suffix: street.find('.street-suffix').text(),
                                 city: addressInfo.find('.locality').text(),
                                 state: addressInfo.find('.region').text(),
-                                complex_name: addressInfo.find('.complex-name span').text(),
+                                complex_name: addressInfo.find('.complex').text(),
                                 notes: notes.text()
                             };
                         } else {
@@ -822,7 +822,7 @@ var MLT = MLT || {};
                                 edited_street: street.text(),
                                 city: addressInfo.find('.locality').text(),
                                 state: addressInfo.find('.region').text(),
-                                complex_name: addressInfo.find('.complex-name span').text(),
+                                complex_name: addressInfo.find('.complex').text(),
                                 notes: notes.text()
                             };
                         }
