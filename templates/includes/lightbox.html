@@ -1,3 +1,5 @@
+{% load icanhaz %}
+
 <aside id="lightbox-add-address" data-add-address-url="{% url map_add_address %}">
 <div>
   {# includes/add_address/form.html is pulled in via ajax #}
@@ -13,6 +15,7 @@
 <aside id="lightbox-export-addresses">
 <div>
   <h3>export addresses</h3>
+  {% icanhaz "export_filter" %}
   <form id="export-address-form" action="{% url map_export_addresses %}" method="GET">
     <label for="export_addresses">select an export file format</label>
     <select name="export_format" id="export_addresses">
