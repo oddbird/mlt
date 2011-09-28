@@ -10,6 +10,11 @@
       {{ form.street_number|label:"number" }}
       {{ form.street_number|placeholder:"number" }}
     </li>
+    <li class="street-prefix">
+      {{ form.street_prefix.errors }}
+      {{ form.street_prefix|label:"street prefix" }}
+      {{ form.street_prefix|placeholder:"n, s, etc." }}
+    </li>
     <li class="street-name">
       {{ form.street_name.errors }}
       {{ form.street_name|label:"street" }}
@@ -19,6 +24,11 @@
       {{ form.street_type.errors }}
       {{ form.street_type|label:"street type" }}
       {{ form.street_type|placeholder:"st, ave, etc." }}
+    </li>
+    <li class="street-suffix">
+      {{ form.street_suffix.errors }}
+      {{ form.street_suffix|label:"street suffix" }}
+      {{ form.street_suffix|placeholder:"n, s, etc." }}
     </li>
     <li class="locality">
       {{ form.city.errors }}
