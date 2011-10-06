@@ -427,14 +427,18 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 .listordering .dir.desc:link, .listordering .dir.desc:visited { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/angle_down.png?1317931604'); background-repeat: no-repeat; background-position: 50% 50%; }
 .listordering .dir.desc:focus, .listordering .dir.desc:hover, .listordering .dir.desc:active { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/angle_up.png?1317931604'); background-repeat: no-repeat; background-position: 50% 50%; }
 
+#add-address-form { overflow: hidden; *zoom: 1; }
 #add-address-form label { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #add-address-form li { margin-bottom: 0.809em; }
 #add-address-form .street-number { display: inline; float: left; width: 18.367%; margin-right: 2.041%; }
-#add-address-form .street-name { display: inline; float: left; width: 59.184%; margin-right: 2.041%; }
+#add-address-form .street-prefix, #add-address-form .street-suffix { display: inline; float: left; width: 8.163%; margin-right: 2.041%; }
+#add-address-form .street-name { display: inline; float: left; width: 38.776%; margin-right: 2.041%; }
 #add-address-form .street-type { display: inline; float: left; width: 18.367%; margin-right: 2.041%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; }
+#add-address-form .locality { clear: both; }
 #add-address-form .units { display: inline; float: left; width: 18.367%; margin-right: 2.041%; padding-top: 0.405em; }
 #add-address-form .units label { position: static; clip: auto; overflow: visible; height: auto; margin: 0; width: auto; }
 #add-address-form .complex { display: inline; float: left; width: 79.592%; margin-right: 2.041%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; }
+#add-address-form .locality, #add-address-form #id_notes { display: block; }
 
 #export-address-form, #import-address-form { margin-top: 1.618em; }
 #export-address-form label, #import-address-form label { display: block; }

@@ -153,17 +153,22 @@
 // Lightboxes ----------------------------------------------------------------
 
 #add-address-form
+  +clearfix
   label
     +gone
   li
     +trailer(.5)
   .street-number
     +columns(2,10)
+  .street-prefix, .street-suffix
+    +columns(1,10)
   .street-name
-    +columns(6,10)
+    +columns(4,10)
   .street-type
     +columns(2,10)
     +omega(10)
+  .locality
+    +full(10)
   .units
     +columns(2,10)
     +padding-leader(.25)
@@ -172,6 +177,9 @@
   .complex
     +columns(8,10)
     +omega(10)
+
+  .locality, #id_notes
+    display: block
 
 #export-address-form, #import-address-form
   +leader(1)
