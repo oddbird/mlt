@@ -434,11 +434,12 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 #add-address-form .street-number { display: inline; float: left; width: 18.367%; margin-right: 2.041%; }
 #add-address-form .street-prefix, #add-address-form .street-suffix { display: inline; float: left; width: 8.163%; margin-right: 2.041%; }
 #add-address-form .street-name { display: inline; float: left; width: 38.776%; margin-right: 2.041%; }
-#add-address-form .street-type { display: inline; float: left; width: 18.367%; margin-right: 2.041%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; }
+#add-address-form .street-type { display: inline; float: left; width: 18.367%; margin-right: 2.041%; }
 #add-address-form .locality { clear: both; }
 #add-address-form .units { display: inline; float: left; width: 18.367%; margin-right: 2.041%; padding-top: 0.405em; }
 #add-address-form .units label { position: static; clip: auto; overflow: visible; height: auto; margin: 0; width: auto; }
-#add-address-form .complex { display: inline; float: left; width: 79.592%; margin-right: 2.041%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; }
+#add-address-form .complex { display: inline; float: left; width: 79.592%; margin-right: 2.041%; }
+#add-address-form .complex, #add-address-form .street-suffix { display: inline; float: right; margin-right: 0; #margin-left: -0.809em; }
 #add-address-form .locality, #add-address-form #id_notes { display: block; }
 
 #export-address-form, #import-address-form { margin-top: 1.618em; }
