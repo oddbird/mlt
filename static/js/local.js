@@ -213,6 +213,8 @@ var MLT = MLT || {};
                                             var byline, web_ui, updatedAddress, newlat, newlng,
                                                 index = thisAddress.find('.mapkey').html();
 
+                                            thisAddress.loadingOverlay('remove');
+
                                             if (data.address.parcel) {
                                                 newlat = data.address.parcel.latitude;
                                                 newlng = data.address.parcel.longitude;
@@ -737,6 +739,32 @@ var MLT = MLT || {};
                         } else {
                             thisAddress.find('input[name="select"]').click();
                         }
+                    });
+                },
+
+                exportAddresses = function () {
+                    var form = $('#export-address-form'),
+                        url = form.attr('action');
+
+                    form.submit(function () {
+                        form.find('.export-filter').remove();
+                        $.each(filters, function (field, filter) {
+                            if (field === 'status') {
+                                var input = ich.export_filter({
+                                    field: field,
+                                    filter: filter
+                                });
+                                form.append(input);
+                            } else {
+                                for (var i = 0; i < filter.length; i = i + 1) {
+                                    var input = ich.export_filter({
+                                        field: field,
+                                        filter: filter[i]
+                                    });
+                                    form.append(input);
+                                }
+                            }
+                        });
                     });
                 },
 
@@ -1266,6 +1294,7 @@ var MLT = MLT || {};
             addressDetails();
             addressSelect();
             addressZoom();
+            exportAddresses();
             editAddress();
             addAddress();
             addressActions();
@@ -1275,11 +1304,10 @@ var MLT = MLT || {};
 
         addressListHeight = function () {
             var headerHeight = $('header[role="banner"]').outerHeight(),
-                actionsHeight = $('.actions').outerHeight(),
-                footerHeight = $('footer[role="contentinfo"]').outerHeight(),
+                actionsHeight = $('#addressform').outerHeight(),
                 addressListHeight,
                 updateHeight = function () {
-                    addressListHeight = $(window).height() - headerHeight - actionsHeight - footerHeight - 2;
+                    addressListHeight = $(window).height() - headerHeight - actionsHeight;
                     $('.managelist').css('height', addressListHeight.toString() + 'px');
                 };
             updateHeight();

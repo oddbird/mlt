@@ -2,9 +2,6 @@
   +button-reset
   +icon('ui/undo_med.png')
 
-.action-history
-  +icon('ui/history_med.png')
-
 .complex
   +float(right)
   margin: 0
@@ -18,14 +15,13 @@
     display: block
 
 #history
-  +full
   h2
     +gone
 
 .revisionlist
   .content
-    +full(29)
     +pie-clearfix
+    +hpadding(gutter())
     border-bottom: 1px solid $light
     background: rgba($light,$xxsmall)
   .changes
@@ -94,9 +90,3 @@
     mark
       +hpadding(rhythm(.25))
       display: block
-
-  mark
-    &.keep
-      background: rgba(green,.125)
-    &.change
-      background: rgba(red,.125)

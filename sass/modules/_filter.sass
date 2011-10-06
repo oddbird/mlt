@@ -3,6 +3,7 @@
 #filter
   +background-image(linear-gradient(right,rgba($light,.5),rgba($light,0) rhythm(3),rgba($light,0)))
   position: relative
+  height: rhythm(1.5)
   #addresstable &
     +full(8)
   #history &
@@ -136,6 +137,7 @@
           background-image: image-url('ui/x.png')
 
   .refresh
+    @extend .actionbutton
     +float(left)
     +icon('ui/refresh.png')
     width: rhythm(1.5)

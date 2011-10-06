@@ -131,15 +131,14 @@ input
 =no-style-button
   +button-reset
   text-align: left
-  &:hover, &:focus
-    +box-shadow(none)
-
+  &:active
+    background-image: none
 
 button,  input[type="reset"], input[type="submit"], input[type="button"], input[type="image"]
   +button-reset
 
 .button
-  +border-radius(1em)
+  +border-radius
   +background($alt)
   +background(linear-gradient(top, rgba($light,.25), rgba($light,0) 100%), $alt)
   +rhythm-borders(1px,.25)
@@ -150,9 +149,11 @@ button,  input[type="reset"], input[type="submit"], input[type="button"], input[
   vertical-align: baseline
   cursor: pointer
   color: contrast-color($alt)
+  &:focus
+    +focus-default
   &:active
     +transition(none)
-    +background(linear-gradient(bottom, rgba($light,.25), rgba($light,0) 100%), $alt)
+    +background-image(linear-gradient(bottom, rgba($light,.25), rgba($light,0) 100%))
   &[disabled]
     color: #888
 
