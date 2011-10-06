@@ -38,6 +38,8 @@
   .street-address
     +demi
     color: $base
+    span
+      +inline-block
 
   .id
     +columns(3,8)
@@ -135,12 +137,12 @@
         +opacity(.75)
 
   .more
+    +padding-leader(.5)
     clear: both
     padding-left: columns(1,8) + gutter(8)
     color: $mid
 
   .byline
-    +padding-leader(.5)
     +trailer(.5)
     +italic
     cite, time, .from
@@ -161,6 +163,7 @@
   .editing
     background: rgba(mix(yellow,#eee), $xxxsmall)
     .mapkey
-      +opacity(0)
+      display: none
     .savechanges
       +opacity(1)
+      z-index: 600

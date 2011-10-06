@@ -52,7 +52,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 #lightboxes aside.active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; z-index: 999; }
 #lightboxes aside > div { -moz-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); -webkit-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); -o-box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); box-shadow: 0 0 1em rgba(0, 0, 0, 0.9); position: relative; margin: 3em auto; padding: 1.618em; width: 52.236em; border: 1em solid; background: white; text-align: left; }
 
-[contenteditable] { color: #005498 !important; text-align: left; min-width: 1em; }
+[contenteditable] { color: #005498 !important; text-align: left; min-width: 1em; min-height: 1.618em; }
 [contenteditable]:focus, [contenteditable]:hover, [contenteditable]:active { outline: 1px dotted; }
 
 /* Root ---------------------------------------------------------------------- */
