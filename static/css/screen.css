@@ -236,6 +236,7 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 
 #messages { margin: 0; padding: 0; border: 0; list-style: none; position: absolute; left: 20.548%; right: 30.822%; -moz-border-radius: 5px; -webkit-border-radius: 5px; -o-border-radius: 5px; -ms-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; -moz-box-shadow: #4c4c4c 0 1px 0.25em; -webkit-box-shadow: #4c4c4c 0 1px 0.25em; -o-box-shadow: #4c4c4c 0 1px 0.25em; box-shadow: #4c4c4c 0 1px 0.25em; z-index: 999; }
 #messages li { list-style-image: none; list-style-type: none; margin-left: 0px; }
+.loggedout #messages { right: 20.548%; }
 #messages p { margin: 0; }
 #messages .message { overflow: hidden; *zoom: 1; padding: 0.405em 0.809em; background: rgba(221, 221, 221, 0.25); position: relative; }
 #messages .message:first-child { -moz-border-radius-topleft: 5px; -webkit-border-top-left-radius: 5px; -o-border-top-left-radius: 5px; -ms-border-top-left-radius: 5px; -khtml-border-top-left-radius: 5px; border-top-left-radius: 5px; -moz-border-radius-topright: 5px; -webkit-border-top-right-radius: 5px; -o-border-top-right-radius: 5px; -ms-border-top-right-radius: 5px; -khtml-border-top-right-radius: 5px; border-top-right-radius: 5px; }
@@ -258,7 +259,7 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 [role="main"] { overflow: hidden; *zoom: 1; position: relative; background: white; }
 
 [role="contentinfo"] { -moz-border-radius-topright: 5px; -webkit-border-top-right-radius: 5px; -o-border-top-right-radius: 5px; -ms-border-top-right-radius: 5px; -khtml-border-top-right-radius: 5px; border-top-right-radius: 5px; -moz-transition-property: width 300ms; -webkit-transition-property: width 300ms; -o-transition-property: width 300ms; transition-property: width 300ms; -moz-transition-duration: 1s; -webkit-transition-duration: 1s; -o-transition-duration: 1s; transition-duration: 1s; position: fixed; left: 33.169em; bottom: 0; padding: 0.405em 0.809em; background: rgba(162, 208, 245, 0.85); overflow: hidden; width: 1.214em; white-space: nowrap; z-index: 900; }
-.section-history [role="contentinfo"] { left: 0; }
+.section-history [role="contentinfo"], .section-account [role="contentinfo"] { left: 0; }
 [role="contentinfo"]:hover { width: auto; min-width: 50%; }
 [role="contentinfo"]:hover .author { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 [role="contentinfo"] .copy { font-size: 1.618em; line-height: 1em; font-weight: 700; margin-right: 0.405em; }
