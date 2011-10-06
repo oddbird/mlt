@@ -149,6 +149,8 @@ button,  input[type="reset"], input[type="submit"], input[type="button"], input[
   vertical-align: baseline
   cursor: pointer
   color: contrast-color($alt)
+  &:focus
+    +focus-default
   &:active
     +transition(none)
     +background-image(linear-gradient(bottom, rgba($light,.25), rgba($light,0) 100%))
