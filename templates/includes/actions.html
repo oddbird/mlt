@@ -4,8 +4,8 @@
   <div class="listcontrols">
     {% block bulkselect %}
       <p class="bulkselect">
-        <input type="checkbox" name="select_all_none" value="" id="select_all_none">
-        <label for="select_all_none" title="select all/none">select all/none</label>
+        <input type="checkbox" name="select_all_none" value="" id="select_all_none" class="action-bulk">
+        <label for="select_all_none" title="select all/none" class="action-bulk">select all/none</label>
       </p>
 
       {% block historycontrols %}
@@ -71,19 +71,19 @@
     {% block addressbools %}
       <ul class="bools">
         <li class="importexport">
-          <a href="#lightbox-import-addresses" title="import addresses">import addresses</a>
-          <a href="#lightbox-export-addresses" title="export addresses">export addresses</a>
+          <a href="#lightbox-import-addresses" title="import addresses" class="action-import">import addresses</a>
+          <a href="#lightbox-export-addresses" title="export addresses" class="action-export">export addresses</a>
         </li>
 
         <li class="approval">
-          <button class="approve" type="submit" title="approve selected mappings">approve selected mappings</button>
+          <button class="action-approve" type="submit" title="approve selected mappings">approve selected mappings</button>
           <button class="action-flag" type="submit" title="flag selected mappings">flag selected mappings</button>
           <button class="action-reject" type="submit" title="reject selected mappings">reject selected mappings</button>
         </li>
 
         <li class="addremove">
-          <button class="delete_selected" type="submit" title="delete selected">delete selected</button>
-          <a href="#lightbox-add-address" class="create" title="add address">add address</a>
+          <button class="action-delete" type="submit" title="delete selected">delete selected</button>
+          <a href="#lightbox-add-address" class="action-create" title="add address">add address</a>
         </li>
       </ul>
     {% endblock addressbools %}

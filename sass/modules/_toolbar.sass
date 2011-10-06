@@ -1,28 +1,5 @@
 /* Actions -------------------------------------------------------------------
 
-.actionboolian
-  +float(left)
-  +background-image(linear-gradient(left,rgba($light,.5),rgba($light,0)))
-  width: rhythm(3)
-  &:hover
-    +background-image(linear-gradient(-25deg,rgba($alt,.125),rgba($alt,.125) 52%,rgba($alt,0) 52%,rgba($alt,0)))
-    background-color: desaturate(lighten($alt,60),30)
-  > *
-    &:nth-child(2n)
-      +float(right)
-
-.actiontri
-  +float(left)
-  +background-image(linear-gradient(left,rgba($light,.5),rgba($light,0)))
-  width: rhythm(4.5)
-  &:hover
-    +background-image(linear-gradient(-25deg,rgba($alt,.125),rgba($alt,.125) 34%,rgba($alt,0) 34%,rgba($alt,0) 65%,rgba($alt,.125) 65%,rgba($alt,.125)))
-    background-color: desaturate(lighten($alt,60),30)
-
-.iconaction
-  +float(left)
-  height: rhythm(1.5)
-
 .actions
   +pie-clearfix
   position: relative
@@ -32,76 +9,64 @@
     +gone
   ul
     +no-style-list
-  button
-    +no-style-button
 
-  .bulkselect
-    +float(left)
-    width: rhythm(1.5)
-    margin: 0
-  [for="select_all_none"]
+.bulkselect
+  +float(left)
+  width: rhythm(1.5)
+  margin: 0
+  label
     +icon('ui/check.png')
     height: rhythm(1.5)
     width: auto
     background-color: $light
-  [id="select_all_none"]
+  input
     +gone
-    &:checked + [for="select_all_none"]
+    &:checked + label
       background-color: desaturate(lighten($alt,50),30)
 
-  .action-revert-all
+.action-revert-all
+  +float(left)
+  +icon('ui/undo_med.png')
+  height: rhythm(1.5)
+  width: rhythm(1.5)
+  background-color: rgba($accent,.25)
+
+.bools
+  +clearfix
+  position: absolute
+  top: 0
+  right: 0
+  width: rhythm(10)
+  background-color: rgba($light,$xxsmall)
+  text-align: center
+
+.actionboolian
+  +border-radius
+  +inline-block
+  margin: rhythm(.25)
+  background-color: $light
+
+.addremove
+  @extend .actionboolian
+  width: rhythm(2.25)
+  .action-delete, .action-create
     +float(left)
-    +icon('ui/undo_med.png')
-    height: rhythm(1.5)
-    width: rhythm(1.5)
-    background-color: rgba($accent,.25)
-
-  .bools
-    +clearfix
-    position: absolute
-    top: 0
-    right: 0
-    width: rhythm(10.5)
-    background-color: rgba($light,$xxsmall)
-
-  .addremove
-    @extend .actionboolian
-  .delete_selected
-    @extend .iconaction
-    +icon('ui/trash.png')
-    width: 50%
-  .create
-    @extend .iconaction
-    +icon('ui/add.png')
     width: 50%
 
-  .importexport
-    @extend .actionboolian
-  [title^="import"]
-    @extend .iconaction
-    +icon('ui/import.png')
-    width: 50%
-  [title^="export"]
-    @extend .iconaction
-    +icon('ui/export.png')
+.importexport
+  @extend .actionboolian
+  width: rhythm(2.25)
+  .action-import, .action-export
+    +float(left)
     width: 50%
 
-  .approval
-    @extend .actiontri
-  .approve
-    @extend .iconaction
-    +icon('ui/thumb_up.png')
+.approval
+  @extend .actionboolian
+  width: rhythm(3.5)
+  .action-approve, .action-flag, .action-reject
+    +float(left)
     width: 33%
-    &.disabled
-      +opacity(.25)
-  .action-flag
-    @extend .iconaction
-    +icon('ui/warning.png')
-    width: 33%
-  .action-reject
-    @extend .iconaction
-    +icon('ui/x.png')
-    width: 33%
+
 
 // List Ordering -------------------------------------------------------------
 
@@ -114,7 +79,7 @@
   height: rhythm(1.5)
   margin:
     left: rhythm(1.5)
-    right: rhythm(10.5)
+    right: rhythm(10)
   z-index: 600
   #history &
     margin:
@@ -123,6 +88,7 @@
   h4
     +gone
   ul
+    +no-style-list
     position: absolute
     left: 0
     padding: rhythm(.125) 0 rhythm(.5)

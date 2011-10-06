@@ -2,8 +2,9 @@
   +replace-text($image)
   +opacity(.75)
   display: block
-  width: image-width($image) + $smallpx
+  width: image-width($image) + $xsmallpx
   #{$focus}
     +opacity(1)
+    background-image: image-url($image)
     @if $hover
       background-image: image-url($hover)
