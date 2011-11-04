@@ -479,12 +479,12 @@ var MLT = MLT || {};
                         addressLoading.scroll = false;
                     },
                     replaceAddress: function (data) {
+                        var thisAddress, byline, web_ui, lat, lng, geolat, geolng, updatedAddress, address, id, index;
                         if (data.success) {
-                            var byline, web_ui, lat, lng, geolat, geolng, updatedAddress,
-                                address = data.address,
-                                id = address.id,
-                                thisAddress = addressContainer.find('.address[data-id="' + id + '"]'),
-                                index = thisAddress.find('.mapkey').text();
+                            address = data.address;
+                            id = address.id;
+                            thisAddress = addressContainer.find('.address[data-id="' + id + '"]');
+                            index = thisAddress.find('.mapkey').text();
 
                             if (address.pl) {
                                 lat = address.latitude;
@@ -535,6 +535,13 @@ var MLT = MLT || {};
                             if (addressContainer.data('trusted') !== 'trusted') {
                                 addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
                             }
+                        } else if (data.errors.length) {
+                            thisAddress = addressContainer.find('.address.loading');
+                            $.each(data.errors, function (i, error) {
+                                $(ich.message({message: error, tags: "error"})).appendTo($('#messages'));
+                                $('#messages').messages();
+                            });
+                            thisAddress.loadingOverlay('remove');
                         }
                     },
                     replaceAddresses: function (data) {
@@ -747,17 +754,18 @@ var MLT = MLT || {};
                         url = form.attr('action');
 
                     form.submit(function () {
+                        var input, i;
                         form.find('.export-filter').remove();
                         $.each(filters, function (field, filter) {
                             if (field === 'status') {
-                                var input = ich.export_filter({
+                                input = ich.export_filter({
                                     field: field,
                                     filter: filter
                                 });
                                 form.append(input);
                             } else {
-                                for (var i = 0; i < filter.length; i = i + 1) {
-                                    var input = ich.export_filter({
+                                for (i = 0; i < filter.length; i = i + 1) {
+                                    input = ich.export_filter({
                                         field: field,
                                         filter: filter[i]
                                     });
