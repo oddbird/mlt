@@ -799,6 +799,8 @@ class AddAddressViewTest(AuthenticatedWebTest):
                 "state",
                 "street_name",
                 "street_number",
+                "street_prefix",
+                "street_suffix",
                 "street_type",
                 ]
             )
