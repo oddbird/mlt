@@ -792,6 +792,13 @@ var MLT = MLT || {};
                         }
                         button.removeClass('action-edit').addClass('action-cancel').attr('title', 'cancel').html('cancel');
                         notes.attr('contenteditable', true).data('original', notes.text());
+
+                        address.delegate('[contenteditable]', 'keydown', function (e) {
+                            if (e.keyCode === keycodes.ENTER) {
+                                e.preventDefault();
+                                address.find('.savechanges').click();
+                            }
+                        });
                     });
 
                     addressContainer.delegate('.action-cancel', 'click', function (e) {
