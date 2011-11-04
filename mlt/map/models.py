@@ -49,50 +49,11 @@ class Parcel(models.Model):
 
 
 
-class AddressManager(models.GeoManager):
-    def create_from_input(self, **kwargs):
-        """
-        Create an address with the given data and return it, unless a duplicate
-        existing address is found; then return None.
+class AddressBase(models.Model):
+    """
+    Abstract base class for both Address and AddressState.
 
-        If the data is bad (e.g. unknown state) will raise ValidationError.
-
-        """
-        street = kwargs.get("street", None)
-        city = kwargs.get("city", None)
-        state = kwargs.get("state", None)
-
-        if state is not None:
-            state = kwargs["state"] = state.upper().strip()
-
-        if street is not None:
-            street = kwargs["input_street"] = street.strip()
-            del kwargs["street"]
-
-        if city is not None:
-            city = kwargs["city"] = city.strip()
-
-        if None not in [street, city, state]:
-            dupes = self.filter(
-                (
-                    models.Q(input_street__iexact=street) |
-                    models.Q(street__iexact=street)
-                    ) &
-                models.Q(city__iexact=city) &
-                models.Q(state__iexact=state)
-                )
-        else:
-            dupes = None
-
-        if not dupes:
-            obj = self.model(**kwargs)
-            obj.full_clean()
-            obj.save()
-            return obj
-
-
-
-class Address(models.Model):
+    """
     # unmodified input data
     input_street = models.CharField(max_length=200, db_index=True)
 
@@ -100,11 +61,11 @@ class Address(models.Model):
     edited_street = models.CharField(max_length=200, blank=True)
 
     # core address info
-    street_prefix = models.CharField(max_length=20, blank=True, db_index=True)
-    street_number = models.CharField(max_length=50, blank=True, db_index=True)
-    street_name = models.CharField(max_length=100, blank=True, db_index=True)
-    street_type = models.CharField(max_length=20, blank=True, db_index=True)
-    street_suffix = models.CharField(max_length=20, blank=True, db_index=True)
+    street_prefix = models.CharField(max_length=20, blank=True)
+    street_number = models.CharField(max_length=50, blank=True)
+    street_name = models.CharField(max_length=100, blank=True)
+    street_type = models.CharField(max_length=20, blank=True)
+    street_suffix = models.CharField(max_length=20, blank=True)
     multi_units = models.BooleanField(default=False)
     city = models.CharField(max_length=200, db_index=True)
     state = USStateField(db_index=True)
@@ -123,17 +84,19 @@ class Address(models.Model):
 
     mapped_by = models.ForeignKey(
         User, blank=True, null=True, on_delete=models.PROTECT,
-        related_name="addresses_mapped")
+        related_name="%(class)s_mapped")
     mapped_timestamp = models.DateTimeField(blank=True, null=True)
     needs_review = models.BooleanField(default=False, db_index=True)
 
     # import
     imported_by = models.ForeignKey(
-        User, on_delete=models.PROTECT, related_name="addresses_imported")
+        User, on_delete=models.PROTECT, related_name="%(class)s_imported")
     import_timestamp = models.DateTimeField()
     import_source = models.CharField(max_length=100, db_index=True)
 
-    objects = AddressManager()
+
+    class Meta:
+        abstract = True
 
 
     def __unicode__(self):
@@ -144,16 +107,7 @@ class Address(models.Model):
     def save(self, *args, **kwargs):
         self.street = (
             self.parsed_street or self.edited_street or self.input_street)
-        return super(Address, self).save(*args, **kwargs)
-
-
-    class Meta:
-        verbose_name_plural = "addresses"
-        permissions = [
-            (
-                "mappings_trusted",
-                "Can approve addresses and map with no approval.")
-            ]
+        return super(AddressBase, self).save(*args, **kwargs)
 
 
     @property
@@ -198,6 +152,97 @@ class Address(models.Model):
             return None
 
 
+
+class AddressManager(models.GeoManager):
+    def create_from_input(self, **kwargs):
+        """
+        Create an address with the given data and return it, unless a duplicate
+        existing address is found; then return None.
+
+        If the data is bad (e.g. unknown state) will raise ValidationError.
+
+        """
+        street = kwargs.get("street", None)
+        city = kwargs.get("city", None)
+        state = kwargs.get("state", None)
+
+        if state is not None:
+            state = kwargs["state"] = state.upper().strip()
+
+        if street is not None:
+            street = kwargs["input_street"] = street.strip()
+            del kwargs["street"]
+
+        if city is not None:
+            city = kwargs["city"] = city.strip()
+
+        if None not in [street, city, state]:
+            dupes = self.filter(
+                (
+                    models.Q(input_street__iexact=street) |
+                    models.Q(street__iexact=street)
+                    ) &
+                models.Q(city__iexact=city) &
+                models.Q(state__iexact=state)
+                )
+        else:
+            dupes = None
+
+        if not dupes:
+            obj = self.model(**kwargs)
+            obj.full_clean()
+            obj.save()
+            return obj
+
+
+
+class Address(AddressBase):
+    objects = AddressManager()
+
+
+    class Meta:
+        verbose_name_plural = "addresses"
+        permissions = [
+            (
+                "mappings_trusted",
+                "Can approve addresses and map with no approval.")
+            ]
+
+
     @property
     def edit_url(self):
         return reverse("map_edit_address", kwargs={"address_id": self.id})
+
+
+
+class AddressSnapshot(AddressBase):
+    """
+    A snapshot of the state of an Address at a given point in time.
+
+    """
+    snapshot_timestamp = models.DateTimeField()
+
+
+
+class AddressChange(models.Model):
+    """
+    Stores information about a change to an Address. The change may encompass
+    modifications to multiple fields, but was made by a single user, at a
+    single point in time.
+
+    """
+    # The Address this change relates to. Null if the address has been deleted.
+    address = models.ForeignKey(
+        Address,
+        null=True, on_delete=models.SET_NULL, related_name="address_changes")
+
+    changed_by = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="address_changes")
+    changed_timestamp = models.DateTimeField()
+
+    # The prior snapshot. NULL indicates "address created"
+    pre = models.ForeignKey(
+        AddressSnapshot, null=True, related_name="pre_for")
+    # The post snapshot. NULL indicates "address deleted"
+    post = models.ForeignKey(
+        AddressSnapshot, null=True, related_name="post_for")
