@@ -1,6 +1,6 @@
 import json, datetime
 
-from django.core.exceptions import FieldError
+from django.core.exceptions import FieldError, NON_FIELD_ERRORS
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.formats import date_format
@@ -224,8 +224,23 @@ def edit_address(request, address_id):
                 "address": UIAddressSerializer().one(address),
                 "success": True,
                 })
+
+    # Errors are not displayed by the field, so we need to transform them to
+    # always specify which field they relate to.
+    errors = []
+    for field, field_errors in form.errors.items():
+        if field != NON_FIELD_ERRORS:
+            modified_errors = []
+            for error in field_errors:
+                if "This field" in error:
+                    error = error.replace("This field", "The %s field" % field)
+                else:
+                    error = "%s: %s" % (field.title(), error)
+                modified_errors.append(error)
+            field_errors = modified_errors
+        errors.extend(field_errors)
     return json_response({
-            "errors": form.errors,
+            "errors": errors,
             "success": False,
             })
 

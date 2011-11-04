@@ -864,7 +864,7 @@ class EditAddressViewTest(CSRFAuthenticatedWebTest):
     def test_errors(self):
         data = {}
         data["city"] = ""
-        data["state"] = "RI"
+        data["state"] = "XX"
         data["street_number"] = "3635"
         data["street_name"] = "Van Gordon",
         data["street_type"] = "St"
@@ -876,7 +876,37 @@ class EditAddressViewTest(CSRFAuthenticatedWebTest):
         self.assertEqual(
             response.json,
             {
-                "errors": {'city': ['This field is required.']},
+                "errors": [
+                    "The city field is required.",
+                    "State: Select a valid choice. "
+                    "XX is not one of the available choices."
+                    ],
+                "messages": [],
+                "success": False,
+                }
+            )
+
+        a = refresh(self.address)
+
+        self.assertEqual(a.city, "Albuquerque")
+
+
+    def test_non_field_errors(self):
+        data = {}
+        data["city"] = "Providence"
+        data["state"] = "RI"
+        data["street_number"] = "3635"
+        data["street_name"] = "",
+        data["street_type"] = "St"
+
+        response = self.post(self.url, data)
+
+        self.assertEqual(response.status_int, 200)
+
+        self.assertEqual(
+            response.json,
+            {
+                "errors": ['Please enter a street address.'],
                 "messages": [],
                 "success": False,
                 }
