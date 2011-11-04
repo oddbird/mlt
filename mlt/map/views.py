@@ -24,6 +24,9 @@ from . import filters, serializers, geocoder
 
 
 class UIAddressSerializer(serializers.AddressSerializer):
+    default_fields = serializers.AddressSerializer.default_fields + ["edit_url"]
+
+
     def _encode_datetime(self, dt):
         if dt:
             return date_format(utc_to_local(dt), "DATETIME_FORMAT")
@@ -186,7 +189,7 @@ def addresses(request):
 
     data = {
         "addresses": IndexedAddressSerializer(
-            extra=["edit_url", "parcel"]).many(ret)
+            extra=["parcel"]).many(ret)
         }
 
     if get_count:

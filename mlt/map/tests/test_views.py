@@ -849,6 +849,10 @@ class EditAddressViewTest(CSRFAuthenticatedWebTest):
         self.assertEqual(response.status_int, 200)
 
         self.assertEqual(response.json["address"]["city"], "Providence")
+        self.assertEqual(
+            response.json["address"]["edit_url"],
+            "/map/_edit_address/%s/" % self.address.id
+            )
         self.assertEqual(len(response.json["messages"]), 1)
         self.assertEqual(response.json["success"], True)
 
@@ -1088,6 +1092,7 @@ class GeocodeViewTest(AuthenticatedWebTest):
                 "address": {
                     "city": "Providence",
                     "complex_name": "",
+                    "edit_url": "/map/_edit_address/%s/" % a.id,
                     "id": a.id,
                     "import_source": "test-created",
                     "import_timestamp": "June 15, 2011 at 4:14 a.m.",
