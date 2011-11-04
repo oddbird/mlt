@@ -7,21 +7,19 @@
       <h3 class="adr">
         {{# street_is_parsed }}
           <div class="street-address" data-parsed="true">
-            <span class="street-number">{{ street_number }}</span>
-            <span class="street-prefix">{{ street_prefix }}</span>
-            <span class="street-name">{{ street_name }}</span>
-            <span class="street-type">{{ street_type }}</span>
-            <span class="street-suffix">{{ street_suffix }}</span>
+            <span class="street-number" title="street number">{{ street_number }}</span>
+            <span class="street-prefix" title="street prefix">{{ street_prefix }}</span>
+            <span class="street-name" title="street name">{{ street_name }}</span>
+            <span class="street-type" title="street type">{{ street_type }}</span>
+            <span class="street-suffix" title="street suffix">{{ street_suffix }}</span>
           </div>
         {{/ street_is_parsed }}
         {{^ street_is_parsed }}
-          <div class="street-address">{{ street }}</div>
+          <div class="street-address" title="street address">{{ street }}</div>
         {{/ street_is_parsed }}
-        <div class="locality">{{ city }}</div>,
-        <div class="region">{{ state }}</div>
-        {{# complex_name }}
-          [<div class="complex-name">{{ complex_name }}</div>]
-        {{/ complex_name }}
+        <div class="locality" title="city or locality">{{ city }}</div>,
+        <div class="region" title="state or region">{{ state }}</div>
+        <div class="complex-name" title="complex name">{{ complex_name }}</div>
       </h3>
     </label>
 
@@ -57,7 +55,7 @@
       <p class="summary action-info" title="show details">details</p>
       <div class="more">
 
-        <p class="notes">{{ notes }}</p>
+        <p class="notes" title="notes">{{ notes }}</p>
 
         {{# byline }}
           <div class="byline">
