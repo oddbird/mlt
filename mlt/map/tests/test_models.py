@@ -3,6 +3,8 @@ import datetime
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
+from mock import patch
+
 from .utils import create_parcel, create_address, create_mpolygon, create_user
 
 
@@ -61,6 +63,12 @@ class AddressTest(TestCase):
     def model(self):
         from mlt.map.models import Address
         return Address
+
+
+    @property
+    def snapshot_model(self):
+        from mlt.map.models import AddressSnapshot
+        return AddressSnapshot
 
 
     def test_latlong(self):
@@ -229,3 +237,16 @@ class AddressTest(TestCase):
     def test_create_no_street(self):
         with self.assertRaises(ValidationError):
             self.create_from_input(city="Rapid City", state="SD")
+
+
+    def test_snapshot(self):
+        a = create_address(city="Providence")
+
+        fake_now = datetime.datetime(2011, 11, 4, 17, 0, 5)
+        with patch("mlt.map.models.datetime") as mock_dt:
+            mock_dt.utcnow.return_value = fake_now
+            s = a.snapshot()
+
+        self.assertIsInstance(s, self.snapshot_model)
+        self.assertEqual(s.city, "Providence")
+        self.assertEqual(s.snapshot_timestamp, fake_now)

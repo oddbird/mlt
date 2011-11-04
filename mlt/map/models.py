@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.core.urlresolvers import reverse
 
 from django.contrib.auth.models import User
@@ -207,6 +209,21 @@ class Address(AddressBase):
                 "mappings_trusted",
                 "Can approve addresses and map with no approval.")
             ]
+
+
+    def snapshot(self):
+        """
+        Create and return a snapshot of the current state of this Address.
+
+        Note that this is not the current database state, but the state of this
+        particular instance, including any modified fields.
+
+        """
+        snap = AddressSnapshot(snapshot_timestamp=datetime.utcnow())
+        for field in AddressBase._meta.fields:
+            setattr(snap, field.attname, getattr(self, field.attname))
+        snap.save()
+        return snap
 
 
     @property
