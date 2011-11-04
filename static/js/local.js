@@ -535,13 +535,6 @@ var MLT = MLT || {};
                             if (addressContainer.data('trusted') !== 'trusted') {
                                 addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
                             }
-                        } else if (data.errors.length) {
-                            thisAddress = addressContainer.find('.address.loading');
-                            $.each(data.errors, function (i, error) {
-                                $(ich.message({message: error, tags: "error"})).appendTo($('#messages'));
-                                $('#messages').messages();
-                            });
-                            thisAddress.loadingOverlay('remove');
                         }
                     },
                     replaceAddresses: function (data) {
@@ -814,7 +807,6 @@ var MLT = MLT || {};
 
                         content.removeClass('editing');
                         save.remove();
-                        address.find('.error').remove();
                         button.removeClass('action-cancel').addClass('action-edit').attr('title', 'edit').html('edit');
                         notes.removeAttr('contenteditable').text(notes.data('original'));
                         addressInfo.wrap('<label for="select_' + id + '" />').find('.locality, .region, .complex-name').each(function () {
@@ -866,32 +858,9 @@ var MLT = MLT || {};
                             $.post(url, edits, function (data) {
                                 if (data.errors) {
                                     address.loadingOverlay('remove');
-                                    $.each(data.errors, function (field, errors) {
-                                        if (field === "__all__") {
-                                            $.each(errors, function (i, error) {
-                                                street.before('<span class="error">' + error + '</span>');
-                                            });
-                                        }
-                                        if (field === "city") {
-                                            $.each(errors, function (i, error) {
-                                                addressInfo.find('.locality').before('<span class="error">' + error + '</span>');
-                                            });
-                                        }
-                                        if (field === "state") {
-                                            $.each(errors, function (i, error) {
-                                                addressInfo.find('.region').before('<span class="error">' + error + '</span>');
-                                            });
-                                        }
-                                        if (field === "complex_name") {
-                                            $.each(errors, function (i, error) {
-                                                addressInfo.find('.complex-name').before('<span class="error">' + error + '</span>');
-                                            });
-                                        }
-                                        if (field === "notes") {
-                                            $.each(errors, function (i, error) {
-                                                notes.before('<span class="error">' + error + '</span>');
-                                            });
-                                        }
+                                    $.each(data.errors, function (i, error) {
+                                        $(ich.message({message: error, tags: "error"})).appendTo($('#messages'));
+                                        $('#messages').messages();
                                     });
                                 } else {
                                     addressLoading.replaceAddress(data);
