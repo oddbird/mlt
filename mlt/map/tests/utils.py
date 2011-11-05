@@ -82,5 +82,9 @@ def create_address(**kwargs):
         }
     defaults.update(kwargs)
 
+    user = defaults.pop("user", defaults["imported_by"])
+
     from mlt.map.models import Address
-    return Address.objects.create(**defaults)
+    a = Address(**defaults)
+    a.save(user=user)
+    return a

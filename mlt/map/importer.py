@@ -19,6 +19,7 @@ class AddressImporter(object):
             "import_timestamp": timestamp,
             "imported_by": user,
             "import_source": source,
+            "user": user,
             }
 
 

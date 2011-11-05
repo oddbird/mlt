@@ -66,6 +66,12 @@ class AddressTest(TestCase):
 
 
     @property
+    def change_model(self):
+        from mlt.map.models import AddressChange
+        return AddressChange
+
+
+    @property
     def snapshot_model(self):
         from mlt.map.models import AddressSnapshot
         return AddressSnapshot
@@ -141,6 +147,7 @@ class AddressTest(TestCase):
             "import_timestamp": datetime.datetime(2011, 7, 8, 1, 2, 3),
             "imported_by": user,
             "import_source": "tests",
+            "user": user,
             }
 
 
@@ -239,14 +246,207 @@ class AddressTest(TestCase):
             self.create_from_input(city="Rapid City", state="SD")
 
 
-    def test_snapshot(self):
+    def test_data(self):
+        data = create_address(city="Providence").data()
+
+        self.assertEqual(data["city"], "Providence")
+        self.assertEqual(
+            set(data.keys()),
+            set([
+                    'city',
+                    'edited_street',
+                    'geocoded',
+                    'street',
+                    'street_number',
+                    'street_name',
+                    'mapped_timestamp',
+                    'state',
+                    'street_suffix',
+                    'multi_units',
+                    'mapped_by_id',
+                    'input_street',
+                    'street_type',
+                    'import_timestamp',
+                    'needs_review',
+                    'imported_by_id',
+                    'import_source',
+                    'street_prefix',
+                    'complex_name',
+                    'notes',
+                    'pl'
+                    ]))
+
+
+    def test_snapshot_saved_new(self):
+        a = self.model()
+        s = a.snapshot(saved=True)
+
+        self.assertIs(s, None)
+
+
+    def test_snapshot_saved(self):
         a = create_address(city="Providence")
+        a.city = "Albuquerque"
 
         fake_now = datetime.datetime(2011, 11, 4, 17, 0, 5)
         with patch("mlt.map.models.datetime") as mock_dt:
             mock_dt.utcnow.return_value = fake_now
-            s = a.snapshot()
+            s = a.snapshot(saved=True)
 
         self.assertIsInstance(s, self.snapshot_model)
         self.assertEqual(s.city, "Providence")
         self.assertEqual(s.snapshot_timestamp, fake_now)
+
+
+    def test_snapshot_current(self):
+        a = create_address(city="Providence")
+        a.city = "Albuquerque"
+
+        fake_now = datetime.datetime(2011, 11, 4, 17, 0, 5)
+        with patch("mlt.map.models.datetime") as mock_dt:
+            mock_dt.utcnow.return_value = fake_now
+            s = a.snapshot(saved=False)
+
+        self.assertIsInstance(s, self.snapshot_model)
+        self.assertEqual(s.city, "Albuquerque")
+        self.assertEqual(s.snapshot_timestamp, fake_now)
+
+
+    def test_create_address_change(self):
+        fake_now = datetime.datetime(2011, 11, 4, 17, 0, 5)
+        with patch("mlt.map.models.datetime") as mock_dt:
+            mock_dt.utcnow.return_value = fake_now
+            a = create_address(city="Albuquerque")
+
+        changes = self.change_model.objects.all()
+
+        self.assertEqual(len(changes), 1)
+
+        change = changes[0]
+
+        self.assertEqual(change.address, a)
+        self.assertIs(change.pre, None)
+        self.assertEqual(change.post.city, "Albuquerque")
+        self.assertEqual(change.changed_timestamp, fake_now)
+
+
+    def test_modify_address_change(self):
+        a = create_address(city="Albuquerque")
+        user = create_user()
+
+        fake_now = datetime.datetime(2011, 11, 4, 17, 0, 5)
+        with patch("mlt.map.models.datetime") as mock_dt:
+            mock_dt.utcnow.return_value = fake_now
+            a.city = "Providence"
+            a.save(user=user)
+
+        changes = self.change_model.objects.all()
+
+        self.assertEqual(len(changes), 2)
+
+        change = changes.get(pre__isnull=False)
+
+        self.assertEqual(change.address, a)
+        self.assertEqual(change.pre.city, "Albuquerque")
+        self.assertEqual(change.post.city, "Providence")
+        self.assertEqual(change.changed_by, user)
+        self.assertEqual(change.changed_timestamp, fake_now)
+
+
+    def test_delete_address_change(self):
+        a = create_address(city="Albuquerque")
+        user = create_user()
+
+        fake_now = datetime.datetime(2011, 11, 4, 17, 0, 5)
+        with patch("mlt.map.models.datetime") as mock_dt:
+            mock_dt.utcnow.return_value = fake_now
+            a.delete(user=user)
+
+        changes = self.change_model.objects.all()
+
+        self.assertEqual(len(changes), 2)
+
+        change = changes.get(post__isnull=True)
+
+        self.assertEqual(change.address, None)
+        self.assertEqual(change.pre.city, "Albuquerque")
+        self.assertIs(change.post, None)
+        self.assertEqual(change.changed_by, user)
+        self.assertEqual(change.changed_timestamp, fake_now)
+
+
+    def test_bulk_update_address_change(self):
+        a = create_address(city="Albuquerque", needs_review=True)
+        create_address(city="Providence", needs_review=True)
+        qs = self.model.objects.all()
+        user = create_user()
+
+        fake_now = datetime.datetime(2011, 11, 4, 17, 0, 5)
+        with patch("mlt.map.models.datetime") as mock_dt:
+            mock_dt.utcnow.return_value = fake_now
+            qs.update(needs_review=False, user=user)
+
+        changes = self.change_model.objects.filter(pre__isnull=False)
+
+        self.assertEqual(len(changes), 2)
+
+        change = changes.get(address=a)
+
+        self.assertEqual(change.pre.needs_review, True)
+        self.assertEqual(change.post.needs_review, False)
+        self.assertEqual(change.changed_by, user)
+        self.assertEqual(change.changed_timestamp, fake_now)
+
+
+    def test_bulk_delete_address_change(self):
+        create_address(city="Albuquerque")
+        create_address(city="Providence")
+        qs = self.model.objects.all()
+        user = create_user()
+
+        fake_now = datetime.datetime(2011, 11, 4, 17, 0, 5)
+        with patch("mlt.map.models.datetime") as mock_dt:
+            mock_dt.utcnow.return_value = fake_now
+            qs.delete(user=user)
+
+        changes = self.change_model.objects.filter(pre__isnull=False)
+
+        self.assertEqual(len(changes), 2)
+
+        change = changes.get(pre__city="Albuquerque")
+
+        self.assertIs(change.post, None)
+        self.assertEqual(change.changed_by, user)
+        self.assertEqual(change.changed_timestamp, fake_now)
+
+
+    def test_save_without_user(self):
+        from mlt.map.models import AddressVersioningError
+        with self.assertRaises(AddressVersioningError):
+            self.model.objects.create()
+
+
+    def test_delete_without_user(self):
+        a = create_address()
+
+        from mlt.map.models import AddressVersioningError
+        with self.assertRaises(AddressVersioningError):
+            a.delete()
+
+
+    def test_bulk_update_without_user(self):
+        create_address()
+        qs = self.model.objects.all()
+
+        from mlt.map.models import AddressVersioningError
+        with self.assertRaises(AddressVersioningError):
+            qs.update()
+
+
+    def test_bulk_delete_without_user(self):
+        create_address()
+        qs = self.model.objects.all()
+
+        from mlt.map.models import AddressVersioningError
+        with self.assertRaises(AddressVersioningError):
+            qs.delete()

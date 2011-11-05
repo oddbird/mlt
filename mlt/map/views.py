@@ -115,6 +115,7 @@ def associate(request):
     if parcel and addresses:
         count = addresses.count()
         addresses.update(
+            user=request.user,
             pl=pl,
             mapped_by=request.user,
             mapped_timestamp=datetime.datetime.utcnow(),
@@ -312,7 +313,7 @@ def geocode(request):
         return json_response({"success": False})
 
     geocoder.update(address, data)
-    address.save()
+    address.save(user=request.user)
 
     messages.success(
         request, "Address &laquo;%s&raquo; geocoded and updated to &laquo;%s&raquo;" % (as_string, geocoder.prep(address))
@@ -337,7 +338,7 @@ def address_actions(request):
 
     if action == "delete":
         count = addresses.count()
-        addresses.delete()
+        addresses.delete(user=request.user)
         messages.success(
             request, "%s address%s deleted."
             % (count, "es" if (count != 1) else ""))
@@ -354,7 +355,7 @@ def address_actions(request):
             return json_response({"success": False})
         updated = Address.objects.filter(
             id__in=[a.id for a in addresses])
-        updated.update(needs_review=False)
+        updated.update(user=request.user, needs_review=False)
         messages.success(
             request, "%s mapping%s approved."
             % (count, "s" if (count != 1) else ""))
@@ -368,7 +369,7 @@ def address_actions(request):
         count = addresses.count()
         updated = Address.objects.filter(
             id__in=[a.id for a in addresses])
-        updated.update(needs_review=True)
+        updated.update(user=request.user, needs_review=True)
         messages.success(
             request, "%s mapping%s flagged."
             % (count, "s" if (count != 1) else ""))

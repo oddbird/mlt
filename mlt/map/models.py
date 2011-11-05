@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
+from django.db.models.query import QuerySet
 
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
@@ -154,8 +155,56 @@ class AddressBase(models.Model):
             return None
 
 
+    def data(self):
+        """
+        Return a dictionary of the full data of this address (all fields which
+        should be snapshotted and versioned).
+
+        """
+        return dict(
+            (field.attname, getattr(self, field.attname))
+            for field in AddressBase._meta.fields
+            )
+
+
+class AddressQuerySet(QuerySet):
+    def update(self, **kwargs):
+        user = kwargs.pop("user", None)
+        if user is None:
+            raise AddressVersioningError(
+                "Cannot update addresses without providing user.")
+
+        for address in self:
+            pre = address.snapshot(saved=True)
+            address.__dict__.update(kwargs)
+            post = address.snapshot(saved=False)
+            AddressChange.objects.create(
+                address=address, changed_by=user, pre=pre, post=post,
+                changed_timestamp=datetime.utcnow())
+
+        return super(AddressQuerySet, self).update(**kwargs)
+
+
+    def delete(self, user=None):
+        if user is None:
+            raise AddressVersioningError(
+                "Cannot delete addresses without providing user.")
+
+        for address in self:
+            pre = address.snapshot(saved=True)
+            AddressChange.objects.create(
+                address=None, changed_by=user, pre=pre, post=None,
+                changed_timestamp=datetime.utcnow())
+
+        return super(AddressQuerySet, self).delete()
+
+
 
 class AddressManager(models.GeoManager):
+    def get_query_set(self):
+        return AddressQuerySet(self.model, using=self._db)
+
+
     def create_from_input(self, **kwargs):
         """
         Create an address with the given data and return it, unless a duplicate
@@ -164,6 +213,8 @@ class AddressManager(models.GeoManager):
         If the data is bad (e.g. unknown state) will raise ValidationError.
 
         """
+        user = kwargs.pop("user", None)
+
         street = kwargs.get("street", None)
         city = kwargs.get("city", None)
         state = kwargs.get("state", None)
@@ -193,8 +244,13 @@ class AddressManager(models.GeoManager):
         if not dupes:
             obj = self.model(**kwargs)
             obj.full_clean()
-            obj.save()
+            obj.save(user=user)
             return obj
+
+
+
+class AddressVersioningError(Exception):
+    pass
 
 
 
@@ -211,19 +267,68 @@ class Address(AddressBase):
             ]
 
 
-    def snapshot(self):
+    def __init__(self, *args, **kwargs):
+        super(Address, self).__init__(*args, **kwargs)
+
+        self._initial_data = self.data()
+
+
+    def save(self, *args, **kwargs):
+        user = kwargs.pop("user", None)
+        if user is None:
+            raise AddressVersioningError(
+                "Cannot save address without providing user.")
+
+        pre = self.snapshot(saved=True)
+
+        ret = super(Address, self).save(*args, **kwargs)
+
+        post = self.snapshot(saved=False)
+
+        AddressChange.objects.create(
+            address=self, changed_by=user, pre=pre, post=post,
+            changed_timestamp=datetime.utcnow())
+
+        return ret
+
+
+    def delete(self, *args, **kwargs):
+        user = kwargs.pop("user", None)
+        if user is None:
+            raise AddressVersioningError(
+                "Cannot delete address without providing user.")
+
+        pre = self.snapshot(saved=True)
+
+        ret = super(Address, self).delete(*args, **kwargs)
+
+        AddressChange.objects.create(
+            address=None, changed_by=user, pre=pre, post=None,
+            changed_timestamp=datetime.utcnow())
+
+        return ret
+
+
+    def snapshot(self, saved=True):
         """
         Create and return a snapshot of the current state of this Address.
 
-        Note that this is not the current database state, but the state of this
-        particular instance, including any modified fields.
+        If ``saved`` is True, this is the state of this address in the
+        database. If this is a new, not-yet-saved instance, ``snapshot()`` does
+        nothing and returns ``None``.
+
+        If ``saved`` is False, this is the current state of this particular
+        instance, including any modified fields.
 
         """
-        snap = AddressSnapshot(snapshot_timestamp=datetime.utcnow())
-        for field in AddressBase._meta.fields:
-            setattr(snap, field.attname, getattr(self, field.attname))
-        snap.save()
-        return snap
+        if saved:
+            if self.pk is None:
+                return None
+            data = self._initial_data.copy()
+        else:
+            data = self.data()
+        data["snapshot_timestamp"] = datetime.utcnow()
+        return AddressSnapshot.objects.create(**data)
 
 
     @property

@@ -50,7 +50,7 @@ class AddressForm(forms.ModelForm):
             address.import_source = WEB_UI_IMPORT_SOURCE
             address.import_timestamp = datetime.utcnow()
 
-        address.save()
+        address.save(user=user)
 
         return address
 
