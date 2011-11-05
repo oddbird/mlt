@@ -1,6 +1,6 @@
 import json, datetime
 
-from django.core.exceptions import FieldError, NON_FIELD_ERRORS
+from django.core.exceptions import NON_FIELD_ERRORS
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.formats import date_format
@@ -19,7 +19,7 @@ from .forms import AddressForm, AddressImportForm
 from .importer import ImporterError
 from .models import Parcel, Address
 from .utils import letter_key
-from . import filters, serializers, geocoder
+from . import filters, serializers, sort, paging, geocoder
 
 
 
@@ -144,49 +144,17 @@ class IndexedAddressSerializer(UIAddressSerializer):
         return letter_key(val)
 
 
-
 @login_required
 def addresses(request):
-    try:
-        start = int(request.GET["start"])
-    except (ValueError, KeyError):
-        start = 1
-    try:
-        num = int(request.GET["num"])
-    except (ValueError, KeyError):
-        num = 20
-
     qs = filters.apply(Address.objects.all(), request.GET)
 
     get_count = request.GET.get("count", "false").lower() not in ["false", "0"]
     if get_count:
         count = qs.count()
 
-    sort = request.GET.getlist("sort") or ["import_timestamp"]
-    sortqs = qs.order_by(*sort)
+    qs = sort.apply(qs, request)
 
-    try:
-        # hack to force evaluation of the sort arguments
-        str(sortqs.query)
-    except FieldError:
-        sortqs = qs
-        # apply sorts one at a time to figure out which caused the error
-        for sortfield in sort:
-            try:
-                str(qs.order_by(sortfield).query)
-            except FieldError:
-                messages.error(
-                    request, "'%s' is not a valid sort field." % sortfield)
-
-
-    qs = sortqs[start-1:start+num-1]
-
-    # @@@ indexing on subsequent queries might break if addresses have been
-    # added/deleted?
-    ret = []
-    for i, address in enumerate(qs):
-        address.index = i + start
-        ret.append(address)
+    ret = paging.apply(qs, request.GET)
 
     data = {
         "addresses": IndexedAddressSerializer(
@@ -380,7 +348,6 @@ def address_actions(request):
 
     messages.error(request, "Unknown action '%s'" % action)
     return json_response({"success": False})
-
 
 
 def json_response(data):
