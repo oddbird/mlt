@@ -1000,7 +1000,7 @@ var MLT = (function (MLT, $) {
             if ($(this).hasClass('action-flag')) {
                 action = "flag";
             }
-            if ($(this).hasClass('approve')) {
+            if ($(this).hasClass('action-approve')) {
                 action = "approve";
             }
             if ($('#addressform .actions .bulkselect').data('selectall')) {
@@ -1037,7 +1037,7 @@ var MLT = (function (MLT, $) {
         });
 
         if (MLT.shared.addressContainer.data('trusted') !== 'trusted') {
-            $('#addressform .actions .bools .approval .approve').addClass('disabled');
+            $('#addressform .actions .bools .approval .action-approve').addClass('disabled');
         }
     };
 
