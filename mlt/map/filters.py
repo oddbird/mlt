@@ -155,8 +155,10 @@ class AddressChangeFilter(Filter):
 
 
     def get_autocomplete_fields(self):
-        ret = super(AddressChangeFilter, self).get_autocomplete_fields()
-        ret["changed_by"] = ("changed by", "post__changed_by__username")
+        ret = {}
+        for field in self.fields:
+            ret[field] = (field.replace("post__", "").replace("_", " "), field)
+        ret["changed_by"] = ("changed by", "changed_by__username")
         ret["post__mapped_by"] = ("mapped by", "post__mapped_by__username")
         ret["post__imported_by"] = ("imported by", "post__imported_by__username")
         return ret

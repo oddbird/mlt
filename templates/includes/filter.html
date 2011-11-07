@@ -15,7 +15,7 @@
 
     <div class="textual">
       <label for="filter_input">filter</label>
-      <input type="text" name="filter" value="" id="filter_input" placeholder="filter by address, ID, date range, etc." autocomplete="off" data-autocomplete-url="{% url map_filter_autocomplete %}">
+      <input type="text" name="filter" value="" id="filter_input" placeholder="filter by address, ID, date range, etc." autocomplete="off" data-autocomplete-url="{% block autocomplete-url %}{% url map_filter_autocomplete %}{% endblock %}">
       {% icanhaz "filter_suggestion" %}
       <ul class="suggest">
       </ul>

@@ -309,6 +309,21 @@ def filter_autocomplete(request):
 
 
 @login_required
+def history_autocomplete(request):
+    q = request.GET.get("q", "")
+
+    if not q:
+        messages.error(
+            request, "Filter autocomplete requires 'q' parameter.")
+        return json_response({})
+
+    data = AddressChangeFilter().autocomplete(AddressChange.objects.all(), q)
+
+    return json_response({"options": data})
+
+
+
+@login_required
 def geocode(request):
     address_id = request.GET.get("id")
     if not address_id:

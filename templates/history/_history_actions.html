@@ -5,3 +5,7 @@
 {% block historycontrols %}
 <button type="submit" class="action-revert-all" title="revert all selected">revert all selected</button>
 {% endblock historycontrols %}
+
+{% block filtering %}
+  {% include "history/_history_filter.html" %}
+{% endblock filtering %}

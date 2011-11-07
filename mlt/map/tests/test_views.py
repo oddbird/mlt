@@ -23,6 +23,7 @@ __all__ = [
     "AddAddressViewTest",
     "EditAddressViewTest",
     "FilterAutocompleteViewTest",
+    "HistoryAutocompleteViewTest",
     "GeocodeViewTest",
     "AddressActionsViewTest",
     ]
@@ -1358,6 +1359,98 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
             [{
                     "desc": "city",
                     "field": "city",
+                    "value": "providence",
+                    "q": "prov",
+                    "rest": "idence",
+                    }]
+            )
+
+
+    def test_no_filter(self):
+        res = self.app.get(
+            self.url,
+            extra_environ={"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
+            user=self.user)
+
+        self.assertEqual(
+            res.json["messages"],
+            [{
+                    "message": "Filter autocomplete requires 'q' parameter.",
+                    "level": 40,
+                    "tags": "error"
+                    }]
+            )
+
+
+
+class HistoryAutocompleteViewTest(AuthenticatedWebTest):
+    url_name = "map_history_autocomplete"
+
+
+    def test_filter(self):
+        blametern = create_user(username="blametern")
+        create_address(
+            input_street="123 N Main St",
+            city="Providence",
+            imported_by=blametern)
+        create_address(
+            input_street="456 N Main St",
+            city="Albuquerque")
+        create_address(
+            input_street="123 N Main St",
+            city="Albuquerque")
+
+        res = self.app.get(self.url + "?q=alb", user=self.user)
+
+        self.assertEqual(
+            res.json["options"],
+            [{
+                    "desc": "city",
+                    "field": "post__city",
+                    "value": "albuquerque",
+                    "q": "alb",
+                    "rest": "uquerque",
+                    }]
+            )
+
+        res = self.app.get(self.url + "?q=b", user=self.user)
+
+        self.assertEqual(
+            res.json["options"],
+            [{      "q": "b",
+                    "field": "post__imported_by",
+                    "value": blametern.id,
+                    "rest": "lametern",
+                    "desc": "imported by"
+                    },
+             {      "q": "b",
+                    "field": "changed_by",
+                    "value": blametern.id,
+                    "rest": "lametern",
+                    "desc": "changed by"
+                    },
+             ]
+            )
+
+
+    def test_filter_case(self):
+        create_address(
+            input_street="123 N Main St",
+            city="Providence")
+        create_address(
+            input_street="456 N Main St",
+            city="providence")
+        create_address(
+            input_street="123 N Main St",
+            city="Albuquerque")
+
+        res = self.app.get(self.url + "?q=prov", user=self.user)
+
+        self.assertEqual(
+            res.json["options"],
+            [{
+                    "desc": "city",
+                    "field": "post__city",
                     "value": "providence",
                     "q": "prov",
                     "rest": "idence",
