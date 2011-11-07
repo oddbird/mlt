@@ -8,7 +8,11 @@ from .utils import create_address, create_parcel, create_user
 
 
 
-__all__ = ["SerializerTest", "AddressSerializerTest"]
+__all__ = [
+    "SerializerTest",
+    "AddressSerializerTest",
+    "AddressChangeSerializerTest"
+    ]
 
 
 
@@ -78,12 +82,6 @@ class SerializerTest(TestCase):
 
 class AddressSerializerTest(TestCase):
     @property
-    def model(self):
-        from mlt.map.models import Address
-        return Address
-
-
-    @property
     def serializer(self):
         from mlt.map.serializers import AddressSerializer
         return AddressSerializer
@@ -137,3 +135,33 @@ class AddressSerializerTest(TestCase):
         self.assertEqual(
             self.serializer(["mapped_by"]).one(a),
             {"mapped_by": None})
+
+
+
+
+
+class AddressChangeSerializerTest(TestCase):
+    @property
+    def model(self):
+        from mlt.map.models import AddressChange
+        return AddressChange
+
+
+    @property
+    def serializer(self):
+        from mlt.map.serializers import AddressChangeSerializer
+        return AddressChangeSerializer
+
+
+    def test_snapshot(self):
+        create_address(city="Newark")
+        c = self.model.objects.get()
+
+        self.assertEqual(self.serializer().one(c)["post"]["city"], "Newark")
+
+
+    def test_snapshot_none(self):
+        create_address()
+        c = self.model.objects.get()
+
+        self.assertEqual(self.serializer().one(c)["pre"], None)

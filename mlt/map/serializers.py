@@ -25,6 +25,18 @@ class Serializer(object):
             yield self.one(obj)
 
 
+    def _encode_datetime(self, dt):
+        if dt:
+            return dt.isoformat()
+        return dt
+
+
+    def _encode_user(self, user):
+        if user:
+            return user.username
+        return user
+
+
 
 class ParcelSerializer(Serializer):
     default_fields = [
@@ -66,12 +78,6 @@ class AddressSerializer(Serializer):
         ]
 
 
-    def _encode_datetime(self, dt):
-        if dt:
-            return dt.isoformat()
-        return dt
-
-
     def encode_mapped_timestamp(self, dt):
         return self._encode_datetime(dt)
 
@@ -86,15 +92,41 @@ class AddressSerializer(Serializer):
         return parcel
 
 
-    def _encode_user(self, user):
-        if user:
-            return user.username
-        return user
-
-
     def encode_mapped_by(self, user):
         return self._encode_user(user)
 
 
     def encode_imported_by(self, user):
         return self._encode_user(user)
+
+
+
+class AddressChangeSerializer(Serializer):
+    default_fields = [
+        "id",
+        "changed_by",
+        "changed_timestamp",
+        "pre",
+        "post",
+        ]
+
+
+    def encode_changed_timestamp(self, dt):
+        return self._encode_datetime(dt)
+
+
+    def encode_changed_by(self, user):
+        return self._encode_user(user)
+
+
+    def _encode_address_snapshot(self, snapshot):
+        if snapshot:
+            return AddressSerializer().one(snapshot)
+
+
+    def encode_pre(self, snapshot):
+        return self._encode_address_snapshot(snapshot)
+
+
+    def encode_post(self, snapshot):
+        return self._encode_address_snapshot(snapshot)
