@@ -465,71 +465,73 @@ var MLT = (function (MLT, $) {
                         if (geoURL && id) {
                             thisAddress.loadingOverlay();
                             $.get(geoURL, {id: id}, function (data) {
-                                var byline, web_ui, updatedAddress, newlat, newlng,
-                                    index = thisAddress.find('.mapkey').html();
+                                if (data.address) {
+                                    var byline, web_ui, updatedAddress, newlat, newlng,
+                                        index = thisAddress.find('.mapkey').html();
 
-                                thisAddress.loadingOverlay('remove');
+                                    if (data.address.parcel) {
+                                        newlat = data.address.parcel.latitude;
+                                        newlng = data.address.parcel.longitude;
+                                    }
+                                    if (data.address.latitude && data.address.longitude) {
+                                        geolat = data.address.latitude;
+                                        geolng = data.address.longitude;
+                                    }
+                                    if (data.address.import_source || data.address.mapped_by) { byline = true; }
+                                    if (data.address.import_source === 'web-ui') { web_ui = true; }
 
-                                if (data.address.parcel) {
-                                    newlat = data.address.parcel.latitude;
-                                    newlng = data.address.parcel.longitude;
-                                }
-                                if (data.address.latitude && data.address.longitude) {
-                                    geolat = data.address.latitude;
-                                    geolng = data.address.longitude;
-                                }
-                                if (data.address.import_source || data.address.mapped_by) { byline = true; }
-                                if (data.address.import_source === 'web-ui') { web_ui = true; }
+                                    updatedAddress = ich.address({
+                                        id: id,
+                                        pl: data.address.pl,
+                                        checked: true,
+                                        latitude: newlat,
+                                        longitude: newlng,
+                                        geolat: geolat,
+                                        geolng: geolng,
+                                        index: index,
+                                        edit_url: data.address.edit_url,
+                                        street: data.address.street,
+                                        street_is_parsed: data.address.street_is_parsed,
+                                        street_number: data.address.street_number,
+                                        street_prefix: data.address.street_prefix,
+                                        street_name: data.address.street_name,
+                                        street_type: data.address.street_type,
+                                        street_suffix: data.address.street_suffix,
+                                        city: data.address.city,
+                                        state: data.address.state,
+                                        complex_name: data.address.complex_name,
+                                        needs_review: data.address.needs_review,
+                                        multi_units: data.address.multi_units,
+                                        notes: data.address.notes,
+                                        byline: byline,
+                                        import_source: data.address.import_source,
+                                        web_ui: web_ui,
+                                        imported_by: data.address.imported_by,
+                                        import_timestamp: data.address.import_timestamp,
+                                        mapped_by: data.address.mapped_by,
+                                        mapped_timestamp: data.address.mapped_timestamp
+                                    });
 
-                                updatedAddress = ich.address({
-                                    id: id,
-                                    pl: data.address.pl,
-                                    checked: true,
-                                    latitude: newlat,
-                                    longitude: newlng,
-                                    geolat: geolat,
-                                    geolng: geolng,
-                                    index: index,
-                                    edit_url: data.address.edit_url,
-                                    street: data.address.street,
-                                    street_is_parsed: data.address.street_is_parsed,
-                                    street_number: data.address.street_number,
-                                    street_prefix: data.address.street_prefix,
-                                    street_name: data.address.street_name,
-                                    street_type: data.address.street_type,
-                                    street_suffix: data.address.street_suffix,
-                                    city: data.address.city,
-                                    state: data.address.state,
-                                    complex_name: data.address.complex_name,
-                                    needs_review: data.address.needs_review,
-                                    multi_units: data.address.multi_units,
-                                    notes: data.address.notes,
-                                    byline: byline,
-                                    import_source: data.address.import_source,
-                                    web_ui: web_ui,
-                                    imported_by: data.address.imported_by,
-                                    import_timestamp: data.address.import_timestamp,
-                                    mapped_by: data.address.mapped_by,
-                                    mapped_timestamp: data.address.mapped_timestamp
-                                });
+                                    thisAddress.replaceWith(updatedAddress);
+                                    updatedAddress.find('.details').html5accordion();
 
-                                thisAddress.replaceWith(updatedAddress);
-                                updatedAddress.find('.details').html5accordion();
-
-                                input = updatedAddress.find('input[id^="select"]').get(0);
-                                input.popup = new L.Popup({ autoPan: false });
-                                input.popup.setLatLng(new L.LatLng(geolat, geolng));
-                                input.popup.setContent(popupContent);
-                                MLT.map.addLayer(input.popup);
-                                MLT.map.panTo(new L.LatLng(geolat, geolng));
-                                if (MLT.map.getZoom() < MLT.shared.MIN_PARCEL_ZOOM) {
-                                    MLT.map.setZoom(MLT.shared.MIN_PARCEL_ZOOM);
-                                }
-                                $('#map .leaflet-map-pane .leaflet-objects-pane .leaflet-popup-pane .leaflet-popup-content').filter(function (index) {
-                                    return $(this).html() === popupContent;
-                                }).closest('.leaflet-popup').addClass('geocoded');
-                                if (MLT.shared.addressContainer.data('trusted') !== 'trusted') {
-                                    MLT.shared.addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
+                                    input = updatedAddress.find('input[id^="select"]').get(0);
+                                    input.popup = new L.Popup({ autoPan: false });
+                                    input.popup.setLatLng(new L.LatLng(geolat, geolng));
+                                    input.popup.setContent(popupContent);
+                                    MLT.map.addLayer(input.popup);
+                                    MLT.map.panTo(new L.LatLng(geolat, geolng));
+                                    if (MLT.map.getZoom() < MLT.shared.MIN_PARCEL_ZOOM) {
+                                        MLT.map.setZoom(MLT.shared.MIN_PARCEL_ZOOM);
+                                    }
+                                    $('#map .leaflet-map-pane .leaflet-objects-pane .leaflet-popup-pane .leaflet-popup-content').filter(function (index) {
+                                        return $(this).html() === popupContent;
+                                    }).closest('.leaflet-popup').addClass('geocoded');
+                                    if (MLT.shared.addressContainer.data('trusted') !== 'trusted') {
+                                        MLT.shared.addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
+                                    }
+                                } else {
+                                    thisAddress.loadingOverlay('remove');
                                 }
                             });
                         }
