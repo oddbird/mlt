@@ -193,16 +193,20 @@ class AddressQuerySet(QuerySet):
         for address in self:
             pre = address.snapshot(saved=True)
             AddressChange.objects.create(
-                address=None, changed_by=user, pre=pre, post=None,
+                address=address, changed_by=user, pre=pre, post=None,
                 changed_timestamp=datetime.utcnow())
 
-        return super(AddressQuerySet, self).delete()
+        super(AddressQuerySet, self).update(deleted=True)
 
 
 
 class AddressManager(models.GeoManager):
+    # even deleted Addresses should be accessible via an AddressChange
+    use_for_related_fields = False
+
+
     def get_query_set(self):
-        return AddressQuerySet(self.model, using=self._db)
+        return AddressQuerySet(self.model, using=self._db).filter(deleted=False)
 
 
     def create_from_input(self, **kwargs):
@@ -255,6 +259,9 @@ class AddressVersioningError(Exception):
 
 
 class Address(AddressBase):
+    deleted = models.BooleanField(default=False, db_index=True)
+
+
     objects = AddressManager()
 
 
@@ -292,21 +299,19 @@ class Address(AddressBase):
         return ret
 
 
-    def delete(self, *args, **kwargs):
-        user = kwargs.pop("user", None)
+    def delete(self, user=None):
         if user is None:
             raise AddressVersioningError(
                 "Cannot delete address without providing user.")
 
         pre = self.snapshot(saved=True)
 
-        ret = super(Address, self).delete(*args, **kwargs)
+        self.deleted = True
+        super(Address, self).save()
 
         AddressChange.objects.create(
-            address=None, changed_by=user, pre=pre, post=None,
+            address=self, changed_by=user, pre=pre, post=None,
             changed_timestamp=datetime.utcnow())
-
-        return ret
 
 
     def snapshot(self, saved=True):
@@ -353,10 +358,9 @@ class AddressChange(models.Model):
     single point in time.
 
     """
-    # The Address this change relates to. Null if the address has been deleted.
+    # The Address this change relates to.
     address = models.ForeignKey(
-        Address,
-        null=True, on_delete=models.SET_NULL, related_name="address_changes")
+        Address, on_delete=models.PROTECT, related_name="address_changes")
 
     changed_by = models.ForeignKey(
         User, on_delete=models.PROTECT, related_name="address_changes")

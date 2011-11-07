@@ -368,7 +368,7 @@ class AddressTest(TestCase):
 
         change = changes.get(post__isnull=True)
 
-        self.assertEqual(change.address, None)
+        self.assertEqual(change.address, a)
         self.assertEqual(change.pre.city, "Albuquerque")
         self.assertIs(change.post, None)
         self.assertEqual(change.changed_by, user)
