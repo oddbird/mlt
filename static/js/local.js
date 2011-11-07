@@ -832,6 +832,7 @@ var MLT = MLT || {};
                         var button = $(this),
                             address = button.closest('.address'),
                             url = address.find('.action-cancel').data('url'),
+                            id = address.data('id'),
                             addressInfo = address.find('.adr'),
                             street = addressInfo.find('.street-address'),
                             content = address.find('.content'),
@@ -863,10 +864,13 @@ var MLT = MLT || {};
                         if (url) {
                             address.loadingOverlay();
                             $.post(url, edits, function (data) {
+                                $('#messages .message').filter(function () {
+                                    return $(this).data('address-id') === id;
+                                }).remove();
                                 if (data.errors) {
                                     address.loadingOverlay('remove');
                                     $.each(data.errors, function (i, error) {
-                                        $(ich.message({message: error, tags: "error"})).appendTo($('#messages'));
+                                        $(ich.message({message: error, tags: "error"})).data('address-id', id).appendTo($('#messages'));
                                         $('#messages').messages();
                                     });
                                 } else {
