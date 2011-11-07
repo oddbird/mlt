@@ -137,3 +137,39 @@ class AddressFilter(Filter):
     override_fields = {
         "aid": lambda vals: Q(id__in=vals)
         }
+
+
+
+class AddressChangeFilter(Filter):
+    fields = [
+        "changed_by",
+        "post__street",
+        "post__city",
+        "post__state",
+        "post__pl",
+        "post__mapped_by",
+        "post__imported_by",
+        "post__import_source",
+        "post__complex_name",
+        ]
+
+
+    def get_autocomplete_fields(self):
+        ret = super(AddressChangeFilter, self).get_autocomplete_fields()
+        ret["changed_by"] = ("changed by", "post__changed_by__username")
+        ret["post__mapped_by"] = ("mapped by", "post__mapped_by__username")
+        ret["post__imported_by"] = ("imported by", "post__imported_by__username")
+        return ret
+
+
+    raw_fields = set(["changed_by", "post__mapped_by", "post__imported_by"])
+
+
+    special_fields = {
+        "status": {
+            "unmapped": Q(post__pl=""),
+            "flagged": ~Q(post__pl="") & Q(post__needs_review=True),
+            "approved": ~Q(post__pl="") & Q(post__needs_review=False),
+            },
+        "address_id": lambda vals: Q(address__in=vals)
+        }

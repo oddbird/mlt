@@ -8,6 +8,7 @@ urlpatterns = patterns(
     url(r"^import/$", "import_addresses", name="map_import_addresses"),
 
     url(r"^_addresses/$", "addresses", name="map_addresses"),
+    url(r"^_history/$", "history", name="map_history"),
     url(r"^_export/$", "export_addresses", name="map_export_addresses"),
     url(r"^_add_address/$", "add_address", name="map_add_address"),
     url(r"^_edit_address/(?P<address_id>\d+)/$",

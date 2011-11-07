@@ -15,23 +15,25 @@ from ..dt import utc_to_local
 
 from .encoder import IterEncoder
 from .export import EXPORT_FORMATS, EXPORT_WRITERS
-from .filters import AddressFilter
+from .filters import AddressFilter, AddressChangeFilter
 from .forms import AddressForm, AddressImportForm
 from .importer import ImporterError
-from .models import Parcel, Address
+from .models import Parcel, Address, AddressChange
 from .utils import letter_key
 from . import serializers, sort, paging, geocoder
 
 
 
-class UIAddressSerializer(serializers.AddressSerializer):
-    default_fields = serializers.AddressSerializer.default_fields + ["edit_url"]
-
-
+class UIDateSerializerMixin(object):
     def _encode_datetime(self, dt):
         if dt:
             return date_format(utc_to_local(dt), "DATETIME_FORMAT")
         return dt
+
+
+
+class UIAddressSerializer(UIDateSerializerMixin, serializers.AddressSerializer):
+    default_fields = serializers.AddressSerializer.default_fields + ["edit_url"]
 
 
 
@@ -43,6 +45,18 @@ class UIParcelSerializer(serializers.ParcelSerializer):
 
     def encode_mapped_to(self, addresses):
         return self.address_serializer.many(addresses)
+
+
+
+class UISnapshotSerializer(UIDateSerializerMixin,
+                           serializers.AddressSerializer):
+    pass
+
+
+
+class UIAddressChangeSerializer(UIDateSerializerMixin,
+                                serializers.AddressChangeSerializer):
+    snapshot_serializer = UISnapshotSerializer()
 
 
 
@@ -145,6 +159,7 @@ class IndexedAddressSerializer(UIAddressSerializer):
         return letter_key(val)
 
 
+
 @login_required
 def addresses(request):
     qs = AddressFilter().apply(Address.objects.all(), request.GET)
@@ -160,11 +175,41 @@ def addresses(request):
             messages.error(
                 request, "'%s' is not a valid sort field." % field)
 
-    ret = paging.apply(qs, request.GET)
+    qs = paging.apply(qs, request.GET)
 
     data = {
         "addresses": IndexedAddressSerializer(
-            extra=["parcel"]).many(ret)
+            extra=["parcel"]).many(qs)
+        }
+
+    if get_count:
+        data["count"] = count
+
+    return json_response(data)
+
+
+
+@login_required
+def history(request):
+    qs = AddressChangeFilter().apply(
+        AddressChange.objects.select_related("pre", "post"), request.GET)
+
+    get_count = request.GET.get("count", "false").lower() not in ["false", "0"]
+    if get_count:
+        count = qs.count()
+
+    try:
+        qs = sort.apply(
+            qs, request.GET.getlist("sort") or ["changed_timestamp"])
+    except sort.BadSort as e:
+        for field in e.bad_fields:
+            messages.error(
+                request, "'%s' is not a valid sort field." % field)
+
+    qs = paging.apply(qs, request.GET)
+
+    data = {
+        "changes": UIAddressChangeSerializer().many(qs)
         }
 
     if get_count:

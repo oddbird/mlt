@@ -18,6 +18,7 @@ __all__ = [
     "ExportViewTest",
     "AssociateViewTest",
     "AddressesViewTest",
+    "HistoryViewTest",
     "GeoJSONViewTest",
     "AddAddressViewTest",
     "EditAddressViewTest",
@@ -819,6 +820,268 @@ class AddressesViewTest(AuthenticatedWebTest):
 
         self.assertEqual(res.json["count"], 2)
         self.assertEqual(len(res.json["addresses"]), 1)
+
+
+
+class HistoryViewTest(AuthenticatedWebTest):
+    url_name = "map_history"
+
+
+    def test_get_changes(self):
+        for i in range(50):
+            create_address(street_number=str(i+1))
+
+        res = self.get()
+
+        self.assertEqual(
+            [c["post"]["street_number"] for c in res.json["changes"]],
+            [str(i) for i in range(1, 21)])
+
+
+    def test_change_serialization(self):
+        a = create_address()
+        c = a.address_changes.get()
+
+        res = self.get()
+
+        from django.utils.formats import date_format
+        from mlt.dt import utc_to_local
+        self.maxDiff = None
+        self.assertEqual(
+            res.json["changes"],
+            [
+                {
+                    "id": c.id,
+                    "changed_by": c.changed_by.username,
+                    "changed_timestamp": date_format(
+                        utc_to_local(c.changed_timestamp), "DATETIME_FORMAT"),
+                    "pre": None,
+                    "post": {
+                        "city": a.city,
+                        "complex_name": a.complex_name,
+                        "id": c.post.id,
+                        "import_source": a.import_source,
+                        "import_timestamp": date_format(
+                            utc_to_local(a.import_timestamp),
+                            "DATETIME_FORMAT"),
+                        "imported_by": a.imported_by.username,
+                        "latitude": None,
+                        "longitude": None,
+                        "mapped_by": None,
+                        "mapped_timestamp": None,
+                        "multi_units": a.multi_units,
+                        "needs_review": a.needs_review,
+                        "notes": a.notes,
+                        "pl": "",
+                        "state": a.state,
+                        "street": a.street,
+                        "street_name": a.street_name,
+                        "street_number": a.street_number,
+                        "street_prefix": a.street_prefix,
+                        "street_suffix": a.street_suffix,
+                        "street_type": a.street_type,
+                        "street_is_parsed": a.street_is_parsed
+                        },
+                    "diff": None,
+                    }
+                ]
+            )
+
+
+    def test_get_specific_changes(self):
+        for i in range(50):
+            create_address(street_number=str(i+1))
+
+        res = self.app.get(
+            self.url + "?start=%s&num=%s" % (21, 10),
+            user=self.user)
+
+        self.assertEqual(
+            [a["post"]["street_number"] for a in res.json["changes"]],
+            [str(i) for i in range(21, 31)])
+
+
+    def test_sort(self):
+        a1 = create_address(
+            input_street="123 N Main St",
+            city="Providence",
+            )
+        c1 = a1.address_changes.get()
+        a2 = create_address(
+            input_street="456 N Main St",
+            city="Albuquerque",
+            )
+        c2 = a2.address_changes.get()
+        a3 = create_address(
+            input_street="123 N Main St",
+            city="Albuquerque",
+            )
+        c3 = a3.address_changes.get()
+
+        res = self.app.get(
+            self.url + "?sort=post__city&sort=-post__street&sort=changed_timestamp",
+            user=self.user)
+
+        self.assertEqual(
+            [c["id"] for c in res.json["changes"]],
+            [c2.id, c3.id, c1.id]
+            )
+
+
+    def test_sort_bad_field(self):
+        res = self.app.get(
+            self.url + "?sort=post__city&sort=bad",
+            extra_environ={"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
+            user=self.user)
+
+        self.assertEqual(
+            res.json["messages"],
+            [
+                {
+                    "message": "'bad' is not a valid sort field.",
+                    "level": 40,
+                    "tags": "error"
+                    }
+                ]
+            )
+
+
+    def assertChanges(self, response, ids):
+        self.assertEqual(
+            set([c["id"] for c in response.json["changes"]]),
+            set(ids)
+            )
+
+
+    def test_filter(self):
+        a1 = create_address(
+            city="Providence",
+            )
+        create_address(
+            city="Albuquerque",
+            )
+        create_address(
+            city="Albuquerque",
+            )
+
+        res = self.app.get(
+            self.url + "?post__city=Providence",
+            user=self.user)
+
+        self.assertChanges(res, [a1.address_changes.get().id])
+
+
+    def test_filter_same_address(self):
+        a1 = create_address(city="Providence")
+        a1.city = "Albuquerque"
+        a1.save(user=self.user)
+        a2 = create_address(city="Albuquerque")
+        a2.city = "Providence"
+        a2.save(user=self.user)
+
+        res = self.app.get(
+            self.url + "?post__city=Providence",
+            user=self.user)
+
+        self.assertChanges(
+            res,
+            [
+                a1.address_changes.get(pre__isnull=True).id,
+                a2.address_changes.get(pre__isnull=False).id
+                ])
+
+
+    def test_filter_plus_ids(self):
+        create_address(
+            city="Providence",
+            )
+        a2 = create_address(
+            city="Albuquerque",
+            )
+        create_address(
+            city="Albuquerque",
+            )
+
+        res = self.app.get(
+            self.url + "?post__city=Albuquerque&address_id=%s" % a2.id,
+            user=self.user)
+
+        self.assertChanges(res, [a2.address_changes.get().id])
+
+
+    def test_filter_status_plus_ids(self):
+        create_address(
+            pl="123",
+            needs_review=False,
+            )
+        a2 = create_address(
+            pl="234",
+            needs_review=True,
+            )
+        create_address(
+            pl="",
+            needs_review=False,
+            )
+
+        res = self.app.get(
+            self.url + "?status=approved&address_id=%s" % a2.id,
+            user=self.user)
+
+        self.assertChanges(res, [])
+
+
+    def test_filter_case_insensitive(self):
+        a1 = create_address(
+            city="Providence",
+            )
+        create_address(
+            city="Albuquerque",
+            )
+        create_address(
+            city="Albuquerque",
+            )
+
+        res = self.app.get(
+            self.url + "?post__city=providence",
+            user=self.user)
+
+        self.assertChanges(res, [a1.address_changes.get().id])
+
+
+    def test_filter_user(self):
+        u1 = create_user()
+        u2 = create_user()
+        create_address(user=u1)
+        create_address(user=u1)
+        a3 = create_address(user=u2)
+
+        res = self.app.get(
+            self.url + "?changed_by=%s" % u2.id,
+            user=self.user)
+
+        self.assertChanges(res, [a3.address_changes.get().id])
+
+
+    def test_count(self):
+        create_address(
+            input_street="123 N Main St",
+            city="Providence",
+            import_timestamp=datetime.datetime(2011, 7, 15, 1, 2, 3))
+        create_address(
+            input_street="456 N Main St",
+            city="Albuquerque",
+            import_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
+        create_address(
+            input_street="123 N Main St",
+            city="Albuquerque",
+            import_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
+
+        res = self.app.get(
+            self.url + "?post__city=Albuquerque&num=1&count=true",
+            user=self.user)
+
+        self.assertEqual(res.json["count"], 2)
+        self.assertEqual(len(res.json["changes"]), 1)
 
 
 
