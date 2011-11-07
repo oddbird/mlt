@@ -9,7 +9,8 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from vectorformats.Formats import Django, GeoJSON
+from vectorformats.Formats import GeoJSON
+from vectorformats.Feature import Feature
 
 from ..dt import utc_to_local
 
@@ -285,10 +286,18 @@ def geojson(request):
         "))" % {"w": westlng, "e": eastlng, "s": southlat, "n": northlat}
         )
     qs = Parcel.objects.filter(geom__intersects=wkt)
-    source = Django.Django(
-        geodjango="geom",
-        properties=UIParcelSerializer.default_fields)
-    output = GeoJSON.GeoJSON().encode(source.decode(qs), to_string=False)
+    features = []
+    serializer = UIParcelSerializer()
+    for parcel in qs:
+        feature = Feature(parcel.id)
+        feature.geometry = {
+            "type": parcel.geom.geom_type,
+            "coordinates": parcel.geom.coords,
+            }
+        feature.properties = serializer.one(parcel)
+        features.append(feature)
+
+    output = GeoJSON.GeoJSON().encode(features, to_string=False)
     return json_response(output)
 
 

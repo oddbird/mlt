@@ -1297,6 +1297,21 @@ class GeoJSONViewTest(AuthenticatedWebTest):
             )
 
 
+    def test_mapped(self):
+        self.maxDiff = None
+        p = create_parcel(
+            geom=create_mpolygon(
+                [(1.0, 5.0), (1.0, 6.0), (2.0, 6.0), (2.0, 5.0), (1.0, 5.0)]))
+        create_address(pl=p.pl)
+
+        response = self.get(
+            westlng="0.0", eastlng="3.0", southlat="4.0", northlat="5.5")
+
+        mapped_to = response.json["features"][0]["properties"]["mapped_to"]
+        self.assertEqual(len(mapped_to), 1)
+        self.assertEqual(mapped_to[0]["street"], "3635 Van Gordon St")
+
+
 
 class FilterAutocompleteViewTest(AuthenticatedWebTest):
     url_name = "map_filter_autocomplete"
