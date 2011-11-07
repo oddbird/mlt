@@ -15,11 +15,12 @@ from ..dt import utc_to_local
 
 from .encoder import IterEncoder
 from .export import EXPORT_FORMATS, EXPORT_WRITERS
+from .filters import AddressFilter
 from .forms import AddressForm, AddressImportForm
 from .importer import ImporterError
 from .models import Parcel, Address
 from .utils import letter_key
-from . import filters, serializers, sort, paging, geocoder
+from . import serializers, sort, paging, geocoder
 
 
 
@@ -80,7 +81,7 @@ def export_addresses(request):
     format = request.GET.get("export_format", EXPORT_FORMATS[0])
     writer_class = EXPORT_WRITERS.get(format, EXPORT_WRITERS[EXPORT_FORMATS[0]])
 
-    addresses = filters.apply(Address.objects.all(), request.GET)
+    addresses = AddressFilter().apply(Address.objects.all(), request.GET)
 
     writer = writer_class(addresses)
 
@@ -107,7 +108,7 @@ def associate(request):
     except Parcel.DoesNotExist:
         messages.error(request, "No parcel with PL '%s'" % pl)
 
-    addresses = filters.apply(Address.objects.all(), request.POST)
+    addresses = AddressFilter().apply(Address.objects.all(), request.POST)
     if not addresses:
         messages.error(
             request, "No addresses selected.")
@@ -146,7 +147,7 @@ class IndexedAddressSerializer(UIAddressSerializer):
 
 @login_required
 def addresses(request):
-    qs = filters.apply(Address.objects.all(), request.GET)
+    qs = AddressFilter().apply(Address.objects.all(), request.GET)
 
     get_count = request.GET.get("count", "false").lower() not in ["false", "0"]
     if get_count:
@@ -256,7 +257,7 @@ def filter_autocomplete(request):
             request, "Filter autocomplete requires 'q' parameter.")
         return json_response({})
 
-    data = filters.autocomplete(q)
+    data = AddressFilter().autocomplete(Address.objects.all(), q)
 
     return json_response({"options": data})
 
@@ -301,7 +302,7 @@ def geocode(request):
 
 @login_required
 def address_actions(request):
-    addresses = filters.apply(Address.objects.all(), request.POST)
+    addresses = AddressFilter().apply(Address.objects.all(), request.POST)
     if not addresses:
         messages.error(
             request, "No addresses selected.")

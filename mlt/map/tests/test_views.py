@@ -580,6 +580,48 @@ class AddressesViewTest(AuthenticatedWebTest):
         self.assertAddresses(res, [a1.id])
 
 
+    def test_filter_status(self):
+        create_address(
+            pl="123",
+            needs_review=False,
+            )
+        a2 = create_address(
+            pl="234",
+            needs_review=True,
+            )
+        create_address(
+            pl="",
+            needs_review=False,
+            )
+
+        res = self.app.get(
+            self.url + "?status=flagged",
+            user=self.user)
+
+        self.assertAddresses(res, [a2.id])
+
+
+    def test_filter_bad_status(self):
+        a1 = create_address(
+            pl="123",
+            needs_review=False,
+            )
+        a2 = create_address(
+            pl="234",
+            needs_review=True,
+            )
+        a3 = create_address(
+            pl="",
+            needs_review=False,
+            )
+
+        res = self.app.get(
+            self.url + "?status=foobar",
+            user=self.user)
+
+        self.assertAddresses(res, [a1.id, a2.id, a3.id])
+
+
     def test_filter_plus_ids(self):
         a1 = create_address(
             city="Providence",
