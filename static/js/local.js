@@ -428,7 +428,7 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.addressPopups = function () {
-        $('#addresstable .managelist .address input[id^="select"]').live('change', function () {
+        MLT.shared.addressContainer.on('change', '.address input[id^="select"]', function () {
             var input, mapped_toIDs, i, already_mapped,
                 thisAddress = $(this).closest('.address'),
                 id = thisAddress.data('id'),
@@ -437,7 +437,7 @@ var MLT = (function (MLT, $) {
                 lng = thisAddress.data('longitude'),
                 geolat = thisAddress.data('geocode-latitude'),
                 geolng = thisAddress.data('geocode-longitude'),
-                geoURL = $('#addresstable .managelist').data('geocode-url');
+                geoURL = MLT.shared.addressContainer.data('geocode-url');
             if ($(this).is(':checked')) {
                 if (lat && lng) {
                     this.popup = new L.Popup({ autoPan: false });
@@ -567,7 +567,7 @@ var MLT = (function (MLT, $) {
 
     MLT.mapAddress = function () {
         var url = $('#mapping').data('associate-url');
-        $('#mapinfo .mapit').live('click', function () {
+        $('#mapinfo').on('click', '.mapit', function () {
             var options,
                 notID,
                 selectedAddressID = $('#addresstable .address input[id^="select"]:checked').map(function () {
@@ -717,8 +717,7 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.addressDetails = function () {
-        var info = $('#addresstable .managelist [id^="address-id"] .details .summary');
-        info.live('click', function () {
+        MLT.shared.addressContainer.on('click', '[id^="address-id"] .details .summary', function () {
             if ($(this).closest('.details').hasClass('open')) {
                 $(this).closest('.address').addClass('expanded');
             } else {
@@ -729,7 +728,7 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.addressSelect = function () {
-        $('#addresstable .managelist .address .content').live('click', function (event) {
+        MLT.shared.addressContainer.on('click', '.address .content', function (event) {
             if (!$(event.target).is('button, a, label, input, .summary, .adr, .street-address, .street-number, .street-prefix, .street-name, .street-type, .street-suffix, .locality, .region, .mapkey, .error, [contenteditable]')) {
                 $(this).closest('.address').find('input[id^="select"]').click();
             }
@@ -737,7 +736,7 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.addressZoom = function () {
-        $('#addresstable .managelist .address .content .mapkey').live('click', function (event) {
+        MLT.shared.addressContainer.on('click', '.address .content .mapkey', function (event) {
             var lat, lng,
                 thisAddress = $(this).closest('.address');
             if (thisAddress.find('input[name="select"]:checked').length) {
@@ -783,7 +782,7 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.editAddress = function () {
-        MLT.shared.addressContainer.delegate('.action-edit', 'click', function (e) {
+        MLT.shared.addressContainer.on('click', '.action-edit', function (e) {
             e.preventDefault();
             var button = $(this),
                 address = button.closest('.address'),
@@ -806,7 +805,7 @@ var MLT = (function (MLT, $) {
             button.removeClass('action-edit').addClass('action-cancel').attr('title', 'cancel').html('cancel');
             notes.attr('contenteditable', true).data('original', notes.text());
 
-            address.delegate('[contenteditable]', 'keydown', function (e) {
+            address.on('keydown', '[contenteditable]', function (e) {
                 if (e.keyCode === MLT.keycodes.ENTER) {
                     e.preventDefault();
                     address.find('.savechanges').click();
@@ -814,7 +813,7 @@ var MLT = (function (MLT, $) {
             });
         });
 
-        MLT.shared.addressContainer.delegate('.action-cancel', 'click', function (e) {
+        MLT.shared.addressContainer.on('click', '.action-cancel', function (e) {
             e.preventDefault();
             var button = $(this),
                 address = button.closest('.address'),
@@ -841,7 +840,7 @@ var MLT = (function (MLT, $) {
             }
         });
 
-        MLT.shared.addressContainer.delegate('.savechanges', 'click', function () {
+        MLT.shared.addressContainer.on('click', '.savechanges', function () {
             var button = $(this),
                 address = button.closest('.address'),
                 url = address.find('.action-cancel').data('url'),
@@ -909,7 +908,7 @@ var MLT = (function (MLT, $) {
             } else {
                 target.find('> div').html(data.html);
                 bootstrapForm();
-                $(document).bind('keydown.closeAddLightbox', function (event) {
+                $(document).on('keydown.closeAddLightbox', function (event) {
                     if (event.keyCode === 27) {
                         target.find('a[title*="close"]').click();
                     }
@@ -927,19 +926,19 @@ var MLT = (function (MLT, $) {
             $.get(url, success);
         });
 
-        target.find('a[title*="close"]').live('click', function () {
+        target.on('click', 'a[title*="close"]', function () {
             var form = target.find('form');
             if (form.length) {
                 form.get(0).reset();
             }
-            $(document).unbind('keydown.closeAddLightbox');
+            $(document).off('keydown.closeAddLightbox');
         });
     };
 
     MLT.addressActions = function () {
         var url = MLT.shared.addressContainer.data('actions-url');
 
-        $('#addressform .actions .bools .addremove .delete_selected').live('click', function () {
+        $('#addressform .actions .bools .addremove .action-delete').click(function () {
             var number = MLT.shared.addressContainer.find('.address').length,
                 selectedAddressID = MLT.shared.addressContainer.find('.address input[id^="select"]:checked').map(function () {
                     return $(this).closest('.address').data('id');
@@ -970,7 +969,7 @@ var MLT = (function (MLT, $) {
             return false;
         });
 
-        MLT.shared.addressContainer.find('.address .content .controls .action-delete').live('click', function () {
+        MLT.shared.addressContainer.on('click', '.address .content .controls .action-delete', function () {
             var number = MLT.shared.addressContainer.find('.address').length,
                 selectedAddressID = $(this).closest('.address').data('id');
             if (number < 20) { number = 20; }
@@ -1017,7 +1016,7 @@ var MLT = (function (MLT, $) {
             return false;
         });
 
-        MLT.shared.addressContainer.find('.address label.action-flag[for^="flag_for_review"]').live('click', function () {
+        MLT.shared.addressContainer.on('click', '.address label.action-flag[for^="flag_for_review"]', function () {
             var action,
                 selectedAddressID = $(this).closest('.address').data('id'),
                 thisDiv = $(this).closest('.id');
@@ -1181,7 +1180,7 @@ var MLT = (function (MLT, $) {
             window.setTimeout(hideList, 150);
         });
 
-        suggestionList.find('a').live({
+        suggestionList.on({
             // Adds ``.selected`` to suggestion on mouseover, removing ``.selected`` from other suggestions
             mouseover: function () {
                 var thisSuggestion = $(this).addClass('selected'),
@@ -1219,9 +1218,9 @@ var MLT = (function (MLT, $) {
                 suggestionList.empty().hide();
                 return false;
             }
-        });
+        }, 'a');
 
-        filterList.find('input[id$="filter"]').live('change', function () {
+        filterList.on('change', 'input[id$="filter"]', function () {
             updateFilters();
         });
 
@@ -1299,7 +1298,7 @@ var MLT = (function (MLT, $) {
             url = target.data('import-addresses-url'),
             success = function (data) {
                 target.find('> div').html(data.html);
-                $(document).bind('keydown.closeImportLightbox', function (event) {
+                $(document).on('keydown.closeImportLightbox', function (event) {
                     if (event.keyCode === 27) {
                         target.find('a[title*="close"]').click();
                     }
@@ -1310,12 +1309,12 @@ var MLT = (function (MLT, $) {
             $.get(url, success);
         });
 
-        target.find('a[title*="close"]').live('click', function () {
+        target.on('click', 'a[title*="close"]', function () {
             var form = target.find('form');
             if (form.length) {
                 form.get(0).reset();
             }
-            $(document).unbind('keydown.closeImportLightbox');
+            $(document).off('keydown.closeImportLightbox');
         });
     };
 
