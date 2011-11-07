@@ -368,3 +368,25 @@ class AddressChange(models.Model):
     # The post snapshot. NULL indicates "address deleted"
     post = models.ForeignKey(
         AddressSnapshot, null=True, related_name="post_for")
+
+
+    @property
+    def diff(self):
+        """
+        Return set of fields that differ between pre and post. If either is
+        None, return None.
+
+        """
+        if self.pre is None or self.post is None:
+            return None
+
+        pre_data = self.pre.data()
+        post_data = self.post.data()
+
+        diff = set()
+
+        for field in set(pre_data).union(set(post_data)):
+            if pre_data.get(field) != post_data.get(field):
+                diff.add(field)
+
+        return diff

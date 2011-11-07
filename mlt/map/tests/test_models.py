@@ -450,3 +450,32 @@ class AddressTest(TestCase):
         from mlt.map.models import AddressVersioningError
         with self.assertRaises(AddressVersioningError):
             qs.delete()
+
+
+    def test_create_address_diff(self):
+        a = create_address()
+        c = a.address_changes.get()
+
+        self.assertEqual(c.diff, None)
+
+
+    def test_modify_address_diff(self):
+        a = create_address(city="Albuquerque", state="NM")
+        user = create_user()
+        a.city = "Providence"
+        a.state = "RI"
+        a.save(user=user)
+
+        c = a.address_changes.get(pre__isnull=False)
+
+        self.assertEqual(c.diff, set(["city", "state"]))
+
+
+    def test_delete_address_diff(self):
+        a = create_address()
+        user = create_user()
+        a.delete(user=user)
+
+        c = a.address_changes.get(post__isnull=True)
+
+        self.assertEqual(c.diff, None)

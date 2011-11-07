@@ -108,6 +108,7 @@ class AddressChangeSerializer(Serializer):
         "changed_timestamp",
         "pre",
         "post",
+        "diff",
         ]
 
 
@@ -119,9 +120,12 @@ class AddressChangeSerializer(Serializer):
         return self._encode_user(user)
 
 
+    snapshot_serializer = AddressSerializer()
+
+
     def _encode_address_snapshot(self, snapshot):
         if snapshot:
-            return AddressSerializer().one(snapshot)
+            return self.snapshot_serializer.one(snapshot)
 
 
     def encode_pre(self, snapshot):
