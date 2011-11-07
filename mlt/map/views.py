@@ -152,7 +152,12 @@ def addresses(request):
     if get_count:
         count = qs.count()
 
-    qs = sort.apply(qs, request)
+    try:
+        qs = sort.apply(qs, request.GET.getlist("sort") or ["import_timestamp"])
+    except sort.BadSort as e:
+        for field in e.bad_fields:
+            messages.error(
+                request, "'%s' is not a valid sort field." % field)
 
     ret = paging.apply(qs, request.GET)
 
