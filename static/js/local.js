@@ -1003,6 +1003,9 @@ var MLT = (function (MLT, $) {
             if ($(this).hasClass('action-approve')) {
                 action = "approve";
             }
+            if ($(this).hasClass('action-reject')) {
+                action = "reject";
+            }
             if ($('#addressform .actions .bulkselect').data('selectall')) {
                 options = $.extend(MLT.shared.filters, { aid: selectedAddressID, action: action });
                 if (MLT.shared.addressContainer.find('.address input[id^="select"]').not(':checked').length) {
@@ -1018,7 +1021,7 @@ var MLT = (function (MLT, $) {
             return false;
         });
 
-        MLT.shared.addressContainer.on('click', '.address label.action-flag[for^="flag_for_review"]', function () {
+        MLT.shared.addressContainer.on('click', '.address .action-flag', function () {
             var action,
                 selectedAddressID = $(this).closest('.address').data('id'),
                 thisDiv = $(this).closest('.id');
@@ -1034,6 +1037,13 @@ var MLT = (function (MLT, $) {
             }
             $.post(url, { aid: selectedAddressID, action: action }, MLT.addressLoading.replaceAddresses);
             return false;
+        });
+
+        MLT.shared.addressContainer.on('click', '.address .action-reject', function (e) {
+            var action = "reject",
+                selectedAddressID = $(this).closest('.address').data('id');
+            $.post(url, { aid: selectedAddressID, action: action }, MLT.addressLoading.replaceAddresses);
+            e.preventDefault();
         });
 
         if (MLT.shared.addressContainer.data('trusted') !== 'trusted') {
