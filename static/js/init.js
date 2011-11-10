@@ -12,24 +12,32 @@ var MLT = (function (MLT, $) {
         $('.details:not(html)').html5accordion();
         $('#messages').messages({ handleAjax: true });
 
-        // local.js
-        MLT.addressListHeight();
-        MLT.addressPopups();
-        MLT.mapAddress();
-        MLT.addressSorting();
-        MLT.addressDetails();
-        MLT.addressSelect();
-        MLT.addressZoom();
-        MLT.exportAddresses();
-        MLT.editAddress();
-        MLT.addAddress();
-        MLT.addressActions();
-        MLT.filtering();
-        MLT.selectAll();
-        MLT.mapInfo();
-        MLT.ajaxPagination();
-        MLT.importAddressesLightbox();
-        MLT.initializeMap();
+        // map.js
+        if ($('#addresstable').length) {
+            MLT.addressListHeight();
+            MLT.addressPopups();
+            MLT.mapAddress();
+            MLT.addressSorting();
+            MLT.addressDetails();
+            MLT.addressSelect();
+            MLT.addressZoom();
+            MLT.exportAddresses();
+            MLT.editAddress();
+            MLT.addAddress();
+            MLT.addressActions();
+            MLT.filtering();
+            MLT.selectAll();
+            MLT.mapInfo();
+            MLT.ajaxPagination();
+            MLT.importAddressesLightbox();
+            MLT.initializeMap();
+        }
+
+        // history.js
+        if ($('#history').length) {
+            MLT.loadChanges();
+            MLT.historyAjaxPagination();
+        }
     });
 
     return MLT;

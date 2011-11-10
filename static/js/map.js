@@ -7,6 +7,23 @@ var MLT = (function (MLT, $) {
 
     'use strict';
 
+    var MIN_PARCEL_ZOOM = 17,
+        mapinfoHover = false,
+        mapinfo = $("#mapinfo"),
+        mapinfoTimeout = null,
+        geojson_url = $('#mapping').data('parcel-geojson-url'),
+        geojson = new L.GeoJSON(),
+        selectedLayer = null,
+        selectedId = null,
+        selectedInfo = null,
+        selectedParcelInfo = null,
+        sortData = {},
+        filters = {},
+        addressContainer = $('#addresstable .managelist'),
+        loadingURL = $('#addresstable .managelist').data('addresses-url'),
+        loadingMessage = $('#addresstable .managelist .load'),
+        preserveSelectAll = null;
+
     MLT.keycodes = {
         SPACE: 32,
         ENTER: 13,
@@ -23,31 +40,12 @@ var MLT = (function (MLT, $) {
         DOWN: 40
     };
 
-    MLT.shared = {
-        MIN_PARCEL_ZOOM: 17,
-        mapinfoHover: false,
-        mapinfo: $("#mapinfo"),
-        mapinfoTimeout: null,
-        geojson_url: $('#mapping').data('parcel-geojson-url'),
-        geojson: new L.GeoJSON(),
-        selectedLayer: null,
-        selectedId: null,
-        selectedInfo: null,
-        selectedParcelInfo: null,
-        sortData: {},
-        filters: {},
-        addressContainer: $('#addresstable .managelist'),
-        loadingURL: $('#addresstable .managelist').data('addresses-url'),
-        loadingMessage: $('#addresstable .managelist .load'),
-        preserveSelectAll: null
-    };
-
     MLT.addressLoading = {
         moreAddresses: true,
         currentlyLoading: false,
         scroll: false,
         newAddresses: function (data) {
-            if (data.addresses.length) {
+            if (data.addresses && data.addresses.length) {
                 $.each(data.addresses, function (i, address) {
                     var byline, web_ui, lat, lng, geolat, geolng, addressHTML;
 
@@ -93,36 +91,36 @@ var MLT = (function (MLT, $) {
                         mapped_timestamp: address.mapped_timestamp
                     });
 
-                    MLT.shared.loadingMessage.before(addressHTML).css('opacity', 0);
+                    loadingMessage.before(addressHTML).css('opacity', 0);
                     addressHTML.find('.details').html5accordion();
                 });
-                MLT.shared.loadingMessage.find('p').html('loading addresses...');
+                loadingMessage.find('p').html('loading addresses...');
                 MLT.addressLoading.moreAddresses = true;
                 if (MLT.addressLoading.scroll) {
-                    MLT.shared.addressContainer.scrollTop(MLT.addressLoading.scroll);
+                    addressContainer.scrollTop(MLT.addressLoading.scroll);
                 }
                 if ($('#addressform .actions .bulkselect').data('selectall')) {
-                    MLT.shared.addressContainer.find('.address input[id^="select"]').prop('checked', true);
+                    addressContainer.find('.address input[id^="select"]').prop('checked', true);
                 }
             } else {
-                MLT.shared.loadingMessage.find('p').html('no more addresses');
+                loadingMessage.find('p').html('no more addresses');
                 MLT.addressLoading.moreAddresses = false;
             }
             if (data.count || data.count === 0) {
                 $('#addressform .actions .listlength').html(data.count);
             }
-            if (MLT.shared.addressContainer.data('trusted') !== 'trusted') {
-                MLT.shared.addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
+            if (addressContainer.data('trusted') !== 'trusted') {
+                addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
             }
             MLT.addressLoading.currentlyLoading = false;
             MLT.addressLoading.scroll = false;
         },
         replaceAddress: function (data) {
             var thisAddress, byline, web_ui, lat, lng, geolat, geolng, updatedAddress, address, id, index;
-            if (data.success) {
+            if (data.success && data.address && data.address.length) {
                 address = data.address;
                 id = address.id;
-                thisAddress = MLT.shared.addressContainer.find('.address[data-id="' + id + '"]');
+                thisAddress = addressContainer.find('.address[data-id="' + id + '"]');
                 index = thisAddress.find('.mapkey').text();
 
                 if (address.pl) {
@@ -171,18 +169,18 @@ var MLT = (function (MLT, $) {
                 if ($('#addressform .actions .bulkselect').data('selectall')) {
                     $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
                 }
-                if (MLT.shared.addressContainer.data('trusted') !== 'trusted') {
-                    MLT.shared.addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
+                if (addressContainer.data('trusted') !== 'trusted') {
+                    addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
                 }
             }
         },
         replaceAddresses: function (data) {
-            if (data.addresses.length) {
-                MLT.shared.addressContainer.find('.address input[id^="select"]:checked').click();
+            if (data.addresses && data.addresses.length) {
+                addressContainer.find('.address input[id^="select"]:checked').click();
                 $.each(data.addresses, function (i, address) {
                     var byline, web_ui, lat, lng, geolat, geolng, updatedAddress,
                         id = address.id,
-                        thisAddress = MLT.shared.addressContainer.find('.address[data-id="' + id + '"]'),
+                        thisAddress = addressContainer.find('.address[data-id="' + id + '"]'),
                         index = thisAddress.find('.mapkey').text();
 
                     if (address.pl) {
@@ -232,47 +230,47 @@ var MLT = (function (MLT, $) {
                 if ($('#addressform .actions .bulkselect').data('selectall')) {
                     $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
                 }
-                if (MLT.shared.addressContainer.data('trusted') !== 'trusted') {
-                    MLT.shared.addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
+                if (addressContainer.data('trusted') !== 'trusted') {
+                    addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
                 }
             }
         },
         // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
         reloadList: function (opts, preserveScroll) {
             var defaults = {
-                sort: MLT.shared.sortData,
+                sort: sortData,
                 start: 1,
                 num: 20,
                 count: true
             },
-                options = $.extend({}, defaults, MLT.shared.filters, opts);
+                options = $.extend({}, defaults, filters, opts);
             if (preserveScroll) {
-                MLT.addressLoading.scroll = MLT.shared.addressContainer.scrollTop();
+                MLT.addressLoading.scroll = addressContainer.scrollTop();
             }
-            MLT.shared.addressContainer.find('.address input[id^="select"]:checked').click();
-            if (!MLT.shared.preserveSelectAll) {
+            addressContainer.find('.address input[id^="select"]:checked').click();
+            if (!preserveSelectAll) {
                 $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
             }
-            MLT.shared.preserveSelectAll = false;
-            MLT.shared.loadingMessage.css('opacity', 1).find('p').html('loading addresses...');
-            MLT.shared.addressContainer.find('.address').remove();
-            if (MLT.shared.loadingURL && MLT.shared.sortData) {
+            preserveSelectAll = false;
+            loadingMessage.css('opacity', 1).find('p').html('loading addresses...');
+            addressContainer.find('.address').remove();
+            if (loadingURL && sortData) {
                 MLT.addressLoading.currentlyLoading = true;
-                $.get(MLT.shared.loadingURL, options, MLT.addressLoading.newAddresses);
+                $.get(loadingURL, options, MLT.addressLoading.newAddresses);
             }
         },
         addMore: function (opts) {
-            var count = MLT.shared.addressContainer.find('.address').length + 1,
+            var count = addressContainer.find('.address').length + 1,
                 defaults = {
-                    sort: MLT.shared.sortData,
+                    sort: sortData,
                     start: count
                 },
-                options = $.extend({}, defaults, MLT.shared.filters, opts);
-            if (MLT.shared.loadingURL && MLT.shared.sortData) {
-                MLT.shared.loadingMessage.animate({opacity: 1}, 'fast');
+                options = $.extend({}, defaults, filters, opts);
+            if (loadingURL && sortData) {
+                loadingMessage.animate({opacity: 1}, 'fast');
                 MLT.addressLoading.currentlyLoading = true;
                 // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
-                $.get(MLT.shared.loadingURL, options, MLT.addressLoading.newAddresses);
+                $.get(loadingURL, options, MLT.addressLoading.newAddresses);
             }
         }
     };
@@ -294,24 +292,26 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.initializeMap = function () {
-        MLT.map = new L.Map('map', {
-            center: new L.LatLng(MLT.mapDefaultLat, MLT.mapDefaultLon),
-            zoom: MLT.mapDefaultZoom,
-            layers: [new L.TileLayer(MLT.tileServerUrl, {attribution: MLT.mapCredits})],
-            closePopupOnClick: false
-        });
+        if ($('#map').length) {
+            MLT.map = new L.Map('map', {
+                center: new L.LatLng(MLT.mapDefaultLat, MLT.mapDefaultLon),
+                zoom: MLT.mapDefaultZoom,
+                layers: [new L.TileLayer(MLT.tileServerUrl, {attribution: MLT.mapCredits})],
+                closePopupOnClick: false
+            });
 
-        MLT.map.on('moveend', function () {
-            MLT.refreshParcels();
-        });
+            MLT.map.on('moveend', function () {
+                MLT.refreshParcels();
+            });
+        }
     };
 
     MLT.showInfo = function (newInfo, selected) {
         var mapped_toIDs, i, already_mapped,
             selectedAddresses = $('#addresstable .address input[id^="select"]:checked');
-        if (MLT.shared.mapinfoTimeout) {
-            clearTimeout(MLT.shared.mapinfoTimeout);
-            MLT.shared.mapinfoTimeout = null;
+        if (mapinfoTimeout) {
+            clearTimeout(mapinfoTimeout);
+            mapinfoTimeout = null;
         }
         $("#mapinfo").html(newInfo).show();
         if (selected) {
@@ -343,9 +343,9 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.hideInfo = function () {
-        if (!MLT.shared.selectedInfo) {
-            MLT.shared.mapinfoTimeout = setTimeout(function () {
-                if (!MLT.shared.mapinfoHover) {
+        if (!selectedInfo) {
+            mapinfoTimeout = setTimeout(function () {
+                if (!mapinfoHover) {
                     $("#mapinfo").empty().hide();
                 }
             }, 100);
@@ -357,25 +357,25 @@ var MLT = (function (MLT, $) {
             ne = bounds.getNorthEast(),
             sw = bounds.getSouthWest();
 
-        if (MLT.map.getZoom() >= MLT.shared.MIN_PARCEL_ZOOM) {
+        if (MLT.map.getZoom() >= MIN_PARCEL_ZOOM) {
             $.getJSON(
-                MLT.shared.geojson_url + "?southlat=" + sw.lat + "&northlat=" + ne.lat + "&westlng=" + sw.lng + "&eastlng=" + ne.lng,
+                geojson_url + "?southlat=" + sw.lat + "&northlat=" + ne.lat + "&westlng=" + sw.lng + "&eastlng=" + ne.lng,
                 function (data) {
-                    MLT.map.removeLayer(MLT.shared.geojson);
-                    MLT.shared.selectedLayer = null;
-                    MLT.shared.geojson = new L.GeoJSON();
+                    MLT.map.removeLayer(geojson);
+                    selectedLayer = null;
+                    geojson = new L.GeoJSON();
 
-                    MLT.shared.geojson.on('featureparse', function (e) {
+                    geojson.on('featureparse', function (e) {
                         var id = e.id;
                         e.layer.info = ich.parcelinfo(e.properties);
                         e.layer.select = function () {
-                            if (MLT.shared.selectedLayer) {
-                                MLT.shared.selectedLayer.unselect();
+                            if (selectedLayer) {
+                                selectedLayer.unselect();
                             }
-                            MLT.shared.selectedParcelInfo = e.properties;
-                            MLT.shared.selectedId = id;
-                            MLT.shared.selectedInfo = this.info;
-                            MLT.shared.selectedLayer = this;
+                            selectedParcelInfo = e.properties;
+                            selectedId = id;
+                            selectedInfo = this.info;
+                            selectedLayer = this;
                             this.selected = true;
                             this.setStyle({
                                 color: "red",
@@ -384,9 +384,9 @@ var MLT = (function (MLT, $) {
                         };
                         e.layer.unselect = function () {
                             if (this.selected) {
-                                MLT.shared.selectedId = null;
-                                MLT.shared.selectedInfo = null;
-                                MLT.shared.selectedLayer = null;
+                                selectedId = null;
+                                selectedInfo = null;
+                                selectedLayer = null;
                             }
                             this.selected = false;
                             this.setStyle({
@@ -394,13 +394,13 @@ var MLT = (function (MLT, $) {
                                 weight: 2
                             });
                         };
-                        if (id === MLT.shared.selectedId) {
+                        if (id === selectedId) {
                             e.layer.select();
                         } else {
                             e.layer.unselect();
                         }
                         e.layer.on('mouseover', function (ev) {
-                            if (!MLT.shared.selectedInfo) {
+                            if (!selectedInfo) {
                                 MLT.showInfo(e.layer.info, false);
                             }
                         });
@@ -418,17 +418,17 @@ var MLT = (function (MLT, $) {
                         });
                     });
 
-                    MLT.shared.geojson.addGeoJSON(data);
-                    MLT.map.addLayer(MLT.shared.geojson);
+                    geojson.addGeoJSON(data);
+                    MLT.map.addLayer(geojson);
                 }
             );
         } else {
-            MLT.map.removeLayer(MLT.shared.geojson);
+            MLT.map.removeLayer(geojson);
         }
     };
 
     MLT.addressPopups = function () {
-        MLT.shared.addressContainer.on('change', '.address input[id^="select"]', function () {
+        addressContainer.on('change', '.address input[id^="select"]', function () {
             var input, mapped_toIDs, i, already_mapped,
                 thisAddress = $(this).closest('.address'),
                 id = thisAddress.data('id'),
@@ -437,7 +437,7 @@ var MLT = (function (MLT, $) {
                 lng = thisAddress.data('longitude'),
                 geolat = thisAddress.data('geocode-latitude'),
                 geolng = thisAddress.data('geocode-longitude'),
-                geoURL = MLT.shared.addressContainer.data('geocode-url');
+                geoURL = addressContainer.data('geocode-url');
             if ($(this).is(':checked')) {
                 if (lat && lng) {
                     this.popup = new L.Popup({ autoPan: false });
@@ -445,8 +445,8 @@ var MLT = (function (MLT, $) {
                     this.popup.setContent(popupContent);
                     MLT.map.addLayer(this.popup);
                     MLT.map.panTo(new L.LatLng(lat, lng));
-                    if (MLT.map.getZoom() < MLT.shared.MIN_PARCEL_ZOOM) {
-                        MLT.map.setZoom(MLT.shared.MIN_PARCEL_ZOOM);
+                    if (MLT.map.getZoom() < MIN_PARCEL_ZOOM) {
+                        MLT.map.setZoom(MIN_PARCEL_ZOOM);
                     }
                 } else {
                     if (geolat && geolng) {
@@ -458,14 +458,14 @@ var MLT = (function (MLT, $) {
                             return $(this).html() === popupContent;
                         }).closest('.leaflet-popup').addClass('geocoded');
                         MLT.map.panTo(new L.LatLng(geolat, geolng));
-                        if (MLT.map.getZoom() < MLT.shared.MIN_PARCEL_ZOOM) {
-                            MLT.map.setZoom(MLT.shared.MIN_PARCEL_ZOOM);
+                        if (MLT.map.getZoom() < MIN_PARCEL_ZOOM) {
+                            MLT.map.setZoom(MIN_PARCEL_ZOOM);
                         }
                     } else {
                         if (geoURL && id) {
                             thisAddress.loadingOverlay();
                             $.get(geoURL, {id: id}, function (data) {
-                                if (data.address) {
+                                if (data.address && data.address.length) {
                                     var byline, web_ui, updatedAddress, newlat, newlng,
                                         index = thisAddress.find('.mapkey').html();
 
@@ -521,14 +521,14 @@ var MLT = (function (MLT, $) {
                                     input.popup.setContent(popupContent);
                                     MLT.map.addLayer(input.popup);
                                     MLT.map.panTo(new L.LatLng(geolat, geolng));
-                                    if (MLT.map.getZoom() < MLT.shared.MIN_PARCEL_ZOOM) {
-                                        MLT.map.setZoom(MLT.shared.MIN_PARCEL_ZOOM);
+                                    if (MLT.map.getZoom() < MIN_PARCEL_ZOOM) {
+                                        MLT.map.setZoom(MIN_PARCEL_ZOOM);
                                     }
                                     $('#map .leaflet-map-pane .leaflet-objects-pane .leaflet-popup-pane .leaflet-popup-content').filter(function (index) {
                                         return $(this).html() === popupContent;
                                     }).closest('.leaflet-popup').addClass('geocoded');
-                                    if (MLT.shared.addressContainer.data('trusted') !== 'trusted') {
-                                        MLT.shared.addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
+                                    if (addressContainer.data('trusted') !== 'trusted') {
+                                        addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
                                     }
                                 } else {
                                     thisAddress.loadingOverlay('remove');
@@ -575,9 +575,9 @@ var MLT = (function (MLT, $) {
                 selectedAddressID = $('#addresstable .address input[id^="select"]:checked').map(function () {
                     return $(this).closest('.address').data('id');
                 }).get(),
-                pl = MLT.shared.selectedParcelInfo.pl,
-                lat = MLT.shared.selectedParcelInfo.latitude,
-                lng = MLT.shared.selectedParcelInfo.longitude,
+                pl = selectedParcelInfo.pl,
+                lat = selectedParcelInfo.latitude,
+                lng = selectedParcelInfo.longitude,
                 success = function (data) {
                     $.each(data.mapped_to, function (i, address) {
                         var byline, web_ui, updatedAddress,
@@ -627,20 +627,20 @@ var MLT = (function (MLT, $) {
                     var updatedParcelInfo = ich.parcelinfo(data);
                     $('#mapinfo').removeClass('selected').html(updatedParcelInfo);
                     $('#mapinfo .mapit').hide();
-                    MLT.shared.selectedLayer.info = updatedParcelInfo;
-                    MLT.shared.selectedLayer.unselect();
+                    selectedLayer.info = updatedParcelInfo;
+                    selectedLayer.unselect();
                     if ($('#addressform .actions .bulkselect').data('selectall')) {
                         $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
                     }
-                    if (MLT.shared.addressContainer.data('trusted') !== 'trusted') {
-                        MLT.shared.addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
+                    if (addressContainer.data('trusted') !== 'trusted') {
+                        addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
                     }
                 };
 
             if ($('#addressform .actions .bulkselect').data('selectall')) {
-                options = $.extend(MLT.shared.filters, { maptopl: pl, aid: selectedAddressID });
-                if (MLT.shared.addressContainer.find('.address input[id^="select"]').not(':checked').length) {
-                    notID = MLT.shared.addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
+                options = $.extend(filters, { maptopl: pl, aid: selectedAddressID });
+                if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
+                    notID = addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
                         return $(this).closest('.address').data('id');
                     }).get();
                     options = $.extend(options, { notid: notID });
@@ -661,14 +661,14 @@ var MLT = (function (MLT, $) {
                 $('#addressform .actions .listordering > ul > li.none').insertAfter($('#addressform .actions .listordering > ul > li:not(.none)').last());
             },
             updateSortData = function () {
-                MLT.shared.sortData = list.find('li[class^="by"]').not('.none').map(function () {
+                sortData = list.find('li[class^="by"]').not('.none').map(function () {
                     var thisName = $(this).find('.field').data('field');
                     if ($(this).find('.dir').hasClass('desc')) {
                         thisName = '-' + thisName;
                     }
                     return thisName;
                 }).get();
-                MLT.shared.preserveSelectAll = true;
+                preserveSelectAll = true;
                 MLT.addressLoading.reloadList();
             };
 
@@ -719,7 +719,7 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.addressDetails = function () {
-        MLT.shared.addressContainer.on('click', '[id^="address-id"] .details .summary', function () {
+        addressContainer.on('click', '[id^="address-id"] .details .summary', function () {
             if ($(this).closest('.details').hasClass('open')) {
                 $(this).closest('.address').addClass('expanded');
             } else {
@@ -730,7 +730,7 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.addressSelect = function () {
-        MLT.shared.addressContainer.on('click', '.address .content', function (event) {
+        addressContainer.on('click', '.address .content', function (event) {
             if (!$(event.target).is('button, a, label, input, .summary, .adr, .street-address, .street-number, .street-prefix, .street-name, .street-type, .street-suffix, .locality, .region, .mapkey, .error, [contenteditable]')) {
                 $(this).closest('.address').find('input[id^="select"]').click();
             }
@@ -738,7 +738,7 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.addressZoom = function () {
-        MLT.shared.addressContainer.on('click', '.address .content .mapkey', function (event) {
+        addressContainer.on('click', '.address .content .mapkey', function (event) {
             var lat, lng,
                 thisAddress = $(this).closest('.address');
             if (thisAddress.find('input[name="select"]:checked').length) {
@@ -746,8 +746,8 @@ var MLT = (function (MLT, $) {
                 lng = thisAddress.data('longitude') || thisAddress.data('geocode-longitude');
                 if (lat && lng) {
                     MLT.map.panTo(new L.LatLng(lat, lng));
-                    if (MLT.map.getZoom() < MLT.shared.MIN_PARCEL_ZOOM) {
-                        MLT.map.setZoom(MLT.shared.MIN_PARCEL_ZOOM);
+                    if (MLT.map.getZoom() < MIN_PARCEL_ZOOM) {
+                        MLT.map.setZoom(MIN_PARCEL_ZOOM);
                     }
                 }
             } else {
@@ -763,7 +763,7 @@ var MLT = (function (MLT, $) {
         form.submit(function () {
             var input, i;
             form.find('.export-filter').remove();
-            $.each(MLT.shared.filters, function (field, filter) {
+            $.each(filters, function (field, filter) {
                 if (field === 'status') {
                     input = ich.export_filter({
                         field: field,
@@ -784,7 +784,7 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.editAddress = function () {
-        MLT.shared.addressContainer.on('click', '.action-edit', function (e) {
+        addressContainer.on('click', '.action-edit', function (e) {
             e.preventDefault();
             var button = $(this),
                 address = button.closest('.address'),
@@ -815,7 +815,7 @@ var MLT = (function (MLT, $) {
             });
         });
 
-        MLT.shared.addressContainer.on('click', '.action-cancel', function (e) {
+        addressContainer.on('click', '.action-cancel', function (e) {
             e.preventDefault();
             var button = $(this),
                 address = button.closest('.address'),
@@ -842,7 +842,7 @@ var MLT = (function (MLT, $) {
             }
         });
 
-        MLT.shared.addressContainer.on('click', '.savechanges', function () {
+        addressContainer.on('click', '.savechanges', function () {
             var button = $(this),
                 address = button.closest('.address'),
                 url = address.find('.action-cancel').data('url'),
@@ -902,7 +902,7 @@ var MLT = (function (MLT, $) {
             url = target.data('add-address-url');
 
         success = function (data) {
-            var number = MLT.shared.addressContainer.find('.address').length;
+            var number = addressContainer.find('.address').length;
             if (number < 20) { number = 20; }
             if (data.success) {
                 target.find('a[title*="close"]').click();
@@ -938,20 +938,20 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.addressActions = function () {
-        var url = MLT.shared.addressContainer.data('actions-url');
+        var url = addressContainer.data('actions-url');
 
         $('#addressform .actions .bools .addremove .action-delete').click(function () {
-            var number = MLT.shared.addressContainer.find('.address').length,
-                selectedAddressID = MLT.shared.addressContainer.find('.address input[id^="select"]:checked').map(function () {
+            var number = addressContainer.find('.address').length,
+                selectedAddressID = addressContainer.find('.address input[id^="select"]:checked').map(function () {
                     return $(this).closest('.address').data('id');
                 }).get(),
                 options,
                 notID;
             if (number < 20) { number = 20; }
             if ($('#addressform .actions .bulkselect').data('selectall')) {
-                options = $.extend(MLT.shared.filters, { aid: selectedAddressID, action: "delete" });
-                if (MLT.shared.addressContainer.find('.address input[id^="select"]').not(':checked').length) {
-                    notID = MLT.shared.addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
+                options = $.extend(filters, { aid: selectedAddressID, action: "delete" });
+                if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
+                    notID = addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
                         return $(this).closest('.address').data('id');
                     }).get();
                     options = $.extend(options, { notid: notID });
@@ -971,8 +971,8 @@ var MLT = (function (MLT, $) {
             return false;
         });
 
-        MLT.shared.addressContainer.on('click', '.address .content .controls .action-delete', function () {
-            var number = MLT.shared.addressContainer.find('.address').length,
+        addressContainer.on('click', '.address .content .controls .action-delete', function () {
+            var number = addressContainer.find('.address').length,
                 selectedAddressID = $(this).closest('.address').data('id');
             if (number < 20) { number = 20; }
             $.post(url, { aid: selectedAddressID, action: "delete" }, function (data) {
@@ -985,12 +985,12 @@ var MLT = (function (MLT, $) {
 
         $('#addressform .actions .bools .approval button').click(function () {
             var action,
-                selectedAddressID = MLT.shared.addressContainer.find('.address input[id^="select"]:checked').map(function () {
+                selectedAddressID = addressContainer.find('.address input[id^="select"]:checked').map(function () {
                     return $(this).closest('.address').data('id');
                 }).get(),
                 options,
                 notID,
-                number = MLT.shared.addressContainer.find('.address').length;
+                number = addressContainer.find('.address').length;
             if (number < 20) { number = 20; }
             if ($(this).hasClass('disabled')) {
                 $(ich.message({message: "You don't have permission to perform this action.", tags: "error"})).appendTo($('#messages'));
@@ -1007,9 +1007,9 @@ var MLT = (function (MLT, $) {
                 action = "reject";
             }
             if ($('#addressform .actions .bulkselect').data('selectall')) {
-                options = $.extend(MLT.shared.filters, { aid: selectedAddressID, action: action });
-                if (MLT.shared.addressContainer.find('.address input[id^="select"]').not(':checked').length) {
-                    notID = MLT.shared.addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
+                options = $.extend(filters, { aid: selectedAddressID, action: action });
+                if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
+                    notID = addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
                         return $(this).closest('.address').data('id');
                     }).get();
                     options = $.extend(options, { notid: notID });
@@ -1021,7 +1021,7 @@ var MLT = (function (MLT, $) {
             return false;
         });
 
-        MLT.shared.addressContainer.on('click', '.address .action-flag', function () {
+        addressContainer.on('click', '.address .action-flag', function () {
             var action,
                 selectedAddressID = $(this).closest('.address').data('id'),
                 thisDiv = $(this).closest('.id');
@@ -1039,14 +1039,14 @@ var MLT = (function (MLT, $) {
             return false;
         });
 
-        MLT.shared.addressContainer.on('click', '.address .action-reject', function (e) {
+        addressContainer.on('click', '.address .action-reject', function (e) {
             var action = "reject",
                 selectedAddressID = $(this).closest('.address').data('id');
             $.post(url, { aid: selectedAddressID, action: action }, MLT.addressLoading.replaceAddresses);
             e.preventDefault();
         });
 
-        if (MLT.shared.addressContainer.data('trusted') !== 'trusted') {
+        if (addressContainer.data('trusted') !== 'trusted') {
             $('#addressform .actions .bools .approval .action-approve').addClass('disabled');
         }
     };
@@ -1073,20 +1073,20 @@ var MLT = (function (MLT, $) {
 
             updateFilters = function () {
                 var currentStatus;
-                if (MLT.shared.filters.status) {
-                    currentStatus = MLT.shared.filters.status;
-                    MLT.shared.filters = {};
-                    MLT.shared.filters.status = currentStatus;
+                if (filters.status) {
+                    currentStatus = filters.status;
+                    filters = {};
+                    filters.status = currentStatus;
                 } else {
-                    MLT.shared.filters = {};
+                    filters = {};
                 }
                 filterList.find('input[id$="filter"]:checked').each(function () {
                     var field = $(this).data('field'),
                         value = $(this).data('value');
-                    if (MLT.shared.filters[field]) {
-                        MLT.shared.filters[field].push(value);
+                    if (filters[field]) {
+                        filters[field].push(value);
                     } else {
-                        MLT.shared.filters[field] = [value];
+                        filters[field] = [value];
                     }
                 });
                 if (filterList.find('input[id$="filter"]:checked').length) {
@@ -1237,9 +1237,9 @@ var MLT = (function (MLT, $) {
         });
 
         refresh.click(function () {
-            var number = MLT.shared.addressContainer.find('.address').length;
+            var number = addressContainer.find('.address').length;
             if (number < 20) { number = 20; }
-            MLT.shared.preserveSelectAll = true;
+            preserveSelectAll = true;
             MLT.addressLoading.reloadList({num: number}, true);
             return false;
         });
@@ -1248,9 +1248,9 @@ var MLT = (function (MLT, $) {
             var thisStatus = $(this).attr('class');
             if (!$(this).closest('.bystatus').hasClass(thisStatus)) {
                 if (thisStatus === 'none') {
-                    delete MLT.shared.filters.status;
+                    delete filters.status;
                 } else {
-                    MLT.shared.filters.status = thisStatus;
+                    filters.status = thisStatus;
                 }
                 $(this).closest('.bystatus').removeClass('approved flagged unmapped none').addClass(thisStatus);
                 MLT.addressLoading.reloadList();
@@ -1264,10 +1264,10 @@ var MLT = (function (MLT, $) {
         $('#addressform .actions .bulkselect #select_all_none').change(function () {
             if ($(this).is(':checked')) {
                 $(this).closest('.bulkselect').data('selectall', true);
-                MLT.shared.addressContainer.find('.address input[id^="select"]').prop('checked', true);
+                addressContainer.find('.address input[id^="select"]').prop('checked', true);
             } else {
                 $(this).closest('.bulkselect').data('selectall', false);
-                MLT.shared.addressContainer.find('.address input[id^="select"]').prop('checked', false);
+                addressContainer.find('.address input[id^="select"]').prop('checked', false);
             }
         });
     };
@@ -1276,28 +1276,28 @@ var MLT = (function (MLT, $) {
         $("#mapinfo")
             .hide()
             .hover(
-                function () { MLT.shared.mapinfoHover = true; },
+                function () { mapinfoHover = true; },
                 function () {
-                    MLT.shared.mapinfoHover = false;
+                    mapinfoHover = false;
                     MLT.hideInfo();
                 }
             )
             .click(function (event) {
                 if ($(this).hasClass('selected') && !$(event.target).is('.mapit')) {
-                    var lat = MLT.shared.selectedParcelInfo.latitude,
-                        lng = MLT.shared.selectedParcelInfo.longitude;
+                    var lat = selectedParcelInfo.latitude,
+                        lng = selectedParcelInfo.longitude;
                     MLT.map.panTo(new L.LatLng(lat, lng));
-                    if (MLT.map.getZoom() < MLT.shared.MIN_PARCEL_ZOOM) {
-                        MLT.map.setZoom(MLT.shared.MIN_PARCEL_ZOOM);
+                    if (MLT.map.getZoom() < MIN_PARCEL_ZOOM) {
+                        MLT.map.setZoom(MIN_PARCEL_ZOOM);
                     }
                 }
             });
     };
 
     MLT.ajaxPagination = function () {
-        MLT.shared.addressContainer.scroll(function () {
+        addressContainer.scroll(function () {
             $.doTimeout('scroll', 150, function () {
-                if ((MLT.shared.addressContainer.get(0).scrollHeight - MLT.shared.addressContainer.scrollTop() - MLT.shared.addressContainer.outerHeight()) <= MLT.shared.loadingMessage.outerHeight() && MLT.addressLoading.moreAddresses && !MLT.addressLoading.currentlyLoading) {
+                if ((addressContainer.get(0).scrollHeight - addressContainer.scrollTop() - addressContainer.outerHeight()) <= loadingMessage.outerHeight() && MLT.addressLoading.moreAddresses && !MLT.addressLoading.currentlyLoading) {
                     MLT.addressLoading.addMore();
                 }
             });

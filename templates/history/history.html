@@ -11,11 +11,16 @@
 
   <form method="POST" id="history-form" class="revisionlist" data-changes-url="{% url map_history %}">
 
-    {% include "includes/revision.html" with id="01" %}
-    {% include "includes/revision.html" with id="02" %}
-    {% include "includes/revision.html" with id="03" %}
+    <aside class="load">
+      <p>loading changes...</p>
+    </aside>
 
   </form>
 </section>
 
 {% endblock content %}
+
+{% block jstemplates %}
+  {% load icanhaz %}
+  {% icanhaz "revision" %}
+{% endblock %}
