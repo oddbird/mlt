@@ -275,13 +275,13 @@ var MLT = (function (MLT, $) {
         }
     };
 
-    MLT.addressListHeight = function () {
+    MLT.addressListHeight = function (actions, list) {
         var headerHeight = $('header[role="banner"]').outerHeight(),
-            actionsHeight = $('#addressform').outerHeight(),
+            actionsHeight = $(actions).outerHeight(),
             addressListHeight,
             updateHeight = function () {
                 addressListHeight = $(window).height() - headerHeight - actionsHeight;
-                $('.managelist').css('height', addressListHeight.toString() + 'px');
+                $(list).css('height', addressListHeight.toString() + 'px');
             };
         updateHeight();
         $(window).resize(function () {

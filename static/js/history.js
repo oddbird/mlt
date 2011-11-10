@@ -22,7 +22,7 @@ var MLT = (function (MLT, $) {
                 changesHTML.find('.details').html5accordion();
                 moreChanges = true;
                 if (scroll) {
-                    $(window).scrollTop(scroll);
+                    changesList.scrollTop(scroll);
                 }
                 // if ($('#addressform .actions .bulkselect').data('selectall')) {
                 //     addressContainer.find('.address input[id^="select"]').prop('checked', true);
@@ -56,7 +56,7 @@ var MLT = (function (MLT, $) {
             },
             options = $.extend({}, defaults, MLT.history.filters, opts);
         if (preserveScroll) {
-            scroll = $(window).scrollTop();
+            scroll = changesList.scrollTop();
         }
         // if (!MLT.history.preserveSelectAll) {
         //     $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
@@ -85,9 +85,9 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.historyAjaxPagination = function () {
-        $(window).scroll(function () {
+        changesList.scroll(function () {
             $.doTimeout('scroll', 150, function () {
-                if ($(document).height() - ($(window).scrollTop() + $(window).height()) <= loadingMessage.outerHeight() && moreChanges && !currentlyLoading) {
+                if ((changesList.get(0).scrollHeight - changesList.scrollTop() - changesList.outerHeight()) <= loadingMessage.outerHeight() && moreChanges && !currentlyLoading) {
                     MLT.loadMoreChanges();
                 }
             });

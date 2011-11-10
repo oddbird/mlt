@@ -14,7 +14,7 @@ var MLT = (function (MLT, $) {
 
         // map.js
         if ($('#addresstable').length) {
-            MLT.addressListHeight();
+            MLT.addressListHeight('#addressform', '.managelist');
             MLT.addressPopups();
             MLT.mapAddress();
             MLT.sorting('#addressform');
@@ -37,6 +37,7 @@ var MLT = (function (MLT, $) {
         if ($('#history').length) {
             MLT.historyAjaxPagination();
             MLT.sorting('#history');
+            MLT.addressListHeight('#history > .actions', '#history .revisionlist');
         }
     });
 
