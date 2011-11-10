@@ -1308,14 +1308,14 @@ var MLT = (function (MLT, $) {
         });
     };
 
-    MLT.selectAll = function () {
-        $('#addressform .actions .bulkselect #select_all_none').change(function () {
+    MLT.selectAll = function (context, items) {
+        $(context).find('.actions .bulkselect #select_all_none').change(function () {
             if ($(this).is(':checked')) {
                 $(this).closest('.bulkselect').data('selectall', true);
-                addressContainer.find('.address input[id^="select"]').prop('checked', true);
+                $(items).find('input[id^="select"]').prop('checked', true);
             } else {
                 $(this).closest('.bulkselect').data('selectall', false);
-                addressContainer.find('.address input[id^="select"]').prop('checked', false);
+                $(items).find('input[id^="select"]').prop('checked', false);
             }
         });
     };

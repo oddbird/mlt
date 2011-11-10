@@ -26,7 +26,7 @@ var MLT = (function (MLT, $) {
             MLT.addAddress();
             MLT.addressActions();
             MLT.filtering();
-            MLT.selectAll();
+            MLT.selectAll('#addressform', '#addresstable .managelist .address');
             MLT.mapInfo();
             MLT.ajaxPagination();
             MLT.importAddressesLightbox();
@@ -39,6 +39,7 @@ var MLT = (function (MLT, $) {
             MLT.sorting('#history');
             MLT.addressListHeight('#history > .actions', '#history .revisionlist');
             MLT.filtering();
+            MLT.selectAll('#history', '#history .revisionlist .revision');
         }
     });
 
