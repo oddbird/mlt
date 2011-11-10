@@ -21,11 +21,13 @@ class GetImporterMixin(object):
         raise NotImplementedError
 
 
-    def get_importer(self):
-        return self.importer(
+    def get_importer(self, **kwargs):
+        defaults = dict(
             timestamp=datetime.datetime(2011, 7, 8, 1, 2, 3),
             user=self.user,
             source="tests")
+        defaults.update(kwargs)
+        return self.importer(**defaults)
 
 
 
@@ -148,3 +150,19 @@ class CSVAddressImporterTest(AddressImporterTest):
         self.assertEqual(
             [a.input_street for a in self.model.objects.all()],
             ["123 N Main St", "3815 Brookside"])
+
+
+    def test_custom_fields(self):
+        i = self.get_importer(fieldnames=["pl", "street", "city", "state"])
+
+        fh = StringIO(
+            "123 51,123 N Main St, Rapid City, SD\n"
+            "123 52, 3815 Brookside, Rapid City, SD")
+
+        count, dupes = i.process_file(fh)
+
+        self.assertEqual(count, 2)
+        self.assertEqual(dupes, 0)
+        self.assertEqual(
+            [a.pl for a in self.model.objects.all()],
+            ["123 51", "123 52"])

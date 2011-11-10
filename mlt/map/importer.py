@@ -51,6 +51,11 @@ class AddressImporter(object):
 
 
 class CSVAddressImporter(AddressImporter):
+    def __init__(self, *args, **kwargs):
+        self.fieldnames = kwargs.pop("fieldnames", ["street", "city", "state"])
+        super(CSVAddressImporter, self).__init__(*args, **kwargs)
+
+
     def process_file(self, fh):
-        reader = csv.DictReader(fh, fieldnames=["street", "city", "state"])
+        reader = csv.DictReader(fh, fieldnames=self.fieldnames)
         return self.process(reader)
