@@ -166,3 +166,17 @@ class CSVAddressImporterTest(AddressImporterTest):
         self.assertEqual(
             [a.pl for a in self.model.objects.all()],
             ["123 51", "123 52"])
+
+
+    def test_header(self):
+        i = self.get_importer(header=True)
+
+        fh = StringIO(
+            "street, city, state\n"
+            "123 N Main St, Rapid City, SD\n"
+            "3815 Brookside, Rapid City, SD")
+
+        count, dupes = i.process_file(fh)
+
+        self.assertEqual(count, 2)
+        self.assertEqual(dupes, 0)

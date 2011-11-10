@@ -53,9 +53,12 @@ class AddressImporter(object):
 class CSVAddressImporter(AddressImporter):
     def __init__(self, *args, **kwargs):
         self.fieldnames = kwargs.pop("fieldnames", ["street", "city", "state"])
+        self.header = kwargs.pop("header", False)
         super(CSVAddressImporter, self).__init__(*args, **kwargs)
 
 
     def process_file(self, fh):
         reader = csv.DictReader(fh, fieldnames=self.fieldnames)
+        if self.header:
+            reader.next()
         return self.process(reader)
