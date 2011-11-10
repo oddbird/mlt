@@ -28,6 +28,9 @@
   .changes
     +columns(28,29)
     position: relative
+
+  .old, .new, .blame
+    min-height: rhythm(3.25)
   .new, .old
     +padding-leader(.5)
     +padding-trailer(.5)
@@ -69,6 +72,15 @@
   .controls
     +columns(1,29)
     +omega(29)
+
+  .created, .deleted
+    +adjust-font-size-to($medpx)
+    +padding-leader(1.25,$medpx)
+    text-transform: uppercase
+  .created
+    color: $green
+  .deleted
+    color: $accent
 
   .adr
     +columns(5,8)
