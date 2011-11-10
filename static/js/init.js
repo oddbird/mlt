@@ -35,8 +35,8 @@ var MLT = (function (MLT, $) {
 
         // history.js
         if ($('#history').length) {
-            MLT.loadChanges();
             MLT.historyAjaxPagination();
+            MLT.changesSorting();
         }
     });
 

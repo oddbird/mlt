@@ -6,6 +6,70 @@
 <button type="submit" class="action-revert-all" title="revert all selected">revert all selected</button>
 {% endblock historycontrols %}
 
+{% block listordering %}
+  <nav class="listordering">
+    <h4>sort by</h4>
+    <ul>
+      <li class="bychanged_timestamp">
+        <a href="#" class="field" data-field="changed_timestamp">changed timestamp</a>
+        <a href="#" class="dir desc">descending</a>
+      </li>
+      <li class="bychanged_by">
+        <a href="#" class="field" data-field="changed_by">changed-by username</a>
+        <a href="#" class="dir asc">ascending</a>
+      </li>
+      <li class="bypropertyID">
+        <a href="#" class="field" data-field="post__pl">pl</a>
+        <a href="#" class="dir asc">ascending</a>
+      </li>
+      <li class="bystate">
+        <a href="#" class="field" data-field="post__state">state</a>
+        <a href="#" class="dir asc">ascending</a>
+      </li>
+      <li class="bycity">
+        <a href="#" class="field" data-field="post__city">city</a>
+        <a href="#" class="dir asc">ascending</a>
+      </li>
+      <li class="bystreet">
+        <a href="#" class="field" data-field="post__street">street</a>
+        <a href="#" class="dir asc">ascending</a>
+      </li>
+      <li class="byimport_timestamp none">
+        <a href="#" class="field" data-field="post__import_timestamp">import timestamp</a>
+        <a href="#" class="dir">none</a>
+      </li>
+      <li class="byneedsreview none">
+        <a href="#" class="field" data-field="post__needs_review">needs review</a>
+        <a href="#" class="dir">none</a>
+      </li>
+      <li class="bymulti_units none">
+        <a href="#" class="field" data-field="post__multi_units">multi-units</a>
+        <a href="#" class="dir">none</a>
+      </li>
+      <li class="bycomplex none">
+        <a href="#" class="field" data-field="post__complex_name">complex name</a>
+        <a href="#" class="dir">none</a>
+      </li>
+      <li class="byimported_by none">
+        <a href="#" class="field" data-field="post__imported_by__username">imported-by username</a>
+        <a href="#" class="dir">none</a>
+      </li>
+      <li class="byimport_source none">
+        <a href="#" class="field" data-field="post__import_source">import source</a>
+        <a href="#" class="dir">none</a>
+      </li>
+      <li class="bymapped_timestamp none">
+        <a href="#" class="field" data-field="post__mapped_timestamp">mapped timestamp</a>
+        <a href="#" class="dir">none</a>
+      </li>
+      <li class="bymapped_by none">
+        <a href="#" class="field" data-field="post__mapped_by__username">mapped-by username</a>
+        <a href="#" class="dir">none</a>
+      </li>
+    </ul>
+  </nav>
+{% endblock listordering %}
+
 {% block filtering %}
   {% include "history/_history_filter.html" %}
 {% endblock filtering %}

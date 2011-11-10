@@ -15,6 +15,7 @@ var MLT = (function (MLT, $) {
         filters,
         currentlyLoading,
         moreChanges,
+        scroll,
         newChanges = function (data) {
             if (data.changes && data.changes.length) {
                 var changesHTML = ich.revision(data);
@@ -22,9 +23,9 @@ var MLT = (function (MLT, $) {
                 loadingMessage.before(changesHTML).css('opacity', 0).find('p').html('loading changes...');
                 changesHTML.find('.details').html5accordion();
                 moreChanges = true;
-                // if (scroll) {
-                //     addressContainer.scrollTop(scroll);
-                // }
+                if (scroll) {
+                    $(window).scrollTop(scroll);
+                }
                 // if ($('#addressform .actions .bulkselect').data('selectall')) {
                 //     addressContainer.find('.address input[id^="select"]').prop('checked', true);
                 // }
@@ -39,22 +40,41 @@ var MLT = (function (MLT, $) {
             //     addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
             // }
             currentlyLoading = false;
-            // scroll = false;
+            scroll = false;
+        },
+        reloadList = function (opts, preserveScroll) {
+            var defaults = {
+                    sort: sortData,
+                    start: 1,
+                    num: 20,
+                    count: true
+                },
+                options = $.extend({}, defaults, filters, opts);
+            if (preserveScroll) {
+                scroll = $(window).scrollTop();
+            }
+            // if (!preserveSelectAll) {
+            //     $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
+            // }
+            // preserveSelectAll = false;
+            loadingMessage.css('opacity', 1).find('p').html('loading changes...');
+            changesList.find('.revision').remove();
+            if (loadingURL && sortData) {
+                currentlyLoading = true;
+                $.get(loadingURL, options, newChanges);
+            }
         };
 
-    MLT.loadChanges = function (opts) {
+    MLT.loadMoreChanges = function (opts) {
         var count = changesList.find('.revision').length + 1,
             defaults = {
-                // sort: sortData,
+                sort: sortData,
                 start: count
             },
-            // options = $.extend({}, defaults, filters, opts);
-            options = $.extend({}, defaults, opts);
-        // if (loadingURL && sortData) {
-        if (loadingURL) {
+            options = $.extend({}, defaults, filters, opts);
+        if (loadingURL && sortData) {
             loadingMessage.animate({opacity: 1}, 'fast');
             currentlyLoading = true;
-            // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
             $.get(loadingURL, options, newChanges);
         }
     };
@@ -63,10 +83,76 @@ var MLT = (function (MLT, $) {
         $(window).scroll(function () {
             $.doTimeout('scroll', 150, function () {
                 if ($(document).height() - ($(window).scrollTop() + $(window).height()) <= loadingMessage.outerHeight() && moreChanges && !currentlyLoading) {
-                    MLT.loadChanges();
+                    MLT.loadMoreChanges();
                 }
             });
         });
+    };
+
+    MLT.changesSorting = function () {
+        var list = context.find('.actions .listordering > ul'),
+            items = list.find('li[class^="by"]'),
+            fields = items.find('.field'),
+            directions = items.find('.dir'),
+            sortList = function () {
+                list.find('.none').insertAfter(list.find('li:not(.none)').last());
+            },
+            updateSortData = function () {
+                sortData = items.not('.none').map(function () {
+                    var thisName = $(this).find('.field').data('field');
+                    if ($(this).find('.dir').hasClass('desc')) {
+                        thisName = '-' + thisName;
+                    }
+                    return thisName;
+                }).get();
+                // preserveSelectAll = true;
+                reloadList();
+            };
+
+        fields.click(function () {
+            if (!($(this).closest('li[class^="by"]').hasClass('none'))) {
+                $(this).closest('li[class^="by"]').find('.dir').removeClass('asc desc').html('none');
+            } else {
+                $(this).closest('li[class^="by"]').find('.dir').addClass('asc').html('ascending');
+            }
+            $(this).closest('li[class^="by"]').toggleClass('none');
+            sortList();
+            updateSortData();
+            return false;
+        });
+
+        directions.click(function () {
+            if ($(this).closest('li[class^="by"]').hasClass('none')) {
+                $(this).closest('li[class^="by"]').removeClass('none');
+            }
+            if ($(this).hasClass('asc') || $(this).hasClass('desc')) {
+                if ($(this).hasClass('asc')) {
+                    $(this).html('descending');
+                }
+                if ($(this).hasClass('desc')) {
+                    $(this).html('ascending');
+                }
+                $(this).toggleClass('asc desc');
+            } else {
+                $(this).addClass('asc').html('ascending');
+            }
+            sortList();
+            updateSortData();
+            return false;
+        });
+
+        list.sortable({
+            delay: 30,
+            update: function (event, ui) {
+                if (ui.item.hasClass('none')) {
+                    ui.item.removeClass('none').find('.dir').addClass('asc').html('ascending');
+                }
+                sortList();
+                updateSortData();
+            }
+        });
+
+        updateSortData();
     };
 
     return MLT;
