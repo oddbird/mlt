@@ -30,6 +30,7 @@ def create_mpolygon(points):
 
 
 def create_parcel(**kwargs):
+    commit = kwargs.pop("commit", True)
     defaults = {
         "pl": "111 22",
         "address": "3635 Van Gordon St",
@@ -46,7 +47,10 @@ def create_parcel(**kwargs):
     defaults.update(kwargs)
 
     from mlt.map.models import Parcel
-    return Parcel.objects.create(**defaults)
+    if commit:
+        return Parcel.objects.create(**defaults)
+    else:
+        return Parcel(**defaults)
 
 
 

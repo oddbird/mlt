@@ -14,7 +14,7 @@ parcel_mapping = {
 
 
 
-def load(shapefile_path, verbose=True):
+def load_parcels(shapefile_path, verbose=True):
     lm = LayerMapping(
         Parcel, shapefile_path, parcel_mapping, transform=True)
 
