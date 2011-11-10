@@ -25,6 +25,11 @@
         {{# notes }}<p class="notes">{{ notes }}</p>{{/ notes }}
       </section>
       {{/ post }}
+      {{^ post }}
+      <section class="new address">
+        <h4 class="deleted">address deleted</h4>
+      </section>
+      {{/ post }}
 
       {{# pre }}
       <section class="old address" data-id="{{ id }}">
@@ -39,6 +44,11 @@
         </div>
         <p class="complex{{# multi_units }} multiple{{/ multi_units }}{{^ multi_units }} single{{/ multi_units }}">{{# multi_units }}multiple units{{/ multi_units }}{{^ multi_units }}single unit{{/ multi_units }}</p>
         {{# notes }}<p class="notes">{{ notes }}</p>{{/ notes }}
+      </section>
+      {{/ pre }}
+      {{^ pre }}
+      <section class="old address">
+        <h4 class="created">address created</h4>
       </section>
       {{/ pre }}
     </label>
