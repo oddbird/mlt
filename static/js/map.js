@@ -1070,6 +1070,8 @@ var MLT = (function (MLT, $) {
 
     MLT.filtering = function () {
         var typedText,
+            localFilters,
+            updateFilters,
             textbox = $('#filter_input'),
             url = textbox.data('autocomplete-url'),
             filterList = $('#filter .visual > ul'),
@@ -1077,42 +1079,62 @@ var MLT = (function (MLT, $) {
             refresh = $('#filter .refresh'),
             status = $('#filter .bystatus a'),
 
+            reloadList = function () {
+                if ($('#addresstable').length) {
+                    MLT.addressLoading.reloadList();
+                } else if ($('#history').length) {
+                    MLT.reloadChangesList();
+                }
+            },
+
             updateSuggestions = function (data) {
                 var newSuggestions = ich.filter_suggestion(data);
                 newSuggestions = newSuggestions.filter(function (index) {
-                    var thisSuggestion = $(this).find('a').data('value');
-                    return !(filterList.find('input[id$="filter"][data-value="' + thisSuggestion + '"]:checked').length);
+                    var thisField = $(this).find('a').data('field'),
+                        thisValue = $(this).find('a').data('value');
+                    return !(filterList.find('input[type="checkbox"][name="' + thisField + '_' + thisValue + '"]:checked').length);
                 });
                 if (newSuggestions.length) {
                     suggestionList.html(newSuggestions).show().find('li:first-child a').addClass('selected');
                 }
-            },
-
-            updateFilters = function () {
-                var currentStatus;
-                if (filters.status) {
-                    currentStatus = filters.status;
-                    filters = {};
-                    filters.status = currentStatus;
-                } else {
-                    filters = {};
-                }
-                filterList.find('input[id$="filter"]:checked').each(function () {
-                    var field = $(this).data('field'),
-                        value = $(this).data('value');
-                    if (filters[field]) {
-                        filters[field].push(value);
-                    } else {
-                        filters[field] = [value];
-                    }
-                });
-                if (filterList.find('input[id$="filter"]:checked').length) {
-                    $('#filter .visual').addClass('active-filters');
-                } else {
-                    $('#filter .visual').removeClass('active-filters');
-                }
-                MLT.addressLoading.reloadList();
             };
+
+        if ($('#addresstable').length) {
+            localFilters = filters;
+        } else if ($('#history').length) {
+            localFilters = MLT.history.filters;
+        }
+
+        updateFilters = function () {
+            var currentStatus;
+            if (localFilters.status) {
+                currentStatus = localFilters.status;
+                localFilters = {};
+                localFilters.status = currentStatus;
+            } else {
+                localFilters = {};
+            }
+            filterList.find('input[id$="filter"]:checked').each(function () {
+                var field = $(this).data('field'),
+                    value = $(this).data('value');
+                if (localFilters[field]) {
+                    localFilters[field].push(value);
+                } else {
+                    localFilters[field] = [value];
+                }
+            });
+            if (filterList.find('input[id$="filter"]:checked').length) {
+                $('#filter .visual').addClass('active-filters');
+            } else {
+                $('#filter .visual').removeClass('active-filters');
+            }
+            if ($('#addresstable').length) {
+                filters = localFilters;
+            } else if ($('#history').length) {
+                MLT.history.filters = localFilters;
+            }
+            reloadList();
+        };
 
         textbox.keyup(function () {
             $(this).doTimeout(300, function () {
@@ -1222,17 +1244,21 @@ var MLT = (function (MLT, $) {
             click: function () {
                 var newFilter,
                     field = $(this).data('field'),
-                    value = $(this).data('value');
+                    value = $(this).data('value'),
+                    desc = $(this).data('desc'),
+                    name = $(this).data('name');
                 if (field && value) {
-                    if (filterList.find('input[type="checkbox"][name="' + value + '"]').length) {
-                        if (filterList.find('input[type="checkbox"][name="' + value + '"]').not(':checked').length) {
-                            filterList.find('input[type="checkbox"][name="' + value + '"]').not(':checked').prop('checked', true);
+                    if (filterList.find('input[type="checkbox"][name="' + field + '_' + value + '"]').length) {
+                        if (filterList.find('input[type="checkbox"][name="' + field + '_' + value + '"]').not(':checked').length) {
+                            filterList.find('input[type="checkbox"][name="' + field + '_' + value + '"]').not(':checked').prop('checked', true);
                             updateFilters();
                         }
                     } else {
                         newFilter = ich.filter_applied({
                             field: field,
-                            value: value
+                            value: value,
+                            desc: desc,
+                            name: name
                         });
                         if (newFilter.length) {
                             filterList.append(newFilter);
@@ -1257,7 +1283,7 @@ var MLT = (function (MLT, $) {
             var number = addressContainer.find('.address').length;
             if (number < 20) { number = 20; }
             preserveSelectAll = true;
-            MLT.addressLoading.reloadList({num: number}, true);
+            reloadList({num: number}, true);
             return false;
         });
 
@@ -1265,12 +1291,17 @@ var MLT = (function (MLT, $) {
             var thisStatus = $(this).attr('class');
             if (!$(this).closest('.bystatus').hasClass(thisStatus)) {
                 if (thisStatus === 'none') {
-                    delete filters.status;
+                    delete localFilters.status;
                 } else {
-                    filters.status = thisStatus;
+                    localFilters.status = thisStatus;
                 }
                 $(this).closest('.bystatus').removeClass('approved flagged unmapped none').addClass(thisStatus);
-                MLT.addressLoading.reloadList();
+                if ($('#addresstable').length) {
+                    filters = localFilters;
+                } else if ($('#history').length) {
+                    MLT.history.filters = localFilters;
+                }
+                reloadList();
             }
             $(this).blur();
             return false;

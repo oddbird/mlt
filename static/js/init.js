@@ -38,6 +38,7 @@ var MLT = (function (MLT, $) {
             MLT.historyAjaxPagination();
             MLT.sorting('#history');
             MLT.addressListHeight('#history > .actions', '#history .revisionlist');
+            MLT.filtering();
         }
     });
 

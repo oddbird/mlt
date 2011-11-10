@@ -42,8 +42,8 @@ var MLT = (function (MLT, $) {
         };
 
     MLT.history = {
-        sortData: null,
-        filters: null,
+        sortData: {},
+        filters: {},
         preserveSelectAll: null
     };
 
