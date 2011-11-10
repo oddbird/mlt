@@ -85,13 +85,11 @@
 
   <nav role="navigation">
     <h2 class="navhead">Primary Navigation</h2>
-    <ul>
-      {% if user.is_authenticated %}
-      <li class="history">
-        <a href="/history/">History</a>
-      </li>
-      {% endif %}
-    </ul>
+    {% if user.is_authenticated %}
+      {% block navigation %}
+        <a href="/history/" class="history">History</a>
+      {% endblock navigation %}
+    {% endif %}
   </nav>
 
   <nav class="meta">

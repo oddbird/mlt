@@ -252,7 +252,8 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 [role="navigation"] { display: inline; float: left; width: 6.164%; margin-right: 0.685%; display: inline; float: right; margin-right: 0.685%; #margin-left: -0.809em; }
 [role="navigation"] a:link, [role="navigation"] a:visited { -moz-border-radius: 0.382em; -webkit-border-radius: 0.382em; -o-border-radius: 0.382em; -ms-border-radius: 0.382em; -khtml-border-radius: 0.382em; border-radius: 0.382em; padding-top: 0.405em; padding-bottom: 0.405em; padding-left: 12px; padding-right: 12px; display: block; text-align: center; background: rgba(221, 221, 221, 0.382) no-repeat scroll 12px; }
 [role="navigation"] a:focus, [role="navigation"] a:hover, [role="navigation"] a:active, [role="navigation"] a.active { background-color: rgba(221, 221, 221, 0.618); }
-[role="navigation"] .history a:link, [role="navigation"] .history a:visited { padding-left: 28.584px; background-image: url('../images/ui/history.png?1317931604'); }
+[role="navigation"] .history:link, [role="navigation"] .history:visited { padding-left: 28.584px; background-image: url('../images/ui/history.png?1317931604'); }
+[role="navigation"] .home:link, [role="navigation"] .home:visited { padding-left: 28.584px; background-image: url('../images/ui/pin_target.png?1320960900'); }
 
 .meta { display: inline; float: left; width: 23.288%; margin-right: 0.685%; display: inline; float: right; padding-top: 0.405em; padding-bottom: 0.405em; text-align: right; }
 

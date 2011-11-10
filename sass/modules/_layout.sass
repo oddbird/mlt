@@ -86,10 +86,13 @@ h1
       background-color: rgba($light,$small)
 
   .history
-    a
-      #{$link}
-        padding-left: $normpx + image-width('ui/history.png') + $xsmallpx
-        background-image: image-url('ui/history.png')
+    #{$link}
+      padding-left: $normpx + image-width('ui/history.png') + $xsmallpx
+      background-image: image-url('ui/history.png')
+  .home
+    #{$link}
+      padding-left: $normpx + image-width('ui/pin_target.png') + $xsmallpx
+      background-image: image-url('ui/pin_target.png')
 
 .meta
   +columns(7)
