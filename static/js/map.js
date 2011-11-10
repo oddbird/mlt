@@ -652,24 +652,41 @@ var MLT = (function (MLT, $) {
         });
     };
 
-    MLT.addressSorting = function () {
-        var list = $('#addressform .actions .listordering > ul'),
+    MLT.sorting = function (container) {
+        var context = $(container),
+            list = context.find('.actions .listordering > ul'),
             items = list.find('li[class^="by"]'),
             fields = items.find('.field'),
             directions = items.find('.dir'),
+            localSortData,
+            localPreserveSelectAll,
+            reloadList = function () {
+                if ($('#addresstable').length) {
+                    MLT.addressLoading.reloadList();
+                } else if ($('#history').length) {
+                    MLT.reloadChangesList();
+                }
+            },
             sortList = function () {
-                $('#addressform .actions .listordering > ul > li.none').insertAfter($('#addressform .actions .listordering > ul > li:not(.none)').last());
+                list.find('.none').insertAfter(list.find('li:not(.none)').last());
             },
             updateSortData = function () {
-                sortData = list.find('li[class^="by"]').not('.none').map(function () {
+                localSortData = list.find('li[class^="by"]').not('.none').map(function () {
                     var thisName = $(this).find('.field').data('field');
                     if ($(this).find('.dir').hasClass('desc')) {
                         thisName = '-' + thisName;
                     }
                     return thisName;
                 }).get();
-                preserveSelectAll = true;
-                MLT.addressLoading.reloadList();
+                localPreserveSelectAll = true;
+                if ($('#addresstable').length) {
+                    preserveSelectAll = localPreserveSelectAll;
+                    sortData = localSortData;
+                } else if ($('#history').length) {
+                    MLT.history.preserveSelectAll = localPreserveSelectAll;
+                    MLT.history.sortData = localSortData;
+                }
+                reloadList();
             };
 
         fields.click(function () {

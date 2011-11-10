@@ -17,7 +17,7 @@ var MLT = (function (MLT, $) {
             MLT.addressListHeight();
             MLT.addressPopups();
             MLT.mapAddress();
-            MLT.addressSorting();
+            MLT.sorting('#addressform');
             MLT.addressDetails();
             MLT.addressSelect();
             MLT.addressZoom();
@@ -36,7 +36,7 @@ var MLT = (function (MLT, $) {
         // history.js
         if ($('#history').length) {
             MLT.historyAjaxPagination();
-            MLT.changesSorting();
+            MLT.sorting('#history');
         }
     });
 
