@@ -117,7 +117,7 @@ var MLT = (function (MLT, $) {
         },
         replaceAddress: function (data) {
             var thisAddress, byline, web_ui, lat, lng, geolat, geolng, updatedAddress, address, id, index;
-            if (data.success && data.address && data.address.length) {
+            if (data.success && data.address) {
                 address = data.address;
                 id = address.id;
                 thisAddress = addressContainer.find('.address[data-id="' + id + '"]');
