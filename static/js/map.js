@@ -96,10 +96,12 @@ var MLT = (function (MLT, $) {
                         mapped_timestamp: address.mapped_timestamp
                     });
 
-                    loadingMessage.before(addressHTML).css('opacity', 0);
-                    addressHTML.find('.details').html5accordion();
+                    if (!(addressContainer.find('.address[data-id="' + address.id + '"]').length)) {
+                        loadingMessage.before(addressHTML);
+                        addressHTML.find('.details').html5accordion();
+                    }
                 });
-                loadingMessage.find('p').html('loading addresses...');
+                loadingMessage.css('opacity', 0).find('p').html('loading addresses...');
                 MLT.addressLoading.moreAddresses = true;
                 if (MLT.addressLoading.scroll) {
                     addressContainer.scrollTop(MLT.addressLoading.scroll);
