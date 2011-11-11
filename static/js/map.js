@@ -1088,6 +1088,13 @@ var MLT = (function (MLT, $) {
             e.preventDefault();
         });
 
+        mapinfo.on('click', '.mapped-addresses .action-reject', function (e) {
+            var action = "reject",
+                selectedAddressID = $(this).closest('li').data('id');
+            $.post(url, { aid: selectedAddressID, action: action }, MLT.addressLoading.replaceAddresses);
+            e.preventDefault();
+        });
+
         addressContainer.on('click', '.address .action-complex', function (e) {
             var action,
                 selectedAddressID = $(this).closest('.address').data('id');
