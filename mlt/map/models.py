@@ -355,6 +355,10 @@ class AddressSnapshot(AddressBase):
     """
     snapshot_timestamp = models.DateTimeField()
 
+    @property
+    def has_parcel(self):
+        return bool(self.parcel)
+
 
 
 class AddressChange(models.Model):

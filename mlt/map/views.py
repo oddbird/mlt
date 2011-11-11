@@ -51,7 +51,7 @@ class UIParcelSerializer(serializers.ParcelSerializer):
 
 class UISnapshotSerializer(UIDateSerializerMixin,
                            serializers.AddressSerializer):
-    pass
+    default_fields = serializers.AddressSerializer.default_fields + ["has_parcel"]
 
 
 

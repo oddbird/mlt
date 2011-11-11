@@ -863,6 +863,7 @@ class HistoryViewTest(AuthenticatedWebTest):
                         "city": a.city,
                         "complex_name": a.complex_name,
                         "geocoded": False,
+                        "has_parcel": False,
                         "id": c.post.id,
                         "import_source": a.import_source,
                         "import_timestamp": date_format(
