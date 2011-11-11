@@ -30,7 +30,7 @@
         <input type="checkbox" name="flag_for_review" value="{{ id }}" id="flag_for_review_{{ id }}"{{# needs_review }} checked="checked"{{/ needs_review }} class="flag">
         <label for="flag_for_review_{{ id }}" class="action-flag">flag for review</label>
 
-        <label for="select_{{ id }}" class="value">{{ pl }}</label>
+        <label for="select_{{ id }}" class="value{{# invalid_pl }} invalid{{/ invalid_pl }}">{{ pl }}</label>
       {{/ pl }}
       {{^ pl }}
         <label for="select_{{ id }}" class="value">not mapped</label>
