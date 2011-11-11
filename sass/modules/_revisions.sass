@@ -20,11 +20,11 @@
 
 .revisionlist
   overflow-y: scroll
-  .content
+  .revision
     +pie-clearfix
     +hpadding(gutter())
+    +background(linear-gradient(left,rgba(#fff,.85),rgba(#fff,.85) columns(15,29), rgba($light,$xxsmall) columns(15,29), rgba($light,$xxsmall)))
     border-bottom: 1px solid $light
-    background: rgba($light,$xxsmall)
   .changes
     +columns(28,29)
     position: relative
@@ -36,18 +36,17 @@
     +padding-trailer(.5)
   .new
     +float(left)
-    position: relative
+    position: static
     width: columns(8,28)
     margin-left: columns(6,28)
     padding:
       left: gutter(28)
       right: columns(1,28) + gutter(28)
-    background: rgba(#fff,.85)
     &::before
-      +background-image(linear-gradient(top left, rgba(#fff,.85), rgba(#fff,.85) 25%, rgba(#fff,0) 25%, rgba(#fff,0)),linear-gradient(bottom left, rgba(#fff,.85), rgba(#fff,.85) 25%, rgba(#fff,0) 25%, rgba(#fff,0)))
+      +background-image(linear-gradient(left top, rgba(#fff,.85), rgba(#fff,.85) rhythm(2), rgba(#fff,0) rhythm(2), rgba(#fff,0)),linear-gradient(bottom left, rgba(#fff,.85), rgba(#fff,.85) rhythm(2), rgba(#fff,0) rhythm(2), rgba(#fff,0)))
       +stretch-y
       content: " "
-      left: 100%
+      left: columns(15,28)
       width: $col-width*2
   .old
     +columns(8,28)
@@ -64,7 +63,6 @@
     left: 0
     width: columns(6,28)
     padding-right: gutter(28)
-    background: rgba(#fff,.85)
     text-align: right
     time, cite
       +font-style-normal
@@ -75,7 +73,7 @@
 
   .created, .deleted
     +adjust-font-size-to($medpx)
-    +padding-leader(1.25,$medpx)
+    +padding-leader(.5,$medpx)
     text-transform: uppercase
   .created
     color: $green
@@ -95,10 +93,11 @@
     color: $mid
 
   .id
-    .flag-for-review, .value
-      +inline-block
+    .value
+      +float(right)
     .flag-for-review
       +replace-text('ui/warning.png')
+      +float(left)
       width: rhythm(1.5)
     mark
       +hpadding(rhythm(.25))

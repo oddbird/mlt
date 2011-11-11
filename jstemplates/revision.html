@@ -1,65 +1,61 @@
 {{# changes }}
 <article id="address-history-{{ id }}" class="revision" data-id="{{ id }}" data-address-id="{{ address_id }}" data-changed-fields="{{# diff }}{{# street }}street-address {{/ street }}{{# city }}locality {{/ city }}{{# state }}region {{/ state }}{{# complex_name }}complex-name {{/ complex_name }}{{# needs_review }}flag-for-review {{/ needs_review }}{{# pl }}value {{/ pl }}{{# multi_units }}complex {{/ multi_units }}{{# notes }}notes {{/ notes }}{{# geocoded }}geocoded {{/ geocoded }}{{/ diff }}">
-  <input type="checkbox" id="select-{{ id }}" name="select" value="" class="item-select">
+  <div class="changes">
+    <h3 class="blame hcard">
+      Changed by <cite>{{ changed_by }}</cite> <br />
+      on <time>{{ changed_timestamp }}</time>
+    </h3>
 
-  <div class="content">
-    <label for="select-{{ id }}" class="changes">
-      <h3 class="blame hcard">
-        Changed by <cite>{{ changed_by }}</cite> <br />
-        on <time>{{ changed_timestamp }}</time>
-      </h3>
+    {{# post }}
+    <section class="new address" data-id="{{ id }}">
+      <h4 class="adr">
+        <div class="street-address">{{ street }}</div>
+        <span class="locality">{{ city }}</span>,
+        <span class="region">{{ state }}</span>
+        {{# complex_name }}<span class="complex-name">[{{ complex_name }}]</span>{{/ complex_name }}
+      </h4>
+      <div class="id">
+        {{# needs_review }}<span class="flag-for-review">flagged for review</span>{{/ needs_review }}
+        {{# geocoded }}<span class="geocoded">geocoded</span>{{/ geocoded }}
+        <span class="value{{# pl }}{{^ has_parcel }} invalid{{/ has_parcel }}{{/ pl }}">{{# pl }}{{ pl }}{{/ pl }}{{^ pl }}unmapped{{/ pl }}</span>
+      </div>
+      <p class="complex{{# multi_units }} multiple{{/ multi_units }}{{^ multi_units }} single{{/ multi_units }}">{{# multi_units }}multiple units{{/ multi_units }}{{^ multi_units }}single unit{{/ multi_units }}</p>
+      {{# notes }}<p class="notes">{{ notes }}</p>{{/ notes }}
+    </section>
+    {{/ post }}
+    {{^ post }}
+    <section class="new address">
+      <h4 class="deleted">address deleted</h4>
+    </section>
+    {{/ post }}
 
-      {{# post }}
-      <section class="new address" data-id="{{ id }}">
-        <h4 class="adr">
-          <div class="street-address">{{ street }}</div>
-          <span class="locality">{{ city }}</span>,
-          <span class="region">{{ state }}</span>
-          {{# complex_name }}<span class="complex-name">[{{ complex_name }}]</span>{{/ complex_name }}
-        </h4>
-        <div class="id">
-          {{# geocoded }}<span class="geocoded">geocoded</span>{{/ geocoded }}
-          {{# needs_review }}<span class="flag-for-review">flagged for review</span>{{/ needs_review }}
-          <span class="value{{# pl }}{{^ has_parcel }} invalid{{/ has_parcel }}{{/ pl }}">{{# pl }}{{ pl }}{{/ pl }}{{^ pl }}unmapped{{/ pl }}</span>
-        </div>
-        <p class="complex{{# multi_units }} multiple{{/ multi_units }}{{^ multi_units }} single{{/ multi_units }}">{{# multi_units }}multiple units{{/ multi_units }}{{^ multi_units }}single unit{{/ multi_units }}</p>
-        {{# notes }}<p class="notes">{{ notes }}</p>{{/ notes }}
-      </section>
-      {{/ post }}
-      {{^ post }}
-      <section class="new address">
-        <h4 class="deleted">address deleted</h4>
-      </section>
-      {{/ post }}
+    {{# pre }}
+    <section class="old address" data-id="{{ id }}">
+      <h4 class="adr">
+        <div class="street-address">{{ street }}</div>
+        <span class="locality">{{ city }}</span>,
+        <span class="region">{{ state }}</span>
+        {{# complex_name }}<span class="complex-name">[{{ complex_name }}]</span>{{/ complex_name }}
+      </h4>
+      <div class="id">
+        {{# needs_review }}<span class="flag-for-review">flagged for review</span>{{/ needs_review }}
+        {{# geocoded }}<span class="geocoded">geocoded</span>{{/ geocoded }}
+        <span class="value{{# pl }}{{^ has_parcel }} invalid{{/ has_parcel }}{{/ pl }}">{{# pl }}{{ pl }}{{/ pl }}{{^ pl }}unmapped{{/ pl }}</span>
+      </div>
+      <p class="complex{{# multi_units }} multiple{{/ multi_units }}{{^ multi_units }} single{{/ multi_units }}">{{# multi_units }}multiple units{{/ multi_units }}{{^ multi_units }}single unit{{/ multi_units }}</p>
+      {{# notes }}<p class="notes">{{ notes }}</p>{{/ notes }}
+    </section>
+    {{/ pre }}
+    {{^ pre }}
+    <section class="old address">
+      <h4 class="created">address created</h4>
+    </section>
+    {{/ pre }}
+  </div>
 
-      {{# pre }}
-      <section class="old address" data-id="{{ id }}">
-        <h4 class="adr">
-          <div class="street-address">{{ street }}</div>
-          <span class="locality">{{ city }}</span>,
-          <span class="region">{{ state }}</span>
-          {{# complex_name }}<span class="complex-name">[{{ complex_name }}]</span>{{/ complex_name }}
-        </h4>
-        <div class="id">
-          {{# geocoded }}<span class="geocoded">geocoded</span>{{/ geocoded }}
-          {{# needs_review }}<span class="flag-for-review">flagged for review</span>{{/ needs_review }}
-          <span class="value{{# pl }}{{^ has_parcel }} invalid{{/ has_parcel }}{{/ pl }}">{{# pl }}{{ pl }}{{/ pl }}{{^ pl }}unmapped{{/ pl }}</span>
-        </div>
-        <p class="complex{{# multi_units }} multiple{{/ multi_units }}{{^ multi_units }} single{{/ multi_units }}">{{# multi_units }}multiple units{{/ multi_units }}{{^ multi_units }}single unit{{/ multi_units }}</p>
-        {{# notes }}<p class="notes">{{ notes }}</p>{{/ notes }}
-      </section>
-      {{/ pre }}
-      {{^ pre }}
-      <section class="old address">
-        <h4 class="created">address created</h4>
-      </section>
-      {{/ pre }}
-    </label>
-
-    <div class="controls">
-      <button class="action-revert" title="revert this change">revert this change</button>
-      <a href="#" class="action-history" title="show all revisions for this address">show all revisions for this address</a>
-    </div>
+  <div class="controls">
+    <button class="action-revert" title="revert this change">revert this change</button>
+    <a href="#" class="action-history" title="show all revisions for this address">show all revisions for this address</a>
   </div>
 </article>
 {{/ changes }}

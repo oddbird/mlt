@@ -1,10 +1,11 @@
-=icon($image,$hover:false)
+=icon($image,$hoverimg:false,$hover:true)
   +replace-text($image)
   +opacity(.75)
   display: block
   width: image-width($image) + $xsmallpx
-  #{$focus}
-    +opacity(1)
-    background-image: image-url($image)
-    @if $hover
-      background-image: image-url($hover)
+  @if $hover or $hoverimg
+    #{$focus}
+      +opacity(1)
+      background-image: image-url($image)
+      @if $hoverimg
+        background-image: image-url($hoverimg)
