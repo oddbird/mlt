@@ -468,7 +468,13 @@ class AddressTest(TestCase):
 
         c = a.address_changes.get(pre__isnull=False)
 
-        self.assertEqual(c.diff, set(["city", "state"]))
+        self.assertEqual(
+            c.diff,
+            {
+                "city": {"pre": "Albuquerque", "post": "Providence"},
+                "state": {"pre": "NM", "post": "RI"},
+             }
+        )
 
 
     def test_delete_address_diff(self):

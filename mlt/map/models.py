@@ -377,8 +377,12 @@ class AddressChange(models.Model):
     @property
     def diff(self):
         """
-        Return set of fields that differ between pre and post. If either is
-        None, return None.
+        Return dictionary containing only fields that differ between pre and
+        post. If either pre or post is None, return None.
+
+        Each field in the returned dictionary maps to a dictionary with just
+        "pre" and "post" keys, containing the "pre" and "post" values of that
+        field.
 
         """
         if self.pre is None or self.post is None:
@@ -387,10 +391,29 @@ class AddressChange(models.Model):
         pre_data = self.pre.data()
         post_data = self.post.data()
 
-        diff = set()
+        diff = {}
 
         for field in set(pre_data).union(set(post_data)):
-            if pre_data.get(field) != post_data.get(field):
-                diff.add(field)
+            pre = pre_data.get(field)
+            post = post_data.get(field)
+            if pre != post:
+                diff[field] = {"pre": pre, "post": post}
 
         return diff
+
+
+    def revert(self):
+        """
+        Revert the fields contained in this changes' diff to their "pre"
+        values.
+
+        Returns a dictionary of fields that have been changed since (i.e. the
+        pre-revert value in the address doesn't match this diff's "post"
+        value); the user should be warned about these changes.
+
+        Returned dictionary maps field names to dictionary with keys
+        "expected", "actual", and "reverted". "expected" and "reverted" are the
+        "post" and "pre" values from this diff, respectively, and "actual" is
+        the actual value that was found in the pre-revert state of the address.
+
+        """
