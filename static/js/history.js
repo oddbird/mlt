@@ -96,30 +96,34 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.filterByAddress = function () {
-        var filterList = context.find('#filter .visual > ul');
+        var filterList = context.find('#filter .visual > ul'),
+            hash,
+            addFilter = function (id) {
+                var newFilter = ich.filter_applied({
+                        field: 'address_id',
+                        value: id,
+                        desc: 'address id',
+                        name: id
+                    });
+
+                if (newFilter.length) {
+                    filterList.html(newFilter);
+                    filterList.trigger('update-filters');
+                }
+            };
 
         changesList.on('click', '.revision .controls .action-history', function () {
-            var newFilter,
-                field = 'address_id',
-                value = $(this).closest('.revision').data('address-id'),
-                desc = 'address id',
-                name = $(this).closest('.revision').data('address-id');
-
-            newFilter = ich.filter_applied({
-                field: field,
-                value: value,
-                desc: desc,
-                name: name
-            });
-
-            // console.log(newFilter);
-
-            if (newFilter.length) {
-                filterList.html(newFilter);
-                filterList.trigger('update-filters');
-            }
+            addFilter($(this).closest('.revision').data('address-id'));
             return false;
         });
+
+        if (window.location.hash && window.location.hash.split('_')[2]) {
+            hash = window.location.hash.split('_')[2];
+            addFilter(hash);
+            window.location.hash = '';
+        } else {
+            MLT.reloadChangesList();
+        }
     };
 
     return MLT;

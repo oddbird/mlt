@@ -31,6 +31,7 @@ var MLT = (function (MLT, $) {
             MLT.ajaxPagination();
             MLT.importAddressesLightbox();
             MLT.initializeMap();
+            MLT.addressLoading.reloadList();
         }
 
         // history.js

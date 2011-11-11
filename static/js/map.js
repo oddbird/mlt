@@ -700,7 +700,6 @@ var MLT = (function (MLT, $) {
                 } else if ($('#history').length) {
                     MLT.history.sortData = localSortData;
                 }
-                reloadList();
             };
 
         fields.click(function () {
@@ -712,6 +711,7 @@ var MLT = (function (MLT, $) {
             $(this).closest('li[class^="by"]').toggleClass('none');
             sortList();
             updateSortData();
+            reloadList();
             return false;
         });
 
@@ -732,6 +732,7 @@ var MLT = (function (MLT, $) {
             }
             sortList();
             updateSortData();
+            reloadList();
             return false;
         });
 
@@ -743,6 +744,7 @@ var MLT = (function (MLT, $) {
                 }
                 sortList();
                 updateSortData();
+                reloadList();
             }
         });
 
