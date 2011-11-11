@@ -826,6 +826,8 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.editAddress = function () {
+        var originalStreet;
+
         addressContainer.on('click', '.action-edit', function (e) {
             e.preventDefault();
             var button = $(this),
@@ -843,8 +845,10 @@ var MLT = (function (MLT, $) {
                 street.find('span[class^="street-"]').each(function () {
                     $(this).attr('contenteditable', true).data('original', $(this).text());
                 });
+                originalStreet = street.find('span').map(function () { return $(this).text(); }).get().join(' ');
             } else {
                 street.attr('contenteditable', true).data('original', street.text());
+                originalStreet = street.text();
             }
             button.removeClass('action-edit').addClass('action-cancel').attr('title', 'cancel').html('cancel');
             notes.attr('contenteditable', true).data('original', notes.text());
@@ -893,6 +897,8 @@ var MLT = (function (MLT, $) {
                 street = addressInfo.find('.street-address'),
                 content = address.find('.content'),
                 notes = address.find('.notes'),
+                editedStreet,
+                rejectButton,
                 edits;
 
             if (street.data('parsed')) {
@@ -907,6 +913,7 @@ var MLT = (function (MLT, $) {
                     complex_name: addressInfo.find('.complex-name').text(),
                     notes: notes.text()
                 };
+                editedStreet = street.find('span').map(function () { return $(this).text(); }).get().join(' ');
             } else {
                 edits = {
                     edited_street: street.text(),
@@ -915,6 +922,7 @@ var MLT = (function (MLT, $) {
                     complex_name: addressInfo.find('.complex-name').text(),
                     notes: notes.text()
                 };
+                editedStreet = street.text();
             }
 
             if (url) {
@@ -931,6 +939,13 @@ var MLT = (function (MLT, $) {
                         });
                     } else {
                         MLT.addressLoading.replaceAddress(data);
+                        if (editedStreet !== originalStreet && !address.find('.id').hasClass('unmapped')) {
+                            MLT.refreshParcels();
+                            if (mapinfo.find('li[data-id="' + id + '"]').length) {
+                                rejectButton = mapinfo.find('li[data-id="' + id + '"] .action-reject');
+                                mapinfo.find('li[data-id="' + id + '"]').html(editedStreet).append(rejectButton);
+                            }
+                        }
                     }
                 });
             }
