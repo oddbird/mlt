@@ -18,6 +18,7 @@ from .base import AddressWriter
 DBF_FIELDS = {
     "id": ("N", 32),
     "street_is_parsed": ("L", 1),
+    "geocoded": ("L", 1),
     "latitude": ("N", 32),
     "longitude": ("N", 32),
     }
@@ -64,6 +65,11 @@ class ShapefileAddressSerializer(AddressSerializer):
 
     def encode_street_is_parsed(self, val):
         return self._encode_boolean(val)
+
+
+    def encode_geocoded(self, val):
+        return self._encode_boolean(
+            super(ShapefileAddressSerializer, self).encode_geocoded(val))
 
 
 

@@ -3,6 +3,7 @@ import zipfile
 
 from django.test import TestCase
 
+from mock import patch
 import shapefile
 
 from ..utils import create_address, create_parcel, create_mpolygon
@@ -29,6 +30,7 @@ class SHPWriterTest(TestCase):
         self.assertEqual(self.writer_class.extension, "zip")
 
 
+    @patch("mlt.map.writers.shp.DBF_FIELDS", {})
     def test_unrecognized_field(self):
         from mlt.map.writers.shp import dbf_field
         with self.assertRaises(ValueError):

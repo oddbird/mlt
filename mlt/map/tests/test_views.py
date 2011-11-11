@@ -480,6 +480,7 @@ class AddressesViewTest(AuthenticatedWebTest):
                         utc_to_local(a.import_timestamp), "DATETIME_FORMAT"),
               "imported_by": a.imported_by.username,
               "index": "A",
+              "geocoded": False,
               "latitude": None,
               "longitude": None,
               "mapped_by": None,
@@ -860,6 +861,7 @@ class HistoryViewTest(AuthenticatedWebTest):
                     "post": {
                         "city": a.city,
                         "complex_name": a.complex_name,
+                        "geocoded": False,
                         "id": c.post.id,
                         "import_source": a.import_source,
                         "import_timestamp": date_format(
@@ -1536,6 +1538,7 @@ class GeocodeViewTest(AuthenticatedWebTest):
                     "city": "Providence",
                     "complex_name": "",
                     "edit_url": "/map/_edit_address/%s/" % a.id,
+                    "geocoded": True,
                     "id": a.id,
                     "import_source": "test-created",
                     "import_timestamp": "June 15, 2011 at 4:14 a.m.",

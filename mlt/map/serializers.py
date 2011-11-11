@@ -73,6 +73,7 @@ class AddressSerializer(Serializer):
         "imported_by",
         "import_timestamp",
         "import_source",
+        "geocoded",
         "latitude",
         "longitude",
         ]
@@ -98,6 +99,12 @@ class AddressSerializer(Serializer):
 
     def encode_imported_by(self, user):
         return self._encode_user(user)
+
+
+    def encode_geocoded(self, geocoded):
+        # actual location data is in latitude/longitude, serialization only
+        # needs this as a "has it been geocoded" flag
+        return bool(geocoded)
 
 
 
