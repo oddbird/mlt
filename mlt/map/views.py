@@ -34,7 +34,8 @@ class UIDateSerializerMixin(object):
 
 
 class UIAddressSerializer(UIDateSerializerMixin, serializers.AddressSerializer):
-    default_fields = serializers.AddressSerializer.default_fields + ["edit_url"]
+    default_fields = serializers.AddressSerializer.default_fields + [
+        "edit_url", "has_parcel"]
 
 
 
@@ -51,7 +52,8 @@ class UIParcelSerializer(serializers.ParcelSerializer):
 
 class UISnapshotSerializer(UIDateSerializerMixin,
                            serializers.AddressSerializer):
-    default_fields = serializers.AddressSerializer.default_fields + ["has_parcel"]
+    default_fields = serializers.AddressSerializer.default_fields + [
+        "has_parcel"]
 
 
 

@@ -149,10 +149,17 @@ class AddressBase(models.Model):
 
     @property
     def parcel(self):
+        if not self.pl:
+            return None
         try:
             return Parcel.objects.get(pl=self.pl)
         except Parcel.DoesNotExist:
             return None
+
+
+    @property
+    def has_parcel(self):
+        return bool(self.parcel)
 
 
     def data(self, internal=False):
@@ -354,10 +361,6 @@ class AddressSnapshot(AddressBase):
 
     """
     snapshot_timestamp = models.DateTimeField()
-
-    @property
-    def has_parcel(self):
-        return bool(self.parcel)
 
 
 
