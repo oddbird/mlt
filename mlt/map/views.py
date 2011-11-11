@@ -420,6 +420,28 @@ def address_actions(request):
                 "addresses": UIAddressSerializer().many(updated),
                 })
 
+    if action == "multi":
+        addresses = addresses.filter(multi_units=False)
+        updated = Address.objects.filter(
+            id__in=[a.id for a in addresses])
+        updated.update(user=request.user, multi_units=True)
+        messages.success(request, "Address set as multi-unit.")
+        return json_response({
+                "success": True,
+                "addresses": UIAddressSerializer().many(updated),
+                })
+
+    if action == "single":
+        addresses = addresses.filter(multi_units=True)
+        updated = Address.objects.filter(
+            id__in=[a.id for a in addresses])
+        updated.update(user=request.user, multi_units=False)
+        messages.success(request, "Address set as single unit.")
+        return json_response({
+                "success": True,
+                "addresses": UIAddressSerializer().many(updated),
+                })
+
     messages.error(request, "Unknown action '%s'" % action)
     return json_response({"success": False})
 

@@ -1839,6 +1839,72 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
         self.assertEqual(refresh(a2).needs_review, False)
 
 
+    def test_multi(self):
+        a1 = create_address(multi_units=False)
+        a2 = create_address(multi_units=True)
+        a3 = create_address(multi_units=False)
+
+        res = self.post(
+            self.url,
+            {"aid": [a1.id, a2.id], "action": "multi"},
+            )
+
+        self.assertEqual(
+            res.json["messages"],
+            [{
+                    "level": 25,
+                    "message": "Address set as multi-unit.",
+                    "tags": "success",
+                    }],
+            )
+        self.assertEqual(len(res.json["addresses"]), 1)
+        self.assertEqual(res.json["addresses"][0]["id"], a1.id)
+        self.assertEqual(res.json["addresses"][0]["multi_units"], True)
+        self.assertTrue(res.json["success"])
+
+        a1 = refresh(a1)
+        self.assertEqual(a1.multi_units, True)
+
+        a2 = refresh(a2)
+        self.assertEqual(a1.multi_units, True)
+
+        a3 = refresh(a3)
+        self.assertEqual(a3.multi_units, False)
+
+
+    def test_single(self):
+        a1 = create_address(multi_units=False)
+        a2 = create_address(multi_units=True)
+        a3 = create_address(multi_units=True)
+
+        res = self.post(
+            self.url,
+            {"aid": [a1.id, a2.id], "action": "single"},
+            )
+
+        self.assertEqual(
+            res.json["messages"],
+            [{
+                    "level": 25,
+                    "message": "Address set as single unit.",
+                    "tags": "success",
+                    }],
+            )
+        self.assertEqual(len(res.json["addresses"]), 1)
+        self.assertEqual(res.json["addresses"][0]["id"], a2.id)
+        self.assertEqual(res.json["addresses"][0]["multi_units"], False)
+        self.assertTrue(res.json["success"])
+
+        a1 = refresh(a1)
+        self.assertEqual(a1.multi_units, False)
+
+        a2 = refresh(a2)
+        self.assertEqual(a1.multi_units, False)
+
+        a3 = refresh(a3)
+        self.assertEqual(a3.multi_units, True)
+
+
     def test_no_ids(self):
         res = self.post(self.url, {})
 
