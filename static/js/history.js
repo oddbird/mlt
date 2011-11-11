@@ -1,5 +1,6 @@
 /*jslint    browser:    true,
-            indent:     4 */
+            indent:     4,
+            confusion:  true */
 /*global    ich, jQuery */
 
 var MLT = (function (MLT, $) {
@@ -35,9 +36,6 @@ var MLT = (function (MLT, $) {
                 if (scroll) {
                     changesList.scrollTop(scroll);
                 }
-                // if ($('#addressform .actions .bulkselect').data('selectall')) {
-                //     addressContainer.find('.address input[id^="select"]').prop('checked', true);
-                // }
             } else {
                 loadingMessage.find('p').html('no more changes');
                 moreChanges = false;
@@ -45,17 +43,13 @@ var MLT = (function (MLT, $) {
             if (data.count || data.count === 0) {
                 $('#filter .filtercontrols .listlength').html(data.count);
             }
-            // if (addressContainer.data('trusted') !== 'trusted') {
-            //     addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
-            // }
             currentlyLoading = false;
             scroll = false;
         };
 
     MLT.history = {
         sortData: {},
-        filters: {},
-        preserveSelectAll: null
+        filters: {}
     };
 
     MLT.reloadChangesList = function (opts, preserveScroll) {
@@ -69,10 +63,6 @@ var MLT = (function (MLT, $) {
         if (preserveScroll) {
             scroll = changesList.scrollTop();
         }
-        // if (!MLT.history.preserveSelectAll) {
-        //     $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
-        // }
-        // MLT.history.preserveSelectAll = false;
         loadingMessage.css('opacity', 1).find('p').html('loading changes...');
         changesList.find('.revision').remove();
         if (loadingURL && MLT.history.sortData) {

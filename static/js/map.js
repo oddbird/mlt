@@ -683,7 +683,6 @@ var MLT = (function (MLT, $) {
                     preserveSelectAll = localPreserveSelectAll;
                     sortData = localSortData;
                 } else if ($('#history').length) {
-                    MLT.history.preserveSelectAll = localPreserveSelectAll;
                     MLT.history.sortData = localSortData;
                 }
                 reloadList();
