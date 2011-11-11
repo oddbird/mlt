@@ -1101,14 +1101,32 @@ var MLT = (function (MLT, $) {
         addressContainer.on('click', '.address .action-reject', function (e) {
             var action = "reject",
                 selectedAddressID = $(this).closest('.address').data('id');
-            $.post(url, { aid: selectedAddressID, action: action }, MLT.addressLoading.replaceAddresses);
+            $.post(url, { aid: selectedAddressID, action: action }, function (data) {
+                MLT.addressLoading.replaceAddresses(data);
+                if (data.success) {
+                    MLT.refreshParcels();
+                    mapinfo.find('.mapped-addresses li[data-id="' + selectedAddressID + '"]').remove();
+                    if (!(mapinfo.find('.mapped-addresses ul > li').length)) {
+                        mapinfo.find('.mapped-addresses h4, .mapped-addresses ul').remove();
+                    }
+                }
+            });
             e.preventDefault();
         });
 
         mapinfo.on('click', '.mapped-addresses .action-reject', function (e) {
             var action = "reject",
                 selectedAddressID = $(this).closest('li').data('id');
-            $.post(url, { aid: selectedAddressID, action: action }, MLT.addressLoading.replaceAddresses);
+            $.post(url, { aid: selectedAddressID, action: action }, function (data) {
+                MLT.addressLoading.replaceAddresses(data);
+                if (data.success) {
+                    MLT.refreshParcels();
+                    mapinfo.find('.mapped-addresses li[data-id="' + selectedAddressID + '"]').remove();
+                    if (!(mapinfo.find('.mapped-addresses ul > li').length)) {
+                        mapinfo.find('.mapped-addresses h4, .mapped-addresses ul').remove();
+                    }
+                }
+            });
             e.preventDefault();
         });
 
