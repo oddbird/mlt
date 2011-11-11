@@ -100,7 +100,7 @@ ins { text-decoration: underline; }
 
 del { text-decoration: line-through; }
 
-mark { background: #ffff99; background-color: rgba(255, 255, 0, 0.5); text-shadow: none; }
+mark { background: #ffff99; background-color: rgba(255, 255, 0, 0.5); text-shadow: none; color: inherit; }
 
 small { font-size: 0.382em; line-height: 4.236em; }
 
