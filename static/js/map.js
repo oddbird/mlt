@@ -22,6 +22,7 @@ var MLT = (function (MLT, $) {
         addressContainer = $('#addresstable .managelist'),
         loadingURL = $('#addresstable .managelist').data('addresses-url'),
         loadingMessage = $('#addresstable .managelist .load'),
+        refreshButton = $('#addresstable #filter .refresh'),
         preserveSelectAll = null;
 
     MLT.keycodes = {
@@ -173,6 +174,7 @@ var MLT = (function (MLT, $) {
 
                 thisAddress.replaceWith(updatedAddress);
                 updatedAddress.find('.details').html5accordion();
+                refreshButton.addClass('expired');
                 if ($('#addressform .actions .bulkselect').data('selectall')) {
                     $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
                 }
@@ -237,6 +239,7 @@ var MLT = (function (MLT, $) {
                     thisAddress.replaceWith(updatedAddress);
                     updatedAddress.find('.details').html5accordion();
                 });
+                refreshButton.addClass('expired');
                 if ($('#addressform .actions .bulkselect').data('selectall')) {
                     $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
                 }
@@ -245,7 +248,6 @@ var MLT = (function (MLT, $) {
                 }
             }
         },
-        // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
         reloadList: function (opts, preserveScroll) {
             var defaults = {
                 sort: sortData,
@@ -264,8 +266,10 @@ var MLT = (function (MLT, $) {
             preserveSelectAll = false;
             loadingMessage.css('opacity', 1).find('p').html('loading addresses...');
             addressContainer.find('.address').remove();
+            refreshButton.removeClass('expired');
             if (loadingURL && sortData) {
                 MLT.addressLoading.currentlyLoading = true;
+                // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
                 $.get(loadingURL, options, MLT.addressLoading.newAddresses);
             }
         },
@@ -528,6 +532,7 @@ var MLT = (function (MLT, $) {
 
                                     thisAddress.replaceWith(updatedAddress);
                                     updatedAddress.find('.details').html5accordion();
+                                    refreshButton.addClass('expired');
 
                                     input = updatedAddress.find('input[id^="select"]').get(0);
                                     input.popup = new L.Popup({ autoPan: false });
@@ -636,6 +641,7 @@ var MLT = (function (MLT, $) {
                             thisAddress.find('input[id^="select"]').click();
                             thisAddress.replaceWith(updatedAddress);
                             updatedAddress.find('.details').html5accordion();
+                            refreshButton.addClass('expired');
                         }
                     });
 
