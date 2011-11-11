@@ -652,6 +652,7 @@ var MLT = (function (MLT, $) {
                     $('#mapinfo .mapit').hide();
                     selectedLayer.info = updatedParcelInfo;
                     selectedLayer.unselect();
+                    MLT.refreshParcels();
                     if ($('#addressform .actions .bulkselect').data('selectall')) {
                         $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
                     }
