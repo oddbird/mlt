@@ -35,6 +35,7 @@
         <label for="select_{{ id }}" class="value{{# invalid_pl }} invalid{{/ invalid_pl }}">{{ pl }}</label>
       {{/ pl }}
       {{^ pl }}
+        {{# geocoded }}<span class="geocoded">geocoded</span>{{/ geocoded }}
         <label for="select_{{ id }}" class="value">not mapped</label>
       {{/ pl }}
     </div>
