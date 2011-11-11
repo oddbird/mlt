@@ -1079,6 +1079,18 @@ var MLT = (function (MLT, $) {
             e.preventDefault();
         });
 
+        addressContainer.on('click', '.address .action-complex', function (e) {
+            var action,
+                selectedAddressID = $(this).closest('.address').data('id');
+            if ($(this).hasClass('multiple')) {
+                action = 'multi';
+            } else if ($(this).hasClass('single')) {
+                action = 'single';
+            }
+            $.post(url, { aid: selectedAddressID, action: action }, MLT.addressLoading.replaceAddresses);
+            e.preventDefault();
+        });
+
         if (addressContainer.data('trusted') !== 'trusted') {
             $('#addressform .actions .bools .approval .action-approve').addClass('disabled');
         }
