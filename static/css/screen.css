@@ -472,8 +472,9 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 .address .locality, .address .region, .address .postal-code, .address .complex-name { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; }
 .address .locality, .address .region, .address .postal-code, .address .complex-name { *display: inline; }
 .address .id { color: #005498; }
-.address .id .value { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; }
+.address .id .value { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; white-space: nowrap; }
 .address .id .value { *display: inline; }
+.address .id .value.invalid { color: #984400; }
 .address .id.unmapped .value { color: #984400; }
 .address .controls, .address .action-info { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; -moz-transition-property: opacity; -webkit-transition-property: opacity; -o-transition-property: opacity; transition-property: opacity; -moz-transition-duration: 0.3s; -webkit-transition-duration: 0.3s; -o-transition-duration: 0.3s; transition-duration: 0.3s; }
 .address .controls { margin: 0; padding: 0; border: 0; list-style: none; display: inline; float: left; clear: right; }
