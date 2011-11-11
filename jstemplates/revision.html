@@ -1,5 +1,5 @@
 {{# changes }}
-<article id="address-history-{{ id }}" class="revision" data-id="{{ id }}" data-changed-fields="{{# diff }}{{# street }}street-address {{/ street }}{{# city }}locality {{/ city }}{{# state }}region {{/ state }}{{# complex_name }}complex-name {{/ complex_name }}{{# needs_review }}flag-for-review {{/ needs_review }}{{# pl }}value {{/ pl }}{{# multi_units }}complex {{/ multi_units }}{{# notes }}notes {{/ notes }}{{/ diff }}">
+<article id="address-history-{{ id }}" class="revision" data-id="{{ id }}" data-changed-fields="{{# diff }}{{# street }}street-address {{/ street }}{{# city }}locality {{/ city }}{{# state }}region {{/ state }}{{# complex_name }}complex-name {{/ complex_name }}{{# needs_review }}flag-for-review {{/ needs_review }}{{# pl }}value {{/ pl }}{{# multi_units }}complex {{/ multi_units }}{{# notes }}notes {{/ notes }}{{# geocoded }}geocoded {{/ geocoded }}{{/ diff }}">
   <input type="checkbox" id="select-{{ id }}" name="select" value="" class="item-select">
 
   <div class="content">
@@ -18,6 +18,7 @@
           {{# complex_name }}<span class="complex-name">[{{ complex_name }}]</span>{{/ complex_name }}
         </h4>
         <div class="id">
+          {{# geocoded }}<span class="geocoded">geocoded</span>{{/ geocoded }}
           {{# needs_review }}<span class="flag-for-review">flagged for review</span>{{/ needs_review }}
           <span class="value">{{# pl }}{{ pl }}{{/ pl }}{{^ pl }}unmapped{{/ pl }}</span>
         </div>
@@ -40,6 +41,7 @@
           {{# complex_name }}<span class="complex-name">[{{ complex_name }}]</span>{{/ complex_name }}
         </h4>
         <div class="id">
+          {{# geocoded }}<span class="geocoded">geocoded</span>{{/ geocoded }}
           {{# needs_review }}<span class="flag-for-review">flagged for review</span>{{/ needs_review }}
           <span class="value">{{# pl }}{{ pl }}{{/ pl }}{{^ pl }}unmapped{{/ pl }}</span>
         </div>
