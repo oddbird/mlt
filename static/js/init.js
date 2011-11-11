@@ -39,6 +39,7 @@ var MLT = (function (MLT, $) {
             MLT.sorting('#history');
             MLT.addressListHeight('#history > .actions', '#history .revisionlist');
             MLT.filtering();
+            MLT.filterByAddress();
         }
     });
 

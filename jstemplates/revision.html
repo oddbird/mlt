@@ -1,5 +1,5 @@
 {{# changes }}
-<article id="address-history-{{ id }}" class="revision" data-id="{{ id }}" data-changed-fields="{{# diff }}{{# street }}street-address {{/ street }}{{# city }}locality {{/ city }}{{# state }}region {{/ state }}{{# complex_name }}complex-name {{/ complex_name }}{{# needs_review }}flag-for-review {{/ needs_review }}{{# pl }}value {{/ pl }}{{# multi_units }}complex {{/ multi_units }}{{# notes }}notes {{/ notes }}{{# geocoded }}geocoded {{/ geocoded }}{{/ diff }}">
+<article id="address-history-{{ id }}" class="revision" data-id="{{ id }}" data-address-id="{{ address_id }}" data-changed-fields="{{# diff }}{{# street }}street-address {{/ street }}{{# city }}locality {{/ city }}{{# state }}region {{/ state }}{{# complex_name }}complex-name {{/ complex_name }}{{# needs_review }}flag-for-review {{/ needs_review }}{{# pl }}value {{/ pl }}{{# multi_units }}complex {{/ multi_units }}{{# notes }}notes {{/ notes }}{{# geocoded }}geocoded {{/ geocoded }}{{/ diff }}">
   <input type="checkbox" id="select-{{ id }}" name="select" value="" class="item-select">
 
   <div class="content">

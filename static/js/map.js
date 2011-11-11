@@ -1293,6 +1293,10 @@ var MLT = (function (MLT, $) {
             updateFilters();
         });
 
+        filterList.on('update-filters', function () {
+            updateFilters();
+        });
+
         refresh.click(function () {
             var number = addressContainer.find('.address').length;
             if (number < 20) { number = 20; }
