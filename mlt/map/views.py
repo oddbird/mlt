@@ -215,7 +215,6 @@ def history(request):
 
     if get_count:
         data["count"] = count
-
     return json_response(data)
 
 

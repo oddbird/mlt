@@ -134,3 +134,10 @@ class AddressChangeSerializer(Serializer):
 
     def encode_post(self, snapshot):
         return self._encode_address_snapshot(snapshot)
+
+
+    def encode_diff(self, diff):
+        # Don't need diff details in a serialization, just need to know the
+        # field changed.
+        if diff:
+            return dict((field, True) for field in diff.keys())

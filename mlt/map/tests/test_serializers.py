@@ -165,3 +165,16 @@ class AddressChangeSerializerTest(TestCase):
         c = self.model.objects.get()
 
         self.assertEqual(self.serializer().one(c)["pre"], None)
+
+
+    def test_diff(self):
+        a = create_address(mapped_timestamp=datetime.datetime(2011, 11, 11))
+        a.mapped_timestamp = datetime.datetime(2011, 11, 12)
+        a.save(user=create_user())
+
+        c = self.model.objects.get(pre__isnull=False)
+
+        self.assertEqual(
+            self.serializer().one(c)["diff"],
+            {"mapped_timestamp": True}
+            )
