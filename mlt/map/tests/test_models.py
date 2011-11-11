@@ -263,18 +263,25 @@ class AddressTest(TestCase):
                     'state',
                     'street_suffix',
                     'multi_units',
-                    'mapped_by_id',
+                    'mapped_by',
                     'input_street',
                     'street_type',
                     'import_timestamp',
                     'needs_review',
-                    'imported_by_id',
+                    'imported_by',
                     'import_source',
                     'street_prefix',
                     'complex_name',
                     'notes',
                     'pl'
                     ]))
+
+
+    def test_data_internal(self):
+        data = create_address(city="Providence").data(internal=True)
+
+        # internal uses raw FK id attributes, not descriptors
+        self.assertTrue("mapped_by_id" in data)
 
 
     def test_snapshot_saved_new(self):
@@ -485,3 +492,17 @@ class AddressTest(TestCase):
         c = a.address_changes.get(post__isnull=True)
 
         self.assertEqual(c.diff, None)
+
+
+    def test_modify_fk(self):
+        u = create_user()
+        a = create_address(mapped_by=None)
+
+        a.mapped_by = u
+        a.save(user=u)
+
+        change = self.change_model.objects.get(pre__isnull=False)
+
+        self.assertEqual(change.pre.mapped_by, None)
+        self.assertEqual(change.post.mapped_by, u)
+        self.assertEqual(change.diff, {"mapped_by": {"pre": None, "post": u}})

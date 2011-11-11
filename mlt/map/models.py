@@ -155,14 +155,20 @@ class AddressBase(models.Model):
             return None
 
 
-    def data(self):
+    def data(self, internal=False):
         """
         Return a dictionary of the full data of this address (all fields which
         should be snapshotted and versioned).
 
+        If ``internal`` is True, uses raw attributes for FKs instead of
+        descriptors, making it safe to use in all situations.
+
         """
+        field_attr = "attname" if internal else "name"
+
         return dict(
-            (field.attname, getattr(self, field.attname))
+            (getattr(field, field_attr),
+             getattr(self, getattr(field, field_attr)))
             for field in AddressBase._meta.fields
             )
 
@@ -277,7 +283,7 @@ class Address(AddressBase):
     def __init__(self, *args, **kwargs):
         super(Address, self).__init__(*args, **kwargs)
 
-        self._initial_data = self.data()
+        self._initial_data = self.data(internal=True)
 
 
     def save(self, *args, **kwargs):
@@ -331,7 +337,7 @@ class Address(AddressBase):
                 return None
             data = self._initial_data.copy()
         else:
-            data = self.data()
+            data = self.data(internal=True)
         data["snapshot_timestamp"] = datetime.utcnow()
         return AddressSnapshot.objects.create(**data)
 
