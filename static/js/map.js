@@ -465,7 +465,7 @@ var MLT = (function (MLT, $) {
                         if (geoURL && id) {
                             thisAddress.loadingOverlay();
                             $.get(geoURL, {id: id}, function (data) {
-                                if (data.address && data.address.length) {
+                                if (data.address) {
                                     var byline, web_ui, updatedAddress, newlat, newlng,
                                         index = thisAddress.find('.mapkey').html();
 
