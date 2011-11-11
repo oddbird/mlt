@@ -130,6 +130,8 @@ var MLT = (function (MLT, $) {
                 thisAddress = addressContainer.find('.address[data-id="' + id + '"]');
                 index = thisAddress.find('.mapkey').text();
 
+                thisAddress.find('input[id^="select"]:checked').click();
+
                 if (address.parcel) {
                     lat = address.parcel.latitude;
                     lng = address.parcel.longitude;
