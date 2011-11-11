@@ -854,6 +854,7 @@ class HistoryViewTest(AuthenticatedWebTest):
             [
                 {
                     "id": c.id,
+                    "address_id": a.id,
                     "changed_by": c.changed_by.username,
                     "changed_timestamp": date_format(
                         utc_to_local(c.changed_timestamp), "DATETIME_FORMAT"),

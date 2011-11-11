@@ -111,6 +111,7 @@ class AddressSerializer(Serializer):
 class AddressChangeSerializer(Serializer):
     default_fields = [
         "id",
+        "address_id",
         "changed_by",
         "changed_timestamp",
         "pre",
