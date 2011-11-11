@@ -18,6 +18,17 @@ var MLT = (function (MLT, $) {
             if (data.changes && data.changes.length) {
                 var changesHTML = ich.revision(data);
 
+                changesHTML.each(function () {
+                    var revision = $(this),
+                        changedFields;
+
+                    if (revision.data('changed-fields')) {
+                        changedFields = revision.data('changed-fields').trim().split(' ');
+                        $.each(changedFields, function (i, field) {
+                            revision.find('.' + field).wrapInner('<mark />');
+                        });
+                    }
+                });
                 loadingMessage.before(changesHTML).css('opacity', 0).find('p').html('loading changes...');
                 changesHTML.find('.details').html5accordion();
                 moreChanges = true;

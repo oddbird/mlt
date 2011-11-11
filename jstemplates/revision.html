@@ -1,5 +1,5 @@
 {{# changes }}
-<article id="address-history-{{ id }}" class="revision" data-id="{{ id }}">
+<article id="address-history-{{ id }}" class="revision" data-id="{{ id }}" data-changed-fields="{{# diff }}{{# street }}street-address {{/ street }}{{# city }}locality {{/ city }}{{# state }}region {{/ state }}{{# complex_name }}complex-name {{/ complex_name }}{{# needs_review }}flag-for-review {{/ needs_review }}{{# pl }}value {{/ pl }}{{# multi_units }}complex {{/ multi_units }}{{# notes }}notes {{/ notes }}{{/ diff }}">
   <input type="checkbox" id="select-{{ id }}" name="select" value="" class="item-select">
 
   <div class="content">
@@ -40,6 +40,7 @@
           {{# complex_name }}<span class="complex-name">[{{ complex_name }}]</span>{{/ complex_name }}
         </h4>
         <div class="id">
+          {{# needs_review }}<span class="flag-for-review">flagged for review</span>{{/ needs_review }}
           <span class="value">{{# pl }}{{ pl }}{{/ pl }}{{^ pl }}unmapped{{/ pl }}</span>
         </div>
         <p class="complex{{# multi_units }} multiple{{/ multi_units }}{{^ multi_units }} single{{/ multi_units }}">{{# multi_units }}multiple units{{/ multi_units }}{{^ multi_units }}single unit{{/ multi_units }}</p>
