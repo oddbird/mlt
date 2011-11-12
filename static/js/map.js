@@ -608,7 +608,8 @@ var MLT = (function (MLT, $) {
                         var byline, web_ui, updatedAddress,
                             id = address.id,
                             thisAddress = $('#addresstable .address[data-id="' + id + '"]'),
-                            index = thisAddress.find('.mapkey').html();
+                            index = thisAddress.find('.mapkey').html(),
+                            parcelIndex;
 
                         if (address.import_source || address.mapped_by) { byline = true; }
                         if (address.import_source === 'web-ui') { web_ui = true; }
@@ -651,15 +652,18 @@ var MLT = (function (MLT, $) {
                             refreshButton.addClass('expired');
 
                             $.each(selectedAddressPL, function (i, pl) {
-                                $.each(parcelMap[pl].properties.mapped_to, function (i, properties) {
-                                    if (properties.id === id) {
-                                        parcelMap[pl].properties.mapped_to.splice(i, 1);
-                                        if (!(parcelMap[pl].properties.mapped_to.length)) {
-                                            parcelMap[pl].properties.mapped = false;
+                                if (parcelMap[pl]) {
+                                    $.each(parcelMap[pl].properties.mapped_to, function (i, properties) {
+                                        if (properties.id === id) {
+                                            parcelIndex = i;
                                         }
-                                        parcelMap[pl].layer.info = ich.parcelinfo(parcelMap[pl].properties);
+                                    });
+                                    parcelMap[pl].properties.mapped_to.splice(parcelIndex, 1);
+                                    if (!(parcelMap[pl].properties.mapped_to.length)) {
+                                        parcelMap[pl].properties.mapped = false;
                                     }
-                                });
+                                    parcelMap[pl].layer.info = ich.parcelinfo(parcelMap[pl].properties);
+                                }
                             });
                         }
                     });
@@ -910,6 +914,7 @@ var MLT = (function (MLT, $) {
                 address = button.closest('.address'),
                 url = address.find('.action-cancel').data('url'),
                 id = address.data('id'),
+                pl = address.data('pl'),
                 addressInfo = address.find('.adr'),
                 street = addressInfo.find('.street-address'),
                 content = address.find('.content'),
@@ -956,8 +961,17 @@ var MLT = (function (MLT, $) {
                         });
                     } else {
                         MLT.addressLoading.replaceAddress(data);
-                        if (editedStreet !== originalStreet && !address.find('.id').hasClass('unmapped')) {
-                            MLT.refreshParcels();
+                        if (editedStreet !== originalStreet && pl) {
+
+                            if (parcelMap[pl]) {
+                                $.each(parcelMap[pl].properties.mapped_to, function (i, properties) {
+                                    if (properties.id === id) {
+                                        parcelMap[pl].properties.mapped_to[i] = data.address;
+                                        parcelMap[pl].layer.info = ich.parcelinfo(parcelMap[pl].properties);
+                                    }
+                                });
+                            }
+
                             if (mapinfo.find('li[data-id="' + id + '"]').length) {
                                 rejectButton = mapinfo.find('li[data-id="' + id + '"] .action-reject');
                                 mapinfo.find('li[data-id="' + id + '"]').html(editedStreet).append(rejectButton);
@@ -1115,11 +1129,24 @@ var MLT = (function (MLT, $) {
 
         addressContainer.on('click', '.address .action-reject', function (e) {
             var action = "reject",
-                selectedAddressID = $(this).closest('.address').data('id');
+                selectedAddressID = $(this).closest('.address').data('id'),
+                pl = $(this).closest('.address').data('pl'),
+                index;
             $.post(url, { aid: selectedAddressID, action: action }, function (data) {
                 MLT.addressLoading.replaceAddresses(data);
                 if (data.success) {
-                    MLT.refreshParcels();
+                    if (parcelMap[pl]) {
+                        $.each(parcelMap[pl].properties.mapped_to, function (i, properties) {
+                            if (properties.id === selectedAddressID) {
+                                index = i;
+                            }
+                        });
+                        parcelMap[pl].properties.mapped_to.splice(index, 1);
+                        if (!(parcelMap[pl].properties.mapped_to.length)) {
+                            parcelMap[pl].properties.mapped = false;
+                        }
+                        parcelMap[pl].layer.info = ich.parcelinfo(parcelMap[pl].properties);
+                    }
                     mapinfo.find('.mapped-addresses li[data-id="' + selectedAddressID + '"]').remove();
                     if (!(mapinfo.find('.mapped-addresses ul > li').length)) {
                         mapinfo.find('.mapped-addresses h4, .mapped-addresses ul').remove();
@@ -1131,11 +1158,24 @@ var MLT = (function (MLT, $) {
 
         mapinfo.on('click', '.mapped-addresses .action-reject', function (e) {
             var action = "reject",
-                selectedAddressID = $(this).closest('li').data('id');
+                selectedAddressID = $(this).closest('li').data('id'),
+                pl = $(this).closest('#mapinfo').find('.id').text(),
+                index;
             $.post(url, { aid: selectedAddressID, action: action }, function (data) {
                 MLT.addressLoading.replaceAddresses(data);
                 if (data.success) {
-                    MLT.refreshParcels();
+                    if (parcelMap[pl]) {
+                        $.each(parcelMap[pl].properties.mapped_to, function (i, properties) {
+                            if (properties.id === selectedAddressID) {
+                                index = i;
+                            }
+                        });
+                        parcelMap[pl].properties.mapped_to.splice(index, 1);
+                        if (!(parcelMap[pl].properties.mapped_to.length)) {
+                            parcelMap[pl].properties.mapped = false;
+                        }
+                        parcelMap[pl].layer.info = ich.parcelinfo(parcelMap[pl].properties);
+                    }
                     mapinfo.find('.mapped-addresses li[data-id="' + selectedAddressID + '"]').remove();
                     if (!(mapinfo.find('.mapped-addresses ul > li').length)) {
                         mapinfo.find('.mapped-addresses h4, .mapped-addresses ul').remove();
