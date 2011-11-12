@@ -679,7 +679,7 @@ var MLT = (function (MLT, $) {
                         if (address.import_source || address.mapped_by) { byline = true; }
                         if (address.import_source === 'web-ui') { web_ui = true; }
 
-                        if (thisAddress.length) {
+                        if (thisAddress.length && thisAddress.find('input[id^="select"]:checked').length) {
                             updatedAddress = ich.address({
                                 id: id,
                                 pl: address.pl,
