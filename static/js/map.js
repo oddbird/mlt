@@ -48,13 +48,11 @@ var MLT = (function (MLT, $) {
         newAddresses: function (data) {
             if (data.addresses && data.addresses.length) {
                 $.each(data.addresses, function (i, address) {
-                    var byline, web_ui, lat, lng, geolat, geolng, addressHTML, invalid_pl;
+                    var byline, web_ui, lat, lng, geolat, geolng, addressHTML;
 
                     if (address.parcel) {
                         lat = address.parcel.latitude;
                         lng = address.parcel.longitude;
-                    } else {
-                        invalid_pl = true;
                     }
                     if (address.latitude && address.longitude && !lat && !lng) {
                         geolat = address.latitude;
@@ -66,7 +64,7 @@ var MLT = (function (MLT, $) {
                     addressHTML = ich.address({
                         id: address.id,
                         pl: address.pl,
-                        invalid_pl: invalid_pl,
+                        has_parcel: address.has_parcel,
                         latitude: lat,
                         longitude: lng,
                         geocoded: address.geocoded,
@@ -123,7 +121,7 @@ var MLT = (function (MLT, $) {
             MLT.addressLoading.scroll = false;
         },
         replaceAddress: function (data) {
-            var thisAddress, byline, web_ui, lat, lng, geolat, geolng, updatedAddress, address, id, index, invalid_pl;
+            var thisAddress, byline, web_ui, lat, lng, geolat, geolng, updatedAddress, address, id, index;
             if (data.success && data.address) {
                 address = data.address;
                 id = address.id;
@@ -132,13 +130,12 @@ var MLT = (function (MLT, $) {
 
                 thisAddress.find('input[id^="select"]:checked').click();
 
-                if (address.parcel) {
-                    lat = address.parcel.latitude;
-                    lng = address.parcel.longitude;
+                if (address.has_parcel) {
+                    lat = address.latitude;
+                    lng = address.longitude;
                 } else {
                     geolat = address.latitude;
                     geolng = address.longitude;
-                    invalid_pl = true;
                 }
                 if (address.import_source || address.mapped_by) { byline = true; }
                 if (address.import_source === 'web-ui') { web_ui = true; }
@@ -146,7 +143,7 @@ var MLT = (function (MLT, $) {
                 updatedAddress = ich.address({
                     id: id,
                     pl: address.pl,
-                    invalid_pl: invalid_pl,
+                    has_parcel: address.has_parcel,
                     latitude: lat,
                     longitude: lng,
                     geolat: geolat,
@@ -191,18 +188,17 @@ var MLT = (function (MLT, $) {
             if (data.addresses && data.addresses.length) {
                 addressContainer.find('.address input[id^="select"]:checked').click();
                 $.each(data.addresses, function (i, address) {
-                    var byline, web_ui, lat, lng, geolat, geolng, updatedAddress, invalid_pl,
+                    var byline, web_ui, lat, lng, geolat, geolng, updatedAddress,
                         id = address.id,
                         thisAddress = addressContainer.find('.address[data-id="' + id + '"]'),
                         index = thisAddress.find('.mapkey').text();
 
-                    if (address.parcel) {
-                        lat = address.parcel.latitude;
-                        lng = address.parcel.longitude;
+                    if (address.has_parcel) {
+                        lat = address.latitude;
+                        lng = address.longitude;
                     } else {
                         geolat = address.latitude;
                         geolng = address.longitude;
-                        invalid_pl = true;
                     }
                     if (address.import_source || address.mapped_by) { byline = true; }
                     if (address.import_source === 'web-ui') { web_ui = true; }
@@ -210,7 +206,7 @@ var MLT = (function (MLT, $) {
                     updatedAddress = ich.address({
                         id: id,
                         pl: address.pl,
-                        invalid_pl: invalid_pl,
+                        has_parcel: address.has_parcel,
                         latitude: lat,
                         longitude: lng,
                         geolat: geolat,
@@ -484,16 +480,13 @@ var MLT = (function (MLT, $) {
                             thisAddress.loadingOverlay();
                             $.get(geoURL, {id: id}, function (data) {
                                 if (data.address) {
-                                    var byline, web_ui, updatedAddress, newlat, newlng, invalid_pl,
+                                    var byline, web_ui, updatedAddress, newlat, newlng,
                                         index = thisAddress.find('.mapkey').html();
 
-                                    if (data.address.parcel) {
-                                        newlat = data.address.parcel.latitude;
-                                        newlng = data.address.parcel.longitude;
+                                    if (data.address.has_parcel) {
+                                        newlat = data.address.latitude;
+                                        newlng = data.address.longitude;
                                     } else {
-                                        invalid_pl = true;
-                                    }
-                                    if (data.address.latitude && data.address.longitude) {
                                         geolat = data.address.latitude;
                                         geolng = data.address.longitude;
                                     }
@@ -503,7 +496,7 @@ var MLT = (function (MLT, $) {
                                     updatedAddress = ich.address({
                                         id: id,
                                         pl: data.address.pl,
-                                        invalid_pl: invalid_pl,
+                                        has_parcel: data.address.has_parcel,
                                         checked: true,
                                         latitude: newlat,
                                         longitude: newlng,

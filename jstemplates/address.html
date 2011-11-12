@@ -32,7 +32,7 @@
 
         {{# geocoded }}<span class="geocoded">geocoded</span>{{/ geocoded }}
 
-        <label for="select_{{ id }}" class="value{{# invalid_pl }} invalid{{/ invalid_pl }}">{{ pl }}</label>
+        <label for="select_{{ id }}" class="value{{^ has_parcel }} invalid{{/ has_parcel }}">{{ pl }}</label>
       {{/ pl }}
       {{^ pl }}
         {{# geocoded }}<span class="geocoded">geocoded</span>{{/ geocoded }}
