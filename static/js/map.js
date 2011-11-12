@@ -23,7 +23,8 @@ var MLT = (function (MLT, $) {
         loadingURL = $('#addresstable .managelist').data('addresses-url'),
         loadingMessage = $('#addresstable .managelist .load'),
         refreshButton = $('#addresstable #filter .refresh'),
-        preserveSelectAll = null;
+        preserveSelectAll = null,
+        parcelMap = {};
 
     MLT.keycodes = {
         SPACE: 32,
@@ -377,11 +378,16 @@ var MLT = (function (MLT, $) {
                 function (data) {
                     MLT.map.removeLayer(geojson);
                     selectedLayer = null;
+                    parcelMap = {};
                     geojson = new L.GeoJSON();
 
                     geojson.on('featureparse', function (e) {
-                        var id = e.id;
+                        var id = e.id,
+                            pl = e.properties.pl;
+
                         e.layer.info = ich.parcelinfo(e.properties);
+                        parcelMap[pl] = e;
+
                         e.layer.select = function () {
                             if (selectedLayer) {
                                 selectedLayer.unselect();
@@ -591,6 +597,9 @@ var MLT = (function (MLT, $) {
                 selectedAddressID = $('#addresstable .address input[id^="select"]:checked').map(function () {
                     return $(this).closest('.address').data('id');
                 }).get(),
+                selectedAddressPL = $('#addresstable .address input[id^="select"]:checked').map(function () {
+                    return $(this).closest('.address').data('pl');
+                }).get(),
                 pl = selectedParcelInfo.pl,
                 lat = selectedParcelInfo.latitude,
                 lng = selectedParcelInfo.longitude,
@@ -608,6 +617,7 @@ var MLT = (function (MLT, $) {
                             updatedAddress = ich.address({
                                 id: id,
                                 pl: address.pl,
+                                has_parcel: address.has_parcel,
                                 latitude: lat,
                                 longitude: lng,
                                 geocoded: address.geocoded,
@@ -639,6 +649,18 @@ var MLT = (function (MLT, $) {
                             thisAddress.replaceWith(updatedAddress);
                             updatedAddress.find('.details').html5accordion();
                             refreshButton.addClass('expired');
+
+                            $.each(selectedAddressPL, function (i, pl) {
+                                $.each(parcelMap[pl].properties.mapped_to, function (i, properties) {
+                                    if (properties.id === id) {
+                                        parcelMap[pl].properties.mapped_to.splice(i, 1);
+                                        if (!(parcelMap[pl].properties.mapped_to.length)) {
+                                            parcelMap[pl].properties.mapped = false;
+                                        }
+                                        parcelMap[pl].layer.info = ich.parcelinfo(parcelMap[pl].properties);
+                                    }
+                                });
+                            });
                         }
                     });
 
@@ -647,7 +669,7 @@ var MLT = (function (MLT, $) {
                     $('#mapinfo .mapit').hide();
                     selectedLayer.info = updatedParcelInfo;
                     selectedLayer.unselect();
-                    MLT.refreshParcels();
+
                     if ($('#addressform .actions .bulkselect').data('selectall')) {
                         $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
                     }
