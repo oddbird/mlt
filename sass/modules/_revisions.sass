@@ -23,31 +23,29 @@
   .revision
     +pie-clearfix
     +hpadding(gutter())
-    +background(linear-gradient(left,rgba(#fff,.85),rgba(#fff,.85) columns(15,29), rgba($light,$xxsmall) columns(15,29), rgba($light,$xxsmall)))
+    +background(linear-gradient(left, $lighter, $lighter columns(15,29), rgba($light,$xxsmall) columns(15,29), rgba($light,$xxsmall)))
+    position: relative
     border-bottom: 1px solid $light
+    &::before
+      +background-image(linear-gradient(left top, $lighter, $lighter rhythm(1.5), rgba($lighter,0) rhythm(1.5), rgba($lighter,0)),linear-gradient(bottom left, $lighter, $lighter rhythm(1.5), rgba($lighter,0) rhythm(1.5), rgba($lighter,0)))
+      +stretch-y
+      content: " "
+      left: columns(15,29)
+      width: $col-width*2
   .changes
     +columns(28,29)
     position: relative
 
-  .old, .new, .blame
-    min-height: rhythm(3.25)
   .new, .old
     +padding-leader(.5)
     +padding-trailer(.5)
   .new
     +float(left)
-    position: static
     width: columns(8,28)
     margin-left: columns(6,28)
     padding:
       left: gutter(28)
       right: columns(1,28) + gutter(28)
-    &::before
-      +background-image(linear-gradient(left top, rgba(#fff,.85), rgba(#fff,.85) rhythm(2), rgba(#fff,0) rhythm(2), rgba(#fff,0)),linear-gradient(bottom left, rgba(#fff,.85), rgba(#fff,.85) rhythm(2), rgba(#fff,0) rhythm(2), rgba(#fff,0)))
-      +stretch-y
-      content: " "
-      left: columns(15,28)
-      width: $col-width*2
   .old
     +columns(8,28)
     +suffix(3,28)
