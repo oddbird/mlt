@@ -55,6 +55,15 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 [contenteditable] { color: #005498 !important; text-align: left; min-width: 1em; min-height: 1.618em; }
 [contenteditable]:focus, [contenteditable]:hover, [contenteditable]:active { outline: 1px dotted; }
 
+@-webkit-keyframes bghighlight { 0% { background-color: rgba(0, 84, 152, 0); }
+  100% { background-color: rgba(0, 84, 152, 0.25); } }
+
+@-moz-keyframes bghighlight { 0% { background-color: rgba(0, 84, 152, 0); }
+  100% { background-color: rgba(0, 84, 152, 0.25); } }
+
+@keyframes bghighlight { 0% { background-color: rgba(0, 84, 152, 0); }
+  100% { background-color: rgba(0, 84, 152, 0.25); } }
+
 /* Root ---------------------------------------------------------------------- */
 body { font-size: 75%; line-height: 1.618em; }
 
@@ -370,6 +379,8 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 #filter .bystatus a:link.unmapped, #filter .bystatus a:visited.unmapped { background-image: url('../images/ui/x.png?1307817035'); }
 #filter .refresh { display: inline; float: left; text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/refresh.png?1308260377'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 16.584px; width: 2.427em; height: 2.427em; }
 #filter .refresh:focus, #filter .refresh:hover, #filter .refresh:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; background-image: url('../images/ui/refresh.png?1308260377'); }
+#filter .refresh.expired { -moz-animation: bghighlight 1s linear alternate infinite; -webkit-animation: bghighlight 1s linear alternate infinite; animation: bghighlight 1s linear alternate infinite; }
+#filter .refresh.expired:hover { -moz-animation-play-state: paused; -webkit-animation-play-state: paused; animation-play-state: paused; }
 #filter .listlength { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; display: inline; float: right; background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, rgba(221, 221, 221, 0.5)), color-stop(100%, rgba(221, 221, 221, 0))); background-image: -webkit-linear-gradient(left, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0)); background-image: -moz-linear-gradient(left, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0)); background-image: -o-linear-gradient(left, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0)); background-image: linear-gradient(left, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0)); margin: 0; padding: 0.405em; width: 4.854em; height: 2.427em; text-align: center; }
 #filter .listlength::before { content: "("; }
 #filter .listlength::after { content: ")"; }

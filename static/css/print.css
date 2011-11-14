@@ -55,6 +55,15 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 [contenteditable] { color: #005498 !important; text-align: left; min-width: 1em; min-height: 1.618em; }
 [contenteditable]:focus, [contenteditable]:hover, [contenteditable]:active { outline: 1px dotted; }
 
+@-webkit-keyframes bghighlight { 0% { background-color: rgba(0, 84, 152, 0); }
+  100% { background-color: rgba(0, 84, 152, 0.25); } }
+
+@-moz-keyframes bghighlight { 0% { background-color: rgba(0, 84, 152, 0); }
+  100% { background-color: rgba(0, 84, 152, 0.25); } }
+
+@keyframes bghighlight { 0% { background-color: rgba(0, 84, 152, 0); }
+  100% { background-color: rgba(0, 84, 152, 0.25); } }
+
 /* Root ---------------------------------------------------------------------- */
 body { font-size: 75%; line-height: 1.618em; }
 

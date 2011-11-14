@@ -1,0 +1,36 @@
+=animation($args)
+  -moz-animation: $args
+  -webkit-animation: $args
+  animation: $args
+
+=animation-duration($s)
+  -moz-animation-duration: $s
+  -webkit-animation-duration: $s
+  animation-duration: $s
+
+=animation-play-state($s)
+  -moz-animation-play-state: $s
+  -webkit-animation-play-state: $s
+  animation-play-state: $s
+
+// bg-highlight
+
+=keyframes-bghighlight
+  0%
+    background-color: rgba($alt,0)
+  100%
+    background-color: rgba($alt,.25)
+
+@-webkit-keyframes bghighlight
+  +keyframes-bghighlight
+
+@-moz-keyframes bghighlight
+  +keyframes-bghighlight
+
+@keyframes bghighlight
+  +keyframes-bghighlight
+
+=bg-highlight()
+  +animation(bghighlight 1s linear alternate infinite)
+  &:hover
+    +animation-play-state(paused)
