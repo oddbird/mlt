@@ -300,7 +300,7 @@ var MLT = (function (MLT, $) {
             };
         updateHeight();
         $(window).resize(function () {
-            $.doTimeout(250, function () {
+            $.doTimeout('resize', 250, function () {
                 updateHeight();
             });
         });
@@ -1322,7 +1322,7 @@ var MLT = (function (MLT, $) {
         };
 
         textbox.keyup(function () {
-            $(this).doTimeout(300, function () {
+            $(this).doTimeout('autocomplete', 250, function () {
                 // Updates suggestion-list if typed-text has changed
                 if ($(this).val() !== typedText) {
                     typedText = $(this).val();
