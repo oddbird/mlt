@@ -78,10 +78,33 @@ class AddressTest(TestCase):
 
 
     def test_latlong(self):
-        a = create_address(geocoded="POINT(30 10)")
+        a = create_address(geocoded="POINT(30 10)", pl="")
 
         self.assertEqual(a.latitude, 10)
         self.assertEqual(a.longitude, 30)
+
+
+    def test_latlong_none(self):
+        a = create_address(geocoded=None, pl="")
+
+        self.assertEqual(a.latitude, None)
+        self.assertEqual(a.longitude, None)
+
+
+    def test_latlong_parcel(self):
+        a = create_address(geocoded="POINT(30 10)", pl="123")
+        create_parcel(
+            pl="123",
+            geom=create_mpolygon([
+                    (1.0, 5.0),
+                    (1.0, 9.0),
+                    (3.0, 9.0),
+                    (3.0, 5.0),
+                    (1.0, 5.0)]))
+
+
+        self.assertEqual(a.latitude, 7.0)
+        self.assertEqual(a.longitude, 2.0)
 
 
     def test_parsed_street(self):

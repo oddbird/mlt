@@ -115,11 +115,17 @@ class AddressBase(models.Model):
 
     @property
     def latitude(self):
+        parcel = self.parcel
+        if parcel:
+            return parcel.latitude
         return self.geocoded and self.geocoded.y or None
 
 
     @property
     def longitude(self):
+        parcel = self.parcel
+        if parcel:
+            return parcel.longitude
         return self.geocoded and self.geocoded.x or None
 
 

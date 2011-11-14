@@ -14,13 +14,14 @@ from .base import AddressWriter
 
 
 # DBF field types: "C" character, "N" numeric, "L" logical (boolean)
+# "D" means decimal, which is really "N" with decimal flag set True
 # types for fields that can't be introspected, or overrides:
 DBF_FIELDS = {
     "id": ("N", 32),
     "street_is_parsed": ("L", 1),
     "geocoded": ("L", 1),
-    "latitude": ("N", 32),
-    "longitude": ("N", 32),
+    "latitude": ("D", 32),
+    "longitude": ("D", 32),
     }
 
 DBF_C_MAX = 254 # maximum recommended length for DBF char field
@@ -86,7 +87,11 @@ class SHPWriter(AddressWriter):
         # create DBF fields for all properties
         for field_name in self.field_names:
             field_type, size = dbf_field(field_name)
-            w.field(field_name, field_type, size)
+            decimal = False
+            if field_type == "D":
+                field_type = "N"
+                decimal = True
+            w.field(field_name, field_type, size, decimal)
 
         # for each mapped address, create polygon and record
         for address in self.objects:
