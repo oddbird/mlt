@@ -3,3 +3,7 @@
   <a href="#" data-field="{{ field }}" data-desc="{{ desc }}" data-value="{{ value }}" data-name="{{ name }}"><b>{{ q }}</b>{{ rest }} <i>[{{ desc }}]</i></a>
 </li>
 {{/ options }}
+
+{{# too_many }}
+<li class="too-many-results">too many [{{ . }}] results to display</li>
+{{/ too_many }}
