@@ -58,6 +58,10 @@
   .geocoded
     +icon('ui/pin_target.png',$hover:false)
     +float(left)
+    &:first-child
+      margin-left: rhythm(1.75)
+      .revisionlist &
+        margin-left: rhythm(1.5)
 
   .flag
     +gone

@@ -476,6 +476,8 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 .address .id .value, .address .id .action-flag { margin-top: 0.405em; margin: 0; }
 .address .id.unmapped .value { display: block; }
 .address .geocoded { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/pin_target.png?1320960900'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 16.584px; display: inline; float: left; }
+.address .geocoded:first-child { margin-left: 2.832em; }
+.revisionlist .address .geocoded:first-child { margin-left: 2.427em; }
 .address .flag { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 .address .flag:checked + .action-flag { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .address .flag:checked + .action-flag:focus, .address .flag:checked + .action-flag:hover, .address .flag:checked + .action-flag:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; }
@@ -565,7 +567,6 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 .revisionlist .id .value { display: inline; float: right; }
 .revisionlist .id .flag-for-review { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/warning.png?1305750015'); background-repeat: no-repeat; background-position: 50% 50%; display: inline; float: left; width: 2.427em; }
 .revisionlist .id mark { display: block; }
-.revisionlist .geocoded:first-child { margin-left: 2.427em; }
 
 /* Map ----------------------------------------------------------------------- */
 #mapping { position: absolute; top: 0; right: 0; bottom: 0; left: 33.169em; }
