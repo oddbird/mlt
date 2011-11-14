@@ -34,6 +34,10 @@ class Filter(object):
     raw_fields = set()
 
 
+    # set of fields to autocomplete using "contains" rather than "startswith"
+    autocomplete_contains = set()
+
+
     # fields whose values are handled with a custom Q object. maps field names
     # to dictionary mapping value to Q object, or to callable taking list of
     # values and returning Q object
@@ -49,8 +53,12 @@ class Filter(object):
         data = []
         seen = set()
         for field, (desc, display_field) in self.autocomplete_fields.items():
+            if field in self.autocomplete_contains:
+                filter_type = "icontains"
+            else:
+                filter_type = "istartswith"
             for option in qs.filter(
-                **{"%s__istartswith" % display_field: q}).values_list(
+                **{"%s__%s" % (display_field, filter_type): q}).values_list(
                 display_field, field).distinct():
                 display, submit = option
                 if hasattr(submit, "lower"):
@@ -58,10 +66,12 @@ class Filter(object):
                 key = (field, submit)
                 if key not in seen:
                     seen.add(key)
+                    start = display.lower().index(q.lower())
                     data.append({
                             "q": q,
                             "name": display,
-                            "rest": display[len(q):],
+                            "pre": display[:start],
+                            "post": display[start+len(q):],
                             "value": submit,
                             "field": field,
                             "desc": desc
@@ -125,6 +135,9 @@ class AddressFilter(Filter):
     raw_fields = set(["mapped_by", "imported_by"])
 
 
+    autocomplete_contains = set(["street"])
+
+
     special_fields = {
         "status": {
             "unmapped": Q(pl=""),
@@ -166,6 +179,9 @@ class AddressChangeFilter(Filter):
 
 
     raw_fields = set(["changed_by", "post__mapped_by", "post__imported_by"])
+
+
+    autocomplete_contains = set(["post__street"])
 
 
     special_fields = {

@@ -1345,7 +1345,8 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
                     "name": "Albuquerque",
                     "value": "albuquerque",
                     "q": "alb",
-                    "rest": "uquerque",
+                    "pre": "",
+                    "post": "uquerque",
                     }]
             )
 
@@ -1357,7 +1358,8 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
                     "field": "imported_by",
                     "name": "blametern",
                     "value": blametern.id,
-                    "rest": "lametern",
+                    "pre": "",
+                    "post": "lametern",
                     "desc": "imported by"
                     }]
             )
@@ -1384,7 +1386,38 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
                     "name": "providence",
                     "value": "providence",
                     "q": "prov",
-                    "rest": "idence",
+                    "pre": "",
+                    "post": "idence",
+                    }]
+            )
+
+
+    def test_filter_contains(self):
+        create_address(input_street="123 Main St")
+        create_address(input_street="456 Main St")
+        create_address(input_street="123 South St")
+
+        res = self.app.get(self.url + "?q=Main", user=self.user)
+
+        self.assertEqual(
+            res.json["options"],
+            [{
+                    "desc": "street",
+                    "field": "street",
+                    "name": "123 Main St",
+                    "value": "123 main st",
+                    "q": "Main",
+                    "pre": "123 ",
+                    "post": " St",
+                    },
+             {
+                    "desc": "street",
+                    "field": "street",
+                    "name": "456 Main St",
+                    "value": "456 main st",
+                    "q": "Main",
+                    "pre": "456 ",
+                    "post": " St",
                     }]
             )
 
@@ -1433,7 +1466,8 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
                     "name": "Albuquerque",
                     "value": "albuquerque",
                     "q": "alb",
-                    "rest": "uquerque",
+                    "pre": "",
+                    "post": "uquerque",
                     }]
             )
 
@@ -1445,17 +1479,49 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
                     "field": "post__imported_by",
                     "name": "blametern",
                     "value": blametern.id,
-                    "rest": "lametern",
+                    "pre": "",
+                    "post": "lametern",
                     "desc": "imported by"
                     },
              {      "q": "b",
                     "field": "changed_by",
                     "name": "blametern",
                     "value": blametern.id,
-                    "rest": "lametern",
+                    "pre": "",
+                    "post": "lametern",
                     "desc": "changed by"
                     },
              ]
+            )
+
+
+    def test_filter_contains(self):
+        create_address(input_street="123 Main St")
+        create_address(input_street="456 Main St")
+        create_address(input_street="123 South St")
+
+        res = self.app.get(self.url + "?q=Main", user=self.user)
+
+        self.assertEqual(
+            res.json["options"],
+            [{
+                    "desc": "street",
+                    "field": "post__street",
+                    "name": "123 Main St",
+                    "value": "123 main st",
+                    "q": "Main",
+                    "pre": "123 ",
+                    "post": " St",
+                    },
+             {
+                    "desc": "street",
+                    "field": "post__street",
+                    "name": "456 Main St",
+                    "value": "456 main st",
+                    "q": "Main",
+                    "pre": "456 ",
+                    "post": " St",
+                    }]
             )
 
 
@@ -1480,7 +1546,8 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
                     "name": "providence",
                     "value": "providence",
                     "q": "prov",
-                    "rest": "idence",
+                    "pre": "",
+                    "post": "idence",
                     }]
             )
 
