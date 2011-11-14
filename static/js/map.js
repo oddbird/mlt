@@ -7,6 +7,14 @@ var MLT = (function (MLT, $) {
 
     'use strict';
 
+    Object.size = function (obj) {
+        var size = 0, key;
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) { size = size + 1; }
+        }
+        return size;
+    };
+
     var MIN_PARCEL_ZOOM = 17,
         mapinfoHover = false,
         mapinfo = $("#mapinfo"),
@@ -176,7 +184,9 @@ var MLT = (function (MLT, $) {
 
                 thisAddress.replaceWith(updatedAddress);
                 updatedAddress.find('.details').html5accordion();
-                refreshButton.addClass('expired');
+                if (Object.size(filters)) {
+                    refreshButton.addClass('expired');
+                }
                 if ($('#addressform .actions .bulkselect').data('selectall')) {
                     $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
                 }
@@ -240,7 +250,9 @@ var MLT = (function (MLT, $) {
                     thisAddress.replaceWith(updatedAddress);
                     updatedAddress.find('.details').html5accordion();
                 });
-                refreshButton.addClass('expired');
+                if (Object.size(filters)) {
+                    refreshButton.addClass('expired');
+                }
                 if ($('#addressform .actions .bulkselect').data('selectall')) {
                     $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
                 }
@@ -601,7 +613,9 @@ var MLT = (function (MLT, $) {
 
                                     thisAddress.replaceWith(updatedAddress);
                                     updatedAddress.find('.details').html5accordion();
-                                    refreshButton.addClass('expired');
+                                    if (Object.size(filters)) {
+                                        refreshButton.addClass('expired');
+                                    }
 
                                     input = updatedAddress.find('input[id^="select"]').get(0);
                                     input.popup = new L.Popup({ autoPan: false });
@@ -714,7 +728,9 @@ var MLT = (function (MLT, $) {
                             thisAddress.find('input[id^="select"]').click();
                             thisAddress.replaceWith(updatedAddress);
                             updatedAddress.find('.details').html5accordion();
-                            refreshButton.addClass('expired');
+                            if (Object.size(filters)) {
+                                refreshButton.addClass('expired');
+                            }
 
                             MLT.updateParcelMapping('remove', true, selectedAddressPL, id, false);
                         }
