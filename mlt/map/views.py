@@ -314,7 +314,7 @@ def filter_autocomplete(request):
 
     data = AddressFilter().autocomplete(Address.objects.all(), q)
 
-    return json_response({"options": data})
+    return json_response(data)
 
 
 
@@ -329,7 +329,7 @@ def history_autocomplete(request):
 
     data = AddressChangeFilter().autocomplete(AddressChange.objects.all(), q)
 
-    return json_response({"options": data})
+    return json_response(data)
 
 
 

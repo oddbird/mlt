@@ -1389,6 +1389,16 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
             )
 
 
+    def test_filter_too_many(self):
+        for i in range(100, 120):
+            create_address(input_street="%s Main St" % i)
+
+        res = self.app.get(self.url + "?q=1", user=self.user)
+
+        self.assertEqual(res.json["options"], [])
+        self.assertEqual(res.json["too_many"], ["street"])
+
+
     def test_no_filter(self):
         res = self.app.get(
             self.url,

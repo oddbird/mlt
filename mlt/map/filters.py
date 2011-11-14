@@ -4,6 +4,8 @@ import operator
 from django.db.models import Q
 
 
+MAX_AUTOCOMPLETE = 12
+
 
 class Filter(object):
     """
@@ -46,19 +48,24 @@ class Filter(object):
 
 
     def autocomplete(self, qs, q):
-        data = []
+        options = []
+        too_many = []
         seen = set()
         for field, (desc, display_field) in self.autocomplete_fields.items():
-            for option in qs.filter(
-                **{"%s__istartswith" % display_field: q}).values_list(
-                display_field, field).distinct():
+            field_options = (qs.filter(
+                    **{"%s__istartswith" % display_field: q}).values_list(
+                    display_field, field).distinct())
+            if field_options.count() > MAX_AUTOCOMPLETE:
+                too_many.append(desc)
+                continue
+            for option in field_options:
                 display, submit = option
                 if hasattr(submit, "lower"):
                     submit = submit.lower()
                 key = (field, submit)
                 if key not in seen:
                     seen.add(key)
-                    data.append({
+                    options.append({
                             "q": q,
                             "name": display,
                             "rest": display[len(q):],
@@ -67,7 +74,7 @@ class Filter(object):
                             "desc": desc
                             })
 
-        return data
+        return {"options": options, "too_many": too_many}
 
 
     def apply(self, qs, filter_data):
