@@ -28,9 +28,9 @@
         <button class="action-reject" type="submit" title="reject mapping">reject mapping</button>
 
         <input type="checkbox" name="flag_for_review" value="{{ id }}" id="flag_for_review_{{ id }}"{{# needs_review }} checked="checked"{{/ needs_review }} class="flag">
-        <label for="flag_for_review_{{ id }}" class="action-flag">flag for review</label>
+        <label for="flag_for_review_{{ id }}" class="action-flag" title="flag for review">flag for review</label>
 
-        {{# geocoded }}<span class="geocoded">geocoded</span>{{/ geocoded }}
+        {{# geocoded }}<span class="geocoded" title="geocoded">geocoded</span>{{/ geocoded }}
 
         <label for="select_{{ id }}" class="value{{^ has_parcel }} invalid{{/ has_parcel }}">{{ pl }}</label>
       {{/ pl }}
