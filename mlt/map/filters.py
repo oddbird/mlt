@@ -30,7 +30,7 @@ class Filter(object):
         return ret
 
 
-    # set of fields to filter raw (no case correction)
+    # set of fields to filter raw (no case insensitivity) - usually FKs
     raw_fields = set()
 
 
@@ -60,6 +60,7 @@ class Filter(object):
                     seen.add(key)
                     data.append({
                             "q": q,
+                            "name": display,
                             "rest": display[len(q):],
                             "value": submit,
                             "field": field,
