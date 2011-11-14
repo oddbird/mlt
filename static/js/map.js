@@ -1279,8 +1279,9 @@ var MLT = (function (MLT, $) {
                         thisValue = $(this).find('a').data('value');
                     return !(filterList.find('input[type="checkbox"][name="' + thisField + '_' + thisValue + '"]:checked').length);
                 });
-                if (newSuggestions.length) {
-                    suggestionList.html(newSuggestions).show().find('li:first-child a').addClass('selected');
+                suggestionList.html(newSuggestions);
+                if (suggestionList.find('li').length) {
+                    suggestionList.show().find('li:first-child a').addClass('selected');
                 }
             };
 
@@ -1324,9 +1325,9 @@ var MLT = (function (MLT, $) {
         textbox.keyup(function () {
             $(this).doTimeout('autocomplete', 250, function () {
                 // Updates suggestion-list if typed-text has changed
-                if ($(this).val() !== typedText) {
+                if (textbox.val() !== typedText) {
                     typedText = $(this).val();
-                    if (typedText.length) {
+                    if (typedText.length && typedText.trim() !== '') {
                         $.get(url, {q: typedText}, updateSuggestions);
                     } else {
                         suggestionList.empty().hide();
@@ -1334,12 +1335,16 @@ var MLT = (function (MLT, $) {
                 }
             });
         }).keydown(function (event) {
+            // Prevent default actions on ENTER
+            if (event.keyCode === MLT.keycodes.ENTER) {
+                event.preventDefault();
+            }
             // If the suggestion list is not visible...
             if (!suggestionList.is(':visible')) {
                 // ...and if the keydown was a non-meta key other than shift, ctrl, alt, caps, or esc...
                 if (!event.metaKey && event.keyCode !== MLT.keycodes.SHIFT && event.keyCode !== MLT.keycodes.CTRL && event.keyCode !== MLT.keycodes.ALT && event.keyCode !== MLT.keycodes.CAPS && event.keyCode !== MLT.keycodes.ESC) {
                     // ...prevent normal TAB function
-                    if (event.keyCode === MLT.keycodes.TAB && textbox.val() !== '') {
+                    if (event.keyCode === MLT.keycodes.TAB && textbox.val() !== '' && suggestionList.find('li').length) {
                         event.preventDefault();
                     }
                     // ...show the suggestion list
@@ -1354,14 +1359,12 @@ var MLT = (function (MLT, $) {
                     if (!suggestionList.find('.selected').parent().is(':first-child')) {
                         suggestionList.find('.selected').removeClass('selected').parent().prev().children('a').addClass('selected');
                     }
-                    return false;
                 }
                 if (event.keyCode === MLT.keycodes.DOWN) {
                     event.preventDefault();
                     if (!suggestionList.find('.selected').parent().is(':last-child')) {
                         suggestionList.find('.selected').removeClass('selected').parent().next().children('a').addClass('selected');
                     }
-                    return false;
                 }
                 // ENTER selects the "active" filter suggestion.
                 if (event.keyCode === MLT.keycodes.ENTER) {
@@ -1369,38 +1372,30 @@ var MLT = (function (MLT, $) {
                     if (suggestionList.find('.selected').length) {
                         suggestionList.find('.selected').click();
                     }
-                    return false;
                 }
                 // TAB auto-completes the "active" suggestion if it isn't already completed...
                 if (event.keyCode === MLT.keycodes.TAB) {
-                    if (thisFilterName && textbox.val().toLowerCase() !== thisFilterName.toLowerCase()) {
+                    if (thisFilterName && textbox.val().toLowerCase() !== thisFilterName.toString().toLowerCase()) {
                         event.preventDefault();
                         textbox.val(thisFilterName);
-                        return false;
                     // ...otherwise, TAB selects the "active" filter suggestion (if exists)
-                    } else {
-                        if (suggestionList.find('.selected').length) {
-                            event.preventDefault();
-                            suggestionList.find('.selected').click();
-                            return false;
-                        }
+                    } else if (suggestionList.find('.selected').length) {
+                        event.preventDefault();
+                        suggestionList.find('.selected').click();
                     }
                 }
                 // RIGHT auto-completes the "active" suggestion if it isn't already completed
                 if (event.keyCode === MLT.keycodes.RIGHT) {
-                    if (thisFilterName && textbox.val().toLowerCase() !== thisFilterName.toLowerCase()) {
+                    if (thisFilterName && textbox.val().toLowerCase() !== thisFilterName.toString().toLowerCase() && textbox.get(0).selectionStart === textbox.val().length) {
                         event.preventDefault();
                         textbox.val(thisFilterName);
-                        return false;
                     }
                 }
                 // ESC hides the suggestion list
                 if (event.keyCode === MLT.keycodes.ESC) {
                     event.preventDefault();
                     suggestionList.hide();
-                    return false;
                 }
-                return true;
             }
         }).focus(function () {
             // Resets textbox data-clicked to ``false`` (becomes ``true`` when an autocomplete suggestion is clicked)
@@ -1426,7 +1421,8 @@ var MLT = (function (MLT, $) {
             mousedown: function () {
                 textbox.data('clicked', true);
             },
-            click: function () {
+            click: function (e) {
+                e.preventDefault();
                 var newFilter,
                     field = $(this).data('field'),
                     value = $(this).data('value'),
@@ -1456,7 +1452,6 @@ var MLT = (function (MLT, $) {
                 textbox.val(null);
                 typedText = null;
                 suggestionList.empty().hide();
-                return false;
             }
         }, 'a');
 
@@ -1468,12 +1463,12 @@ var MLT = (function (MLT, $) {
             updateFilters();
         });
 
-        refresh.click(function () {
+        refresh.click(function (e) {
+            e.preventDefault();
             var number = addressContainer.find('.address').length;
             if (number < 20) { number = 20; }
             preserveSelectAll = true;
             reloadList({num: number}, true);
-            return false;
         });
 
         status.click(function () {
