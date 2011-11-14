@@ -1342,6 +1342,7 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
             [{
                     "desc": "city",
                     "field": "city",
+                    "name": "Albuquerque",
                     "value": "albuquerque",
                     "q": "alb",
                     "rest": "uquerque",
@@ -1354,6 +1355,7 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
             res.json["options"],
             [{      "q": "b",
                     "field": "imported_by",
+                    "name": "blametern",
                     "value": blametern.id,
                     "rest": "lametern",
                     "desc": "imported by"
@@ -1379,6 +1381,7 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
             [{
                     "desc": "city",
                     "field": "city",
+                    "name": "providence",
                     "value": "providence",
                     "q": "prov",
                     "rest": "idence",
@@ -1427,6 +1430,7 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
             [{
                     "desc": "city",
                     "field": "post__city",
+                    "name": "Albuquerque",
                     "value": "albuquerque",
                     "q": "alb",
                     "rest": "uquerque",
@@ -1439,12 +1443,14 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
             res.json["options"],
             [{      "q": "b",
                     "field": "post__imported_by",
+                    "name": "blametern",
                     "value": blametern.id,
                     "rest": "lametern",
                     "desc": "imported by"
                     },
              {      "q": "b",
                     "field": "changed_by",
+                    "name": "blametern",
                     "value": blametern.id,
                     "rest": "lametern",
                     "desc": "changed by"
@@ -1471,6 +1477,7 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
             [{
                     "desc": "city",
                     "field": "post__city",
+                    "name": "providence",
                     "value": "providence",
                     "q": "prov",
                     "rest": "idence",
