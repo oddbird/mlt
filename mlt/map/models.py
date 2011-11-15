@@ -451,3 +451,8 @@ class AddressChange(models.Model):
             for field, data in self.diff.items():
                 setattr(address, field, data["pre"])
             address.save(user=user)
+
+
+    @property
+    def revert_url(self):
+        return reverse("map_revert_change", kwargs={"change_id": self.id})

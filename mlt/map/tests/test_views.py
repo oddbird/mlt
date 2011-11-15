@@ -26,6 +26,7 @@ __all__ = [
     "HistoryAutocompleteViewTest",
     "GeocodeViewTest",
     "AddressActionsViewTest",
+    "RevertChangeViewTest",
     ]
 
 
@@ -860,6 +861,7 @@ class HistoryViewTest(AuthenticatedWebTest):
                     "changed_timestamp": date_format(
                         utc_to_local(c.changed_timestamp), "DATETIME_FORMAT"),
                     "pre": None,
+                    "revert_url": "/map/_revert/%s/" % c.id,
                     "post": {
                         "city": a.city,
                         "complex_name": a.complex_name,
@@ -1315,6 +1317,33 @@ class GeoJSONViewTest(AuthenticatedWebTest):
         mapped_to = response.json["features"][0]["properties"]["mapped_to"]
         self.assertEqual(len(mapped_to), 1)
         self.assertEqual(mapped_to[0]["street"], "3635 Van Gordon St")
+
+
+
+class RevertChangeViewTest(CSRFAuthenticatedWebTest):
+    def setUp(self):
+        super(RevertChangeViewTest, self).setUp()
+        self.address = create_address()
+
+
+    @property
+    def url(self):
+        return reverse(
+            "map_revert_change",
+            kwargs={
+                "change_id": self.address.address_changes.get(
+                    pre__isnull=True).id
+                }
+            )
+
+
+    def test_revert(self):
+        res = self.post(self.url, {})
+        self.assertEqual(res.json["success"], True)
+        self.assertEqual(
+            self.address.__class__._base_manager.get(
+                pk=self.address.pk).deleted,
+            True)
 
 
 

@@ -59,6 +59,9 @@ class UISnapshotSerializer(UIDateSerializerMixin,
 
 class UIAddressChangeSerializer(UIDateSerializerMixin,
                                 serializers.AddressChangeSerializer):
+    default_fields = serializers.AddressChangeSerializer.default_fields + [
+        "revert_url"]
+
     snapshot_serializer = UISnapshotSerializer()
 
 
@@ -446,6 +449,16 @@ def address_actions(request):
 
     messages.error(request, "Unknown action '%s'" % action)
     return json_response({"success": False})
+
+
+
+@login_required
+@require_POST
+def revert_change(request, change_id):
+    change = get_object_or_404(AddressChange, pk=change_id)
+    change.revert(request.user)
+    return json_response({"success": True})
+
 
 
 def json_response(data):

@@ -19,4 +19,6 @@ urlpatterns = patterns(
     url(r"^_history_autocomplete/$", "history_autocomplete", name="map_history_autocomplete"),
     url(r"^_geocode/$", "geocode", name="map_geocode"),
     url(r"^_action/$", "address_actions", name="map_address_actions"),
+    url(r"^_revert/(?P<change_id>\d+)/$",
+        "revert_change", name="map_revert_change"),
     )
