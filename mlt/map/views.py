@@ -474,7 +474,7 @@ def revert_change(request, change_id):
         conflict_string = conflict[0]
         if len(conflict) > 1:
             plural = "s"
-            conflict_string = conflict[:-1].join(", ") + " and " + conflict[-1]
+            conflict_string = ", ".join(conflict[:-1]) + " and " + conflict[-1]
         messages.warning(
             request,
             "Reverting this change overwrote more recent changes to the "
