@@ -585,3 +585,57 @@ class AddressTest(TestCase):
         change = a.address_changes.latest('changed_timestamp')
         self.assertEqual(change.pre, None)
         self.assertEqual(change.changed_by, u)
+
+
+    def test_revert_delete_twice(self):
+        a = create_address()
+        a.delete(user=create_user())
+
+        c = a.address_changes.get(post__isnull=True)
+
+        u = create_user()
+        c.revert(u)
+        c.revert(u)
+
+        a = a.__class__.objects.get(pk=a.pk)
+        self.assertEqual(a.deleted, False)
+
+        # Second revert had no effect, did not add another change
+        # creation, deletion, first revert == 3 changes
+        self.assertEqual(len(a.address_changes.all()), 3)
+
+
+    def test_revert_create_twice(self):
+        a = create_address()
+
+        c = a.address_changes.get()
+
+        u = create_user()
+        c.revert(u)
+        c.revert(u)
+
+        a = a.__class__._base_manager.get(pk=a.pk)
+        self.assertEqual(a.deleted, True)
+
+        # Second revert had no effect, did not add another change
+        # creation, first revert == 2 changes
+        self.assertEqual(len(a.address_changes.all()), 2)
+
+
+    def test_revert_no_change(self):
+        a = create_address(city="Providence")
+        a.city = "Albuquerque"
+        a.save(user=create_user())
+
+        c = a.address_changes.get(pre__isnull=False)
+
+        u = create_user()
+        c.revert(u)
+        c.revert(u)
+
+        a = a.__class__.objects.get(pk=a.pk)
+        self.assertEqual(a.city, "Providence")
+
+        # Second revert was a no-op, therefore should not add another change
+        # creation, edit, first revert == 3 changes
+        self.assertEqual(len(a.address_changes.all()), 3)

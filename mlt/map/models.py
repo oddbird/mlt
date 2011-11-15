@@ -444,13 +444,20 @@ class AddressChange(models.Model):
         """
         address = self.address
         if self.pre is None:
-            address.delete(user=user)
+            if not address.deleted:
+                address.delete(user=user)
         elif self.post is None:
-            address.undelete(user=user)
+            if address.deleted:
+                address.undelete(user=user)
         else:
             for field, data in self.diff.items():
-                setattr(address, field, data["pre"])
-            address.save(user=user)
+                changed = False
+                current = getattr(address, field)
+                if data["pre"] != current:
+                    setattr(address, field, data["pre"])
+                    changed = True
+            if changed:
+                address.save(user=user)
 
 
     @property
