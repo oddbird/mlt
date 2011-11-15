@@ -23,34 +23,32 @@
   .revision
     +pie-clearfix
     +hpadding(gutter())
-    +background(linear-gradient(left, $lighter, $lighter columns(15,29), rgba($light,$xxsmall) columns(15,29), rgba($light,$xxsmall)))
+    +background(linear-gradient(left, $lighter, $lighter columns(16,29), $alt-hint columns(16,29), $alt-hint))
     position: relative
     border-bottom: 1px solid $light
     &::before
-      +background-image(linear-gradient(left top, $lighter, $lighter rhythm(1.5), rgba($lighter,0) rhythm(1.5), rgba($lighter,0)),linear-gradient(bottom left, $lighter, $lighter rhythm(1.5), rgba($lighter,0) rhythm(1.5), rgba($lighter,0)))
+      +background-image(linear-gradient(top right, $alt-hint, $alt-hint rhythm(1.5), rgba($alt-hint,0) rhythm(1.5), rgba($alt-hint,0)),linear-gradient(bottom right, $alt-hint, $alt-hint rhythm(1.5), rgba($alt-hint,0) rhythm(1.5), rgba($alt-hint,0)))
       +stretch-y
       content: " "
-      left: columns(15,29)
-      width: $col-width*2
+      right: columns(13,29)
+      width: columns(2,29)
   .changes
     +columns(28,29)
-    position: relative
 
   .new, .old
     +padding-leader(.5)
     +padding-trailer(.5)
-  .new
+  .old
     +float(left)
     width: columns(8,28)
     margin-left: columns(6,28)
     padding:
       left: gutter(28)
       right: columns(1,28) + gutter(28)
-  .old
+  .new
     +columns(8,28)
     +suffix(3,28)
     +omega(28)
-    position: relative
   .blame, .controls
     +padding-leader(.675)
     +padding-trailer(.675)
