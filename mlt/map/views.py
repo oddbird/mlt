@@ -455,7 +455,9 @@ def address_actions(request):
 @login_required
 @require_POST
 def revert_change(request, change_id):
-    change = get_object_or_404(AddressChange, pk=change_id)
+    change = get_object_or_404(
+        AddressChange.objects.select_related("address", "pre", "post"),
+        pk=change_id)
     change.revert(request.user)
     return json_response({"success": True})
 
