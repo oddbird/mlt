@@ -33,24 +33,26 @@
     right: 0
     top: rhythm(1.5)
     background: #fff
-    z-index: 900
-    a
-      #{$link}
-        +padding-leader(.25)
-        +trailing-border(1px,.25)
-        +clearfix
-        +hpadding(1em)
-        display: block
-        color: $base
-        border: 1px solid $light
-          color: transparent $mid $light
-          width: 0 1px 1px
+    z-index: 800
+    a, .too-many-results
+      +padding-leader(.25)
+      +trailing-border(1px,.25)
+      +clearfix
+      +hpadding(1em)
+      display: block
+      color: $base
+      border: 1px solid $light
+        color: transparent $mid $light
+        width: 0 1px 1px
       &.selected
         background: $light
     li:last-child
       a
         #{$link}
           border-bottom-color: $mid
+    .too-many-results
+      color: $mid
+      border-bottom-color: $mid
     i
       +float(right)
       padding-left: 1em
