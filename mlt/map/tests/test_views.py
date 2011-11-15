@@ -1339,11 +1339,41 @@ class RevertChangeViewTest(CSRFAuthenticatedWebTest):
 
     def test_revert(self):
         res = self.post(self.url, {})
-        self.assertEqual(res.json["success"], True)
+        self.assertEqual(
+            res.json,
+            {
+                "success": True,
+                "messages": [
+                    {
+                        "level": 25,
+                        "message": "Change reverted.",
+                        "tags": "success"
+                        }
+                    ]
+                }
+            )
         self.assertEqual(
             self.address.__class__._base_manager.get(
                 pk=self.address.pk).deleted,
             True)
+
+
+    def test_revert_noop(self):
+        self.post(self.url, {})
+        res = self.post(self.url, {})
+        self.assertEqual(
+            res.json,
+            {
+                "success": False,
+                "messages": [
+                    {
+                        "level": 30,
+                        "message": "This change is already reverted.",
+                        "tags": "warning"
+                        }
+                    ]
+                }
+            )
 
 
 

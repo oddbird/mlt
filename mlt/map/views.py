@@ -458,8 +458,17 @@ def revert_change(request, change_id):
     change = get_object_or_404(
         AddressChange.objects.select_related("address", "pre", "post"),
         pk=change_id)
-    change.revert(request.user)
-    return json_response({"success": True})
+    flags = change.revert(request.user)
+
+    success = True
+
+    if flags.get("no-op"):
+        success = False
+        messages.warning(request, "This change is already reverted.")
+    else:
+        messages.success(request, "Change reverted.")
+
+    return json_response({"success": success})
 
 
 
