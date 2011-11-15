@@ -646,3 +646,20 @@ class AddressTest(TestCase):
         # creation, edit, first revert == 3 changes
         self.assertEqual(len(a.address_changes.all()), 3)
         self.assertEqual(flags, {"no-op": True})
+
+
+    def test_revert_conflict(self):
+        a = create_address(city="Providence")
+        a.city = "Albuquerque"
+        a.save(user=create_user())
+        a.city = "New Bedford"
+        a.save(user=create_user())
+
+        c = a.address_changes.get(post__city="Albuquerque")
+
+        u = create_user()
+        flags = c.revert(u)
+
+        a = a.__class__.objects.get(pk=a.pk)
+        self.assertEqual(a.city, "Providence")
+        self.assertEqual(flags, {"conflict": ["city"]})

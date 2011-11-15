@@ -450,7 +450,9 @@ class AddressChange(models.Model):
 
         """
         changed = False
+        conflict = []
         address = self.address
+
         if self.pre is None:
             if not address.deleted:
                 address.delete(user=user)
@@ -463,14 +465,19 @@ class AddressChange(models.Model):
             for field, data in self.diff.items():
                 current = getattr(address, field)
                 if data["pre"] != current:
+                    if data["post"] != current:
+                        conflict.append(field)
                     setattr(address, field, data["pre"])
                     changed = True
             if changed:
                 address.save(user=user)
 
         flags = {}
+
         if not changed:
             flags["no-op"] = True
+        if conflict:
+            flags["conflict"] = conflict
 
         return flags
 
