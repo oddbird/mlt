@@ -133,7 +133,9 @@ var MLT = (function (MLT, $) {
             thisChange.loadingOverlay();
             $.post(url, function (data) {
                 thisChange.loadingOverlay('remove');
-                MLT.reloadChangesList(data);
+                if (data.success) {
+                    MLT.reloadChangesList(data);
+                }
             });
         });
     };
