@@ -120,7 +120,6 @@ var MLT = (function (MLT, $) {
         if (window.location.hash && window.location.hash.split('_')[2]) {
             hash = window.location.hash.split('_')[2];
             addFilter(hash);
-            window.location.hash = '';
         } else {
             MLT.reloadChangesList();
         }
