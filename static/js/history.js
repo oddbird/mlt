@@ -126,6 +126,19 @@ var MLT = (function (MLT, $) {
         }
     };
 
+    MLT.revertChange = function () {
+        changesList.on('click', '.revision .controls .action-revert', function (e) {
+            e.preventDefault();
+            var url = $(this).data('revert-url'),
+                thisChange = $(this).closest('.revision');
+            thisChange.loadingOverlay();
+            $.post(url, function (data) {
+                thisChange.loadingOverlay('remove');
+                MLT.reloadChangesList(data);
+            });
+        });
+    };
+
     return MLT;
 
 }(MLT || {}, jQuery));
