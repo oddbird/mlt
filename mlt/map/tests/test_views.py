@@ -1401,7 +1401,7 @@ class RevertChangeViewTest(CSRFAuthenticatedWebTest):
                         "level": 30,
                         "message":
                             "Reverting this change overwrote more recent "
-                        "changes to the city field. See "
+                        "changes. See "
                         '<a href="#" class="address-history" '
                         'data-address-id="%s">full history</a> '
                         "for this address." % self.address.id,

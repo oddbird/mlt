@@ -468,21 +468,12 @@ def revert_change(request, change_id):
     else:
         messages.success(request, "Change reverted.")
 
-    conflict = flags.get("conflict")
-    if conflict:
-        plural = ""
-        conflict_string = conflict[0]
-        if len(conflict) > 1:
-            plural = "s"
-            conflict_string = ", ".join(conflict[:-1]) + " and " + conflict[-1]
+    if flags.get("conflict"):
         messages.warning(
             request,
-            "Reverting this change overwrote more recent changes to the "
-            "%s field%s. See "
+            "Reverting this change overwrote more recent changes. See "
             '<a href="#" class="address-history" data-address-id="%s">'
-            "full history</a> for this address." % (
-                conflict_string, plural, change.address.id
-                )
+            "full history</a> for this address." % change.address.id
             )
 
     return json_response({"success": success})
