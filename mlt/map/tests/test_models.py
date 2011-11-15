@@ -548,12 +548,13 @@ class AddressTest(TestCase):
         c = a.address_changes.get(pre__isnull=False)
 
         u = create_user()
-        c.revert(u)
+        flags = c.revert(u)
 
         a = a.__class__.objects.get(pk=a.pk)
         self.assertEqual(a.city, "Providence")
         self.assertEqual(
             a.address_changes.latest('changed_timestamp').changed_by, u)
+        self.assertEqual(flags, {})
 
 
     def test_revert_create(self):
@@ -562,13 +563,14 @@ class AddressTest(TestCase):
         c = a.address_changes.get()
 
         u = create_user()
-        c.revert(u)
+        flags = c.revert(u)
 
         a = a.__class__._base_manager.get(pk=a.pk)
         self.assertEqual(a.deleted, True)
         change = a.address_changes.latest('changed_timestamp')
         self.assertEqual(change.post, None)
         self.assertEqual(change.changed_by, u)
+        self.assertEqual(flags, {})
 
 
     def test_revert_delete(self):
@@ -578,13 +580,14 @@ class AddressTest(TestCase):
         c = a.address_changes.get(post__isnull=True)
 
         u = create_user()
-        c.revert(u)
+        flags = c.revert(u)
 
         a = a.__class__.objects.get(pk=a.pk)
         self.assertEqual(a.deleted, False)
         change = a.address_changes.latest('changed_timestamp')
         self.assertEqual(change.pre, None)
         self.assertEqual(change.changed_by, u)
+        self.assertEqual(flags, {})
 
 
     def test_revert_delete_twice(self):
@@ -595,7 +598,7 @@ class AddressTest(TestCase):
 
         u = create_user()
         c.revert(u)
-        c.revert(u)
+        flags = c.revert(u)
 
         a = a.__class__.objects.get(pk=a.pk)
         self.assertEqual(a.deleted, False)
@@ -603,6 +606,8 @@ class AddressTest(TestCase):
         # Second revert had no effect, did not add another change
         # creation, deletion, first revert == 3 changes
         self.assertEqual(len(a.address_changes.all()), 3)
+        self.assertEqual(flags, {"no-op": True})
+
 
 
     def test_revert_create_twice(self):
@@ -612,7 +617,7 @@ class AddressTest(TestCase):
 
         u = create_user()
         c.revert(u)
-        c.revert(u)
+        flags = c.revert(u)
 
         a = a.__class__._base_manager.get(pk=a.pk)
         self.assertEqual(a.deleted, True)
@@ -620,6 +625,7 @@ class AddressTest(TestCase):
         # Second revert had no effect, did not add another change
         # creation, first revert == 2 changes
         self.assertEqual(len(a.address_changes.all()), 2)
+        self.assertEqual(flags, {"no-op": True})
 
 
     def test_revert_no_change(self):
@@ -631,7 +637,7 @@ class AddressTest(TestCase):
 
         u = create_user()
         c.revert(u)
-        c.revert(u)
+        flags = c.revert(u)
 
         a = a.__class__.objects.get(pk=a.pk)
         self.assertEqual(a.city, "Providence")
@@ -639,3 +645,4 @@ class AddressTest(TestCase):
         # Second revert was a no-op, therefore should not add another change
         # creation, edit, first revert == 3 changes
         self.assertEqual(len(a.address_changes.all()), 3)
+        self.assertEqual(flags, {"no-op": True})

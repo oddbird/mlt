@@ -441,23 +441,38 @@ class AddressChange(models.Model):
         Revert the fields contained in this change's diff to their "pre"
         values.
 
+        Returns a dictionary with possible warning flags about the revert
+        action. In the normal case, the returned dictionary will be empty. If
+        the reversion overwrites (in part or in full) a more recent change to
+        the address, the "conflict" key will be set to a list of the
+        conflicting fields. If the reversion is a no-op (nothing needs to be
+        changed), the "no-op" key will be set to ``True``.
+
         """
+        changed = False
         address = self.address
         if self.pre is None:
             if not address.deleted:
                 address.delete(user=user)
+                changed = True
         elif self.post is None:
             if address.deleted:
                 address.undelete(user=user)
+                changed = True
         else:
             for field, data in self.diff.items():
-                changed = False
                 current = getattr(address, field)
                 if data["pre"] != current:
                     setattr(address, field, data["pre"])
                     changed = True
             if changed:
                 address.save(user=user)
+
+        flags = {}
+        if not changed:
+            flags["no-op"] = True
+
+        return flags
 
 
     @property
