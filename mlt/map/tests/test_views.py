@@ -1323,7 +1323,7 @@ class GeoJSONViewTest(AuthenticatedWebTest):
 class RevertChangeViewTest(CSRFAuthenticatedWebTest):
     def setUp(self):
         super(RevertChangeViewTest, self).setUp()
-        self.address = create_address()
+        self.address = create_address(city="Providence")
 
 
     @property
@@ -1369,6 +1369,42 @@ class RevertChangeViewTest(CSRFAuthenticatedWebTest):
                     {
                         "level": 30,
                         "message": "This change is already reverted.",
+                        "tags": "warning"
+                        }
+                    ]
+                }
+            )
+
+
+    def test_revert_conflict(self):
+        self.address.city = "Albuquerque"
+        self.address.save(user=self.user)
+
+        self.address.city = "New Bedford"
+        self.address.save(user=self.user)
+
+        change = self.address.address_changes.get(post__city="Albuquerque")
+        url = reverse("map_revert_change", kwargs={"change_id": change.id})
+
+        res = self.post(url, {})
+        self.assertEqual(
+            res.json,
+            {
+                "success": True,
+                "messages": [
+                    {
+                        "level": 25,
+                        "message": "Change reverted.",
+                        "tags": "success"
+                        },
+                    {
+                        "level": 30,
+                        "message":
+                            "Reverting this change overwrote more recent "
+                        "changes to the city field. See "
+                        '<a href="#" class="address-history" '
+                        'data-address-id="%s">full history</a> '
+                        "for this address." % self.address.id,
                         "tags": "warning"
                         }
                     ]
