@@ -464,6 +464,15 @@ class AddressTest(TestCase):
             a.delete()
 
 
+    def test_undelete_without_user(self):
+        a = create_address()
+        a.delete(user=create_user())
+
+        from mlt.map.models import AddressVersioningError
+        with self.assertRaises(AddressVersioningError):
+            a.undelete()
+
+
     def test_bulk_update_without_user(self):
         create_address()
         qs = self.model.objects.all()
@@ -529,3 +538,50 @@ class AddressTest(TestCase):
         self.assertEqual(change.pre.mapped_by, None)
         self.assertEqual(change.post.mapped_by, u)
         self.assertEqual(change.diff, {"mapped_by": {"pre": None, "post": u}})
+
+
+    def test_revert(self):
+        a = create_address(city="Providence")
+        a.city = "Albuquerque"
+        a.save(user=create_user())
+
+        c = a.address_changes.get(pre__isnull=False)
+
+        u = create_user()
+        c.revert(u)
+
+        a = a.__class__.objects.get(pk=a.pk)
+        self.assertEqual(a.city, "Providence")
+        self.assertEqual(
+            a.address_changes.latest('changed_timestamp').changed_by, u)
+
+
+    def test_revert_create(self):
+        a = create_address()
+
+        c = a.address_changes.get()
+
+        u = create_user()
+        c.revert(u)
+
+        a = a.__class__._base_manager.get(pk=a.pk)
+        self.assertEqual(a.deleted, True)
+        change = a.address_changes.latest('changed_timestamp')
+        self.assertEqual(change.post, None)
+        self.assertEqual(change.changed_by, u)
+
+
+    def test_revert_delete(self):
+        a = create_address()
+        a.delete(user=create_user())
+
+        c = a.address_changes.get(post__isnull=True)
+
+        u = create_user()
+        c.revert(u)
+
+        a = a.__class__.objects.get(pk=a.pk)
+        self.assertEqual(a.deleted, False)
+        change = a.address_changes.latest('changed_timestamp')
+        self.assertEqual(change.pre, None)
+        self.assertEqual(change.changed_by, u)

@@ -333,6 +333,21 @@ class Address(AddressBase):
             changed_timestamp=datetime.utcnow())
 
 
+    def undelete(self, user=None):
+        if user is None:
+            raise AddressVersioningError(
+                "Cannot undelete address without providing user.")
+
+        post = self.snapshot(saved=True)
+
+        self.deleted = False
+        super(Address, self).save()
+
+        AddressChange.objects.create(
+            address=self, changed_by=user, pre=None, post=post,
+            changed_timestamp=datetime.utcnow())
+
+
     def snapshot(self, saved=True):
         """
         Create and return a snapshot of the current state of this Address.
@@ -421,18 +436,18 @@ class AddressChange(models.Model):
         return diff
 
 
-    def revert(self):
+    def revert(self, user):
         """
-        Revert the fields contained in this changes' diff to their "pre"
+        Revert the fields contained in this change's diff to their "pre"
         values.
 
-        Returns a dictionary of fields that have been changed since (i.e. the
-        pre-revert value in the address doesn't match this diff's "post"
-        value); the user should be warned about these changes.
-
-        Returned dictionary maps field names to dictionary with keys
-        "expected", "actual", and "reverted". "expected" and "reverted" are the
-        "post" and "pre" values from this diff, respectively, and "actual" is
-        the actual value that was found in the pre-revert state of the address.
-
         """
+        address = self.address
+        if self.pre is None:
+            address.delete(user=user)
+        elif self.post is None:
+            address.undelete(user=user)
+        else:
+            for field, data in self.diff.items():
+                setattr(address, field, data["pre"])
+            address.save(user=user)
