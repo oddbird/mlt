@@ -117,6 +117,12 @@ var MLT = (function (MLT, $) {
             return false;
         });
 
+        $('#messages').on('click', '.message .address-history', function () {
+            addFilter($(this).data('address-id'));
+            $(this).closest('.message').find('.close').click();
+            return false;
+        });
+
         if (window.location.hash && window.location.hash.split('_')[2]) {
             hash = window.location.hash.split('_')[2];
             addFilter(hash);
