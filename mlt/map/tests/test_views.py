@@ -2021,6 +2021,35 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
         self.assertEqual(a3.multi_units, True)
 
 
+    def test_reject(self):
+        a1 = create_address(pl="")
+        a2 = create_address(pl="123")
+        a3 = create_address(pl="234")
+
+        res = self.post(
+            self.url,
+            {"aid": [a1.id, a2.id], "action": "reject"},
+            )
+
+        self.assertEqual(
+            res.json["messages"],
+            [{
+                    "level": 25,
+                    "message": "1 mapping rejected.",
+                    "tags": "success",
+                    }],
+            )
+        self.assertEqual(len(res.json["addresses"]), 1)
+        self.assertEqual(res.json["addresses"][0]["has_parcel"], False)
+        self.assertTrue(res.json["success"])
+
+        a2 = refresh(a2)
+        self.assertEqual(a2.pl, "")
+
+        a3 = refresh(a3)
+        self.assertEqual(a3.pl, "234")
+
+
     def test_no_ids(self):
         res = self.post(self.url, {})
 

@@ -425,6 +425,20 @@ def address_actions(request):
                 "addresses": UIAddressSerializer().many(updated),
                 })
 
+    if action == "reject":
+        addresses = addresses.exclude(pl="")
+        count = addresses.count()
+        updated = Address.objects.filter(
+            id__in=[a.id for a in addresses])
+        updated.update(user=request.user, pl="")
+        messages.success(
+            request, "%s mapping%s rejected."
+            % (count, "s" if (count != 1) else ""))
+        return json_response({
+                "success": True,
+                "addresses": UIAddressSerializer().many(updated),
+                })
+
     if action == "multi":
         addresses = addresses.filter(multi_units=False)
         updated = Address.objects.filter(
