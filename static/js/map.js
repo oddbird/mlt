@@ -724,7 +724,9 @@ var MLT = (function (MLT, $) {
                     $('#mapinfo').removeClass('selected').html(updatedParcelInfo);
                     $('#mapinfo .mapit').hide();
                     selectedLayer.info = updatedParcelInfo;
-                    selectedLayer.unselect();
+                    if (selectedLayer) {
+                        selectedLayer.unselect();
+                    }
 
                     if ($('#addressform .actions .bulkselect').data('selectall')) {
                         $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
@@ -1089,7 +1091,9 @@ var MLT = (function (MLT, $) {
                 $.post(url, options, function (data) {
                     if (data.success) {
                         MLT.addressLoading.reloadList({num: number}, true);
-                        selectedLayer.unselect();
+                        if (selectedLayer) {
+                            selectedLayer.unselect();
+                        }
                         mapinfo.empty().hide();
                         MLT.refreshParcels();
                     }
@@ -1158,7 +1162,9 @@ var MLT = (function (MLT, $) {
                 $.post(url, options, function (data) {
                     if (data.success) {
                         MLT.addressLoading.replaceAddresses(data);
-                        selectedLayer.unselect();
+                        if (selectedLayer) {
+                            selectedLayer.unselect();
+                        }
                         mapinfo.empty().hide();
                         MLT.refreshParcels();
                     }
