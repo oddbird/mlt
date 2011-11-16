@@ -24,7 +24,9 @@ var MLT = (function (MLT, $) {
         loadingMessage = $('#addresstable .managelist .load'),
         refreshButton = $('#addresstable #filter .refresh'),
         preserveSelectAll = null,
-        parcelMap = {};
+        parcelMap = {},
+        XHR = null,
+        ajaxCounter = 0;
 
     MLT.keycodes = {
         SPACE: 32,
@@ -251,12 +253,18 @@ var MLT = (function (MLT, $) {
         },
         reloadList: function (opts, preserveScroll) {
             var defaults = {
-                sort: sortData,
-                start: 1,
-                num: 20,
-                count: true
-            },
-                options = $.extend({}, defaults, filters, opts);
+                    sort: sortData,
+                    start: 1,
+                    num: 20,
+                    count: true
+                },
+                options = $.extend({}, defaults, filters, opts),
+                counter;
+
+            if (XHR) { XHR.abort(); }
+            ajaxCounter = ajaxCounter + 1;
+            counter = ajaxCounter;
+
             if (preserveScroll) {
                 MLT.addressLoading.scroll = addressContainer.scrollTop();
             }
@@ -271,7 +279,9 @@ var MLT = (function (MLT, $) {
             if (loadingURL && sortData) {
                 MLT.addressLoading.currentlyLoading = true;
                 // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
-                $.get(loadingURL, options, MLT.addressLoading.newAddresses);
+                XHR = $.get(loadingURL, options, function (data) {
+                    if (counter === ajaxCounter) { MLT.addressLoading.newAddresses(data); }
+                });
             }
         },
         addMore: function (opts) {
@@ -280,12 +290,20 @@ var MLT = (function (MLT, $) {
                     sort: sortData,
                     start: count
                 },
-                options = $.extend({}, defaults, filters, opts);
+                options = $.extend({}, defaults, filters, opts),
+                counter;
+
+            if (XHR) { XHR.abort(); }
+            ajaxCounter = ajaxCounter + 1;
+            counter = ajaxCounter;
+
             if (loadingURL && sortData) {
                 loadingMessage.animate({opacity: 1}, 'fast');
                 MLT.addressLoading.currentlyLoading = true;
                 // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
-                $.get(loadingURL, options, MLT.addressLoading.newAddresses);
+                XHR = $.get(loadingURL, options, function (data) {
+                    if (counter === ajaxCounter) { MLT.addressLoading.newAddresses(data); }
+                });
             }
         }
     };
