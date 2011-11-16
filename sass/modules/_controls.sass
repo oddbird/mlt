@@ -10,6 +10,10 @@
 .action-history
   +icon('ui/history.png')
 
+.action-revert
+  +button-reset
+  +icon('ui/undo_med.png')
+
 .action-delete
   @extend .actionbutton
   +icon('ui/trash.png')
@@ -35,12 +39,6 @@
   .address &
     +icon('ui/warning.png')
     +opacity(0)
-
-.action-revert-all
-  @extend .actionbutton
-  +icon('ui/undo_med.png')
-  height: rhythm(1.5)
-  width: rhythm(1.5)
 
 .action-delete
   @extend .actionbutton
