@@ -1,4 +1,5 @@
 from datetime import datetime
+import re
 
 from django.core.urlresolvers import reverse
 
@@ -243,6 +244,12 @@ class AddressQuerySet(GeoQuerySet):
 
 
 
+COMPACT_WHITESPACE_RE = re.compile("\s+")
+
+def compact_whitespace(s):
+    return COMPACT_WHITESPACE_RE.sub(" ", s)
+
+
 class AddressManager(models.GeoManager):
     # even deleted Addresses should be accessible via an AddressChange
     use_for_related_fields = False
@@ -267,14 +274,14 @@ class AddressManager(models.GeoManager):
         state = kwargs.get("state", None)
 
         if state is not None:
-            state = kwargs["state"] = state.upper().strip()
+            state = kwargs["state"] = compact_whitespace(state.upper().strip())
 
         if street is not None:
-            street = kwargs["input_street"] = street.strip()
+            street = kwargs["input_street"] = compact_whitespace(street.strip())
             del kwargs["street"]
 
         if city is not None:
-            city = kwargs["city"] = city.strip()
+            city = kwargs["city"] = compact_whitespace(city.strip())
 
         if None not in [street, city, state]:
             dupes = self.filter(

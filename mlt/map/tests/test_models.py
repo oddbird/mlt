@@ -234,7 +234,7 @@ class AddressTest(TestCase):
             input_street="123 N Main St", city="Rapid City", state="SD")
 
         b = self.create_from_input(
-            street="123 n main st  ", city=" rapid city", state="  sd")
+            street="123 n main  st  ", city=" rapid city", state="  sd")
 
 
         self.assertIs(b, None)
