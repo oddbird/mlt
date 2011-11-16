@@ -240,6 +240,17 @@ class AddressTest(TestCase):
         self.assertIs(b, None)
 
 
+    def test_create_dupe_trailing_period(self):
+        create_address(
+            input_street="123 N Main St", city="Rapid City", state="SD")
+
+        b = self.create_from_input(
+            street="123 n main  st.  ", city=" rapid city", state="  sd")
+
+
+        self.assertIs(b, None)
+
+
     def test_create_dupe_of_parsed(self):
         create_address(
             input_street="123  N Main St.",

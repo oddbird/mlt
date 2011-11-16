@@ -277,7 +277,8 @@ class AddressManager(models.GeoManager):
             state = kwargs["state"] = compact_whitespace(state.upper().strip())
 
         if street is not None:
-            street = kwargs["input_street"] = compact_whitespace(street.strip())
+            street = kwargs["input_street"] = compact_whitespace(
+                street.strip()).rstrip(".")
             del kwargs["street"]
 
         if city is not None:
