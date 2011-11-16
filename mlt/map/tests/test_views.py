@@ -9,7 +9,8 @@ from django_webtest import WebTest
 
 from mock import patch
 
-from .utils import create_address, create_parcel, create_mpolygon, create_user
+from .utils import (
+    create_address, create_parcel, create_mpolygon, create_user, refresh)
 
 
 
@@ -29,10 +30,6 @@ __all__ = [
     "RevertChangeViewTest",
     ]
 
-
-
-def refresh(obj):
-    return obj.__class__._base_manager.get(pk=obj.pk)
 
 
 class AuthenticatedWebTest(WebTest):

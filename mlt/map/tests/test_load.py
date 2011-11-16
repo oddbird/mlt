@@ -76,10 +76,6 @@ def write_to_shapefile(parcels):
 
 
 
-stdout = StringIO()
-
-
-
 class LoadParcelsTestCase(TestCase):
     @property
     def func(self):
@@ -93,8 +89,8 @@ class LoadParcelsTestCase(TestCase):
         return Parcel
 
 
-    @patch("sys.stdout", stdout)
-    def test_load(self):
+    @patch("sys.stdout")
+    def test_load(self, stdout):
         p = create_parcel(
             pl="123 45",
             geom=create_mpolygon([
@@ -111,8 +107,7 @@ class LoadParcelsTestCase(TestCase):
 
         self.func(shapefile)
 
-        stdout.seek(0)
-        self.assertEqual(stdout.read(), "Saved: 123 45\n")
+        stdout.write.assert_called_with("Saved: 123 45\n")
 
         parcels = self.model.objects.all()
 
@@ -120,3 +115,20 @@ class LoadParcelsTestCase(TestCase):
         parcel = parcels[0]
         self.assertEqual(parcel.geom.coords, p.geom.coords)
         self.assertEqual(parcel.pl, "123 45")
+
+
+    @patch("sys.stdout")
+    def test_second_load(self, stdout):
+        create_parcel(pl="135 79")
+
+        p = create_parcel(pl="123 45", commit=False)
+
+        shapedir, shapefile = write_to_shapefile([p])
+        self.addCleanup(shutil.rmtree, shapedir)
+
+        self.func(shapefile)
+
+        parcels = self.model.objects.all()
+
+        self.assertEqual(len(parcels), 1)
+        self.assertEqual(parcels[0].pl, "123 45")

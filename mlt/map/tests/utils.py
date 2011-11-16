@@ -2,6 +2,11 @@ from datetime import datetime
 
 
 
+def refresh(obj):
+    return obj.__class__._base_manager.get(pk=obj.pk)
+
+
+
 user_number = 1
 
 def create_user(**kwargs):
@@ -43,6 +48,7 @@ def create_parcel(**kwargs):
             ("-71.4059226139629004", "41.7884699426220294"),
             ("-71.4057922808270291", "41.7882712655665784"),
             ]),
+        "import_timestamp": datetime.utcnow(),
         }
     defaults.update(kwargs)
 

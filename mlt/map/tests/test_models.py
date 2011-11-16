@@ -5,7 +5,8 @@ from django.test import TestCase
 
 from mock import patch
 
-from .utils import create_parcel, create_address, create_mpolygon, create_user
+from .utils import (
+    create_parcel, create_address, create_mpolygon, create_user, refresh)
 
 
 
@@ -18,6 +19,20 @@ class ParcelTest(TestCase):
     def model(self):
         from mlt.map.models import Parcel
         return Parcel
+
+
+    def test_soft_delete(self):
+        p = create_parcel()
+        p.delete()
+        p = refresh(p)
+        self.assertEqual(p.deleted, True)
+
+
+    def test_soft_bulk_delete(self):
+        p = create_parcel()
+        self.model.objects.all().delete()
+        p = refresh(p)
+        self.assertEqual(p.deleted, True)
 
 
     def test_latitude(self):
@@ -550,7 +565,7 @@ class AddressTest(TestCase):
         u = create_user()
         flags = c.revert(u)
 
-        a = a.__class__.objects.get(pk=a.pk)
+        a = refresh(a)
         self.assertEqual(a.city, "Providence")
         self.assertEqual(
             a.address_changes.latest('changed_timestamp').changed_by, u)
@@ -565,7 +580,7 @@ class AddressTest(TestCase):
         u = create_user()
         flags = c.revert(u)
 
-        a = a.__class__._base_manager.get(pk=a.pk)
+        a = refresh(a)
         self.assertEqual(a.deleted, True)
         change = a.address_changes.latest('changed_timestamp')
         self.assertEqual(change.post, None)
@@ -582,7 +597,7 @@ class AddressTest(TestCase):
         u = create_user()
         flags = c.revert(u)
 
-        a = a.__class__.objects.get(pk=a.pk)
+        a = refresh(a)
         self.assertEqual(a.deleted, False)
         change = a.address_changes.latest('changed_timestamp')
         self.assertEqual(change.pre, None)
@@ -600,7 +615,7 @@ class AddressTest(TestCase):
         c.revert(u)
         flags = c.revert(u)
 
-        a = a.__class__.objects.get(pk=a.pk)
+        a = refresh(a)
         self.assertEqual(a.deleted, False)
 
         # Second revert had no effect, did not add another change
@@ -619,7 +634,7 @@ class AddressTest(TestCase):
         c.revert(u)
         flags = c.revert(u)
 
-        a = a.__class__._base_manager.get(pk=a.pk)
+        a = refresh(a)
         self.assertEqual(a.deleted, True)
 
         # Second revert had no effect, did not add another change
@@ -639,7 +654,7 @@ class AddressTest(TestCase):
         c.revert(u)
         flags = c.revert(u)
 
-        a = a.__class__.objects.get(pk=a.pk)
+        a = refresh(a)
         self.assertEqual(a.city, "Providence")
 
         # Second revert was a no-op, therefore should not add another change
@@ -660,6 +675,6 @@ class AddressTest(TestCase):
         u = create_user()
         flags = c.revert(u)
 
-        a = a.__class__.objects.get(pk=a.pk)
+        a = refresh(a)
         self.assertEqual(a.city, "Providence")
         self.assertEqual(flags, {"conflict": ["city"]})

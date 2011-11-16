@@ -1,11 +1,27 @@
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
-from django.db.models.query import QuerySet
 
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
+from django.contrib.gis.db.models.query import GeoQuerySet
 from django.contrib.localflavor.us.models import USStateField
+
+
+
+
+class ParcelQuerySet(GeoQuerySet):
+    def delete(self):
+        super(ParcelQuerySet, self).update(deleted=True)
+
+
+
+class ParcelManager(models.GeoManager):
+    use_for_related_fields = False
+
+
+    def get_query_set(self):
+        return ParcelQuerySet(self.model, using=self._db).filter(deleted=False)
 
 
 
@@ -16,11 +32,19 @@ class Parcel(models.Model):
     classcode = models.CharField(max_length=55)
     geom = models.MultiPolygonField()
 
-    objects = models.GeoManager()
+    import_timestamp = models.DateTimeField()
+    deleted = models.BooleanField(default=False, db_index=True)
+
+    objects = ParcelManager()
 
 
     def __unicode__(self):
         return self.pl
+
+
+    def delete(self):
+        self.deleted = True
+        self.save(force_update=True)
 
 
     @property
@@ -186,7 +210,7 @@ class AddressBase(models.Model):
             )
 
 
-class AddressQuerySet(QuerySet):
+class AddressQuerySet(GeoQuerySet):
     def update(self, **kwargs):
         user = kwargs.pop("user", None)
         if user is None:
