@@ -8,6 +8,9 @@
       {{ form.file.errors }}
       {{ form.file|label:"select a CSV file to import" }}
       {{ form.file }}
+      <p class="help">
+        CSV file should have columns "street, city, state" and no header row.
+      </p>
     </li>
     <li class="source">
       {{ form.source.errors }}
