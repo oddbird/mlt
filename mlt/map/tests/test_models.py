@@ -234,7 +234,7 @@ class AddressTest(TestCase):
             input_street="123 N Main St", city="Rapid City", state="SD")
 
         b = self.create_from_input(
-            street="123 n main  st  ", city=" rapid city", state="  sd")
+            street="123 N Main  st  ", city=" rapid city", state="  sd")
 
 
         self.assertIs(b, None)
@@ -245,7 +245,40 @@ class AddressTest(TestCase):
             input_street="123 N Main St", city="Rapid City", state="SD")
 
         b = self.create_from_input(
-            street="123 n main  st.  ", city=" rapid city", state="  sd")
+            street="123 N Main St. ", city="Rapid City", state="SD")
+
+
+        self.assertIs(b, None)
+
+
+    def test_create_dupe_street_st(self):
+        create_address(
+            input_street="123 N Main St", city="Rapid City", state="SD")
+
+        b = self.create_from_input(
+            street="123 N Main Street", city="Rapid City", state="SD")
+
+
+        self.assertIs(b, None)
+
+
+    def test_create_dupe_avenue_ave(self):
+        create_address(
+            input_street="123 N Main Ave", city="Rapid City", state="SD")
+
+        b = self.create_from_input(
+            street="123 N Main Avenue", city="Rapid City", state="SD")
+
+
+        self.assertIs(b, None)
+
+
+    def test_create_dupe_av_ave(self):
+        create_address(
+            input_street="123 N Main Ave", city="Rapid City", state="SD")
+
+        b = self.create_from_input(
+            street="123 N Main Av", city="Rapid City", state="SD")
 
 
         self.assertIs(b, None)

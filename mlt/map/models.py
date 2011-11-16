@@ -244,10 +244,22 @@ class AddressQuerySet(GeoQuerySet):
 
 
 
-COMPACT_WHITESPACE_RE = re.compile("\s+")
+COMPACT_WHITESPACE_RE = re.compile(r"\s+")
 
 def compact_whitespace(s):
     return COMPACT_WHITESPACE_RE.sub(" ", s)
+
+
+street_replacements = [
+    (re.compile(r"\bstreet\b", re.IGNORECASE), "St"),
+    (re.compile(r"\bavenue\b", re.IGNORECASE), "Ave"),
+    (re.compile(r"\bav\b", re.IGNORECASE), "Ave"),
+    ]
+
+def clean_street(s):
+    for pattern, repl in street_replacements:
+        s = pattern.sub(repl, s)
+    return s
 
 
 class AddressManager(models.GeoManager):
@@ -277,8 +289,8 @@ class AddressManager(models.GeoManager):
             state = kwargs["state"] = compact_whitespace(state.upper().strip())
 
         if street is not None:
-            street = kwargs["input_street"] = compact_whitespace(
-                street.strip()).rstrip(".")
+            street = kwargs["input_street"] = clean_street(
+                compact_whitespace(street.strip()).rstrip("."))
             del kwargs["street"]
 
         if city is not None:
