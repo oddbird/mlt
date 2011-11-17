@@ -25,8 +25,10 @@ var MLT = (function (MLT, $) {
         refreshButton = $('#addresstable #filter .refresh'),
         preserveSelectAll = null,
         parcelMap = {},
-        XHR = null,
-        ajaxCounter = 0;
+        listXHR = null,
+        listCounter = 0,
+        parcelXHR = null,
+        parcelCounter = 0;
 
     MLT.keycodes = {
         SPACE: 32,
@@ -261,9 +263,9 @@ var MLT = (function (MLT, $) {
                 options = $.extend({}, defaults, filters, opts),
                 counter;
 
-            if (XHR) { XHR.abort(); }
-            ajaxCounter = ajaxCounter + 1;
-            counter = ajaxCounter;
+            if (listXHR) { listXHR.abort(); }
+            listCounter = listCounter + 1;
+            counter = listCounter;
 
             if (preserveScroll) {
                 MLT.addressLoading.scroll = addressContainer.scrollTop();
@@ -279,8 +281,11 @@ var MLT = (function (MLT, $) {
             if (loadingURL && sortData) {
                 MLT.addressLoading.currentlyLoading = true;
                 // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
-                XHR = $.get(loadingURL, options, function (data) {
-                    if (counter === ajaxCounter) { MLT.addressLoading.newAddresses(data); }
+                listXHR = $.get(loadingURL, options, function (data) {
+                    if (counter === listCounter) {
+                        MLT.addressLoading.newAddresses(data);
+                        listXHR = null;
+                    }
                 });
             }
         },
@@ -293,16 +298,19 @@ var MLT = (function (MLT, $) {
                 options = $.extend({}, defaults, filters, opts),
                 counter;
 
-            if (XHR) { XHR.abort(); }
-            ajaxCounter = ajaxCounter + 1;
-            counter = ajaxCounter;
+            if (listXHR) { listXHR.abort(); }
+            listCounter = listCounter + 1;
+            counter = listCounter;
 
             if (loadingURL && sortData) {
                 loadingMessage.animate({opacity: 1}, 'fast');
                 MLT.addressLoading.currentlyLoading = true;
                 // @@@ if this returns with errors, subsequent ajax calls will be prevented unless currentlyLoading is set to `false`
-                XHR = $.get(loadingURL, options, function (data) {
-                    if (counter === ajaxCounter) { MLT.addressLoading.newAddresses(data); }
+                listXHR = $.get(loadingURL, options, function (data) {
+                    if (counter === listCounter) {
+                        MLT.addressLoading.newAddresses(data);
+                        listXHR = null;
+                    }
                 });
             }
         }
@@ -388,76 +396,84 @@ var MLT = (function (MLT, $) {
     MLT.refreshParcels = function () {
         var bounds = MLT.map.getBounds(),
             ne = bounds.getNorthEast(),
-            sw = bounds.getSouthWest();
+            sw = bounds.getSouthWest(),
+            counter;
+
+        if (parcelXHR) { parcelXHR.abort(); }
+        parcelCounter = parcelCounter + 1;
+        counter = parcelCounter;
 
         if (MLT.map.getZoom() >= MIN_PARCEL_ZOOM) {
-            $.getJSON(
+            parcelXHR = $.getJSON(
                 geojson_url + "?southlat=" + sw.lat + "&northlat=" + ne.lat + "&westlng=" + sw.lng + "&eastlng=" + ne.lng,
                 function (data) {
-                    MLT.map.removeLayer(geojson);
-                    selectedLayer = null;
-                    parcelMap = {};
-                    geojson = new L.GeoJSON();
+                    if (counter === parcelCounter) {
+                        parcelXHR = null;
+                        MLT.map.removeLayer(geojson);
+                        selectedLayer = null;
+                        parcelMap = {};
+                        geojson = new L.GeoJSON();
 
-                    geojson.on('featureparse', function (e) {
-                        var id = e.id,
-                            pl = e.properties.pl;
+                        geojson.on('featureparse', function (e) {
+                            var id = e.id,
+                                pl = e.properties.pl;
 
-                        e.layer.info = ich.parcelinfo(e.properties);
-                        parcelMap[pl] = e;
+                            e.layer.info = ich.parcelinfo(e.properties);
+                            parcelMap[pl] = e;
 
-                        e.layer.select = function () {
-                            if (selectedLayer) {
-                                selectedLayer.unselect();
-                            }
-                            selectedParcelInfo = e.properties;
-                            selectedId = id;
-                            selectedInfo = this.info;
-                            selectedLayer = this;
-                            this.selected = true;
-                            this.setStyle({
-                                color: "red",
-                                weight: 5
-                            });
-                        };
-                        e.layer.unselect = function () {
-                            if (this.selected) {
-                                selectedId = null;
-                                selectedInfo = null;
-                                selectedLayer = null;
-                            }
-                            this.selected = false;
-                            this.setStyle({
-                                color: "blue",
-                                weight: 2
-                            });
-                        };
-                        if (id === selectedId) {
-                            e.layer.select();
-                        } else {
-                            e.layer.unselect();
-                        }
-                        e.layer.on('mouseover', function (ev) {
-                            if (!selectedInfo) {
-                                MLT.showInfo(e.layer.info, false);
-                            }
-                        });
-                        e.layer.on('mouseout', function (ev) {
-                            MLT.hideInfo();
-                        });
-                        e.layer.on('click', function (ev) {
-                            if (ev.target.selected) {
-                                ev.target.unselect();
-                                MLT.showInfo(e.layer.info, false);
+                            e.layer.select = function () {
+                                if (selectedLayer) {
+                                    selectedLayer.unselect();
+                                }
+                                selectedParcelInfo = e.properties;
+                                selectedId = id;
+                                selectedInfo = this.info;
+                                selectedLayer = this;
+                                this.selected = true;
+                                this.setStyle({
+                                    color: "red",
+                                    weight: 5
+                                });
+                            };
+                            e.layer.unselect = function () {
+                                if (this.selected) {
+                                    selectedId = null;
+                                    selectedInfo = null;
+                                    selectedLayer = null;
+                                }
+                                this.selected = false;
+                                this.setStyle({
+                                    color: "blue",
+                                    weight: 2
+                                });
+                            };
+                            if (id === selectedId) {
+                                e.layer.select();
                             } else {
-                                ev.target.select();
-                                MLT.showInfo(e.layer.info, true);
+                                e.layer.unselect();
                             }
+                            e.layer.on('mouseover', function (ev) {
+                                if (!selectedInfo) {
+                                    MLT.showInfo(e.layer.info, false);
+                                }
+                            });
+                            e.layer.on('mouseout', function (ev) {
+                                MLT.hideInfo();
+                            });
+                            e.layer.on('click', function (ev) {
+                                if (ev.target.selected) {
+                                    ev.target.unselect();
+                                    MLT.showInfo(e.layer.info, false);
+                                } else {
+                                    ev.target.select();
+                                    MLT.showInfo(e.layer.info, true);
+                                }
+                            });
                         });
-                    });
 
-                    geojson.addGeoJSON(data);
-                    MLT.map.addLayer(geojson);
+                        geojson.addGeoJSON(data);
+                        MLT.map.addLayer(geojson);
+                    }
                 }
             );
         } else {
