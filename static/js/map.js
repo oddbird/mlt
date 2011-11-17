@@ -53,7 +53,7 @@ var MLT = (function (MLT, $) {
         newAddresses: function (data) {
             if (data.addresses && data.addresses.length) {
                 $.each(data.addresses, function (i, address) {
-                    var byline, web_ui, lat, lng, geolat, geolng, addressHTML;
+                    var lat, lng, geolat, geolng, addressHTML;
 
                     if (address.parcel) {
                         lat = address.parcel.latitude;
@@ -63,8 +63,6 @@ var MLT = (function (MLT, $) {
                         geolat = address.latitude;
                         geolng = address.longitude;
                     }
-                    if (address.import_source || address.mapped_by) { byline = true; }
-                    if (address.import_source === 'web-ui') { web_ui = true; }
 
                     addressHTML = ich.address({
                         id: address.id,
@@ -90,11 +88,7 @@ var MLT = (function (MLT, $) {
                         needs_review: address.needs_review,
                         multi_units: address.multi_units,
                         notes: address.notes,
-                        byline: byline,
-                        import_source: address.import_source,
-                        web_ui: web_ui,
-                        imported_by: address.imported_by,
-                        import_timestamp: address.import_timestamp,
+                        batch_tags: address.batch_tags,
                         mapped_by: address.mapped_by,
                         mapped_timestamp: address.mapped_timestamp
                     });
@@ -126,7 +120,7 @@ var MLT = (function (MLT, $) {
             MLT.addressLoading.scroll = false;
         },
         replaceAddress: function (data) {
-            var thisAddress, byline, web_ui, lat, lng, geolat, geolng, updatedAddress, address, id, index;
+            var thisAddress, lat, lng, geolat, geolng, updatedAddress, address, id, index;
             if (data.success && data.address) {
                 address = data.address;
                 id = address.id;
@@ -142,8 +136,6 @@ var MLT = (function (MLT, $) {
                     geolat = address.latitude;
                     geolng = address.longitude;
                 }
-                if (address.import_source || address.mapped_by) { byline = true; }
-                if (address.import_source === 'web-ui') { web_ui = true; }
 
                 updatedAddress = ich.address({
                     id: id,
@@ -169,11 +161,7 @@ var MLT = (function (MLT, $) {
                     needs_review: address.needs_review,
                     multi_units: address.multi_units,
                     notes: address.notes,
-                    byline: byline,
-                    import_source: address.import_source,
-                    web_ui: web_ui,
-                    imported_by: address.imported_by,
-                    import_timestamp: address.import_timestamp,
+                    batch_tags: address.batch_tags,
                     mapped_by: address.mapped_by,
                     mapped_timestamp: address.mapped_timestamp
                 });
@@ -193,7 +181,7 @@ var MLT = (function (MLT, $) {
             if (data.addresses && data.addresses.length) {
                 addressContainer.find('.address input[id^="select"]:checked').click();
                 $.each(data.addresses, function (i, address) {
-                    var byline, web_ui, lat, lng, geolat, geolng, updatedAddress,
+                    var lat, lng, geolat, geolng, updatedAddress,
                         id = address.id,
                         thisAddress = addressContainer.find('.address[data-id="' + id + '"]'),
                         index = thisAddress.find('.mapkey').text();
@@ -205,8 +193,6 @@ var MLT = (function (MLT, $) {
                         geolat = address.latitude;
                         geolng = address.longitude;
                     }
-                    if (address.import_source || address.mapped_by) { byline = true; }
-                    if (address.import_source === 'web-ui') { web_ui = true; }
 
                     updatedAddress = ich.address({
                         id: id,
@@ -232,11 +218,7 @@ var MLT = (function (MLT, $) {
                         needs_review: address.needs_review,
                         multi_units: address.multi_units,
                         notes: address.notes,
-                        byline: byline,
-                        import_source: address.import_source,
-                        web_ui: web_ui,
-                        imported_by: address.imported_by,
-                        import_timestamp: address.import_timestamp,
+                        batch_tags: address.batch_tags,
                         mapped_by: address.mapped_by,
                         mapped_timestamp: address.mapped_timestamp
                     });
@@ -586,7 +568,7 @@ var MLT = (function (MLT, $) {
                             thisAddress.loadingOverlay();
                             $.get(geoURL, {id: id}, function (data) {
                                 if (data.address) {
-                                    var byline, web_ui, updatedAddress, newlat, newlng,
+                                    var updatedAddress, newlat, newlng,
                                         index = thisAddress.find('.mapkey').html();
 
                                     if (data.address.has_parcel) {
@@ -596,8 +578,6 @@ var MLT = (function (MLT, $) {
                                         geolat = data.address.latitude;
                                         geolng = data.address.longitude;
                                     }
-                                    if (data.address.import_source || data.address.mapped_by) { byline = true; }
-                                    if (data.address.import_source === 'web-ui') { web_ui = true; }
 
                                     updatedAddress = ich.address({
                                         id: id,
@@ -624,11 +604,7 @@ var MLT = (function (MLT, $) {
                                         needs_review: data.address.needs_review,
                                         multi_units: data.address.multi_units,
                                         notes: data.address.notes,
-                                        byline: byline,
-                                        import_source: data.address.import_source,
-                                        web_ui: web_ui,
-                                        imported_by: data.address.imported_by,
-                                        import_timestamp: data.address.import_timestamp,
+                                        batch_tags: data.address.batch_tags,
                                         mapped_by: data.address.mapped_by,
                                         mapped_timestamp: data.address.mapped_timestamp
                                     });
@@ -705,13 +681,10 @@ var MLT = (function (MLT, $) {
                 lng = selectedParcelInfo.longitude,
                 success = function (data) {
                     $.each(data.mapped_to, function (i, address) {
-                        var byline, web_ui, updatedAddress,
+                        var updatedAddress,
                             id = address.id,
                             thisAddress = $('#addresstable .address[data-id="' + id + '"]'),
                             index = thisAddress.find('.mapkey').html();
-
-                        if (address.import_source || address.mapped_by) { byline = true; }
-                        if (address.import_source === 'web-ui') { web_ui = true; }
 
                         if (thisAddress.length && thisAddress.find('input[id^="select"]:checked').length) {
                             updatedAddress = ich.address({
@@ -736,11 +709,7 @@ var MLT = (function (MLT, $) {
                                 needs_review: address.needs_review,
                                 multi_units: address.multi_units,
                                 notes: address.notes,
-                                byline: byline,
-                                import_source: address.import_source,
-                                web_ui: web_ui,
-                                imported_by: address.imported_by,
-                                import_timestamp: address.import_timestamp,
+                                batch_tags: address.batch_tags,
                                 mapped_by: address.mapped_by,
                                 mapped_timestamp: address.mapped_timestamp
                             });

@@ -60,37 +60,36 @@
 
         <p class="notes" title="notes">{{ notes }}</p>
 
-        {{# byline }}
-          <div class="byline">
-            {{# import_source }}
-              <p class="hcard">
-                {{# web_ui }}
-                Created
-                {{/ web_ui }}
-                {{^ web_ui }}
-                Imported
-                {{/ web_ui }}
-                {{# imported_by }}
-                by <cite class="fn">{{ imported_by }}</cite>
-                {{/ imported_by }}
-                {{^ web_ui }}
-                from <span class="from">{{ import_source }}</span>
-                {{/ web_ui }}
-                {{# import_timestamp }}
-                on <time pubdate>{{ import_timestamp }}</time>
-                {{/ import_timestamp }}
-              </p>
-            {{/ import_source }}
+        <div class="byline">
+          {{# batch_tags }}
+            <p class="hcard">
+              Imported
+              {{# username }}
+                by <cite class="fn">{{ username }}</cite>
+              {{/ username }}
+              {{# tag }}
+                in batch "<span class="from">{{ tag }}</span>"
+              {{/ tag }}
+              {{# timestamp }}
+                on <time pubdate>{{ timestamp }}</time>
+              {{/ timestamp }}
+            </p>
+          {{/ batch_tags }}
 
-            {{# pl }}
-              <p class="hcard">
-                {{# mapped_by }}Mapped by <cite class="fn">{{ mapped_by }}</cite>{{/ mapped_by }}
-                {{^ mapped_by }}{{# mapped_timestamp }}Mapped{{/ mapped_timestamp }}{{/ mapped_by}}
-                {{# mapped_timestamp }} on <time class="mapped">{{ mapped_timestamp }}</time>{{/ mapped_timestamp }}
-              </p>
-            {{/ pl }}
+          {{# pl }}
+            <p class="hcard">
+              {{# mapped_by }}Mapped by <cite class="fn">{{ mapped_by }}</cite>{{/ mapped_by }}
+              {{^ mapped_by }}{{# mapped_timestamp }}Mapped{{/ mapped_timestamp }}{{/ mapped_by}}
+              {{# mapped_timestamp }} on <time class="mapped">{{ mapped_timestamp }}</time>{{/ mapped_timestamp }}
+            </p>
+          {{/ pl }}
+
+          <div class="addtag details">
+            <label for="add_a_tag" class="summary">add a tag</label>
+            <input type="text" id="add_a_tag" class="tag-input">
           </div>
-        {{/ byline }}
+
+        </div>
       </div>
     </div>
 
