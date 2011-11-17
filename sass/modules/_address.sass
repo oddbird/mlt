@@ -156,10 +156,22 @@
   .byline
     +trailer(.5)
     +italic
-    cite, time, .from
+    cite, time, .tag
       +demi
       +font-style-normal
       color: $base
+
+  .tags
+    .tag-label, .tag-list
+      +inline-block
+    .tag-list
+      +delimited-list
+    .action-removetag
+      +opacity(0)
+    .tag
+      &:hover
+        .action-removetag
+          +opacity(1)
 
   .savechanges
     @extend .actionbutton
