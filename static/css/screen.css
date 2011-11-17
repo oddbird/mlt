@@ -278,10 +278,10 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 [role="contentinfo"] .author { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=10)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=10); opacity: 0.1; -moz-transition-property: opacity 300ms; -webkit-transition-property: opacity 300ms; -o-transition-property: opacity 300ms; transition-property: opacity 300ms; -moz-transition-duration: 1s; -webkit-transition-duration: 1s; -o-transition-duration: 1s; transition-duration: 1s; }
 [role="contentinfo"] small { font: inherit; }
 
-.actionbutton, .action-delete, .action-complex, .action-approve, .action-flag, .action-reject, .action-removetag, #filter .refresh, .address .savechanges { margin: 0; padding: 0; border: 0; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; -moz-border-radius: 0; -webkit-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; -khtml-border-radius: 0; border-radius: 0; text-shadow: none; overflow: visible; width: auto; vertical-align: baseline; background: none; color: inherit; font: inherit; text-align: left; }
-.actionbutton, .action-delete, .action-complex, .action-approve, .action-flag, .action-reject, .action-removetag, #filter .refresh, .address .savechanges { *display: inline; }
-.actionbutton:active, .action-delete:active, .action-complex:active, .action-approve:active, .action-flag:active, .action-reject:active, .action-removetag:active, #filter .refresh:active, .address .savechanges:active { background-image: none; }
-.actionbutton.disabled, .disabled.action-delete, .disabled.action-complex, .disabled.action-approve, .disabled.action-flag, .disabled.action-reject, .disabled.action-removetag, #filter .disabled.refresh, .address .disabled.savechanges { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=25)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=25); opacity: 0.25; }
+.actionbutton, .action-delete, .action-complex, .action-approve, .action-flag, .action-reject, #filter .refresh, .address .savechanges { margin: 0; padding: 0; border: 0; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; -moz-border-radius: 0; -webkit-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; -khtml-border-radius: 0; border-radius: 0; text-shadow: none; overflow: visible; width: auto; vertical-align: baseline; background: none; color: inherit; font: inherit; text-align: left; }
+.actionbutton, .action-delete, .action-complex, .action-approve, .action-flag, .action-reject, #filter .refresh, .address .savechanges { *display: inline; }
+.actionbutton:active, .action-delete:active, .action-complex:active, .action-approve:active, .action-flag:active, .action-reject:active, #filter .refresh:active, .address .savechanges:active { background-image: none; }
+.actionbutton.disabled, .disabled.action-delete, .disabled.action-complex, .disabled.action-approve, .disabled.action-flag, .disabled.action-reject, #filter .disabled.refresh, .address .disabled.savechanges { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=25)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=25); opacity: 0.25; }
 
 .action-history { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/history.png?1317931604'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 16.584px; }
 .action-history:focus, .action-history:hover, .action-history:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; background-image: url('../images/ui/history.png?1317931604'); }
@@ -331,10 +331,6 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 
 .action-reject { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/thumb_down.png?1317931604'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 16.584px; }
 .action-reject:focus, .action-reject:hover, .action-reject:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; background-image: url('../images/ui/thumb_down.png?1317931604'); }
-
-.action-removetag { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/x_sm.png?1308006098'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 12.584px; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; vertical-align: baseline; }
-.action-removetag:focus, .action-removetag:hover, .action-removetag:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; background-image: url('../images/ui/x_sm.png?1308006098'); }
-.action-removetag { *display: inline; }
 
 /* Login --------------------------------------------------------------------- */
 #login, #password_change, #password_reset, #password_reset_confirm { clear: both; padding-left: 27.778%; padding-right: 27.778%; padding-top: 1.618em; padding-bottom: 1.618em; max-width: 47.731em; }
@@ -520,16 +516,7 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 .address.expanded:hover .summary { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; }
 .address .more { padding-top: 0.809em; clear: both; padding-left: 12.821%; color: #949494; }
 .address .byline { margin-bottom: 0.809em; font-style: italic; }
-.address .byline cite, .address .byline time, .address .byline .tag { font-weight: 500; font-style: normal; color: #4c4c4c; }
-.address .tags .tag-label, .address .tags .tag-list { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; }
-.address .tags .tag-label, .address .tags .tag-list { *display: inline; }
-.address .tags .tag-list { list-style-type: none; }
-.address .tags .tag-list, .address .tags .tag-list li { margin: 0px; padding: 0px; display: inline; }
-.address .tags .tag-list li:after { content: ", "; }
-.address .tags .tag-list li:last-child:after { content: ""; }
-.address .tags .tag-list li.last:after { content: ""; }
-.address .tags .action-removetag { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; }
-.address .tags .tag:hover .action-removetag { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
+.address .byline cite, .address .byline time, .address .byline .from { font-weight: 500; font-style: normal; color: #4c4c4c; }
 .address .savechanges { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/disk_med.png?1308254127'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 23.584px; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; -moz-transition-property: all; -webkit-transition-property: all; -o-transition-property: all; transition-property: all; -moz-transition-duration: 300ms; -webkit-transition-duration: 300ms; -o-transition-duration: 300ms; transition-duration: 300ms; height: 1.618em; position: absolute; top: 0.405em; right: 89.744%; }
 .address .savechanges:focus, .address .savechanges:hover, .address .savechanges:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; background-image: url('../images/ui/disk_med.png?1308254127'); }
 .address .editing { background: rgba(246, 246, 119, 0.146); }
