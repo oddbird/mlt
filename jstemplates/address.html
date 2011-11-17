@@ -81,8 +81,9 @@
 
             {{# pl }}
               <p class="hcard">
-                Mapped by <cite class="fn">{{ mapped_by }}</cite>
-                on <time class="mapped">{{ mapped_timestamp }}</time>
+                {{# mapped_by }}Mapped by <cite class="fn">{{ mapped_by }}</cite>{{/ mapped_by }}
+                {{^ mapped_by }}{{# mapped_timestamp }}Mapped{{/ mapped_timestamp }}{{/ mapped_by}}
+                {{# mapped_timestamp }} on <time class="mapped">{{ mapped_timestamp }}</time>{{/ mapped_timestamp }}
               </p>
             {{/ pl }}
 
