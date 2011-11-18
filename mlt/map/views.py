@@ -42,7 +42,7 @@ class UIAddressSerializer(UIDateSerializerMixin, serializers.AddressSerializer):
 class UIParcelSerializer(serializers.ParcelSerializer):
     default_fields = serializers.ParcelSerializer.default_fields + ["mapped_to"]
 
-    address_serializer = UIAddressSerializer()
+    address_serializer = UIAddressSerializer(exclude=["edit_url", "has_parcel"])
 
 
     def encode_mapped_to(self, addresses):
