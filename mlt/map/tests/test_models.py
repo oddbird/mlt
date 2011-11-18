@@ -10,7 +10,7 @@ from .utils import (
 
 
 
-__all__ = ["ParcelTest", "AddressTest"]
+__all__ = ["ParcelTest", "AddressTest", "ParcelPrefetchQuerySetTest"]
 
 
 
@@ -762,6 +762,8 @@ class AddressTest(TestCase):
     def test_change_prefetch_parcels(self):
         create_address(pl="1")
         create_address(pl="2")
+        a = create_address()
+        a.delete(user=create_user())
 
         create_parcel(pl="1")
         create_parcel(pl="2")
@@ -771,6 +773,22 @@ class AddressTest(TestCase):
             qs = self.change_model.objects.select_related(
                 "pre", "post").prefetch_parcels()._clone()
             for change in qs:
-                self.assertEqual(change.post.pl, change.post.parcel.pl)
+                change.post and change.post.parcel
+                change.pre and change.pre.parcel
             # second iteration shouldn't trigger additional query
-            [c.post.parcel for c in qs]
+            [c.post and c.post.parcel for c in qs]
+
+
+
+class ParcelPrefetchQuerySetTest(TestCase):
+    @property
+    def klass(self):
+        from mlt.map.models import ParcelPrefetchQuerySet
+        return ParcelPrefetchQuerySet
+
+
+    def test_prefetch_parcel_not_implemented(self):
+        qs = self.klass()
+
+        with self.assertRaises(NotImplementedError):
+            qs._fetch_parcels()
