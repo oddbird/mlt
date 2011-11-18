@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import datetime
 import re
 
@@ -14,6 +15,45 @@ from django.contrib.localflavor.us.models import USStateField
 class ParcelQuerySet(GeoQuerySet):
     def delete(self):
         super(ParcelQuerySet, self).update(deleted=True)
+
+
+    def __init__(self, *args, **kwargs):
+        super(ParcelQuerySet, self).__init__(*args, **kwargs)
+
+        self._mapped_fetched = False
+        self._prefetch_mapped = False
+
+
+    def prefetch_mapped(self):
+        clone = self._clone()
+
+        clone._prefetch_mapped = True
+
+        return clone
+
+
+    def __iter__(self):
+        if self._prefetch_mapped and not self._mapped_fetched:
+            self._fetch_mapped()
+
+        return super(ParcelQuerySet, self).__iter__()
+
+
+    def _fetch_mapped(self):
+        # ensures result cache is fully populated
+        len(self)
+
+        addresses_by_pl = defaultdict(list)
+        for address in Address.objects.filter(pl__in=[
+                p.pl for p in self._result_cache]):
+            addresses_by_pl[address.pl].append(address)
+
+
+        for p in self._result_cache:
+            p._mapped_to = addresses_by_pl.get(p.pl)
+            p._mapped_fetched = True
+
+        self._mapped_fetched = True
 
 
 
@@ -43,6 +83,13 @@ class Parcel(models.Model):
         unique_together = [("pl", "import_timestamp")]
 
 
+    def __init__(self, *args, **kwargs):
+        super(Parcel, self).__init__(*args, **kwargs)
+
+        self._mapped_to = None
+        self._mapped_fetched = False
+
+
     def __unicode__(self):
         return self.pl
 
@@ -65,10 +112,14 @@ class Parcel(models.Model):
     @property
     def mapped_to(self):
         """
-        QuerySet of Addresses mapped to this Parcel.
+        List of Addresses mapped to this Parcel.
 
         """
-        return Address.objects.filter(pl=self.pl)
+        if not self._mapped_fetched:
+            self._mapped_to = list(Address.objects.filter(pl=self.pl))
+            self._mapped_fetched = True
+
+        return self._mapped_to
 
 
     @property

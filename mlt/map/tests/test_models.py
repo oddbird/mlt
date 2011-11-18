@@ -59,7 +59,7 @@ class ParcelTest(TestCase):
         self.assertEqual(parcel.longitude, 2.0)
 
 
-    def test_mapped(self):
+    def test_mapped_to(self):
         parcel = create_parcel(pl="1234")
         address1 = create_address(pl="1234", needs_review=False)
         create_address(pl="12345")
@@ -70,6 +70,23 @@ class ParcelTest(TestCase):
             set(parcel.mapped_to), set([address1, address3]))
         self.assertTrue(parcel.mapped)
         self.assertFalse(parcel2.mapped)
+
+
+    def test_prefetch_mapped(self):
+        create_address(pl="1")
+        create_address(pl="2")
+        create_address(pl="2")
+
+        create_parcel(pl="1")
+        create_parcel(pl="2")
+
+        with self.assertNumQueries(2): # one for parcels, one for addresses
+            qs = self.model.objects.all().prefetch_mapped()
+            for parcel in qs:
+                for address in parcel.mapped_to:
+                    self.assertEqual(parcel.pl, address.pl)
+            # second iteration shouldn't trigger additional query
+            [p for p in qs]
 
 
 
