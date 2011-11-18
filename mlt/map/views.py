@@ -113,11 +113,9 @@ def export_addresses(request):
     writer_class = EXPORT_WRITERS.get(format, EXPORT_WRITERS[EXPORT_FORMATS[0]])
 
     addresses = AddressFilter().apply(
-        Address.objects.select_related("imported_by", "mapped_by"),
+        Address.objects.select_related(
+            "imported_by", "mapped_by").prefetch_parcels(),
         request.GET)
-
-    if writer_class.needs_parcels:
-        addresses = addresses.prefetch_parcels()
 
     writer = writer_class(addresses)
 

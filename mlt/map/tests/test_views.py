@@ -118,35 +118,23 @@ class ImportViewTest(AuthenticatedWebTest):
 class MockWriter(object):
     mimetype = "text/mock"
     extension = "mck"
-    needs_parcels = False
 
     def __init__(self, addresses):
         self.addresses = addresses
 
 
     def save(self, stream):
-        # writers might access User FKs
+        # writers might access User FKs and parcel data
         for a in self.addresses:
             a.imported_by
+            a.parcel
         stream.write(",".join([str(a.id) for a in self.addresses]))
 
 
 
-class MockWriterNeedsParcels(MockWriter):
-    needs_parcels = True
 
-    def save(self, stream):
-        super(MockWriterNeedsParcels, self).save(stream)
-        # a writer with needs_parcels = True might access the parcel
-        for a in self.addresses:
-            a.parcel
-
-
-
-
-@patch("mlt.map.views.EXPORT_FORMATS", ["mock", "mockp"])
-@patch("mlt.map.views.EXPORT_WRITERS", {"mock": MockWriter,
-                                        "mockp": MockWriterNeedsParcels})
+@patch("mlt.map.views.EXPORT_FORMATS", ["mock"])
+@patch("mlt.map.views.EXPORT_WRITERS", {"mock": MockWriter})
 class ExportViewTest(AuthenticatedWebTest):
     url_name = "map_export_addresses"
 
@@ -173,17 +161,6 @@ class ExportViewTest(AuthenticatedWebTest):
     def test_queries(self, querystring="?export_format=mock"):
         create_address(imported_by=create_user())
         create_address()
-
-        # 1 for addresses, 11 for misc sessions/auth
-        with self.assertNumQueries(12):
-            self._basic_test(querystring)
-
-
-    def test_parcel_queries(self, querystring="?export_format=mockp"):
-        create_address(pl="1")
-        create_address(pl="2")
-        create_parcel(pl="1")
-        create_parcel(pl="2")
 
         # 1 for addresses, 1 for parcels, 11 for misc sessions/auth
         with self.assertNumQueries(13):
