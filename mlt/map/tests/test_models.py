@@ -85,6 +85,8 @@ class ParcelTest(TestCase):
             for parcel in qs:
                 for address in parcel.mapped_to:
                     self.assertEqual(parcel.pl, address.pl)
+                    # both directions are pre-set, no additional query here
+                    self.assertEqual(address.parcel, parcel)
             # second iteration shouldn't trigger additional query
             [p for p in qs]
 

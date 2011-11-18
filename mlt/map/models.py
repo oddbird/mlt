@@ -52,6 +52,9 @@ class ParcelQuerySet(GeoQuerySet):
         for p in self._result_cache:
             p._mapped_to = addresses_by_pl.get(p.pl, [])
             p._mapped_fetched = True
+            for address in p._mapped_to:
+                address._parcel = p
+                address._parcel_fetched = True
 
         self._mapped_fetched = True
 
@@ -312,6 +315,8 @@ class AddressQuerySet(GeoQuerySet):
         for a in self._result_cache:
             a._parcel = parcels_by_pl.get(a.pl)
             a._parcel_fetched = True
+            # can't preset parcel's _mapped_to, address query may not have
+            # included all addresses mapped to these parcels
 
         self._parcels_fetched = True
 
