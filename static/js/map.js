@@ -1571,6 +1571,22 @@ var MLT = (function (MLT, $) {
         });
     };
 
+    MLT.addImportTag = function () {
+        addressContainer.on('keydown', '.address .byline .addtag input.tag-input', function (e) {
+            if (e.keyCode === MLT.keycodes.ENTER) {
+                var url = $(this).data('url'),
+                    thisAddress = $(this).closest('.address');
+                thisAddress.loadingOverlay();
+                $.post(url, function (data) {
+                    thisAddress.loadingOverlay('remove');
+                    if (data.success) {
+                        MLT.addressLoading.replaceAddress(data);
+                    }
+                });
+            }
+        });
+    };
+
     return MLT;
 
 }(MLT || {}, jQuery));

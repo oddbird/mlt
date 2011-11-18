@@ -32,6 +32,7 @@ var MLT = (function (MLT, $) {
             MLT.importAddressesLightbox();
             MLT.initializeMap();
             MLT.addressLoading.reloadList();
+            MLT.addImportTag();
         }
 
         // history.js
