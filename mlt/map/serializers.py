@@ -44,7 +44,6 @@ class ParcelSerializer(Serializer):
         "address",
         "first_owner",
         "classcode",
-        "mapped",
         "latitude",
         "longitude",
         ]

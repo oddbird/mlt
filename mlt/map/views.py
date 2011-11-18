@@ -40,7 +40,8 @@ class UIAddressSerializer(UIDateSerializerMixin, serializers.AddressSerializer):
 
 
 class UIParcelSerializer(serializers.ParcelSerializer):
-    default_fields = serializers.ParcelSerializer.default_fields + ["mapped_to"]
+    default_fields = serializers.ParcelSerializer.default_fields + [
+        "mapped_to", "mapped"]
 
     address_serializer = UIAddressSerializer(
         exclude=[
@@ -177,7 +178,10 @@ class IndexedAddressSerializer(UIAddressSerializer):
 
 @login_required
 def addresses(request):
-    qs = AddressFilter().apply(Address.objects.all(), request.GET)
+    qs = AddressFilter().apply(
+        Address.objects.all().select_related(
+            "mapped_by", "imported_by").prefetch_parcels(),
+        request.GET)
 
     get_count = request.GET.get("count", "false").lower() not in ["false", "0"]
     if get_count:

@@ -751,7 +751,8 @@ class AddressTest(TestCase):
         create_parcel(pl="2")
 
         with self.assertNumQueries(2): # one for addresses, one for parcels
-            qs = self.model.objects.all().prefetch_parcels()
+            # cloning preserves the prefetch marker
+            qs = self.model.objects.all().prefetch_parcels()._clone()
             for address in qs:
                 self.assertEqual(address.pl, address.parcel.pl)
             # second iteration shouldn't trigger additional query

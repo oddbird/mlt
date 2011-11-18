@@ -458,6 +458,17 @@ class AddressesViewTest(AuthenticatedWebTest):
             [letter_key(i) for i in range(1, 21)])
 
 
+    def test_queries(self):
+        for i in range(50):
+            create_address(street_number=str(i+1), pl=i)
+            create_parcel(pl=i)
+
+        # 1 for parcels, 1 for addresses, 11 for sessions/auth
+        with self.assertNumQueries(13):
+            self.get()
+
+
+
     def test_address_serialization(self):
         a = create_address()
 

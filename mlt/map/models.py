@@ -32,6 +32,14 @@ class ParcelQuerySet(GeoQuerySet):
         return clone
 
 
+    def _clone(self, *args, **kwargs):
+        clone = super(ParcelQuerySet, self)._clone(*args, **kwargs)
+
+        clone._prefetch_mapped = self._prefetch_mapped
+
+        return clone
+
+
     def __iter__(self):
         if self._prefetch_mapped and not self._mapped_fetched:
             self._fetch_mapped()
@@ -291,6 +299,14 @@ class AddressQuerySet(GeoQuerySet):
         clone = self._clone()
 
         clone._prefetch_parcels = True
+
+        return clone
+
+
+    def _clone(self, *args, **kwargs):
+        clone = super(AddressQuerySet, self)._clone(*args, **kwargs)
+
+        clone._prefetch_parcels = self._prefetch_parcels
 
         return clone
 
