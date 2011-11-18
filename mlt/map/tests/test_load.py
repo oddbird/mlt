@@ -1,20 +1,20 @@
-from cStringIO import StringIO
 import os.path
 import shutil
 import tempfile
 
+from django.db import IntegrityError
 from django.test import TestCase
 
 from django.contrib.gis.models import SpatialRefSys
 
-from mock import patch
+from mock import Mock
 import shapefile
 
 from .utils import create_parcel, create_mpolygon
 
 
 
-__all__ = ["LoadParcelsTestCase"]
+__all__ = ["LoadParcelsTest"]
 
 
 
@@ -76,7 +76,7 @@ def write_to_shapefile(parcels):
 
 
 
-class LoadParcelsTestCase(TestCase):
+class LoadParcelsTest(TestCase):
     @property
     def func(self):
         from mlt.map.load import load_parcels
@@ -89,8 +89,13 @@ class LoadParcelsTestCase(TestCase):
         return Parcel
 
 
-    @patch("sys.stdout")
-    def test_load(self, stdout):
+    def write_shapefile(self, parcels):
+        shapedir, shapefile = write_to_shapefile(parcels)
+        self.addCleanup(shutil.rmtree, shapedir)
+        return shapefile
+
+
+    def test_load(self):
         p = create_parcel(
             pl="123 45",
             geom=create_mpolygon([
@@ -102,10 +107,10 @@ class LoadParcelsTestCase(TestCase):
                     ]),
             commit=False)
 
-        shapedir, shapefile = write_to_shapefile([p])
-        self.addCleanup(shutil.rmtree, shapedir)
+        shapefile = self.write_shapefile([p])
 
-        self.func(shapefile)
+        stdout = Mock()
+        self.func(shapefile, stream=stdout)
 
         stdout.write.assert_called_with("Saved: 123 45\n")
 
@@ -117,18 +122,36 @@ class LoadParcelsTestCase(TestCase):
         self.assertEqual(parcel.pl, "123 45")
 
 
-    @patch("sys.stdout")
-    def test_second_load(self, stdout):
+    def test_second_load(self):
         create_parcel(pl="135 79")
 
         p = create_parcel(pl="123 45", commit=False)
 
-        shapedir, shapefile = write_to_shapefile([p])
-        self.addCleanup(shutil.rmtree, shapedir)
+        shapefile = self.write_shapefile([p])
 
-        self.func(shapefile)
+        self.func(shapefile, verbose=False)
 
         parcels = self.model.objects.all()
 
         self.assertEqual(len(parcels), 1)
         self.assertEqual(parcels[0].pl, "123 45")
+
+
+
+    def test_verbose_false(self):
+        shapefile = self.write_shapefile([create_parcel()])
+
+        stdout = Mock()
+        self.func(shapefile, verbose=False, stream=stdout)
+
+        self.assertEqual(stdout.write.call_count, 0)
+
+
+    def test_dupe_pl(self):
+        p1 = create_parcel(pl="135 79")
+        p2 = create_parcel(pl="135 79")
+
+        shapefile = self.write_shapefile([p1, p2])
+
+        with self.assertRaises(IntegrityError):
+            self.func(shapefile, verbose=False, stream=Mock())

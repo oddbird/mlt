@@ -1,4 +1,5 @@
 import datetime
+import sys
 
 from django.db import transaction
 
@@ -19,7 +20,13 @@ parcel_mapping = {
 
 
 @transaction.commit_on_success
-def load_parcels(shapefile_path, verbose=True):
+def load_parcels(shapefile_path, verbose=True, stream=None):
+    """
+    Load parcels from shapefile at given path.
+
+    Raises IntegrityError on a duplicate PL, and rolls back the load.
+
+    """
     # monkeypatch no-op transaction handling into LayerMapping, as we
     # wrap it in a transaction including more operations.
     LayerMapping.TRANSACTION_MODES['none'] = lambda func: func
@@ -32,7 +39,7 @@ def load_parcels(shapefile_path, verbose=True):
         shapefile_path, parcel_mapping, transform=True,
         transaction_mode='none')
 
-    lm.save(strict=True, verbose=verbose)
+    lm.save(strict=True, verbose=verbose, stream=stream or sys.stdout)
 
 
 

@@ -39,6 +39,10 @@ class Parcel(models.Model):
     objects = ParcelManager()
 
 
+    class Meta:
+        unique_together = [("pl", "import_timestamp")]
+
+
     def __unicode__(self):
         return self.pl
 

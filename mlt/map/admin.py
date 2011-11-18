@@ -60,8 +60,11 @@ class AddressAdmin(admin.ModelAdmin):
 
 
 class ParcelAdmin(admin.OSMGeoAdmin):
-    list_display = ["__unicode__", "address", "first_owner", "classcode"]
+    list_display = [
+        "__unicode__", "address", "first_owner", "classcode", "import_timestamp"
+        ]
     search_fields = ["pl", "address", "first_owner", "classcode"]
+    exclude = ["deleted"]
 
 
 
