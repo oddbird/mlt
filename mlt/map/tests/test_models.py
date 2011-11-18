@@ -722,3 +722,18 @@ class AddressTest(TestCase):
         a = refresh(a)
         self.assertEqual(a.city, "Providence")
         self.assertEqual(flags, {"conflict": ["city"]})
+
+
+    def test_prefetch_parcels(self):
+        create_address(pl="1")
+        create_address(pl="2")
+
+        create_parcel(pl="1")
+        create_parcel(pl="2")
+
+        with self.assertNumQueries(2): # one for addresses, one for parcels
+            qs = self.model.objects.all().prefetch_parcels()
+            for address in qs:
+                self.assertEqual(address.pl, address.parcel.pl)
+            # second iteration shouldn't trigger additional query
+            [a.pl for a in qs]

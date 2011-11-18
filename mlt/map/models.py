@@ -131,6 +131,13 @@ class AddressBase(models.Model):
         abstract = True
 
 
+    def __init__(self, *args, **kwargs):
+        super(AddressBase, self).__init__(*args, **kwargs)
+
+        self._parcel = None
+        self._parcel_fetched = False
+
+
     def __unicode__(self):
         return "%s, %s %s" % (
             self.street, self.city, self.state)
@@ -144,17 +151,15 @@ class AddressBase(models.Model):
 
     @property
     def latitude(self):
-        parcel = self.parcel
-        if parcel:
-            return parcel.latitude
+        if self.parcel:
+            return self.parcel.latitude
         return self.geocoded and self.geocoded.y or None
 
 
     @property
     def longitude(self):
-        parcel = self.parcel
-        if parcel:
-            return parcel.longitude
+        if self.parcel:
+            return self.parcel.longitude
         return self.geocoded and self.geocoded.x or None
 
 
@@ -184,12 +189,17 @@ class AddressBase(models.Model):
 
     @property
     def parcel(self):
-        if not self.pl:
-            return None
-        try:
-            return Parcel.objects.get(pl=self.pl)
-        except Parcel.DoesNotExist:
-            return None
+        if not self._parcel_fetched:
+            if not self.pl:
+                self._parcel = None
+            else:
+                try:
+                    self._parcel = Parcel.objects.get(pl=self.pl)
+                except Parcel.DoesNotExist:
+                    self._parcel = None
+            self._parcel_fetched = True
+
+        return self._parcel
 
 
     @property
@@ -216,6 +226,45 @@ class AddressBase(models.Model):
 
 
 class AddressQuerySet(GeoQuerySet):
+    def __init__(self, *args, **kwargs):
+        super(AddressQuerySet, self).__init__(*args, **kwargs)
+
+        self._parcels_fetched = False
+        self._prefetch_parcels = False
+
+
+    def prefetch_parcels(self):
+        clone = self._clone()
+
+        clone._prefetch_parcels = True
+
+        return clone
+
+
+    def __iter__(self):
+        if self._prefetch_parcels and not self._parcels_fetched:
+            self._fetch_parcels()
+
+        return super(AddressQuerySet, self).__iter__()
+
+
+    def _fetch_parcels(self):
+        # ensures result cache is fully populated
+        len(self)
+
+        parcels_by_pl = dict(
+            (p.pl, p) for p in
+            Parcel.objects.filter(
+                pl__in=[a.pl for a in self._result_cache])
+            )
+
+        for a in self._result_cache:
+            a._parcel = parcels_by_pl.get(a.pl)
+            a._parcel_fetched = True
+
+        self._parcels_fetched = True
+
+
     def update(self, **kwargs):
         user = kwargs.pop("user", None)
         if user is None:
