@@ -118,18 +118,35 @@ class ImportViewTest(AuthenticatedWebTest):
 class MockWriter(object):
     mimetype = "text/mock"
     extension = "mck"
+    needs_parcels = False
 
     def __init__(self, addresses):
         self.addresses = addresses
 
 
     def save(self, stream):
+        # writers might access User FKs
+        for a in self.addresses:
+            a.imported_by
         stream.write(",".join([str(a.id) for a in self.addresses]))
 
 
 
-@patch("mlt.map.views.EXPORT_FORMATS", ["foo"])
-@patch("mlt.map.views.EXPORT_WRITERS", {"foo": MockWriter})
+class MockWriterNeedsParcels(MockWriter):
+    needs_parcels = True
+
+    def save(self, stream):
+        super(MockWriterNeedsParcels, self).save(stream)
+        # a writer with needs_parcels = True might access the parcel
+        for a in self.addresses:
+            a.parcel
+
+
+
+
+@patch("mlt.map.views.EXPORT_FORMATS", ["mock", "mockp"])
+@patch("mlt.map.views.EXPORT_WRITERS", {"mock": MockWriter,
+                                        "mockp": MockWriterNeedsParcels})
 class ExportViewTest(AuthenticatedWebTest):
     url_name = "map_export_addresses"
 
@@ -145,12 +162,32 @@ class ExportViewTest(AuthenticatedWebTest):
         return res
 
 
-    def test_export(self, querystring="?export_format=foo"):
+    def test_export(self, querystring="?export_format=mock"):
         a1 = create_address()
         a2 = create_address()
 
         res = self._basic_test(querystring)
         self.assertEqual(res.body, "%s,%s" % (a1.id, a2.id))
+
+
+    def test_queries(self, querystring="?export_format=mock"):
+        create_address(imported_by=create_user())
+        create_address()
+
+        # 1 for addresses, 11 for misc sessions/auth
+        with self.assertNumQueries(12):
+            self._basic_test(querystring)
+
+
+    def test_parcel_queries(self, querystring="?export_format=mockp"):
+        create_address(pl="1")
+        create_address(pl="2")
+        create_parcel(pl="1")
+        create_parcel(pl="2")
+
+        # 1 for addresses, 1 for parcels, 11 for misc sessions/auth
+        with self.assertNumQueries(13):
+            self._basic_test(querystring)
 
 
     def test_no_format(self):
@@ -165,7 +202,7 @@ class ExportViewTest(AuthenticatedWebTest):
         a1 = create_address(city="Providence")
         create_address(city="Albuquerque")
 
-        res = self._basic_test("?export_format=foo&city=Providence")
+        res = self._basic_test("?export_format=mock&city=Providence")
 
         self.assertEqual(res.body, str(a1.id))
 

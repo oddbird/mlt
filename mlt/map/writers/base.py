@@ -16,6 +16,8 @@ class BaseWriter(object):
 
     mimetype = "text/plain"
     extension = "txt"
+    # subclasses should set to True if they access mapped-parcel data
+    needs_parcels = False
 
 
     serializer = serializers.Serializer()
