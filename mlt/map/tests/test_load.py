@@ -137,7 +137,6 @@ class LoadParcelsTest(TestCase):
         self.assertEqual(parcels[0].pl, "123 45")
 
 
-
     def test_verbose_false(self):
         shapefile = self.write_shapefile([create_parcel()])
 
