@@ -430,7 +430,8 @@ def address_actions(request):
         count = addresses.count()
         updated = Address.objects.filter(
             id__in=[a.id for a in addresses])
-        updated.update(user=request.user, pl="")
+        updated.update(
+            user=request.user, pl="", mapped_by=None, mapped_timestamp=None)
         messages.success(
             request, "%s mapping%s rejected."
             % (count, "s" if (count != 1) else ""))

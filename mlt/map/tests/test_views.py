@@ -2019,9 +2019,11 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
 
 
     def test_reject(self):
-        a1 = create_address(pl="")
-        a2 = create_address(pl="123")
-        a3 = create_address(pl="234")
+        u = create_user()
+        now = datetime.datetime.utcnow()
+        a1 = create_address(pl="", mapped_by=None, mapped_timestamp=None)
+        a2 = create_address(pl="123", mapped_by=u, mapped_timestamp=now)
+        a3 = create_address(pl="234", mapped_by=u, mapped_timestamp=now)
 
         res = self.post(
             self.url,
@@ -2042,9 +2044,13 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
 
         a2 = refresh(a2)
         self.assertEqual(a2.pl, "")
+        self.assertEqual(a2.mapped_by, None)
+        self.assertEqual(a2.mapped_timestamp, None)
 
         a3 = refresh(a3)
         self.assertEqual(a3.pl, "234")
+        self.assertEqual(a3.mapped_by, u)
+        self.assertEqual(a3.mapped_timestamp, now)
 
 
     def test_no_ids(self):
