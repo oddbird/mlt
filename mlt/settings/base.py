@@ -184,6 +184,13 @@ MIDDLEWARE_CLASSES.insert(
 
 INSTALLED_APPS += ["ajax_loading_overlay"]
 
+# Celery
+
+BROKER_TRANSPORT = "django"
+INSTALLED_APPS += ["djcelery", "djkombu"]
+import djcelery
+djcelery.setup_loader()
+
 # import local settings, if they exist
 
 local_settings = abspath(join(dirname(__file__), "local.py"))

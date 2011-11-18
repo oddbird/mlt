@@ -28,4 +28,5 @@ django-kombu==0.9.4
 importlib==1.0.2
 kombu==1.4.3
 ordereddict==1.1
-
+django-celery==2.4.2
+django-picklefield==0.1.9
