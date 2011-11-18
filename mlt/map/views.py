@@ -72,7 +72,8 @@ class UIAddressChangeSerializer(UIDateSerializerMixin,
     default_fields = serializers.AddressChangeSerializer.default_fields + [
         "revert_url"]
 
-    snapshot_serializer = UISnapshotSerializer()
+    snapshot_serializer = UISnapshotSerializer(
+        exclude=["mapped_by", "imported_by"])
 
 
 
@@ -179,7 +180,7 @@ class IndexedAddressSerializer(UIAddressSerializer):
 @login_required
 def addresses(request):
     qs = AddressFilter().apply(
-        Address.objects.all().select_related(
+        Address.objects.select_related(
             "mapped_by", "imported_by").prefetch_parcels(),
         request.GET)
 
@@ -211,7 +212,10 @@ def addresses(request):
 @login_required
 def history(request):
     qs = AddressChangeFilter().apply(
-        AddressChange.objects.select_related("pre", "post"), request.GET)
+        AddressChange.objects.select_related(
+            "pre", "post", "changed_by"
+            ).prefetch_parcels(),
+        request.GET)
 
     get_count = request.GET.get("count", "false").lower() not in ["false", "0"]
     if get_count:

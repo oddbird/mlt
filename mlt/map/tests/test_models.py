@@ -757,3 +757,20 @@ class AddressTest(TestCase):
                 self.assertEqual(address.pl, address.parcel.pl)
             # second iteration shouldn't trigger additional query
             [a.pl for a in qs]
+
+
+    def test_change_prefetch_parcels(self):
+        create_address(pl="1")
+        create_address(pl="2")
+
+        create_parcel(pl="1")
+        create_parcel(pl="2")
+
+        with self.assertNumQueries(2): # one for changes, one for parcels
+            # cloning preserves the prefetch marker
+            qs = self.change_model.objects.select_related(
+                "pre", "post").prefetch_parcels()._clone()
+            for change in qs:
+                self.assertEqual(change.post.pl, change.post.parcel.pl)
+            # second iteration shouldn't trigger additional query
+            [c.post.parcel for c in qs]

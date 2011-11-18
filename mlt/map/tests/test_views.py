@@ -849,6 +849,16 @@ class HistoryViewTest(AuthenticatedWebTest):
             [str(i) for i in range(1, 21)])
 
 
+    def test_queries(self):
+        for i in range(50):
+            create_address(street_number=str(i+1), pl=i)
+            create_parcel(pl=i)
+
+        # 1 for changes, 1 for parcels, 11 for misc sessions/auth
+        with self.assertNumQueries(13) as context:
+            self.get()
+
+
     def test_change_serialization(self):
         a = create_address()
         c = a.address_changes.get()
@@ -879,10 +889,8 @@ class HistoryViewTest(AuthenticatedWebTest):
                         "import_timestamp": date_format(
                             utc_to_local(a.import_timestamp),
                             "DATETIME_FORMAT"),
-                        "imported_by": a.imported_by.username,
                         "latitude": None,
                         "longitude": None,
-                        "mapped_by": None,
                         "mapped_timestamp": None,
                         "multi_units": a.multi_units,
                         "needs_review": a.needs_review,

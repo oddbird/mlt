@@ -287,9 +287,10 @@ class AddressBase(models.Model):
             )
 
 
-class AddressQuerySet(GeoQuerySet):
+
+class ParcelPrefetchQuerySet(GeoQuerySet):
     def __init__(self, *args, **kwargs):
-        super(AddressQuerySet, self).__init__(*args, **kwargs)
+        super(ParcelPrefetchQuerySet, self).__init__(*args, **kwargs)
 
         self._parcels_fetched = False
         self._prefetch_parcels = False
@@ -304,7 +305,7 @@ class AddressQuerySet(GeoQuerySet):
 
 
     def _clone(self, *args, **kwargs):
-        clone = super(AddressQuerySet, self)._clone(*args, **kwargs)
+        clone = super(ParcelPrefetchQuerySet, self)._clone(*args, **kwargs)
 
         clone._prefetch_parcels = self._prefetch_parcels
 
@@ -313,15 +314,27 @@ class AddressQuerySet(GeoQuerySet):
 
     def __iter__(self):
         if self._prefetch_parcels and not self._parcels_fetched:
-            self._fetch_parcels()
+            self._fetch_parcels_wrapper()
 
-        return super(AddressQuerySet, self).__iter__()
+        return super(ParcelPrefetchQuerySet, self).__iter__()
 
 
-    def _fetch_parcels(self):
+    def _fetch_parcels_wrapper(self):
         # ensures result cache is fully populated
         len(self)
 
+        self._fetch_parcels()
+
+        self._parcels_fetched = True
+
+
+    def _fetch_parcels(self):
+        raise NotImplementedError
+
+
+
+class AddressQuerySet(ParcelPrefetchQuerySet):
+    def _fetch_parcels(self):
         parcels_by_pl = dict(
             (p.pl, p) for p in
             Parcel.objects.filter(
@@ -333,8 +346,6 @@ class AddressQuerySet(GeoQuerySet):
             a._parcel_fetched = True
             # can't preset parcel's _mapped_to, address query may not have
             # included all addresses mapped to these parcels
-
-        self._parcels_fetched = True
 
 
     def update(self, **kwargs):
@@ -554,6 +565,35 @@ class AddressSnapshot(AddressBase):
 
 
 
+class AddressChangeQuerySet(ParcelPrefetchQuerySet):
+    def _fetch_parcels(self):
+        pls = set()
+        for c in self._result_cache:
+            if c.pre is not None:
+                pls.add(c.pre.pl)
+            if c.post is not None:
+                pls.add(c.post.pl)
+
+        parcels_by_pl = dict(
+            (p.pl, p) for p in
+            Parcel.objects.filter(pl__in=pls))
+
+        for c in self._result_cache:
+            if c.pre is not None:
+                c.pre._parcel = parcels_by_pl.get(c.pre.pl)
+                c.pre._parcel_fetched = True
+            if c.post is not None:
+                c.post._parcel = parcels_by_pl.get(c.post.pl)
+                c.post._parcel_fetched = True
+
+
+
+class AddressChangeManager(models.GeoManager):
+    def get_query_set(self):
+        return AddressChangeQuerySet(self.model, using=self._db)
+
+
+
 class AddressChange(models.Model):
     """
     Stores information about a change to an Address. The change may encompass
@@ -575,6 +615,9 @@ class AddressChange(models.Model):
     # The post snapshot. NULL indicates "address deleted"
     post = models.ForeignKey(
         AddressSnapshot, null=True, related_name="post_for")
+
+
+    objects = AddressChangeManager()
 
 
     @property
