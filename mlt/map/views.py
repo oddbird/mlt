@@ -42,7 +42,16 @@ class UIAddressSerializer(UIDateSerializerMixin, serializers.AddressSerializer):
 class UIParcelSerializer(serializers.ParcelSerializer):
     default_fields = serializers.ParcelSerializer.default_fields + ["mapped_to"]
 
-    address_serializer = UIAddressSerializer(exclude=["edit_url", "has_parcel"])
+    address_serializer = UIAddressSerializer(
+        exclude=[
+            "edit_url",
+            "has_parcel",
+            "latitude",
+            "longitude",
+            "mapped_by",
+            "imported_by"
+            ]
+        )
 
 
     def encode_mapped_to(self, addresses):
@@ -289,7 +298,7 @@ def geojson(request):
         "%(w)s %(s)s"
         "))" % {"w": westlng, "e": eastlng, "s": southlat, "n": northlat}
         )
-    qs = Parcel.objects.filter(geom__intersects=wkt)
+    qs = Parcel.objects.filter(geom__intersects=wkt).prefetch_mapped()
     features = []
     serializer = UIParcelSerializer()
     for parcel in qs:

@@ -50,7 +50,7 @@ class ParcelQuerySet(GeoQuerySet):
 
 
         for p in self._result_cache:
-            p._mapped_to = addresses_by_pl.get(p.pl)
+            p._mapped_to = addresses_by_pl.get(p.pl, [])
             p._mapped_fetched = True
 
         self._mapped_fetched = True

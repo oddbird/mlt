@@ -227,11 +227,11 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
 
         a = refresh(a)
         self.assertEqual(a.pl, "1234")
+        self.assertEqual(a.mapped_by, self.user)
         self.assertEqual(res.json["pl"], "1234")
         self.assertEqual(len(res.json["mapped_to"]), 1)
         addy = res.json["mapped_to"][0]
         self.assertEqual(addy["id"], a.id)
-        self.assertEqual(addy["mapped_by"], self.user.username)
         self.assertEqual(addy["mapped_timestamp"], date_format(
                 utc_to_local(a.mapped_timestamp), "DATETIME_FORMAT"))
         self.assertEqual(addy["needs_review"], True)
@@ -253,11 +253,11 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
 
         a = refresh(a)
         self.assertEqual(a.pl, "1234")
+        self.assertEqual(a.mapped_by, u)
         self.assertEqual(res.json["pl"], "1234")
         self.assertEqual(len(res.json["mapped_to"]), 1)
         addy = res.json["mapped_to"][0]
         self.assertEqual(addy["id"], a.id)
-        self.assertEqual(addy["mapped_by"], u.username)
         self.assertEqual(addy["needs_review"], False)
 
 
@@ -272,11 +272,11 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
 
         a2 = refresh(a2)
         self.assertEqual(a2.pl, "1234")
+        self.assertEqual(a2.mapped_by, self.user)
         self.assertEqual(res.json["pl"], "1234")
         self.assertEqual(len(res.json["mapped_to"]), 2)
         addy = [a for a in res.json["mapped_to"] if a["id"] == a2.id][0]
         self.assertEqual(addy["id"], a2.id)
-        self.assertEqual(addy["mapped_by"], self.user.username)
         self.assertEqual(addy["mapped_timestamp"], date_format(
                 utc_to_local(a2.mapped_timestamp), "DATETIME_FORMAT"))
         self.assertEqual(addy["needs_review"], True)
@@ -295,13 +295,12 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
         a2 = refresh(a2)
         self.assertEqual(a1.pl, "1234")
         self.assertEqual(a2.pl, "1234")
+        self.assertEqual(a1.mapped_by, self.user)
+        self.assertEqual(a2.mapped_by, self.user)
         self.assertEqual(res.json["pl"], "1234")
         mt = res.json["mapped_to"]
         self.assertEqual(len(mt), 2)
         self.assertEqual(set([a["id"] for a in mt]), set([a1.id, a2.id]))
-        self.assertEqual(
-            set([a["mapped_by"] for a in mt]), set([self.user.username])
-            )
         self.assertEqual(
             set([a["mapped_timestamp"] for a in mt]),
             set([date_format(utc_to_local(a1.mapped_timestamp),
@@ -326,13 +325,12 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
         self.assertEqual(a1.pl, "1234")
         self.assertEqual(a2.pl, "1234")
         self.assertEqual(a3.pl, "")
+        self.assertEqual(a1.mapped_by, self.user)
+        self.assertEqual(a2.mapped_by, self.user)
         self.assertEqual(res.json["pl"], "1234")
         mt = res.json["mapped_to"]
         self.assertEqual(len(mt), 2)
         self.assertEqual(set([a["id"] for a in mt]), set([a1.id, a2.id]))
-        self.assertEqual(
-            set([a["mapped_by"] for a in mt]), set([self.user.username])
-            )
         self.assertEqual(
             set([a["mapped_timestamp"] for a in mt]),
             set([date_format(utc_to_local(a1.mapped_timestamp),
@@ -1253,7 +1251,6 @@ class GeoJSONViewTest(AuthenticatedWebTest):
 
 
     def test_contains(self):
-        self.maxDiff = None
         p = create_parcel(
             geom=create_mpolygon(
                 [(1.0, 5.0), (1.0, 6.0), (2.0, 6.0), (2.0, 5.0), (1.0, 5.0)]))
@@ -1302,7 +1299,6 @@ class GeoJSONViewTest(AuthenticatedWebTest):
 
 
     def test_mapped(self):
-        self.maxDiff = None
         p = create_parcel(
             geom=create_mpolygon(
                 [(1.0, 5.0), (1.0, 6.0), (2.0, 6.0), (2.0, 5.0), (1.0, 5.0)]))
@@ -1314,6 +1310,25 @@ class GeoJSONViewTest(AuthenticatedWebTest):
         mapped_to = response.json["features"][0]["properties"]["mapped_to"]
         self.assertEqual(len(mapped_to), 1)
         self.assertEqual(mapped_to[0]["street"], "3635 Van Gordon St")
+
+
+    def test_queries(self):
+        # @@@ convert to fake-request test to avoid extra queries?
+        p1 = create_parcel(
+            pl="1",
+            geom=create_mpolygon(
+                [(1.0, 5.0), (1.0, 6.0), (2.0, 6.0), (2.0, 5.0), (1.0, 5.0)]))
+        p2 = create_parcel(
+            pl="2",
+            geom=create_mpolygon(
+                [(1.0, 5.0), (1.0, 6.0), (2.0, 6.0), (2.0, 5.0), (1.0, 5.0)]))
+        create_address(pl=p1.pl)
+        create_address(pl=p2.pl)
+
+        # 1 for parcels, 1 for addresses, 11 for sessions/auth/etc
+        with self.assertNumQueries(13):
+            self.get(
+                westlng="0.0", eastlng="3.0", southlat="4.0", northlat="5.5")
 
 
 
