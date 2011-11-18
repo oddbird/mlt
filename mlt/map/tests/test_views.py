@@ -58,6 +58,7 @@ class AuthenticatedWebTest(WebTest):
         self.assertEqual(response.status_int, 302)
 
 
+
 class ImportViewTest(AuthenticatedWebTest):
     url_name = "map_import_addresses"
 
@@ -1313,7 +1314,6 @@ class GeoJSONViewTest(AuthenticatedWebTest):
 
 
     def test_queries(self):
-        # @@@ convert to fake-request test to avoid extra queries?
         p1 = create_parcel(
             pl="1",
             geom=create_mpolygon(
