@@ -1861,8 +1861,9 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
         a2 = create_address(pl="123", needs_review=True)
         a3 = create_address(pl="234", needs_review=False)
 
-        # 1 to update, 1 for addresses, 1 for parcels, 11 for sessions/auth
-        with self.assertNumQueries(14):
+        # 1 to update, 1 for addresses, 1 for parcels,
+        # 1 for querying addresses again to record change, 11 for sessions/auth
+        with self.assertNumQueries(15):
             self.post(
                 self.url,
                 {"aid": [a1.id, a2.id, a3.id], "action": "flag"},

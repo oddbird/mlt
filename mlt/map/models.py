@@ -9,7 +9,8 @@ from django.contrib.gis.db import models
 from django.contrib.gis.db.models.query import GeoQuerySet
 from django.contrib.localflavor.us.models import USStateField
 
-from .tasks import record_address_change
+from .tasks import (
+    record_address_change, record_bulk_changes, record_bulk_delete)
 
 
 
@@ -362,16 +363,11 @@ class AddressQuerySet(ParcelPrefetchQuerySet):
 
         now = datetime.utcnow()
 
-        for address in self:
-            pre_data = address.snapshot_data(saved=True)
-            address.__dict__.update(kwargs)
-            post_data = address.snapshot_data(saved=False)
-            record_address_change.delay(
-                address_id=address.id,
-                pre_data=pre_data,
-                post_data=post_data,
-                user_id=user.id,
-                timestamp=now)
+        record_bulk_changes.delay(
+            address_ids=[a.id for a in self],
+            user_id=user.id,
+            timestamp=now,
+            **kwargs)
 
         return super(AddressQuerySet, self).update(**kwargs)
 
@@ -383,14 +379,10 @@ class AddressQuerySet(ParcelPrefetchQuerySet):
 
         now = datetime.utcnow()
 
-        for address in self:
-            pre = address.snapshot_data(saved=True)
-            record_address_change.delay(
-                address_id=address.id,
-                user_id=user.id,
-                pre_data=pre,
-                post_data=None,
-                timestamp=now)
+        record_bulk_delete.delay(
+            address_ids=[a.id for a in self],
+            user_id=user.id,
+            timestamp=now)
 
         super(AddressQuerySet, self).update(deleted=True)
 
