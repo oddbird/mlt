@@ -18,12 +18,15 @@ def record_bulk_delete(address_ids, user_id, timestamp):
 
 
 @task(ignore_result=True)
-def record_bulk_changes(address_ids, user_id, timestamp, **kwargs):
+def record_bulk_changes(address_data, user_id, timestamp):
     from .models import Address
 
-    for address in Address.objects.filter(id__in=address_ids):
-        pre_data = address.snapshot_data(saved=True)
-        address.__dict__.update(kwargs)
+    for address in Address.objects.filter(id__in=set(address_data)):
+        for k, v in address_data[address.id]["pre"].items():
+            setattr(address, k, v)
+        pre_data = address.snapshot_data(saved=False)
+        for k, v in address_data[address.id]["post"].items():
+            setattr(address, k, v)
         post_data = address.snapshot_data(saved=False)
         record_address_change.delay(
             address_id=address.id,

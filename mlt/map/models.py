@@ -363,11 +363,18 @@ class AddressQuerySet(ParcelPrefetchQuerySet):
 
         now = datetime.utcnow()
 
+        # save current values for recording changes
+        address_data = {}
+        for address in self:
+            address_data[address.id] = {"pre": {}, "post": {}}
+            for field, value in kwargs.items():
+                address_data[address.id]["pre"][field] = getattr(address, field)
+                address_data[address.id]["post"][field] = value
+
         record_bulk_changes.delay(
-            address_ids=[a.id for a in self],
+            address_data=address_data,
             user_id=user.id,
-            timestamp=now,
-            **kwargs)
+            timestamp=now)
 
         return super(AddressQuerySet, self).update(**kwargs)
 
