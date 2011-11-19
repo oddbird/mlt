@@ -1950,8 +1950,8 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
                     }],
             )
         self.assertTrue(res.json["success"])
-        self.assertEqual(len(res.json["addresses"]), 1)
-        self.assertEqual(res.json["addresses"][0]["needs_review"], False)
+        # only addresses specifically requested by "aid" are returned
+        self.assertEqual(len(res.json["addresses"]), 0)
 
         a1 = refresh(a1)
         self.assertEqual(a1.needs_review, False)
@@ -2007,8 +2007,8 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
                     }],
             )
         self.assertTrue(res.json["success"])
-        self.assertEqual(len(res.json["addresses"]), 1)
-        self.assertEqual(res.json["addresses"][0]["needs_review"], True)
+        # only addresses specifically requested by "aid" are returned
+        self.assertEqual(len(res.json["addresses"]), 0)
 
         self.assertEqual(refresh(a1).needs_review, True)
         self.assertEqual(refresh(a2).needs_review, False)

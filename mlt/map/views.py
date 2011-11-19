@@ -401,6 +401,8 @@ def address_actions(request):
             request, "No addresses selected.")
         return json_response({"success": False})
 
+    visible_selected_ids = set(request.POST.getlist("aid"))
+
     action = request.POST.get("action")
 
     if action == "delete":
@@ -414,72 +416,82 @@ def address_actions(request):
     if action == "approve":
         addresses = addresses.filter(needs_review=True).exclude(pl="")
         count = addresses.count()
+        visible_updated_ids = visible_selected_ids.intersection(
+            set([unicode(i) for i in addresses.values_list("id", flat=True)]))
         if not request.user.has_perm("map.mappings_trusted"):
             messages.error(
                 request,
                 "You don't have permission to approve %s."
                 % ("this mapping" if count == 1 else "these mappings"))
             return json_response({"success": False})
-        updated = Address.objects.filter(
-            id__in=[a.id for a in addresses])
-        updated.update(user=request.user, needs_review=False)
+        addresses.update(user=request.user, needs_review=False)
         messages.success(
             request, "%s mapping%s approved."
             % (count, "s" if (count != 1) else ""))
         return json_response({
                 "success": True,
-                "addresses": UIAddressSerializer().many(updated.prefetch()),
+                "addresses": UIAddressSerializer().many(
+                    Address.objects.prefetch().filter(
+                        id__in=visible_updated_ids)),
                 })
 
     if action == "flag":
         addresses = addresses.filter(needs_review=False).exclude(pl="")
         count = addresses.count()
-        updated = Address.objects.filter(
-            id__in=[a.id for a in addresses])
-        updated.update(user=request.user, needs_review=True)
+        visible_updated_ids = visible_selected_ids.intersection(
+            set([unicode(i) for i in addresses.values_list("id", flat=True)]))
+        addresses.update(user=request.user, needs_review=True)
         messages.success(
             request, "%s mapping%s flagged."
             % (count, "s" if (count != 1) else ""))
         return json_response({
                 "success": True,
-                "addresses": UIAddressSerializer().many(updated.prefetch()),
+                "addresses": UIAddressSerializer().many(
+                    Address.objects.prefetch().filter(
+                        id__in=visible_updated_ids)),
                 })
 
     if action == "reject":
         addresses = addresses.exclude(pl="")
         count = addresses.count()
-        updated = Address.objects.filter(
-            id__in=[a.id for a in addresses])
-        updated.update(
+        visible_updated_ids = visible_selected_ids.intersection(
+            set([unicode(i) for i in addresses.values_list("id", flat=True)]))
+        addresses.update(
             user=request.user, pl="", mapped_by=None, mapped_timestamp=None)
         messages.success(
             request, "%s mapping%s rejected."
             % (count, "s" if (count != 1) else ""))
         return json_response({
                 "success": True,
-                "addresses": UIAddressSerializer().many(updated.prefetch()),
+                "addresses": UIAddressSerializer().many(
+                    Address.objects.prefetch().filter(
+                        id__in=visible_updated_ids)),
                 })
 
     if action == "multi":
         addresses = addresses.filter(multi_units=False)
-        updated = Address.objects.filter(
-            id__in=[a.id for a in addresses])
-        updated.update(user=request.user, multi_units=True)
+        visible_updated_ids = visible_selected_ids.intersection(
+            set([unicode(i) for i in addresses.values_list("id", flat=True)]))
+        addresses.update(user=request.user, multi_units=True)
         messages.success(request, "Address set as multi-unit.")
         return json_response({
                 "success": True,
-                "addresses": UIAddressSerializer().many(updated.prefetch()),
+                "addresses": UIAddressSerializer().many(
+                    Address.objects.prefetch().filter(
+                        id__in=visible_updated_ids)),
                 })
 
     if action == "single":
         addresses = addresses.filter(multi_units=True)
-        updated = Address.objects.filter(
-            id__in=[a.id for a in addresses])
-        updated.update(user=request.user, multi_units=False)
+        visible_updated_ids = visible_selected_ids.intersection(
+            set([unicode(i) for i in addresses.values_list("id", flat=True)]))
+        addresses.update(user=request.user, multi_units=False)
         messages.success(request, "Address set as single unit.")
         return json_response({
                 "success": True,
-                "addresses": UIAddressSerializer().many(updated.prefetch()),
+                "addresses": UIAddressSerializer().many(
+                    Address.objects.prefetch().filter(
+                        id__in=visible_updated_ids)),
                 })
 
     messages.error(request, "Unknown action '%s'" % action)
