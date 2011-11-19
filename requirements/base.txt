@@ -25,7 +25,6 @@ amqplib==1.0.2
 anyjson==0.3.1
 celery==2.4.2
 django-kombu==0.9.4
-importlib==1.0.2
 kombu==1.4.3
 ordereddict==1.1
 django-celery==2.4.2

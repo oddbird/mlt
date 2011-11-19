@@ -189,6 +189,9 @@ INSTALLED_APPS += ["ajax_loading_overlay"]
 BROKER_TRANSPORT = "django"
 INSTALLED_APPS += ["djcelery", "djkombu"]
 
+CELERY_ALWAYS_EAGER = True
+CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
+
 # import local settings, if they exist
 
 local_settings = abspath(join(dirname(__file__), "local.py"))

@@ -1,5 +1,7 @@
 from .base import *
 
+CELERY_ALWAYS_EAGER = False
+
 SESSION_COOKIE_SECURE = True
 # http://en.wikipedia.org/wiki/Strict_Transport_Security
 SECURE_HSTS_SECONDS = 86400
