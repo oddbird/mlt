@@ -1856,6 +1856,19 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
         self.assertEqual(a1.__class__.objects.count(), 1)
 
 
+    def test_queries(self):
+        a1 = create_address(pl="", needs_review=True)
+        a2 = create_address(pl="123", needs_review=True)
+        a3 = create_address(pl="234", needs_review=False)
+
+        # 1 to update, 1 for addresses, 1 for parcels, 11 for sessions/auth
+        with self.assertNumQueries(14):
+            self.post(
+                self.url,
+                {"aid": [a1.id, a2.id, a3.id], "action": "flag"},
+                )
+
+
     def test_approve(self):
         a1 = create_address(pl="", needs_review=True)
         a2 = create_address(pl="123", needs_review=True)

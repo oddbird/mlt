@@ -113,8 +113,7 @@ def export_addresses(request):
     writer_class = EXPORT_WRITERS.get(format, EXPORT_WRITERS[EXPORT_FORMATS[0]])
 
     addresses = AddressFilter().apply(
-        Address.objects.select_related(
-            "imported_by", "mapped_by").prefetch_parcels(),
+        Address.objects.prefetch(),
         request.GET)
 
     writer = writer_class(addresses)
@@ -183,8 +182,7 @@ class IndexedAddressSerializer(UIAddressSerializer):
 @login_required
 def addresses(request):
     qs = AddressFilter().apply(
-        Address.objects.select_related(
-            "mapped_by", "imported_by").prefetch_parcels(),
+        Address.objects.prefetch(),
         request.GET)
 
     get_count = request.GET.get("count", "false").lower() not in ["false", "0"]
@@ -395,7 +393,9 @@ def geocode(request):
 
 @login_required
 def address_actions(request):
-    addresses = AddressFilter().apply(Address.objects.all(), request.POST)
+    addresses = AddressFilter().apply(
+        Address.objects.all(),
+        request.POST)
     if not addresses:
         messages.error(
             request, "No addresses selected.")
@@ -428,7 +428,7 @@ def address_actions(request):
             % (count, "s" if (count != 1) else ""))
         return json_response({
                 "success": True,
-                "addresses": UIAddressSerializer().many(updated),
+                "addresses": UIAddressSerializer().many(updated.prefetch()),
                 })
 
     if action == "flag":
@@ -442,7 +442,7 @@ def address_actions(request):
             % (count, "s" if (count != 1) else ""))
         return json_response({
                 "success": True,
-                "addresses": UIAddressSerializer().many(updated),
+                "addresses": UIAddressSerializer().many(updated.prefetch()),
                 })
 
     if action == "reject":
@@ -457,7 +457,7 @@ def address_actions(request):
             % (count, "s" if (count != 1) else ""))
         return json_response({
                 "success": True,
-                "addresses": UIAddressSerializer().many(updated),
+                "addresses": UIAddressSerializer().many(updated.prefetch()),
                 })
 
     if action == "multi":
@@ -468,7 +468,7 @@ def address_actions(request):
         messages.success(request, "Address set as multi-unit.")
         return json_response({
                 "success": True,
-                "addresses": UIAddressSerializer().many(updated),
+                "addresses": UIAddressSerializer().many(updated.prefetch()),
                 })
 
     if action == "single":
@@ -479,7 +479,7 @@ def address_actions(request):
         messages.success(request, "Address set as single unit.")
         return json_response({
                 "success": True,
-                "addresses": UIAddressSerializer().many(updated),
+                "addresses": UIAddressSerializer().many(updated.prefetch()),
                 })
 
     messages.error(request, "Unknown action '%s'" % action)

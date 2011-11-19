@@ -335,6 +335,11 @@ class ParcelPrefetchQuerySet(GeoQuerySet):
 
 
 class AddressQuerySet(ParcelPrefetchQuerySet):
+    def prefetch(self):
+        return self.select_related(
+            "mapped_by", "imported_by").prefetch_parcels()
+
+
     def _fetch_parcels(self):
         parcels_by_pl = dict(
             (p.pl, p) for p in
@@ -416,6 +421,10 @@ class AddressManager(models.GeoManager):
 
     def get_query_set(self):
         return AddressQuerySet(self.model, using=self._db).filter(deleted=False)
+
+
+    def prefetch(self):
+        return self.get_query_set().prefetch()
 
 
     def create_from_input(self, **kwargs):
