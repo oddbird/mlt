@@ -387,7 +387,7 @@ class AddressTest(TestCase):
 
     def test_snapshot_saved_new(self):
         a = self.model()
-        s = a.snapshot(saved=True)
+        s = a.snapshot_data(saved=True)
 
         self.assertIs(s, None)
 
@@ -396,28 +396,18 @@ class AddressTest(TestCase):
         a = create_address(city="Providence")
         a.city = "Albuquerque"
 
-        fake_now = datetime.datetime(2011, 11, 4, 17, 0, 5)
-        with patch("mlt.map.models.datetime") as mock_dt:
-            mock_dt.utcnow.return_value = fake_now
-            s = a.snapshot(saved=True)
+        s = a.snapshot_data(saved=True)
 
-        self.assertIsInstance(s, self.snapshot_model)
-        self.assertEqual(s.city, "Providence")
-        self.assertEqual(s.snapshot_timestamp, fake_now)
+        self.assertEqual(s["city"], "Providence")
 
 
     def test_snapshot_current(self):
         a = create_address(city="Providence")
         a.city = "Albuquerque"
 
-        fake_now = datetime.datetime(2011, 11, 4, 17, 0, 5)
-        with patch("mlt.map.models.datetime") as mock_dt:
-            mock_dt.utcnow.return_value = fake_now
-            s = a.snapshot(saved=False)
+        s = a.snapshot_data(saved=False)
 
-        self.assertIsInstance(s, self.snapshot_model)
-        self.assertEqual(s.city, "Albuquerque")
-        self.assertEqual(s.snapshot_timestamp, fake_now)
+        self.assertEqual(s["city"], "Albuquerque")
 
 
     def test_create_address_change(self):

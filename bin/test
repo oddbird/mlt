@@ -6,5 +6,5 @@ else
   arg="map"
 fi
 
-coverage run --branch manage.py test $arg
+DJANGO_SETTINGS_MODULE="mlt.settings.test" coverage run --branch manage.py test $arg
 coverage html --include='mlt/map/*.py' --omit='mlt/map/migrations/*','mlt/map/tests/*'

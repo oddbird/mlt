@@ -9,6 +9,7 @@ from django.contrib.gis.db import models
 from django.contrib.gis.db.models.query import GeoQuerySet
 from django.contrib.localflavor.us.models import USStateField
 
+from .tasks import record_address_change
 
 
 
@@ -354,13 +355,18 @@ class AddressQuerySet(ParcelPrefetchQuerySet):
             raise AddressVersioningError(
                 "Cannot update addresses without providing user.")
 
+        now = datetime.utcnow()
+
         for address in self:
-            pre = address.snapshot(saved=True)
+            pre_data = address.snapshot_data(saved=True)
             address.__dict__.update(kwargs)
-            post = address.snapshot(saved=False)
-            AddressChange.objects.create(
-                address=address, changed_by=user, pre=pre, post=post,
-                changed_timestamp=datetime.utcnow())
+            post_data = address.snapshot_data(saved=False)
+            record_address_change.delay(
+                address_id=address.id,
+                pre_data=pre_data,
+                post_data=post_data,
+                user_id=user.id,
+                timestamp=now)
 
         return super(AddressQuerySet, self).update(**kwargs)
 
@@ -370,11 +376,16 @@ class AddressQuerySet(ParcelPrefetchQuerySet):
             raise AddressVersioningError(
                 "Cannot delete addresses without providing user.")
 
+        now = datetime.utcnow()
+
         for address in self:
-            pre = address.snapshot(saved=True)
-            AddressChange.objects.create(
-                address=address, changed_by=user, pre=pre, post=None,
-                changed_timestamp=datetime.utcnow())
+            pre = address.snapshot_data(saved=True)
+            record_address_change.delay(
+                address_id=address.id,
+                user_id=user.id,
+                pre_data=pre,
+                post_data=None,
+                timestamp=now)
 
         super(AddressQuerySet, self).update(deleted=True)
 
@@ -485,15 +496,17 @@ class Address(AddressBase):
             raise AddressVersioningError(
                 "Cannot save address without providing user.")
 
-        pre = self.snapshot(saved=True)
+        pre = self.snapshot_data(saved=True)
 
         ret = super(Address, self).save(*args, **kwargs)
 
-        post = self.snapshot(saved=False)
+        post = self.snapshot_data(saved=False)
 
-        AddressChange.objects.create(
-            address=self, changed_by=user, pre=pre, post=post,
-            changed_timestamp=datetime.utcnow())
+        record_address_change.delay(
+            address_id=self.id,
+            user_id=user.id,
+            pre_data=pre, post_data=post,
+            timestamp=datetime.utcnow())
 
         return ret
 
@@ -503,14 +516,16 @@ class Address(AddressBase):
             raise AddressVersioningError(
                 "Cannot delete address without providing user.")
 
-        pre = self.snapshot(saved=True)
+        pre = self.snapshot_data(saved=True)
 
         self.deleted = True
         super(Address, self).save()
 
-        AddressChange.objects.create(
-            address=self, changed_by=user, pre=pre, post=None,
-            changed_timestamp=datetime.utcnow())
+        record_address_change.delay(
+            address_id=self.id,
+            user_id=user.id,
+            pre_data=pre, post_data=None,
+            timestamp=datetime.utcnow())
 
 
     def undelete(self, user=None):
@@ -518,23 +533,24 @@ class Address(AddressBase):
             raise AddressVersioningError(
                 "Cannot undelete address without providing user.")
 
-        post = self.snapshot(saved=True)
+        post = self.snapshot_data(saved=True)
 
         self.deleted = False
         super(Address, self).save()
 
-        AddressChange.objects.create(
-            address=self, changed_by=user, pre=None, post=post,
-            changed_timestamp=datetime.utcnow())
+        record_address_change.delay(
+            address_id=self.id,
+            user_id=user.id,
+            pre_data=None, post_data=post,
+            timestamp=datetime.utcnow())
 
 
-    def snapshot(self, saved=True):
+    def snapshot_data(self, saved=True):
         """
-        Create and return a snapshot of the current state of this Address.
+        Return a data dictionary representing the state of this Address.
 
         If ``saved`` is True, this is the state of this address in the
-        database. If this is a new, not-yet-saved instance, ``snapshot()`` does
-        nothing and returns ``None``.
+        database. If this is a new, not-yet-saved instance, returns ``None``.
 
         If ``saved`` is False, this is the current state of this particular
         instance, including any modified fields.
@@ -546,8 +562,8 @@ class Address(AddressBase):
             data = self._initial_data.copy()
         else:
             data = self.data(internal=True)
-        data["snapshot_timestamp"] = datetime.utcnow()
-        return AddressSnapshot.objects.create(**data)
+
+        return data
 
 
     @property

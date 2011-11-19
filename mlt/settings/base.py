@@ -188,8 +188,6 @@ INSTALLED_APPS += ["ajax_loading_overlay"]
 
 BROKER_TRANSPORT = "django"
 INSTALLED_APPS += ["djcelery", "djkombu"]
-import djcelery
-djcelery.setup_loader()
 
 # import local settings, if they exist
 
