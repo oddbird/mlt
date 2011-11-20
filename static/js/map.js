@@ -186,45 +186,47 @@ var MLT = (function (MLT, $) {
                         thisAddress = addressContainer.find('.address[data-id="' + id + '"]'),
                         index = thisAddress.find('.mapkey').text();
 
-                    if (address.has_parcel) {
-                        lat = address.latitude;
-                        lng = address.longitude;
-                    } else {
-                        geolat = address.latitude;
-                        geolng = address.longitude;
+                    if (thisAddress.length) {
+                        if (address.has_parcel) {
+                            lat = address.latitude;
+                            lng = address.longitude;
+                        } else {
+                            geolat = address.latitude;
+                            geolng = address.longitude;
+                        }
+
+                        updatedAddress = ich.address({
+                            id: id,
+                            pl: address.pl,
+                            has_parcel: address.has_parcel,
+                            latitude: lat,
+                            longitude: lng,
+                            geolat: geolat,
+                            geolng: geolng,
+                            geocoded: address.geocoded,
+                            index: index,
+                            edit_url: address.edit_url,
+                            street: address.street,
+                            street_is_parsed: address.street_is_parsed,
+                            street_number: address.street_number,
+                            street_prefix: address.street_prefix,
+                            street_name: address.street_name,
+                            street_type: address.street_type,
+                            street_suffix: address.street_suffix,
+                            city: address.city,
+                            state: address.state,
+                            complex_name: address.complex_name,
+                            needs_review: address.needs_review,
+                            multi_units: address.multi_units,
+                            notes: address.notes,
+                            batch_tags: address.batch_tags,
+                            mapped_by: address.mapped_by,
+                            mapped_timestamp: address.mapped_timestamp
+                        });
+
+                        thisAddress.replaceWith(updatedAddress);
+                        updatedAddress.find('.details').html5accordion();
                     }
-
-                    updatedAddress = ich.address({
-                        id: id,
-                        pl: address.pl,
-                        has_parcel: address.has_parcel,
-                        latitude: lat,
-                        longitude: lng,
-                        geolat: geolat,
-                        geolng: geolng,
-                        geocoded: address.geocoded,
-                        index: index,
-                        edit_url: address.edit_url,
-                        street: address.street,
-                        street_is_parsed: address.street_is_parsed,
-                        street_number: address.street_number,
-                        street_prefix: address.street_prefix,
-                        street_name: address.street_name,
-                        street_type: address.street_type,
-                        street_suffix: address.street_suffix,
-                        city: address.city,
-                        state: address.state,
-                        complex_name: address.complex_name,
-                        needs_review: address.needs_review,
-                        multi_units: address.multi_units,
-                        notes: address.notes,
-                        batch_tags: address.batch_tags,
-                        mapped_by: address.mapped_by,
-                        mapped_timestamp: address.mapped_timestamp
-                    });
-
-                    thisAddress.replaceWith(updatedAddress);
-                    updatedAddress.find('.details').html5accordion();
                 });
                 refreshButton.addClass('expired');
                 if ($('#addressform .actions .bulkselect').data('selectall')) {
