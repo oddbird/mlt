@@ -9,7 +9,7 @@ var MLT = (function (MLT, $) {
 
     var MIN_PARCEL_ZOOM = 17,
         mapinfoHover = false,
-        mapinfo = $("#mapinfo"),
+        mapinfo = $('#mapinfo'),
         mapinfoTimeout = null,
         geojson_url = $('#mapping').data('parcel-geojson-url'),
         geojson = new L.GeoJSON(),
@@ -20,8 +20,8 @@ var MLT = (function (MLT, $) {
         sortData = {},
         filters = {},
         addressContainer = $('#addresstable .managelist'),
-        loadingURL = $('#addresstable .managelist').data('addresses-url'),
-        loadingMessage = $('#addresstable .managelist .load'),
+        loadingURL = addressContainer.data('addresses-url'),
+        loadingMessage = addressContainer.find('.load'),
         refreshButton = $('#addresstable #filter .refresh'),
         preserveSelectAll = null,
         parcelMap = {},
@@ -333,15 +333,15 @@ var MLT = (function (MLT, $) {
 
     MLT.showInfo = function (newInfo, selected) {
         var mapped_toIDs, i, already_mapped,
-            selectedAddresses = $('#addresstable .address input[id^="select"]:checked');
+            selectedAddresses = addressContainer.find('.address input[id^="select"]:checked');
         if (mapinfoTimeout) {
             clearTimeout(mapinfoTimeout);
             mapinfoTimeout = null;
         }
-        $("#mapinfo").html(newInfo).show();
+        mapinfo.html(newInfo).show();
         if (selected) {
-            $("#mapinfo").addClass("selected");
-            mapped_toIDs = $('#mapinfo .mapped-addresses ul li').map(function () {
+            mapinfo.addClass("selected");
+            mapped_toIDs = mapinfo.find('.mapped-addresses ul li').map(function () {
                 return $(this).data('id');
             }).get();
             selectedAddresses.each(function () {
@@ -357,13 +357,13 @@ var MLT = (function (MLT, $) {
             });
             // Only show `map to selected` button if an address is selected
             if (selectedAddresses.length && already_mapped === false) {
-                $('#mapinfo .mapit').show();
+                mapinfo.find('.mapit').show();
             } else {
-                $('#mapinfo .mapit').hide();
+                mapinfo.find('.mapit').hide();
             }
         } else {
-            $('#mapinfo').removeClass("selected");
-            $('#mapinfo .mapit').hide();
+            mapinfo.removeClass("selected");
+            mapinfo.find('.mapit').hide();
         }
     };
 
@@ -371,7 +371,7 @@ var MLT = (function (MLT, $) {
         if (!selectedInfo) {
             mapinfoTimeout = setTimeout(function () {
                 if (!mapinfoHover) {
-                    $("#mapinfo").empty().hide();
+                    mapinfo.empty().hide();
                 }
             }, 100);
         }
@@ -645,10 +645,10 @@ var MLT = (function (MLT, $) {
 
             // Only show `map to selected` button if an address is selected
             // and isn't already mapped to the selected parcel
-            mapped_toIDs = $('#mapinfo .mapped-addresses ul li').map(function () {
+            mapped_toIDs = mapinfo.find('.mapped-addresses ul li').map(function () {
                 return $(this).data('id');
             }).get();
-            $('#addresstable .address input[id^="select"]:checked').each(function () {
+            addressContainer.find('.address input[id^="select"]:checked').each(function () {
                 var this_is_mapped;
                 for (i = 0; i < mapped_toIDs.length; i = i + 1) {
                     if ($(this).closest('.address').data('id') === mapped_toIDs[i]) {
@@ -659,33 +659,35 @@ var MLT = (function (MLT, $) {
                     already_mapped = false;
                 }
             });
-            if ($('#addresstable .address input[id^="select"]:checked').length && already_mapped === false) {
-                $('#mapinfo .mapit').show();
+            if (addressContainer.find('.address input[id^="select"]:checked').length && already_mapped === false) {
+                mapinfo.find('.mapit').show();
             } else {
-                $('#mapinfo .mapit').hide();
+                mapinfo.find('.mapit').hide();
             }
         });
     };
 
     MLT.mapAddress = function () {
         var url = $('#mapping').data('associate-url');
-        $('#mapinfo').on('click', '.mapit', function () {
+        mapinfo.on('click', '.mapit', function () {
             var options,
                 notID,
-                selectedAddressID = $('#addresstable .address input[id^="select"]:checked').map(function () {
+                selectedAddressInput = addressContainer.find('.address input[id^="select"]:checked'),
+                selectedAddressID = selectedAddressInput.map(function () {
                     return $(this).closest('.address').data('id');
                 }).get(),
-                selectedAddressPL = $('#addresstable .address input[id^="select"]:checked').map(function () {
+                selectedAddressPL = selectedAddressInput.map(function () {
                     return $(this).closest('.address').data('pl');
                 }).get(),
                 pl = selectedParcelInfo.pl,
                 lat = selectedParcelInfo.latitude,
                 lng = selectedParcelInfo.longitude,
                 success = function (data) {
+                    selectedAddressInput.each(function () { $(this).closest('.address').loadingOverlay('remove'); });
                     $.each(data.mapped_to, function (i, address) {
                         var updatedAddress,
                             id = address.id,
-                            thisAddress = $('#addresstable .address[data-id="' + id + '"]'),
+                            thisAddress = addressContainer.find('.address[data-id="' + id + '"]'),
                             index = thisAddress.find('.mapkey').html();
 
                         if (thisAddress.length && thisAddress.find('input[id^="select"]:checked').length) {
@@ -726,8 +728,8 @@ var MLT = (function (MLT, $) {
                     });
 
                     var updatedParcelInfo = ich.parcelinfo(data);
-                    $('#mapinfo').removeClass('selected').html(updatedParcelInfo);
-                    $('#mapinfo .mapit').hide();
+                    mapinfo.removeClass('selected').html(updatedParcelInfo);
+                    mapinfo.find('.mapit').hide();
                     selectedLayer.info = updatedParcelInfo;
                     if (selectedLayer) {
                         selectedLayer.unselect();
@@ -740,6 +742,8 @@ var MLT = (function (MLT, $) {
                         addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
                     }
                 };
+
+            selectedAddressInput.each(function () { $(this).closest('.address').loadingOverlay(); });
 
             if ($('#addressform .actions .bulkselect').data('selectall')) {
                 options = $.extend({}, filters, { maptopl: pl, aid: selectedAddressID });
@@ -1076,15 +1080,17 @@ var MLT = (function (MLT, $) {
 
         $('#addressform .actions .bools .addremove .action-delete').click(function () {
             var number = addressContainer.find('.address').length,
-                selectedAddressID = addressContainer.find('.address input[id^="select"]:checked').map(function () {
+                selectedAddressInput = addressContainer.find('.address input[id^="select"]:checked'),
+                selectedAddressID = selectedAddressInput.map(function () {
                     return $(this).closest('.address').data('id');
                 }).get(),
-                selectedAddressPL = addressContainer.find('.address input[id^="select"]:checked').map(function () {
+                selectedAddressPL = selectedAddressInput.map(function () {
                     return $(this).closest('.address').data('pl');
                 }).get(),
                 options,
                 notID;
             if (number < 20) { number = 20; }
+            selectedAddressInput.each(function () { $(this).closest('.address').loadingOverlay(); });
             if ($('#addressform .actions .bulkselect').data('selectall')) {
                 options = $.extend({}, filters, { aid: selectedAddressID, action: "delete" });
                 if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
@@ -1094,6 +1100,7 @@ var MLT = (function (MLT, $) {
                     $.extend(options, { notid: notID });
                 }
                 $.post(url, options, function (data) {
+                    selectedAddressInput.each(function () { $(this).closest('.address').loadingOverlay('remove'); });
                     if (data.success) {
                         MLT.addressLoading.reloadList({num: number}, true);
                         if (selectedLayer) {
@@ -1105,6 +1112,7 @@ var MLT = (function (MLT, $) {
                 });
             } else {
                 $.post(url, { aid: selectedAddressID, action: "delete" }, function (data) {
+                    selectedAddressInput.each(function () { $(this).closest('.address').loadingOverlay('remove'); });
                     if (data.success) {
                         MLT.addressLoading.reloadList({num: number}, true);
                         $.each(selectedAddressID, function (i, id) {
@@ -1118,10 +1126,13 @@ var MLT = (function (MLT, $) {
 
         addressContainer.on('click', '.address .content .controls .action-delete', function () {
             var number = addressContainer.find('.address').length,
-                selectedAddressID = $(this).closest('.address').data('id'),
-                selectedAddressPL = $(this).closest('.address').data('pl');
+                selectedAddress = $(this).closest('.address'),
+                selectedAddressID = selectedAddress.data('id'),
+                selectedAddressPL = selectedAddress.data('pl');
+            selectedAddress.loadingOverlay();
             if (number < 20) { number = 20; }
             $.post(url, { aid: selectedAddressID, action: "delete" }, function (data) {
+                selectedAddress.loadingOverlay('remove');
                 if (data.success) {
                     MLT.addressLoading.reloadList({num: number}, true);
                     MLT.updateParcelMapping('remove', false, selectedAddressPL, selectedAddressID, true);
@@ -1132,15 +1143,17 @@ var MLT = (function (MLT, $) {
 
         $('#addressform .actions .bools .approval button').click(function () {
             var action,
-                selectedAddressID = addressContainer.find('.address input[id^="select"]:checked').map(function () {
+                selectedAddressInput = addressContainer.find('.address input[id^="select"]:checked'),
+                selectedAddressID = selectedAddressInput.map(function () {
                     return $(this).closest('.address').data('id');
                 }).get(),
-                selectedAddressPL = addressContainer.find('.address input[id^="select"]:checked').map(function () {
+                selectedAddressPL = selectedAddressInput.map(function () {
                     return $(this).closest('.address').data('pl');
                 }).get(),
                 options,
                 notID,
                 number = addressContainer.find('.address').length;
+            selectedAddressInput.each(function () { $(this).closest('.address').loadingOverlay(); });
             if (number < 20) { number = 20; }
             if ($(this).hasClass('disabled')) {
                 $(ich.message({message: "You don't have permission to perform this action.", tags: "error"})).appendTo($('#messages'));
@@ -1165,6 +1178,7 @@ var MLT = (function (MLT, $) {
                     $.extend(options, { notid: notID });
                 }
                 $.post(url, options, function (data) {
+                    selectedAddressInput.each(function () { $(this).closest('.address').loadingOverlay('remove'); });
                     if (data.success) {
                         MLT.addressLoading.replaceAddresses(data);
                         if (selectedLayer) {
@@ -1176,6 +1190,7 @@ var MLT = (function (MLT, $) {
                 });
             } else {
                 $.post(url, { aid: selectedAddressID, action: action }, function (data) {
+                    selectedAddressInput.each(function () { $(this).closest('.address').loadingOverlay('remove'); });
                     if (data.success) {
                         MLT.addressLoading.replaceAddresses(data);
                         if (action === 'flag' || action === 'approve') {
@@ -1196,9 +1211,11 @@ var MLT = (function (MLT, $) {
 
         addressContainer.on('click', '.address .action-flag', function () {
             var action,
-                selectedAddressID = $(this).closest('.address').data('id'),
-                selectedAddressPL = $(this).closest('.address').data('pl'),
+                selectedAddress = $(this).closest('.address'),
+                selectedAddressID = selectedAddress.data('id'),
+                selectedAddressPL = selectedAddress.data('pl'),
                 thisDiv = $(this).closest('.id');
+            selectedAddress.loadingOverlay();
             if ($(this).siblings('input[name="flag_for_review"]').attr('disabled') === 'disabled') {
                 $(ich.message({message: "You don't have permission to approve this mapping.", tags: "error"})).appendTo($('#messages'));
                 $('#messages').messages();
@@ -1210,6 +1227,7 @@ var MLT = (function (MLT, $) {
                 action = "approve";
             }
             $.post(url, { aid: selectedAddressID, action: action }, function (data) {
+                selectedAddress.loadingOverlay('remove');
                 if (data.success) {
                     MLT.addressLoading.replaceAddresses(data);
                     $.each(data.addresses, function (i, address) {
@@ -1222,12 +1240,15 @@ var MLT = (function (MLT, $) {
 
         addressContainer.on('click', '.address .action-reject', function (e) {
             var action = "reject",
-                selectedAddressID = $(this).closest('.address').data('id'),
-                pl = $(this).closest('.address').data('pl');
+                selectedAddress = $(this).closest('.address'),
+                selectedAddressID = selectedAddress.data('id'),
+                selectedAddressPL = selectedAddress.data('pl');
+            selectedAddress.loadingOverlay();
             $.post(url, { aid: selectedAddressID, action: action }, function (data) {
+                selectedAddress.loadingOverlay('remove');
                 MLT.addressLoading.replaceAddresses(data);
                 if (data.success) {
-                    MLT.updateParcelMapping('remove', false, pl, selectedAddressID, true);
+                    MLT.updateParcelMapping('remove', false, selectedAddressPL, selectedAddressID, true);
                 }
             });
             e.preventDefault();
@@ -1235,10 +1256,13 @@ var MLT = (function (MLT, $) {
 
         mapinfo.on('click', '.mapped-addresses .action-reject', function (e) {
             var action = "reject",
-                selectedAddressID = $(this).closest('li').data('id'),
-                pl = $(this).closest('#mapinfo').find('.id').text(),
+                thisMapping = $(this).closest('li'),
+                selectedAddressID = thisMapping.data('id'),
+                pl = mapinfo.find('.id').text(),
                 index;
+            thisMapping.loadingOverlay();
             $.post(url, { aid: selectedAddressID, action: action }, function (data) {
+                thisMapping.loadingOverlay('remove');
                 MLT.addressLoading.replaceAddresses(data);
                 if (data.success) {
                     MLT.updateParcelMapping('remove', false, pl, selectedAddressID, true);
@@ -1249,13 +1273,18 @@ var MLT = (function (MLT, $) {
 
         addressContainer.on('click', '.address .action-complex', function (e) {
             var action,
-                selectedAddressID = $(this).closest('.address').data('id');
+                selectedAddress = $(this).closest('.address'),
+                selectedAddressID = selectedAddress.data('id');
+            selectedAddress.loadingOverlay();
             if ($(this).hasClass('multiple')) {
                 action = 'multi';
             } else if ($(this).hasClass('single')) {
                 action = 'single';
             }
-            $.post(url, { aid: selectedAddressID, action: action }, MLT.addressLoading.replaceAddresses);
+            $.post(url, { aid: selectedAddressID, action: action }, function (data) {
+                selectedAddress.loadingOverlay('remove');
+                MLT.addressLoading.replaceAddresses(data);
+            });
             e.preventDefault();
         });
 
@@ -1516,7 +1545,7 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.mapInfo = function () {
-        $("#mapinfo")
+        mapinfo
             .hide()
             .hover(
                 function () { mapinfoHover = true; },
