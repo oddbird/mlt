@@ -740,12 +740,12 @@ var MLT = (function (MLT, $) {
                 };
 
             if ($('#addressform .actions .bulkselect').data('selectall')) {
-                options = $.extend(filters, { maptopl: pl, aid: selectedAddressID });
+                options = $.extend({}, filters, { maptopl: pl, aid: selectedAddressID });
                 if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
                     notID = addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
                         return $(this).closest('.address').data('id');
                     }).get();
-                    options = $.extend(options, { notid: notID });
+                    $.extend(options, { notid: notID });
                 }
                 $.post(url, options, success);
             } else {
@@ -1084,12 +1084,12 @@ var MLT = (function (MLT, $) {
                 notID;
             if (number < 20) { number = 20; }
             if ($('#addressform .actions .bulkselect').data('selectall')) {
-                options = $.extend(filters, { aid: selectedAddressID, action: "delete" });
+                options = $.extend({}, filters, { aid: selectedAddressID, action: "delete" });
                 if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
                     notID = addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
                         return $(this).closest('.address').data('id');
                     }).get();
-                    options = $.extend(options, { notid: notID });
+                    $.extend(options, { notid: notID });
                 }
                 $.post(url, options, function (data) {
                     if (data.success) {
@@ -1155,12 +1155,12 @@ var MLT = (function (MLT, $) {
                 action = "reject";
             }
             if ($('#addressform .actions .bulkselect').data('selectall')) {
-                options = $.extend(filters, { aid: selectedAddressID, action: action });
+                options = $.extend({}, filters, { aid: selectedAddressID, action: action });
                 if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
                     notID = addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
                         return $(this).closest('.address').data('id');
                     }).get();
-                    options = $.extend(options, { notid: notID });
+                    $.extend(options, { notid: notID });
                 }
                 $.post(url, options, function (data) {
                     if (data.success) {
@@ -1273,11 +1273,11 @@ var MLT = (function (MLT, $) {
             refresh = $('#filter .refresh'),
             status = $('#filter .bystatus a'),
 
-            reloadList = function () {
+            reloadList = function (opts, preserveScroll) {
                 if ($('#addresstable').length) {
-                    MLT.addressLoading.reloadList();
+                    MLT.addressLoading.reloadList(opts, preserveScroll);
                 } else if ($('#history').length) {
-                    MLT.reloadChangesList();
+                    MLT.reloadChangesList(opts, preserveScroll);
                 }
             },
 
