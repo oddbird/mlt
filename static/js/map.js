@@ -1314,6 +1314,7 @@ var MLT = (function (MLT, $) {
 
             updateSuggestions = function (data) {
                 var newSuggestions = ich.filter_suggestion(data);
+                textbox.removeClass('loading');
                 newSuggestions = newSuggestions.filter(function (index) {
                     var thisField = $(this).find('a').data('field'),
                         thisValue = $(this).find('a').data('value');
@@ -1368,6 +1369,7 @@ var MLT = (function (MLT, $) {
                 if (textbox.val() !== typedText) {
                     typedText = $(this).val();
                     if (typedText.length && typedText.trim() !== '') {
+                        textbox.addClass('loading');
                         $.get(url, {q: typedText}, updateSuggestions);
                     } else {
                         suggestionList.empty().hide();
