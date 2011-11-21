@@ -15,8 +15,5 @@ urlpatterns = patterns(
 
     url(r"^admin/", include(admin.site.urls)),
 
-    # wireframes
-    url(r"^history/$",
-        "django.views.generic.simple.direct_to_template",
-        {"template": "history/history.html"}),
+    url(r"^history/$", "mlt.views.history", name="history"),
 )
