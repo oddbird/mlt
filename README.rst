@@ -7,7 +7,7 @@ Development
 If you want to run this project in a `virtualenv`_ to isolate it from other
 Python projects on your system, create a virtualenv and activate it.  Then
 run ``bin/install-reqs`` to install the dependencies for this project into
-your Python environment.
+your Python environment. Python 2.7 is required.
 
 You'll need a PostGIS-enabled PostgreSQL database available for this
 project; create it with a command like ``createdb -T template_postgis mlt``. 
