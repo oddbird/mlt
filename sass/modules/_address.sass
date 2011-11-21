@@ -41,6 +41,12 @@
     span
       +inline-block
 
+  .complex-name:not(:empty)
+    &::before
+      content: "["
+    &::after
+      content: "]"
+
   .id
     +columns(3,8)
     +omega(8)

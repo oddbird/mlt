@@ -347,7 +347,7 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 #history #filter .textual { margin-right: 17.544%; }
 #filter .textual label { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #filter .textual input { clear: both; margin: 0; background: rgba(255, 255, 255, 0.125); }
-#filter .textual input.loading { background-image: url('../images/ui/load.gif?1321904472'); background-position: 98%; background-repeat: no-repeat; }
+#filter .textual input.loading { background-image: url('../images/ui/load.gif?1321904968'); background-position: 98%; background-repeat: no-repeat; }
 #filter .suggest { display: none; position: absolute; left: 0; right: 0; top: 2.427em; background: white; z-index: 800; }
 #filter .suggest a, #filter .suggest .too-many-results { padding-top: 0.405em; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 0.321em; overflow: hidden; *zoom: 1; padding-left: 1em; padding-right: 1em; display: block; color: #4c4c4c; border: 1px solid #dddddd; border-color: transparent #949494 #dddddd; border-width: 0 1px 1px; }
 #filter .suggest a.selected, #filter .suggest .too-many-results.selected { background: #dddddd; }
@@ -476,6 +476,8 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 .address .street-address { font-weight: 500; color: #4c4c4c; }
 .address .street-address span { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; }
 .address .street-address span { *display: inline; }
+.address .complex-name:not(:empty)::before { content: "["; }
+.address .complex-name:not(:empty)::after { content: "]"; }
 .address .id { display: inline; float: left; width: 35.897%; margin-right: 2.564%; display: inline; float: right; margin-right: 0; #margin-left: -0.809em; padding-top: 0.405em; font-weight: 500; text-align: right; }
 .address .id .value, .address .id .action-flag { margin-top: 0.405em; margin: 0; }
 .address .id.unmapped .value { display: block; }
