@@ -23,6 +23,7 @@
   right: 0
   padding: rhythm(.5) rhythm(1)
   background: rgba($light,.85)
+  min-width: rhythm(10)
   z-index: 500
   &.selected
     +box-shadow(red 0 0 1em)
@@ -44,13 +45,18 @@
     +leader(.5)
     ul
       +no-style-list
+    li
+      position: relative
+      padding-right: rhythm(1.5)
 
   .flagged
     background: image-url('ui/warning.png') no-repeat scroll left
     padding-left: image-width('ui/warning.png') + $smallpx
 
   .action-reject
-    +float(right)
+    position: absolute
+    right: 0
+    top: 0
 
   li:hover
     .action-reject
