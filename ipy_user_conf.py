@@ -17,7 +17,7 @@ def main():
     imports = [
         "import datetime",
         "from django.contrib.auth.models import User",
-        "from mlt.map.models import Parcel, AddressBase, Address, AddressChange, AddressSnapshot",
+        "from mlt.map.models import Parcel, AddressBatch, AddressBase, Address, AddressChange, AddressSnapshot",
         "from mlt.map.load import load_parcels",
         "from mlt.map import geocoder, serializers",
         ]

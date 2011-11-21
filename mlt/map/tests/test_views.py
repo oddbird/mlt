@@ -126,7 +126,7 @@ class MockWriter(object):
     def save(self, stream):
         # writers might access User FKs and parcel data
         for a in self.addresses:
-            a.imported_by
+            a.mapped_by
             a.parcel
         stream.write(",".join([str(a.id) for a in self.addresses]))
 
@@ -159,7 +159,7 @@ class ExportViewTest(AuthenticatedWebTest):
 
 
     def test_queries(self, querystring="?export_format=mock"):
-        create_address(imported_by=create_user())
+        create_address(mapped_by=create_user())
         create_address()
 
         # 1 for addresses, 1 for parcels, 11 for misc sessions/auth
@@ -484,7 +484,11 @@ class AddressesViewTest(AuthenticatedWebTest):
 
 
     def test_address_serialization(self):
-        a = create_address()
+        now = datetime.datetime(2011, 11, 21)
+        a = create_address(
+            pl="1",
+            mapped_by=self.user,
+            mapped_timestamp=now)
 
         res = self.get()
 
@@ -497,22 +501,19 @@ class AddressesViewTest(AuthenticatedWebTest):
               "complex_name": a.complex_name,
               "edit_url": a.edit_url,
               "id": a.id,
-              "import_source": a.import_source,
-              "import_timestamp": date_format(
-                        utc_to_local(a.import_timestamp), "DATETIME_FORMAT"),
-              "imported_by": a.imported_by.username,
               "index": "A",
               "geocoded": False,
               "has_parcel": False,
               "latitude": None,
               "longitude": None,
-              "mapped_by": None,
-              "mapped_timestamp": None,
+              "mapped_by": self.user.username,
+              "mapped_timestamp": date_format(
+                        utc_to_local(now), "DATETIME_FORMAT"),
               "multi_units": a.multi_units,
               "needs_review": a.needs_review,
               "notes": a.notes,
               "parcel": None,
-              "pl": "",
+              "pl": "1",
               "state": a.state,
               "street": a.street,
               "street_name": a.street_name,
@@ -543,18 +544,18 @@ class AddressesViewTest(AuthenticatedWebTest):
         a1 = create_address(
             input_street="123 N Main St",
             city="Providence",
-            import_timestamp=datetime.datetime(2011, 7, 15, 1, 2, 3))
+            mapped_timestamp=datetime.datetime(2011, 7, 15, 1, 2, 3))
         a2 = create_address(
             input_street="456 N Main St",
             city="Albuquerque",
-            import_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
+            mapped_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
         a3 = create_address(
             input_street="123 N Main St",
             city="Albuquerque",
-            import_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
+            mapped_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
 
         res = self.app.get(
-            self.url + "?sort=city&sort=-street&sort=import_timestamp",
+            self.url + "?sort=city&sort=-street&sort=mapped_timestamp",
             user=self.user)
 
         self.assertEqual(
@@ -766,17 +767,17 @@ class AddressesViewTest(AuthenticatedWebTest):
         u1 = create_user()
         u2 = create_user()
         a1 = create_address(
-            imported_by=u1,
+            mapped_by=u1,
             )
         a2 = create_address(
-            imported_by=u1,
+            mapped_by=u1,
             )
         create_address(
-            imported_by=u2
+            mapped_by=u2
             )
 
         res = self.app.get(
-            self.url + "?imported_by=%s" % u1.id,
+            self.url + "?mapped_by=%s" % u1.id,
             user=self.user)
 
         self.assertAddresses(res, [a1.id, a2.id])
@@ -831,15 +832,15 @@ class AddressesViewTest(AuthenticatedWebTest):
         create_address(
             input_street="123 N Main St",
             city="Providence",
-            import_timestamp=datetime.datetime(2011, 7, 15, 1, 2, 3))
+            )
         create_address(
             input_street="456 N Main St",
             city="Albuquerque",
-            import_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
+            )
         create_address(
             input_street="123 N Main St",
             city="Albuquerque",
-            import_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
+            )
 
         res = self.app.get(self.url + "?city=Albuquerque&num=1&count=true", user=self.user)
 
@@ -869,7 +870,7 @@ class HistoryViewTest(AuthenticatedWebTest):
             create_parcel(pl=i)
 
         # 1 for changes, 1 for parcels, 11 for misc sessions/auth
-        with self.assertNumQueries(13) as context:
+        with self.assertNumQueries(13):
             self.get()
 
 
@@ -899,10 +900,6 @@ class HistoryViewTest(AuthenticatedWebTest):
                         "geocoded": False,
                         "has_parcel": False,
                         "id": c.post.id,
-                        "import_source": a.import_source,
-                        "import_timestamp": date_format(
-                            utc_to_local(a.import_timestamp),
-                            "DATETIME_FORMAT"),
                         "latitude": None,
                         "longitude": None,
                         "mapped_timestamp": None,
@@ -1103,15 +1100,15 @@ class HistoryViewTest(AuthenticatedWebTest):
         create_address(
             input_street="123 N Main St",
             city="Providence",
-            import_timestamp=datetime.datetime(2011, 7, 15, 1, 2, 3))
+            )
         create_address(
             input_street="456 N Main St",
             city="Albuquerque",
-            import_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
+            )
         create_address(
             input_street="123 N Main St",
             city="Albuquerque",
-            import_timestamp=datetime.datetime(2011, 7, 16, 1, 2, 3))
+            )
 
         res = self.app.get(
             self.url + "?post__city=Albuquerque&num=1&count=true",
@@ -1467,7 +1464,7 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
         create_address(
             input_street="123 N Main St",
             city="Providence",
-            imported_by=blametern)
+            mapped_by=blametern)
         create_address(
             input_street="456 N Main St",
             city="Albuquerque")
@@ -1494,11 +1491,11 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
         self.assertEqual(
             res.json["options"],
             [{      "q": "b",
-                    "field": "imported_by",
+                    "field": "mapped_by",
                     "name": "blametern",
                     "value": blametern.id,
                     "rest": "lametern",
-                    "desc": "imported by"
+                    "desc": "mapped by"
                     }]
             )
 
@@ -1565,7 +1562,8 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
         create_address(
             input_street="123 N Main St",
             city="Providence",
-            imported_by=blametern)
+            user=blametern,
+            mapped_by=blametern)
         create_address(
             input_street="456 N Main St",
             city="Albuquerque")
@@ -1591,19 +1589,22 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
 
         self.assertEqual(
             res.json["options"],
-            [{      "q": "b",
-                    "field": "post__imported_by",
-                    "name": "blametern",
-                    "value": blametern.id,
-                    "rest": "lametern",
-                    "desc": "imported by"
-                    },
-             {      "q": "b",
+            [
+                {
+                    "q": "b",
                     "field": "changed_by",
                     "name": "blametern",
                     "value": blametern.id,
                     "rest": "lametern",
                     "desc": "changed by"
+                    },
+                {
+                    "q": "b",
+                    "field": "post__mapped_by",
+                    "name": "blametern",
+                    "value": blametern.id,
+                    "rest": "lametern",
+                    "desc": "mapped by"
                     },
              ]
             )
@@ -1701,9 +1702,6 @@ class GeocodeViewTest(AuthenticatedWebTest):
                     "geocoded": True,
                     "has_parcel": False,
                     "id": a.id,
-                    "import_source": "test-created",
-                    "import_timestamp": "June 15, 2011 at 4:14 a.m.",
-                    "imported_by": a.imported_by.username,
                     "mapped_by": None,
                     "mapped_timestamp": None,
                     "multi_units": False,

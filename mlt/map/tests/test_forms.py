@@ -45,13 +45,18 @@ class AddressImportFormTest(TestCase):
         from mlt.map.models import Address
         self.assertEqual(Address.objects.count(), 1)
         a = Address.objects.get()
-        self.assertEqual(a.imported_by, self.user)
-        self.assertEqual(a.import_timestamp, datetime(2011, 7, 8, 1, 2, 3))
-        self.assertEqual(a.import_source, "mysource")
         self.assertEqual(a.street, "123 N Main St")
         self.assertEqual(a.city, "Providence")
         self.assertEqual(a.state, "RI")
 
+        batches = a.batches.all()
+        self.assertEqual(len(batches), 1)
+
+        batch = batches[0]
+
+        self.assertEqual(batch.user, self.user)
+        self.assertEqual(batch.timestamp, datetime(2011, 7, 8, 1, 2, 3))
+        self.assertEqual(batch.tag, "mysource")
 
 
 class AddressFormTest(TestCase):
@@ -117,9 +122,8 @@ class AddressFormTest(TestCase):
         self.assertEqual(a.notes, "some notes")
         self.assertEqual(a.complex_name, "The Van Gordon Building")
         self.assertEqual(a.multi_units, True)
-        self.assertEqual(a.import_source, "web-ui")
-        self.assertEqual(a.imported_by, u)
-        self.assertEqual(a.import_timestamp, datetime(2011, 6, 17, 10, 14, 25))
+
+        self.assertEqual(a.batches.count(), 0)
 
 
     def test_create_no_street(self):
@@ -142,7 +146,6 @@ class AddressFormTest(TestCase):
 
 
     def test_edit(self):
-        u1 = create_user(username="someone")
         a = create_address(
             street_number="1234",
             street_name="Van Heusen",
@@ -152,9 +155,7 @@ class AddressFormTest(TestCase):
             multi_units=False,
             complex_name="",
             notes="",
-            imported_by=u1,
-            import_source="big batch",
-            import_timestamp=datetime(2011, 8, 1, 10, 0, 0))
+            )
 
         u2 = create_user(username="blametern")
         f = self.form(
@@ -183,14 +184,8 @@ class AddressFormTest(TestCase):
         self.assertEqual(a.complex_name, "The Van Gordon Building")
         self.assertEqual(a.multi_units, True)
 
-        # editing doesn't change these fields
-        self.assertEqual(a.import_source, "big batch")
-        self.assertEqual(a.imported_by, u1)
-        self.assertEqual(a.import_timestamp, datetime(2011, 8, 1, 10, 0, 0))
-
 
     def test_edit_unparsed(self):
-        u1 = create_user(username="someone")
         a = create_address(
             street_prefix="",
             street_number="",
@@ -203,9 +198,7 @@ class AddressFormTest(TestCase):
             multi_units=False,
             complex_name="",
             notes="",
-            imported_by=u1,
-            import_source="big batch",
-            import_timestamp=datetime(2011, 8, 1, 10, 0, 0))
+            )
 
         u2 = create_user(username="blametern")
         f = self.form(
@@ -234,11 +227,6 @@ class AddressFormTest(TestCase):
         self.assertEqual(a.notes, "some notes")
         self.assertEqual(a.complex_name, "The Van Gordon Building")
         self.assertEqual(a.multi_units, True)
-
-        # editing doesn't change these fields
-        self.assertEqual(a.import_source, "big batch")
-        self.assertEqual(a.imported_by, u1)
-        self.assertEqual(a.import_timestamp, datetime(2011, 8, 1, 10, 0, 0))
 
 
     def test_edit_no_street(self):

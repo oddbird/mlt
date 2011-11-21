@@ -4,29 +4,29 @@ from . import models
 
 
 
+class AddressBatchAssociationInline(admin.TabularInline):
+    model = models.Address.batches.through
+
+
 class AddressAdmin(admin.ModelAdmin):
     list_display = [
         "__unicode__",
         "pl",
-        "import_source",
-        "imported_by",
-        "import_timestamp",
         ]
     list_filter = [
         "multi_units",
         "mapped_by",
-        "imported_by",
-        "import_source",
+        "batches",
         "complex_name",
         "state",
         ]
-    date_hierarchy = "import_timestamp"
     search_fields = [
         "input_street",
         "parsed_street",
         "city",
         "state",
         ]
+    inlines = [AddressBatchAssociationInline]
     fieldsets = [
         (None, {
                 "fields": [
@@ -49,12 +49,6 @@ class AddressAdmin(admin.ModelAdmin):
                     ("mapped_by", "mapped_timestamp"),
                     ]
                 }),
-        ("Import", {
-                "fields": [
-                    "import_source",
-                    ("imported_by", "import_timestamp"),
-                    ]
-                }),
         ]
 
 
@@ -68,5 +62,12 @@ class ParcelAdmin(admin.OSMGeoAdmin):
 
 
 
+class AddressBatchAdmin(admin.ModelAdmin):
+    list_display = ["__unicode__", "user", "timestamp"]
+    search_fields = ["tag", "user", "timestamp"]
+
+
+
 admin.site.register(models.Address, AddressAdmin)
 admin.site.register(models.Parcel, ParcelAdmin)
+admin.site.register(models.AddressBatch, AddressBatchAdmin)

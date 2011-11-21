@@ -78,15 +78,14 @@ class AddressImporterTest(GetImporterMixin, TransactionTestCase):
             set([a.input_street for a in self.model.objects.all()]),
             set(["123 N Main St", "3815 Brookside Dr"])
             )
+
+        batches = self.model._meta.get_field("batches").rel.to.objects.all()
+        self.assertEqual(len(batches), 1)
+        batch = batches[0]
+        self.assertEqual(batch.user, self.user)
+        self.assertEqual(batch.tag, "tests")
         self.assertEqual(
-            self.model.objects.values(
-                "import_timestamp", "imported_by", "import_source").distinct()[0],
-            {
-                'import_timestamp': datetime.datetime(2011, 7, 8, 1, 2, 3),
-                'imported_by': int(self.user.id),
-                'import_source': u'tests',
-                }
-            )
+            batch.timestamp, datetime.datetime(2011, 7, 8, 1, 2, 3))
 
 
     def test_import_errors(self):

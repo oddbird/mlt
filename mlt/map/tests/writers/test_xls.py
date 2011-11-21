@@ -47,4 +47,4 @@ class XLSWriterTest(TestCase):
 
         self.assertEqual(sheet.name, "Addresses")
         self.assertEqual(sheet.nrows, 3)
-        self.assertEqual(sheet.ncols, 23)
+        self.assertEqual(sheet.ncols, 20)

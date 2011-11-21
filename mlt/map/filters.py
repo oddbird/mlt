@@ -116,8 +116,6 @@ class AddressFilter(Filter):
         "state",
         "pl",
         "mapped_by",
-        "imported_by",
-        "import_source",
         "complex_name",
         ]
 
@@ -125,11 +123,10 @@ class AddressFilter(Filter):
     def get_autocomplete_fields(self):
         ret = super(AddressFilter, self).get_autocomplete_fields()
         ret["mapped_by"] = ("mapped by", "mapped_by__username")
-        ret["imported_by"] = ("imported by", "imported_by__username")
         return ret
 
 
-    raw_fields = set(["mapped_by", "imported_by"])
+    raw_fields = set(["mapped_by"])
 
 
     special_fields = {
@@ -156,8 +153,6 @@ class AddressChangeFilter(Filter):
         "post__state",
         "post__pl",
         "post__mapped_by",
-        "post__imported_by",
-        "post__import_source",
         "post__complex_name",
         ]
 
@@ -168,11 +163,11 @@ class AddressChangeFilter(Filter):
             ret[field] = (field.replace("post__", "").replace("_", " "), field)
         ret["changed_by"] = ("changed by", "changed_by__username")
         ret["post__mapped_by"] = ("mapped by", "post__mapped_by__username")
-        ret["post__imported_by"] = ("imported by", "post__imported_by__username")
+
         return ret
 
 
-    raw_fields = set(["changed_by", "post__mapped_by", "post__imported_by"])
+    raw_fields = set(["changed_by", "post__mapped_by"])
 
 
     special_fields = {

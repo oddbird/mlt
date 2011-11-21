@@ -145,6 +145,22 @@ class Parcel(models.Model):
 
 
 
+class AddressBatch(models.Model):
+    """
+    Metadata for a batch of addresses loaded at a given time by a given user.
+
+    """
+    user = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="address_batches")
+    timestamp = models.DateTimeField()
+    tag = models.CharField(max_length=100, db_index=True)
+
+
+    def __unicode__(self):
+        return self.tag
+
+
+
 class AddressBase(models.Model):
     """
     Abstract base class for both Address and AddressState.
@@ -183,12 +199,6 @@ class AddressBase(models.Model):
         related_name="%(class)s_mapped")
     mapped_timestamp = models.DateTimeField(blank=True, null=True)
     needs_review = models.BooleanField(default=False, db_index=True)
-
-    # import
-    imported_by = models.ForeignKey(
-        User, on_delete=models.PROTECT, related_name="%(class)s_imported")
-    import_timestamp = models.DateTimeField()
-    import_source = models.CharField(max_length=100, db_index=True)
 
 
     class Meta:
@@ -478,6 +488,8 @@ class AddressVersioningError(Exception):
 
 class Address(AddressBase):
     deleted = models.BooleanField(default=False, db_index=True)
+
+    batches = models.ManyToManyField(AddressBatch, related_name="addresses")
 
 
     objects = AddressManager()

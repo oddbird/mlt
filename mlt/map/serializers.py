@@ -69,9 +69,6 @@ class AddressSerializer(Serializer):
         "mapped_by",
         "mapped_timestamp",
         "needs_review",
-        "imported_by",
-        "import_timestamp",
-        "import_source",
         "geocoded",
         "latitude",
         "longitude",
@@ -82,10 +79,6 @@ class AddressSerializer(Serializer):
         return self._encode_datetime(dt)
 
 
-    def encode_import_timestamp(self, dt):
-        return self._encode_datetime(dt)
-
-
     def encode_parcel(self, parcel):
         if parcel:
             return ParcelSerializer().one(parcel)
@@ -93,10 +86,6 @@ class AddressSerializer(Serializer):
 
 
     def encode_mapped_by(self, user):
-        return self._encode_user(user)
-
-
-    def encode_imported_by(self, user):
         return self._encode_user(user)
 
 

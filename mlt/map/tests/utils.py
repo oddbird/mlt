@@ -81,15 +81,26 @@ def create_address(**kwargs):
         "input_street": "3635 Van Gordon St",
         "city": "Providence",
         "state": "RI",
-        "imported_by": create_user(),
-        "import_source": "test-created",
-        "import_timestamp": datetime(2011, 6, 15, 10, 14, 25),
         }
     defaults.update(kwargs)
 
-    user = defaults.pop("user", defaults["imported_by"])
+    user = defaults.pop("user", create_user())
 
     from mlt.map.models import Address
     a = Address(**defaults)
     a.save(user=user)
     return a
+
+
+def create_address_batch(**kwargs):
+    defaults = {
+        "timestamp": datetime.utcnow(),
+        "tag": "testing",
+        }
+
+    defaults.update(kwargs)
+    if "user" not in defaults:
+        defaults["user"] = create_user()
+
+    from mlt.map.models import AddressBatch
+    return AddressBatch.objects.create(**defaults)

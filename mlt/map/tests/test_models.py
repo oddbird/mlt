@@ -6,11 +6,16 @@ from django.test import TestCase
 from mock import patch
 
 from .utils import (
-    create_parcel, create_address, create_mpolygon, create_user, refresh)
+    create_parcel, create_address, create_mpolygon, create_user,
+    create_address_batch, refresh)
 
 
 
-__all__ = ["ParcelTest", "AddressTest", "ParcelPrefetchQuerySetTest"]
+__all__ = [
+    "ParcelTest",
+    "AddressTest",
+    "AddressBatchTest",
+    "ParcelPrefetchQuerySetTest"]
 
 
 
@@ -201,9 +206,6 @@ class AddressTest(TestCase):
             user = self._import_user = create_user()
 
         return {
-            "import_timestamp": datetime.datetime(2011, 7, 8, 1, 2, 3),
-            "imported_by": user,
-            "import_source": "tests",
             "user": user,
             }
 
@@ -367,10 +369,7 @@ class AddressTest(TestCase):
                     'mapped_by',
                     'input_street',
                     'street_type',
-                    'import_timestamp',
                     'needs_review',
-                    'imported_by',
-                    'import_source',
                     'street_prefix',
                     'complex_name',
                     'notes',
@@ -782,3 +781,17 @@ class ParcelPrefetchQuerySetTest(TestCase):
 
         with self.assertRaises(NotImplementedError):
             qs._fetch_parcels()
+
+
+
+class AddressBatchTest(TestCase):
+    @property
+    def model(self):
+        from mlt.map.models import AddressBatch
+        return AddressBatch
+
+
+    def test_unicode(self):
+        b = create_address_batch(tag="foo")
+
+        self.assertEqual(unicode(b), u"foo")

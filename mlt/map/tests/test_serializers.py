@@ -89,11 +89,11 @@ class AddressSerializerTest(TestCase):
 
     def test_datetime(self):
         a = create_address(
-            import_timestamp=datetime.datetime(2011, 7, 8, 1, 2, 3))
+            mapped_timestamp=datetime.datetime(2011, 7, 8, 1, 2, 3))
 
         self.assertEqual(
-            self.serializer(["import_timestamp"]).one(a),
-            {"import_timestamp": "2011-07-08T01:02:03"}
+            self.serializer(["mapped_timestamp"]).one(a),
+            {"mapped_timestamp": "2011-07-08T01:02:03"}
             )
 
 
@@ -122,11 +122,11 @@ class AddressSerializerTest(TestCase):
 
     def test_user(self):
         u = create_user(username="blametern")
-        a = create_address(imported_by=u)
+        a = create_address(mapped_by=u)
 
         self.assertEqual(
-            self.serializer(["imported_by"]).one(a),
-            {"imported_by": "blametern"})
+            self.serializer(["mapped_by"]).one(a),
+            {"mapped_by": "blametern"})
 
 
     def test_user_none(self):

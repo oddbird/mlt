@@ -3,7 +3,7 @@ import csv
 from django.core.exceptions import ValidationError
 from django.db import transaction
 
-from .models import Address
+from .models import Address, AddressBatch
 
 
 
@@ -15,18 +15,15 @@ class ImporterError(Exception):
 
 class AddressImporter(object):
     def __init__(self, timestamp, user, source):
-        self.extra_data = {
-            "import_timestamp": timestamp,
-            "imported_by": user,
-            "import_source": source,
-            "user": user,
-            }
+        self.batch = AddressBatch.objects.create(
+            timestamp=timestamp, user=user, tag=source)
+        self.extra_data = {"user": user}
 
 
     @transaction.commit_manually
     def process(self, rows):
         errors = []
-        saved = 0
+        saved = []
         dupes = 0
         for i, r in enumerate(rows):
             data = self.extra_data.copy()
@@ -36,7 +33,7 @@ class AddressImporter(object):
                 if res is None:
                     dupes += 1
                 else:
-                    saved += 1
+                    saved.append(res)
             except ValidationError as e:
                 # 1-based numbering for rows
                 errors.append((i + 1, e.message_dict))
@@ -45,8 +42,10 @@ class AddressImporter(object):
             transaction.rollback()
             raise ImporterError(errors)
 
+        self.batch.addresses.add(*saved)
+
         transaction.commit()
-        return saved, dupes
+        return len(saved), dupes
 
 
 

@@ -9,10 +9,6 @@ from . import models
 
 
 
-WEB_UI_IMPORT_SOURCE = "web-ui"
-
-
-
 class AddressForm(forms.ModelForm):
     class Meta:
         model = models.Address
@@ -45,10 +41,6 @@ class AddressForm(forms.ModelForm):
         if address.pk is None:
             address.input_street = (
                 address.parsed_street or address.edited_street)
-
-            address.imported_by = user
-            address.import_source = WEB_UI_IMPORT_SOURCE
-            address.import_timestamp = datetime.utcnow()
 
         address.save(user=user)
 
