@@ -19,6 +19,3 @@ WebTest==1.2.3
 WebOb==1.0.7
 
 xlrd==0.7.1
-
-# needed for Celery on Python 2.6 only
-importlib==1.0.2
