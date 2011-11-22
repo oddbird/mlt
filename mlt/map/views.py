@@ -32,10 +32,20 @@ class UIDateSerializerMixin(object):
         return dt
 
 
+class UIAddressBatchSerializer(
+    UIDateSerializerMixin, serializers.AddressBatchSerializer):
+    pass
+
+
 
 class UIAddressSerializer(UIDateSerializerMixin, serializers.AddressSerializer):
     default_fields = serializers.AddressSerializer.default_fields + [
-        "edit_url", "has_parcel"]
+        "edit_url", "has_parcel", "batch_tags"]
+    batch_serializer = UIAddressBatchSerializer()
+
+
+    def encode_batch_tags(self, val):
+        return self.batch_serializer.many(val)
 
 
 
@@ -50,7 +60,7 @@ class UIParcelSerializer(serializers.ParcelSerializer):
             "latitude",
             "longitude",
             "mapped_by",
-            "imported_by"
+            "batch_tags",
             ]
         )
 
@@ -113,7 +123,7 @@ def export_addresses(request):
     writer_class = EXPORT_WRITERS.get(format, EXPORT_WRITERS[EXPORT_FORMATS[0]])
 
     addresses = AddressFilter().apply(
-        Address.objects.prefetch(),
+        Address.objects.prefetch("parcels"),
         request.GET)
 
     writer = writer_class(addresses)
@@ -215,7 +225,7 @@ def history(request):
     qs = AddressChangeFilter().apply(
         AddressChange.objects.select_related(
             "pre", "post", "changed_by"
-            ).prefetch_parcels(),
+            ).prefetch_linked("parcels"),
         request.GET)
 
     get_count = request.GET.get("count", "false").lower() not in ["false", "0"]

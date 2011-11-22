@@ -10,7 +10,8 @@ from django_webtest import WebTest
 from mock import patch
 
 from .utils import (
-    create_address, create_parcel, create_mpolygon, create_user, refresh)
+    create_address, create_parcel, create_mpolygon, create_user,
+    create_address_batch, refresh)
 
 
 
@@ -477,8 +478,8 @@ class AddressesViewTest(AuthenticatedWebTest):
             create_address(street_number=str(i+1), pl=i)
             create_parcel(pl=i)
 
-        # 1 for parcels, 1 for addresses, 11 for sessions/auth
-        with self.assertNumQueries(13):
+        # 1 for parcels, 1 for addresses, 1 for batches, 11 for sessions/auth
+        with self.assertNumQueries(14):
             self.get()
 
 
@@ -489,6 +490,8 @@ class AddressesViewTest(AuthenticatedWebTest):
             pl="1",
             mapped_by=self.user,
             mapped_timestamp=now)
+        b = create_address_batch()
+        a.batches.add(b)
 
         res = self.get()
 
@@ -497,7 +500,15 @@ class AddressesViewTest(AuthenticatedWebTest):
 
         self.assertEqual(
             res.json["addresses"],
-            [{"city": a.city,
+            [{"batch_tags": [
+                        {
+                            "user": b.user.username,
+                            "timestamp": date_format(
+                                utc_to_local(b.timestamp), "DATETIME_FORMAT"),
+                            "tag": b.tag,
+                            }
+                        ],
+              "city": a.city,
               "complex_name": a.complex_name,
               "edit_url": a.edit_url,
               "id": a.id,
@@ -1696,6 +1707,7 @@ class GeocodeViewTest(AuthenticatedWebTest):
             res.json,
             {
                 "address": {
+                    "batch_tags": [],
                     "city": "Providence",
                     "complex_name": "",
                     "edit_url": "/map/_edit_address/%s/" % a.id,
@@ -1859,9 +1871,9 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
         a2 = create_address(pl="123", needs_review=True)
         a3 = create_address(pl="234", needs_review=False)
 
-        # 1 to update, 1 for addresses, 1 for parcels,
+        # 1 to update, 1 for addresses, 1 for parcels, 1 for batches,
         # 1 for querying addresses again to record change, 11 for sessions/auth
-        with self.assertNumQueries(15):
+        with self.assertNumQueries(16):
             self.post(
                 self.url,
                 {"aid": [a1.id, a2.id, a3.id], "action": "flag"},

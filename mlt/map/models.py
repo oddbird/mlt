@@ -300,58 +300,66 @@ class AddressBase(models.Model):
 
 
 
-class ParcelPrefetchQuerySet(GeoQuerySet):
+class PrefetchQuerySet(GeoQuerySet):
     def __init__(self, *args, **kwargs):
-        super(ParcelPrefetchQuerySet, self).__init__(*args, **kwargs)
+        super(PrefetchQuerySet, self).__init__(*args, **kwargs)
 
-        self._parcels_fetched = False
-        self._prefetch_parcels = False
+        self._prefetch_linked_done = False
+        self._prefetch_linked = []
 
 
-    def prefetch_parcels(self):
+    def prefetch_linked(self, *args):
         clone = self._clone()
 
-        clone._prefetch_parcels = True
+        clone._prefetch_linked = args
 
         return clone
 
 
     def _clone(self, *args, **kwargs):
-        clone = super(ParcelPrefetchQuerySet, self)._clone(*args, **kwargs)
+        clone = super(PrefetchQuerySet, self)._clone(*args, **kwargs)
 
-        clone._prefetch_parcels = self._prefetch_parcels
+        clone._prefetch_linked = self._prefetch_linked
 
         return clone
 
 
     def __iter__(self):
-        if self._prefetch_parcels and not self._parcels_fetched:
-            self._fetch_parcels_wrapper()
+        if self._prefetch_linked and not self._prefetch_linked_done:
+            self._prefetch_linked_wrapper()
 
-        return super(ParcelPrefetchQuerySet, self).__iter__()
+        return super(PrefetchQuerySet, self).__iter__()
 
 
-    def _fetch_parcels_wrapper(self):
+    def _prefetch_linked_wrapper(self):
         # ensures result cache is fully populated
         len(self)
 
-        self._fetch_parcels()
+        self._prefetch_linked_objects()
 
-        self._parcels_fetched = True
+        self._prefetch_linked_done = True
 
 
-    def _fetch_parcels(self):
+    def _prefetch_linked_objects(self):
         raise NotImplementedError
 
 
 
-class AddressQuerySet(ParcelPrefetchQuerySet):
-    def prefetch(self):
+class AddressQuerySet(PrefetchQuerySet):
+    def prefetch(self, *args):
+        prefetch_types = args or ["parcels", "batches"]
         return self.select_related(
-            "mapped_by", "imported_by").prefetch_parcels()
+            "mapped_by", "imported_by").prefetch_linked(*prefetch_types)
 
 
-    def _fetch_parcels(self):
+    def _prefetch_linked_objects(self):
+        if "parcels" in self._prefetch_linked:
+            self._prefetch_parcels()
+        if "batches" in self._prefetch_linked:
+            self._prefetch_batches()
+
+
+    def _prefetch_parcels(self):
         parcels_by_pl = dict(
             (p.pl, p) for p in
             Parcel.objects.filter(
@@ -363,6 +371,21 @@ class AddressQuerySet(ParcelPrefetchQuerySet):
             a._parcel_fetched = True
             # can't preset parcel's _mapped_to, address query may not have
             # included all addresses mapped to these parcels
+
+
+    def _prefetch_batches(self):
+        through = self.model.batches.through
+        qs = through.objects.filter(
+            address__in=[a.id for a in self._result_cache]).select_related(
+            "addressbatch")
+        batches_by_aid = defaultdict(list)
+        for through_record in qs:
+            batches_by_aid[through_record.address_id].append(
+                through_record.addressbatch)
+
+        for a in self._result_cache:
+            a._all_batches = sorted(
+                batches_by_aid.get(a.id, []), key=lambda b: b.timestamp)
 
 
     def update(self, **kwargs):
@@ -432,8 +455,8 @@ class AddressManager(models.GeoManager):
         return AddressQuerySet(self.model, using=self._db).filter(deleted=False)
 
 
-    def prefetch(self):
-        return self.get_query_set().prefetch()
+    def prefetch(self, *args):
+        return self.get_query_set().prefetch(*args)
 
 
     def create_from_input(self, **kwargs):
@@ -507,6 +530,7 @@ class Address(AddressBase):
     def __init__(self, *args, **kwargs):
         super(Address, self).__init__(*args, **kwargs)
 
+        self._all_batches = None
         self._initial_data = self.data(internal=True)
 
 
@@ -587,6 +611,13 @@ class Address(AddressBase):
 
 
     @property
+    def batch_tags(self):
+        if self._all_batches is None:
+            self._all_batches = list(self.batches.order_by("timestamp"))
+        return self._all_batches
+
+
+    @property
     def edit_url(self):
         return reverse("map_edit_address", kwargs={"address_id": self.id})
 
@@ -601,8 +632,13 @@ class AddressSnapshot(AddressBase):
 
 
 
-class AddressChangeQuerySet(ParcelPrefetchQuerySet):
-    def _fetch_parcels(self):
+class AddressChangeQuerySet(PrefetchQuerySet):
+    def _prefetch_linked_objects(self):
+        if "parcels" in self._prefetch_linked:
+            self._prefetch_parcels()
+
+
+    def _prefetch_parcels(self):
         pls = set()
         for c in self._result_cache:
             if c.pre is not None:

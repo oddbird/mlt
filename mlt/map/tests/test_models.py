@@ -15,7 +15,7 @@ __all__ = [
     "ParcelTest",
     "AddressTest",
     "AddressBatchTest",
-    "ParcelPrefetchQuerySetTest"]
+    "PrefetchQuerySetTest"]
 
 
 
@@ -741,11 +741,34 @@ class AddressTest(TestCase):
 
         with self.assertNumQueries(2): # one for addresses, one for parcels
             # cloning preserves the prefetch marker
-            qs = self.model.objects.all().prefetch_parcels()._clone()
+            qs = self.model.objects.all().prefetch_linked("parcels")._clone()
             for address in qs:
                 self.assertEqual(address.pl, address.parcel.pl)
             # second iteration shouldn't trigger additional query
             [a.pl for a in qs]
+
+
+    def test_prefetch_batches(self):
+        a1 = create_address()
+        a2 = create_address()
+        b1 = create_address_batch(
+            timestamp=datetime.datetime(2011, 11, 22, 10, 45))
+        b2 = create_address_batch(
+            timestamp=datetime.datetime(2011, 11, 22, 10, 30))
+        a1.batches.add(b1, b2)
+        a2.batches.add(b2, b1)
+
+        with self.assertNumQueries(2): # one for addresses, one for batches
+            # cloning preserves the prefetch marker
+            qs = self.model.objects.all().prefetch_linked("batches")._clone()
+            # batches are also ordered by timestamp
+            for address in qs:
+                self.assertEqual(
+                    address.batch_tags,
+                    [b2, b1]
+                    )
+            # second iteration shouldn't trigger additional query
+            [a for a in qs]
 
 
     def test_change_prefetch_parcels(self):
@@ -760,7 +783,7 @@ class AddressTest(TestCase):
         with self.assertNumQueries(2): # one for changes, one for parcels
             # cloning preserves the prefetch marker
             qs = self.change_model.objects.select_related(
-                "pre", "post").prefetch_parcels()._clone()
+                "pre", "post").prefetch_linked("parcels")._clone()
             for change in qs:
                 change.post and change.post.parcel
                 change.pre and change.pre.parcel
@@ -768,19 +791,31 @@ class AddressTest(TestCase):
             [c.post and c.post.parcel for c in qs]
 
 
+    def test_change_bad_prefetch(self):
+        create_address(pl="1")
+        a = create_address()
+        a.delete(user=create_user())
 
-class ParcelPrefetchQuerySetTest(TestCase):
+        create_parcel(pl="1")
+        create_parcel(pl="2")
+
+        with self.assertNumQueries(1): # just one for changes
+            list(self.change_model.objects.all().prefetch_linked("foo"))
+
+
+
+class PrefetchQuerySetTest(TestCase):
     @property
     def klass(self):
-        from mlt.map.models import ParcelPrefetchQuerySet
-        return ParcelPrefetchQuerySet
+        from mlt.map.models import PrefetchQuerySet
+        return PrefetchQuerySet
 
 
-    def test_prefetch_parcel_not_implemented(self):
+    def test_prefetch_linked_objects_not_implemented(self):
         qs = self.klass()
 
         with self.assertRaises(NotImplementedError):
-            qs._fetch_parcels()
+            qs._prefetch_linked_objects()
 
 
 

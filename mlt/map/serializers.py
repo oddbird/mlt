@@ -50,6 +50,23 @@ class ParcelSerializer(Serializer):
 
 
 
+class AddressBatchSerializer(Serializer):
+    default_fields = [
+        "user",
+        "timestamp",
+        "tag"
+        ]
+
+
+    def encode_user(self, val):
+        return self._encode_user(val)
+
+
+    def encode_timestamp(self, val):
+        return self._encode_datetime(val)
+
+
+
 class AddressSerializer(Serializer):
     default_fields = [
         "id",

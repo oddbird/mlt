@@ -64,11 +64,11 @@
           {{# batch_tags }}
             <p class="hcard">
               Imported
-              {{# username }}
-                by <cite class="fn">{{ username }}</cite>
-              {{/ username }}
+              {{# user }}
+                by <cite class="fn">{{ user }}</cite>
+              {{/ user }}
               {{# tag }}
-                in batch "<span class="from">{{ tag }}</span>"
+                in "<span class="from">{{ tag }}</span>"
               {{/ tag }}
               {{# timestamp }}
                 on <time pubdate>{{ timestamp }}</time>
