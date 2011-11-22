@@ -75,6 +75,7 @@ var MLT = (function (MLT, $) {
                         geolng: geolng,
                         index: address.index,
                         edit_url: address.edit_url,
+                        add_tag_url: address.add_tag_url,
                         street: address.street,
                         street_is_parsed: address.street_is_parsed,
                         street_number: address.street_number,
@@ -148,6 +149,7 @@ var MLT = (function (MLT, $) {
                     geocoded: address.geocoded,
                     index: index,
                     edit_url: address.edit_url,
+                    add_tag_url: address.add_tag_url,
                     street: address.street,
                     street_is_parsed: address.street_is_parsed,
                     street_number: address.street_number,
@@ -206,6 +208,7 @@ var MLT = (function (MLT, $) {
                             geocoded: address.geocoded,
                             index: index,
                             edit_url: address.edit_url,
+                            add_tag_url: address.add_tag_url,
                             street: address.street,
                             street_is_parsed: address.street_is_parsed,
                             street_number: address.street_number,
@@ -593,6 +596,7 @@ var MLT = (function (MLT, $) {
                                         geocoded: data.address.geocoded,
                                         index: index,
                                         edit_url: data.address.edit_url,
+                                        add_tag_url: data.address.add_tag_url,
                                         street: data.address.street,
                                         street_is_parsed: data.address.street_is_parsed,
                                         street_number: data.address.street_number,
@@ -700,6 +704,7 @@ var MLT = (function (MLT, $) {
                                 geocoded: address.geocoded,
                                 index: index,
                                 edit_url: address.edit_url,
+                                add_tag_url: address.add_tag_url,
                                 street: address.street,
                                 street_is_parsed: address.street_is_parsed,
                                 street_number: address.street_number,
@@ -1608,9 +1613,10 @@ var MLT = (function (MLT, $) {
         addressContainer.on('keydown', '.address .byline .addtag input.tag-input', function (e) {
             if (e.keyCode === MLT.keycodes.ENTER) {
                 var url = $(this).data('url'),
-                    thisAddress = $(this).closest('.address');
+                    thisAddress = $(this).closest('.address'),
+                    input = thisAddress.find('input.tag-input');
                 thisAddress.loadingOverlay();
-                $.post(url, function (data) {
+                $.post(url, {'tag': input.val()}, function (data) {
                     thisAddress.loadingOverlay('remove');
                     if (data.success) {
                         MLT.addressLoading.replaceAddress(data);

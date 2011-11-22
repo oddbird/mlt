@@ -153,7 +153,7 @@ class AddressBatch(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.PROTECT, related_name="address_batches")
     timestamp = models.DateTimeField()
-    tag = models.CharField(max_length=100, db_index=True)
+    tag = models.CharField(max_length=100, unique=True)
 
 
     def __unicode__(self):
@@ -637,6 +637,11 @@ class Address(AddressBase):
     @property
     def edit_url(self):
         return reverse("map_edit_address", kwargs={"address_id": self.id})
+
+
+    @property
+    def add_tag_url(self):
+        return reverse("map_add_tag", kwargs={"address_id": self.id})
 
 
 

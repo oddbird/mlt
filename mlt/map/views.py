@@ -19,7 +19,7 @@ from .export import EXPORT_FORMATS, EXPORT_WRITERS
 from .filters import AddressFilter, AddressChangeFilter
 from .forms import AddressForm, AddressImportForm
 from .importer import ImporterError
-from .models import Parcel, Address, AddressChange
+from .models import Parcel, Address, AddressChange, AddressBatch
 from .utils import letter_key
 from . import serializers, sort, paging, geocoder
 
@@ -40,7 +40,7 @@ class UIAddressBatchSerializer(
 
 class UIAddressSerializer(UIDateSerializerMixin, serializers.AddressSerializer):
     default_fields = serializers.AddressSerializer.default_fields + [
-        "edit_url", "has_parcel", "batch_tags"]
+        "edit_url", "add_tag_url", "has_parcel", "batch_tags"]
     batch_serializer = UIAddressBatchSerializer()
 
 
@@ -261,6 +261,43 @@ def add_address(request):
             request, "Address &laquo;%s&raquo; added." % address.street)
         return json_response({"success": True})
     return render(request, "includes/add_address/form.html", {"form": form})
+
+
+
+@login_required
+@require_POST
+def add_tag(request, address_id):
+    address = get_object_or_404(Address, pk=address_id)
+    tag = request.POST.get("tag")
+    if not tag:
+        messages.error(request, "Please provide a batch tag name.")
+        return json_response({"success": False})
+
+    batch, created = AddressBatch.objects.get_or_create(
+        tag=tag,
+        defaults={
+            "user": request.user,
+            "timestamp": datetime.datetime.utcnow()
+            }
+        )
+
+    if not created and address.batches.filter(id=batch.id).exists():
+        messages.info(request, "Address is already in batch '%s'." % tag)
+        return json_response({"success": False})
+
+    address.batches.add(batch)
+
+    if created:
+        messages.success(request, "New batch '%s' created." % tag)
+    else:
+        messages.success(request, "Existing batch '%s' added to address." % tag)
+
+    return json_response(
+        {
+            "success": True,
+            "address": UIAddressSerializer().one(address)
+            }
+        )
 
 
 

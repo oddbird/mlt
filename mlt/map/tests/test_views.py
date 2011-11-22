@@ -29,6 +29,7 @@ __all__ = [
     "GeocodeViewTest",
     "AddressActionsViewTest",
     "RevertChangeViewTest",
+    "AddTagViewTest",
     ]
 
 
@@ -500,7 +501,8 @@ class AddressesViewTest(AuthenticatedWebTest):
 
         self.assertEqual(
             res.json["addresses"],
-            [{"batch_tags": [
+            [{"add_tag_url": "/map/_add_tag/%s/" % a.id,
+              "batch_tags": [
                         {
                             "user": b.user.username,
                             "timestamp": date_format(
@@ -1211,6 +1213,108 @@ class AddAddressViewTest(AuthenticatedWebTest):
 
 
 
+class AddTagViewTest(CSRFAuthenticatedWebTest):
+    def setUp(self):
+        super(AddTagViewTest, self).setUp()
+        self.address = create_address(city="Providence")
+
+
+    @property
+    def url(self):
+        return reverse(
+            "map_add_tag", kwargs={"address_id": self.address.id})
+
+
+    def test_new_batch(self):
+        response = self.post(self.url, {"tag": "foo"})
+
+        self.assertEqual(response.status_int, 200)
+
+        self.assertEqual(response.json["address"]["city"], "Providence")
+        self.assertEqual(
+            response.json["messages"],
+            [
+                {
+                    "level": 25,
+                    "message": "New batch 'foo' created.",
+                    "tags": "success"
+                    }
+                ]
+            )
+        self.assertEqual(response.json["success"], True)
+
+        batch = self.address.batches.get()
+        self.assertEqual(batch.tag, "foo")
+        self.assertEqual(batch.user, self.user)
+
+
+    def test_existing_batch(self):
+        b = create_address_batch(tag="foo")
+
+        response = self.post(self.url, {"tag": "foo"})
+
+        self.assertEqual(response.status_int, 200)
+
+        self.assertEqual(response.json["address"]["city"], "Providence")
+        self.assertEqual(
+            response.json["messages"],
+            [
+                {
+                    "level": 25,
+                    "message": "Existing batch 'foo' added to address.",
+                    "tags": "success"
+                    }
+                ]
+            )
+        self.assertEqual(response.json["success"], True)
+
+        batch = self.address.batches.get()
+        self.assertEqual(batch, b)
+
+
+    def test_has_batch(self):
+        b = create_address_batch(tag="foo")
+        self.address.batches.add(b)
+
+        response = self.post(self.url, {"tag": "foo"})
+
+        self.assertEqual(response.status_int, 200)
+
+        self.assertEqual(
+            response.json["messages"],
+            [
+                {
+                    "level": 20,
+                    "message": "Address is already in batch 'foo'.",
+                    "tags": "info"
+                    }
+                ]
+            )
+        self.assertEqual(response.json["success"], False)
+
+        batch = self.address.batches.get()
+        self.assertEqual(batch, b)
+
+
+    def test_no_tag(self):
+        response = self.post(self.url, {"tag": ""})
+
+        self.assertEqual(response.status_int, 200)
+
+        self.assertEqual(
+            response.json["messages"],
+            [
+                {
+                    "level": 40,
+                    "message": "Please provide a batch tag name.",
+                    "tags": "error"
+                    }
+                ]
+            )
+        self.assertEqual(response.json["success"], False)
+
+
+
 class EditAddressViewTest(CSRFAuthenticatedWebTest):
     def setUp(self):
         super(EditAddressViewTest, self).setUp()
@@ -1786,6 +1890,7 @@ class GeocodeViewTest(AuthenticatedWebTest):
             res.json,
             {
                 "address": {
+                    "add_tag_url": "/map/_add_tag/%s/" % a.id,
                     "batch_tags": [],
                     "city": "Providence",
                     "complex_name": "",

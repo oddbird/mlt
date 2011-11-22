@@ -755,8 +755,10 @@ class AddressTest(TestCase):
         a1 = create_address()
         a2 = create_address()
         b1 = create_address_batch(
+            tag="one",
             timestamp=datetime.datetime(2011, 11, 22, 10, 45))
         b2 = create_address_batch(
+            tag="two",
             timestamp=datetime.datetime(2011, 11, 22, 10, 30))
         a1.batches.add(b1, b2)
         a2.batches.add(b2, b1)
