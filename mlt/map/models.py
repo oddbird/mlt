@@ -160,6 +160,10 @@ class AddressBatch(models.Model):
         return self.tag
 
 
+    class Meta:
+        verbose_name_plural = "address batches"
+
+
 
 class AddressBase(models.Model):
     """

@@ -91,7 +91,7 @@ class ImportViewTest(AuthenticatedWebTest):
             self.url, user=self.user)
 
         form = res.forms["import-address-form"]
-        form["source"] = "mysource"
+        form["tag"] = "mytag"
         form["file"] = ("bad.csv", "Bad, Address, Yo")
 
         res = form.submit()
@@ -106,7 +106,7 @@ class ImportViewTest(AuthenticatedWebTest):
             self.url, user=self.user)
 
         form = res.forms["import-address-form"]
-        form["source"] = "mysource"
+        form["tag"] = "mytag"
         form["file"] = ("good.csv", "123 Good St, Providence, RI")
 
         res = form.submit().follow()

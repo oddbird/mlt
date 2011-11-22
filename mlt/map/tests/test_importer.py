@@ -25,7 +25,7 @@ class GetImporterMixin(object):
         defaults = dict(
             timestamp=datetime.datetime(2011, 7, 8, 1, 2, 3),
             user=self.user,
-            source="tests")
+            tag="tests")
         defaults.update(kwargs)
         return self.importer(**defaults)
 

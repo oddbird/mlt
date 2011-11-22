@@ -6,7 +6,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
 from .backports import override_settings
-from .utils import create_user, create_address
+from .utils import create_user, create_address, create_address_batch
 
 
 
@@ -28,13 +28,13 @@ class AddressImportFormTest(TestCase):
     def test_fields(self):
         self.assertEqual(
             [f.name for f in self.form()],
-            ["file", "source"]
+            ["file", "tag"]
             )
 
 
     def test_save(self):
         f = self.form(
-            data={"source": "mysource"},
+            data={"tag": "mytag"},
             files={"file": SimpleUploadedFile(
                     "data.csv", "123 N Main St, Providence, RI")})
 
@@ -56,7 +56,20 @@ class AddressImportFormTest(TestCase):
 
         self.assertEqual(batch.user, self.user)
         self.assertEqual(batch.timestamp, datetime(2011, 7, 8, 1, 2, 3))
-        self.assertEqual(batch.tag, "mysource")
+        self.assertEqual(batch.tag, "mytag")
+
+
+    def test_dupe_batch_name(self):
+        create_address_batch(tag="mytag")
+
+        f = self.form(
+            data={"tag": "mytag"},
+            files={"file": SimpleUploadedFile(
+                    "data.csv", "123 N Main St, Providence, RI")})
+
+        self.assertFalse(f.is_valid())
+        self.assertEqual(
+            f.errors, {"tag": ["This batch tag is already used."]})
 
 
 class AddressFormTest(TestCase):

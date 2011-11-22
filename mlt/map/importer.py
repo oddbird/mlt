@@ -14,9 +14,9 @@ class ImporterError(Exception):
 
 
 class AddressImporter(object):
-    def __init__(self, timestamp, user, source):
+    def __init__(self, timestamp, user, tag):
         self.batch = AddressBatch.objects.create(
-            timestamp=timestamp, user=user, tag=source)
+            timestamp=timestamp, user=user, tag=tag)
         self.extra_data = {"user": user}
 
 

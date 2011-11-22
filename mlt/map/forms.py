@@ -50,13 +50,20 @@ class AddressForm(forms.ModelForm):
 
 class AddressImportForm(forms.Form):
     file = forms.FileField()
-    source = forms.CharField()
+    tag = forms.CharField()
+
+
+    def clean_tag(self):
+        tag = self.cleaned_data["tag"]
+        if models.AddressBatch.objects.filter(tag=tag).exists():
+            raise forms.ValidationError("This batch tag is already used.")
+        return tag
 
 
     def save(self, user):
         i = CSVAddressImporter(
             timestamp=datetime.utcnow(),
             user=user,
-            source=self.cleaned_data["source"])
+            tag=self.cleaned_data["tag"])
 
         return i.process_file(self.cleaned_data["file"])
