@@ -111,13 +111,13 @@ class Filter(object):
 
 class AddressFilter(Filter):
     fields = [
+        "batches",
         "street",
         "city",
         "state",
         "pl",
         "mapped_by",
         "complex_name",
-        "batches",
         ]
 
 
@@ -149,6 +149,7 @@ class AddressFilter(Filter):
 
 class AddressChangeFilter(Filter):
     fields = [
+        "address__batches",
         "changed_by",
         "post__street",
         "post__city",
@@ -165,11 +166,12 @@ class AddressChangeFilter(Filter):
             ret[field] = (field.replace("post__", "").replace("_", " "), field)
         ret["changed_by"] = ("changed by", "changed_by__username")
         ret["post__mapped_by"] = ("mapped by", "post__mapped_by__username")
+        ret["address__batches"] = ("batch", "address__batches__tag")
 
         return ret
 
 
-    raw_fields = set(["changed_by", "post__mapped_by"])
+    raw_fields = set(["changed_by", "post__mapped_by", "address__batches"])
 
 
     special_fields = {

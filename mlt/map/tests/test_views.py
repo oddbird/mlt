@@ -1034,6 +1034,25 @@ class HistoryViewTest(AuthenticatedWebTest):
         self.assertChanges(res, [a1.address_changes.get().id])
 
 
+    def test_filter_batch(self):
+        a1 = create_address()
+        a2 = create_address()
+        create_address()
+
+        b1 = create_address_batch(tag="one")
+        b2 = create_address_batch(tag="two")
+
+        a1.batches.add(b1, b2)
+        a2.batches.add(b2)
+
+        res = self.app.get(
+            self.url + "?address__batches=%s" % b2.id,
+            user=self.user)
+
+        self.assertChanges(
+            res, [a1.address_changes.get().id, a2.address_changes.get().id])
+
+
     def test_filter_same_address(self):
         a1 = create_address(city="Providence")
         a1.city = "Albuquerque"
@@ -1657,6 +1676,27 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
                     "desc": "mapped by"
                     },
              ]
+            )
+
+
+    def test_batch(self):
+        a1 = create_address()
+        b2 = create_address_batch(tag="two")
+
+        a1.batches.add(b2)
+
+        res = self.app.get(self.url + "?q=tw", user=self.user)
+
+        self.assertEqual(
+            res.json["options"],
+            [{
+                    "desc": "batch",
+                    "field": "address__batches",
+                    "name": "two",
+                    "value": b2.id,
+                    "q": "tw",
+                    "rest": "o",
+                    }]
             )
 
 
