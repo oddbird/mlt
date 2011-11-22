@@ -461,8 +461,11 @@ class AddressManager(models.GeoManager):
 
     def create_from_input(self, **kwargs):
         """
-        Create an address with the given data and return it, unless a duplicate
-        existing address is found; then return None.
+        Create an address with the given data, unless a duplicate existing
+        address is found. Return a tuple of (created, addresses), where
+        ``created`` is ``True`` if an address was newly created, and
+        ``addresses`` is an iterable of exact-match addresses (will be length
+        one if newly created).
 
         If the data is bad (e.g. unknown state) will raise ValidationError.
 
@@ -485,7 +488,7 @@ class AddressManager(models.GeoManager):
             city = kwargs["city"] = compact_whitespace(city.strip())
 
         if None not in [street, city, state]:
-            dupes = self.filter(
+            addresses = self.filter(
                 (
                     models.Q(input_street__iexact=street) |
                     models.Q(street__iexact=street)
@@ -494,13 +497,18 @@ class AddressManager(models.GeoManager):
                 models.Q(state__iexact=state)
                 )
         else:
-            dupes = None
+            addresses = None
 
-        if not dupes:
+        created = False
+        if not addresses:
             obj = self.model(**kwargs)
             obj.full_clean()
             obj.save(user=user)
-            return obj
+
+            created = True
+            addresses = [obj]
+
+        return (created, addresses)
 
 
 

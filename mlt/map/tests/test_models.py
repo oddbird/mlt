@@ -220,22 +220,25 @@ class AddressTest(TestCase):
         a = create_address(
             input_street="123 N Main St", city="Rapid City", state="SD")
 
-        b = self.create_from_input(
+        (created, addresses) = self.create_from_input(
             street="321 S Little St", city="Rapid City", state="SD")
 
-        self.assertNotEqual(a, b)
-        self.assertEqual(b.input_street, "321 S Little St")
+        self.assertTrue(created)
+        self.assertNotIn(a, addresses)
+        self.assertEqual(len(addresses), 1)
+        self.assertEqual(addresses[0].input_street, "321 S Little St")
 
 
     def test_create_dupe(self):
-        create_address(
+        a = create_address(
             input_street="123 N Main St", city="Rapid City", state="SD")
 
-        b = self.create_from_input(
+        (created, addresses) = self.create_from_input(
             street="123 N Main St", city="Rapid City", state="SD")
 
 
-        self.assertIs(b, None)
+        self.assertFalse(created)
+        self.assertEqual(list(addresses), [a])
         self.assertEqual(self.model.objects.count(), 1)
 
 
@@ -243,66 +246,66 @@ class AddressTest(TestCase):
         create_address(
             input_street="123 N Main St", city="Rapid City", state="SD")
 
-        b = self.create_from_input(
+        (created, addresses) = self.create_from_input(
             street="123 n main st", city="rapid city", state="sd")
 
 
-        self.assertIs(b, None)
+        self.assertFalse(created)
 
 
     def test_create_dupe_whitespace(self):
         create_address(
             input_street="123 N Main St", city="Rapid City", state="SD")
 
-        b = self.create_from_input(
+        (created, addresses) = self.create_from_input(
             street="123 N Main  st  ", city=" rapid city", state="  sd")
 
 
-        self.assertIs(b, None)
+        self.assertFalse(created)
 
 
     def test_create_dupe_trailing_period(self):
         create_address(
             input_street="123 N Main St", city="Rapid City", state="SD")
 
-        b = self.create_from_input(
+        (created, addresses) = self.create_from_input(
             street="123 N Main St. ", city="Rapid City", state="SD")
 
 
-        self.assertIs(b, None)
+        self.assertFalse(created)
 
 
     def test_create_dupe_street_st(self):
         create_address(
             input_street="123 N Main St", city="Rapid City", state="SD")
 
-        b = self.create_from_input(
+        (created, addresses) = self.create_from_input(
             street="123 N Main Street", city="Rapid City", state="SD")
 
 
-        self.assertIs(b, None)
+        self.assertFalse(created)
 
 
     def test_create_dupe_avenue_ave(self):
         create_address(
             input_street="123 N Main Ave", city="Rapid City", state="SD")
 
-        b = self.create_from_input(
+        (created, addresses) = self.create_from_input(
             street="123 N Main Avenue", city="Rapid City", state="SD")
 
 
-        self.assertIs(b, None)
+        self.assertFalse(created)
 
 
     def test_create_dupe_av_ave(self):
         create_address(
             input_street="123 N Main Ave", city="Rapid City", state="SD")
 
-        b = self.create_from_input(
+        (created, addresses) = self.create_from_input(
             street="123 N Main Av", city="Rapid City", state="SD")
 
 
-        self.assertIs(b, None)
+        self.assertFalse(created)
 
 
     def test_create_dupe_of_parsed(self):
@@ -311,25 +314,25 @@ class AddressTest(TestCase):
             street_number="123", street_name="N Main", street_type="St",
             city="Rapid City", state="SD")
 
-        b = self.create_from_input(
+        (created, addresses) = self.create_from_input(
             street="123 N Main St", city="Rapid City", state="SD")
 
 
-        self.assertIs(b, None)
+        self.assertFalse(created)
 
 
     def test_create_uppercases_state(self):
-        a = self.create_from_input(
+        (created, addresses) = self.create_from_input(
             street="321 S Little St", city="Rapid City", state="sd")
 
-        self.assertEqual(a.state, "SD")
+        self.assertEqual(addresses[0].state, "SD")
 
 
     def test_create_strips_whitespace(self):
-        a = self.create_from_input(
+        (created, addresses) = self.create_from_input(
             street="321 S Little St", city=" Rapid City", state=" SD ")
 
-        self.assertEqual(a.state, "SD")
+        self.assertEqual(addresses[0].state, "SD")
 
 
     def test_create_bad_data(self):

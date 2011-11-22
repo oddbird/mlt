@@ -46,9 +46,9 @@ class AddressImporterTest(GetImporterMixin, TransactionTestCase):
 
     def test_import(self):
         """
-        Given an iterable of dictionaries, the process() method saves each
-        dictionary as an address, adding the extra importer metadata, returning
-        the count of addresses added and the count of dupes.
+        Given  an iterable  of dictionaries,  the process()  method  saves each
+        dictionary as an address, adding batch metadata, returning the count of
+        addresses added and the count of dupes.
 
         """
 
@@ -86,6 +86,10 @@ class AddressImporterTest(GetImporterMixin, TransactionTestCase):
         self.assertEqual(batch.tag, "tests")
         self.assertEqual(
             batch.timestamp, datetime.datetime(2011, 7, 8, 1, 2, 3))
+        self.assertEqual(
+            [list(a.batches.all()) for a in self.model.objects.all()],
+            [[batch], [batch]]
+            )
 
 
     def test_import_errors(self):

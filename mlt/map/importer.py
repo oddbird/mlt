@@ -23,17 +23,18 @@ class AddressImporter(object):
     @transaction.commit_manually
     def process(self, rows):
         errors = []
-        saved = []
+        saved = 0
         dupes = 0
         for i, r in enumerate(rows):
             data = self.extra_data.copy()
             data.update(r)
             try:
-                res = Address.objects.create_from_input(**data)
-                if res is None:
-                    dupes += 1
+                created, addresses = Address.objects.create_from_input(**data)
+                self.batch.addresses.add(*addresses)
+                if created:
+                    saved += 1
                 else:
-                    saved.append(res)
+                    dupes += 1
             except ValidationError as e:
                 # 1-based numbering for rows
                 errors.append((i + 1, e.message_dict))
@@ -42,10 +43,8 @@ class AddressImporter(object):
             transaction.rollback()
             raise ImporterError(errors)
 
-        self.batch.addresses.add(*saved)
-
         transaction.commit()
-        return len(saved), dupes
+        return saved, dupes
 
 
 
