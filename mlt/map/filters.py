@@ -117,16 +117,18 @@ class AddressFilter(Filter):
         "pl",
         "mapped_by",
         "complex_name",
+        "batches",
         ]
 
 
     def get_autocomplete_fields(self):
         ret = super(AddressFilter, self).get_autocomplete_fields()
         ret["mapped_by"] = ("mapped by", "mapped_by__username")
+        ret["batches"] = ("batch", "batches__tag")
         return ret
 
 
-    raw_fields = set(["mapped_by"])
+    raw_fields = set(["mapped_by", "batches"])
 
 
     special_fields = {

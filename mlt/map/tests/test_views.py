@@ -618,6 +618,24 @@ class AddressesViewTest(AuthenticatedWebTest):
         self.assertAddresses(res, [a1.id])
 
 
+    def test_filter_batch(self):
+        a1 = create_address()
+        a2 = create_address()
+        create_address()
+
+        b1 = create_address_batch(tag="one")
+        b2 = create_address_batch(tag="two")
+
+        a1.batches.add(b1, b2)
+        a2.batches.add(b2)
+
+        res = self.app.get(
+            self.url + "?batches=%s" % b2.id,
+            user=self.user)
+
+        self.assertAddresses(res, [a1.id, a2.id])
+
+
     def test_filter_status(self):
         create_address(
             pl="123",
@@ -1507,6 +1525,27 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
                     "value": blametern.id,
                     "rest": "lametern",
                     "desc": "mapped by"
+                    }]
+            )
+
+
+    def test_batch(self):
+        a1 = create_address()
+        b2 = create_address_batch(tag="two")
+
+        a1.batches.add(b2)
+
+        res = self.app.get(self.url + "?q=tw", user=self.user)
+
+        self.assertEqual(
+            res.json["options"],
+            [{
+                    "desc": "batch",
+                    "field": "batches",
+                    "name": "two",
+                    "value": b2.id,
+                    "q": "tw",
+                    "rest": "o",
                     }]
             )
 
