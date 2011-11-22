@@ -546,11 +546,14 @@ class Address(AddressBase):
 
         post = self.snapshot_data(saved=False)
 
-        record_address_change.delay(
-            address_id=self.id,
-            user_id=user.id,
-            pre_data=pre, post_data=post,
-            timestamp=datetime.utcnow())
+        # apply eagerly - one address won't be slow, better UI feedback
+        record_address_change.apply(
+            kwargs=dict(
+                address_id=self.id,
+                user_id=user.id,
+                pre_data=pre, post_data=post,
+                timestamp=datetime.utcnow())
+            )
 
         return ret
 
@@ -565,11 +568,14 @@ class Address(AddressBase):
         self.deleted = True
         super(Address, self).save()
 
-        record_address_change.delay(
-            address_id=self.id,
-            user_id=user.id,
-            pre_data=pre, post_data=None,
-            timestamp=datetime.utcnow())
+        # apply eagerly - one address won't be slow, better UI feedback
+        record_address_change.apply(
+            kwargs=dict(
+                address_id=self.id,
+                user_id=user.id,
+                pre_data=pre, post_data=None,
+                timestamp=datetime.utcnow())
+            )
 
 
     def undelete(self, user=None):
@@ -582,11 +588,14 @@ class Address(AddressBase):
         self.deleted = False
         super(Address, self).save()
 
-        record_address_change.delay(
-            address_id=self.id,
-            user_id=user.id,
-            pre_data=None, post_data=post,
-            timestamp=datetime.utcnow())
+        # apply eagerly - one address won't be slow, better UI feedback
+        record_address_change.apply(
+            kwargs=dict(
+                address_id=self.id,
+                user_id=user.id,
+                pre_data=None, post_data=post,
+                timestamp=datetime.utcnow())
+            )
 
 
     def snapshot_data(self, saved=True):
