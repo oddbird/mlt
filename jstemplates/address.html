@@ -1,4 +1,4 @@
-<article id="address-id-{{ id }}" class="address" data-id="{{ id }}"{{# pl }} data-pl="{{ pl }}"{{/ pl }}{{# latitude }}{{# longitude }}{{# has_parcel }} data-latitude="{{ latitude }}" data-longitude="{{ longitude }}"{{/ has_parcel }}{{^ has_parcel }} data-geocode-latitude="{{ latitude }}" data-geocode-longitude="{{ longitude }}"{{/ has_parcel }}{{/ longitude }}{{/ latitude }}>
+<article id="address-id-{{ id }}" class="address" data-id="{{ id }}"{{# pl }} data-pl="{{ pl }}"{{/ pl }}{{# has_parcel }}{{# latitude }}{{# longitude }} data-latitude="{{ latitude }}" data-longitude="{{ longitude }}"{{/ longitude }}{{/ latitude }}{{/ has_parcel }}{{^ has_parcel }}{{# geocoded }}{{# latitude }}{{# longitude }} data-geocode-latitude="{{ latitude }}" data-geocode-longitude="{{ longitude }}"{{/ longitude }}{{/ latitude }}{{/ geocoded }}{{/ has_parcel }}>
   <input type="checkbox" id="select_{{ id }}" name="select" value="{{ id }}" class="item-select"{{# checked }} checked="checked"{{/ checked }}>
 
   <div class="content">

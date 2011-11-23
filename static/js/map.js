@@ -481,18 +481,21 @@ var MLT = (function (MLT, $) {
                                     updatedAddress.find('.details').html5accordion();
                                     refreshButton.addClass('expired');
 
-                                    input = updatedAddress.find('input[id^="select"]').get(0);
-                                    input.popup = new L.Popup({ autoPan: false });
-                                    input.popup.setLatLng(new L.LatLng(address.latitude, address.longitude));
-                                    input.popup.setContent(popupContent);
-                                    MLT.map.addLayer(input.popup);
-                                    MLT.map.panTo(new L.LatLng(address.latitude, address.longitude));
-                                    if (MLT.map.getZoom() < MIN_PARCEL_ZOOM) {
-                                        MLT.map.setZoom(MIN_PARCEL_ZOOM);
+                                    if (address.geocoded && address.geocoded.latitude && address.geocoded.longitude) {
+                                        input = updatedAddress.find('input[id^="select"]').get(0);
+                                        input.popup = new L.Popup({ autoPan: false });
+                                        input.popup.setLatLng(new L.LatLng(address.geocoded.latitude, address.geocoded.longitude));
+                                        input.popup.setContent(popupContent);
+                                        MLT.map.addLayer(input.popup);
+                                        MLT.map.panTo(new L.LatLng(address.geocoded.latitude, address.geocoded.longitude));
+                                        if (MLT.map.getZoom() < MIN_PARCEL_ZOOM) {
+                                            MLT.map.setZoom(MIN_PARCEL_ZOOM);
+                                        }
+                                        $('#map .leaflet-map-pane .leaflet-objects-pane .leaflet-popup-pane .leaflet-popup-content').filter(function (index) {
+                                            return $(this).html() === popupContent;
+                                        }).closest('.leaflet-popup').addClass('geocoded');
                                     }
-                                    $('#map .leaflet-map-pane .leaflet-objects-pane .leaflet-popup-pane .leaflet-popup-content').filter(function (index) {
-                                        return $(this).html() === popupContent;
-                                    }).closest('.leaflet-popup').addClass('geocoded');
+
                                     if (addressContainer.data('trusted') !== 'trusted') {
                                         addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
                                     }
