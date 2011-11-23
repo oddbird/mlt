@@ -110,7 +110,7 @@ class LoadParcelsTest(TestCase):
         shapefile = self.write_shapefile([p])
 
         stdout = Mock()
-        self.func(shapefile, stream=stdout)
+        self.func(shapefile, stream=stdout, verbose=True)
 
         stdout.write.assert_called_with("Saved: 123 45\n")
 
