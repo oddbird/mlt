@@ -20,7 +20,8 @@ parcel_mapping = {
 
 
 @transaction.commit_on_success
-def load_parcels(shapefile_path, verbose=True, stream=None):
+def load_parcels(shapefile_path,
+                 verbose=False, progress=True, silent=False, stream=None):
     """
     Load parcels from shapefile at given path.
 
@@ -39,7 +40,12 @@ def load_parcels(shapefile_path, verbose=True, stream=None):
         shapefile_path, parcel_mapping, transform=True,
         transaction_mode='none')
 
-    lm.save(strict=True, verbose=verbose, stream=stream or sys.stdout)
+    lm.save(
+        strict=True,
+        verbose=verbose,
+        progress=progress,
+        silent=silent,
+        stream=stream or sys.stdout)
 
 
 

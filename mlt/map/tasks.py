@@ -1,3 +1,5 @@
+import shutil
+
 from celery.task import task
 
 
@@ -59,3 +61,23 @@ def record_address_change(address_id, pre_data, post_data, user_id, timestamp):
         pre=pre,
         post=post,
         changed_timestamp=timestamp)
+
+
+
+@task
+def load_parcels_task(temp_dir, shapefile_path):
+    from .load import load_parcels
+
+    class UpdateProgress(object):
+        def write(self, s):
+            load_parcels_task.update_state(state="PROGRESS", meta=s)
+
+    load_parcels(
+        shapefile_path,
+        progress=1000,
+        verbose=False,
+        silent=True,
+        stream=UpdateProgress())
+
+    shutil.rmtree(temp_dir)
+    return True

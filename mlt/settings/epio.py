@@ -27,6 +27,12 @@ CACHES = {
     },
 }
 
+CELERY_RESULT_BACKEND = "redis"
+CELERY_REDIS_HOST = config["redis"]["host"]
+CELERY_REDIS_PORT = config["redis"]["port"]
+CELERY_REDIS_PASSWORD = config["redis"]["password"]
+CELERY_REDIS_DB = 0
+
 SERVER_EMAIL = "server@provplan.ep.io"
 DEFAULT_FROM_EMAIL = "server@provplan.ep.io"
 EMAIL_HOST = "mail.threepines.org"

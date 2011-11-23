@@ -62,7 +62,7 @@ Copy settings/local.sample.py to settings/local.py and modify as needed.
 #SECRET_KEY = ""
 
 # Uncomment this (and modify LOCATION appropriately) to use memcached rather
-# than local-memory cache. See
+# than local-memory cache. This is required for a production deployment. See
 # http://docs.djangoproject.com/en/dev/topics/cache/ for more configuration
 # options. For faster caching, install pylibmc in place of python-memcached and
 # replace MemcachedCache with PyLibMCCache.
