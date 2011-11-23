@@ -23,6 +23,7 @@ var MLT = (function (MLT, $) {
         loadingURL = addressContainer.data('addresses-url'),
         loadingMessage = addressContainer.find('.load'),
         refreshButton = $('#addresstable #filter .refresh'),
+        bulkSelect = $('#addressform .actions .bulkselect'),
         preserveSelectAll = null,
         parcelMap = {},
         listXHR = null,
@@ -65,8 +66,8 @@ var MLT = (function (MLT, $) {
                 if (MLT.addressLoading.scroll) {
                     addressContainer.scrollTop(MLT.addressLoading.scroll);
                 }
-                if ($('#addressform .actions .bulkselect').data('selectall')) {
-                    addressContainer.find('.address input[id^="select"]').prop('checked', true);
+                if (bulkSelect.data('selectall')) {
+                    addressContainer.find('.address .item-select').prop('checked', true);
                 }
             } else {
                 loadingMessage.find('p').html('no more addresses');
@@ -89,10 +90,10 @@ var MLT = (function (MLT, $) {
                 thisAddress = addressContainer.find('.address[data-id="' + id + '"]');
                 index = thisAddress.find('.mapkey').text();
 
-                if (thisAddress.find('input[id^="select"]:checked').length) {
+                if (thisAddress.find('.item-select').is(':checked')) {
                     checked = true;
                     address.checked = true;
-                    popup = thisAddress.find('input[id^="select"]').get(0).popup;
+                    popup = thisAddress.find('.item-select').get(0).popup;
                 }
                 address.index = index;
                 updatedAddress = ich.address(address);
@@ -104,26 +105,33 @@ var MLT = (function (MLT, $) {
                 updatedAddress.find('.details').html5accordion();
                 refreshButton.addClass('expired');
                 if (checked && popup) {
-                    updatedAddress.find('input[id^="select"]').get(0).popup = popup;
-                }
-                if ($('#addressform .actions .bulkselect').data('selectall')) {
-                    $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
+                    updatedAddress.find('.item-select').get(0).popup = popup;
                 }
                 if (addressContainer.data('trusted') !== 'trusted') {
                     addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
                 }
             }
         },
-        replaceAddresses: function (data) {
+        replaceAddresses: function (data, removePopup) {
             if (data.addresses && data.addresses.length) {
-                addressContainer.find('.address input[id^="select"]:checked').click();
                 $.each(data.addresses, function (i, address) {
                     var updatedAddress,
                         id = address.id,
                         thisAddress = addressContainer.find('.address[data-id="' + id + '"]'),
-                        index = thisAddress.find('.mapkey').text();
+                        index = thisAddress.find('.mapkey').text(),
+                        checked,
+                        popup;
 
                     if (thisAddress.length) {
+                        if (thisAddress.find('.item-select').is(':checked')) {
+                            checked = true;
+                            address.checked = true;
+                            if (removePopup) {
+                                MLT.map.removeLayer(thisAddress.find('.item-select').get(0).popup);
+                            } else {
+                                popup = thisAddress.find('.item-select').get(0).popup;
+                            }
+                        }
                         address.index = index;
                         updatedAddress = ich.address(address);
 
@@ -132,12 +140,12 @@ var MLT = (function (MLT, $) {
                         }
                         thisAddress.replaceWith(updatedAddress);
                         updatedAddress.find('.details').html5accordion();
+                        if (checked && popup) {
+                            updatedAddress.find('.item-select').get(0).popup = popup;
+                        }
                     }
                 });
                 refreshButton.addClass('expired');
-                if ($('#addressform .actions .bulkselect').data('selectall')) {
-                    $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
-                }
                 if (addressContainer.data('trusted') !== 'trusted') {
                     addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
                 }
@@ -160,9 +168,9 @@ var MLT = (function (MLT, $) {
             if (preserveScroll) {
                 MLT.addressLoading.scroll = addressContainer.scrollTop();
             }
-            addressContainer.find('.address input[id^="select"]:checked').click();
+            addressContainer.find('.address .item-select:checked').click();
             if (!preserveSelectAll) {
-                $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
+                bulkSelect.data('selectall', false).find('#select_all_none').prop('checked', false);
             }
             preserveSelectAll = false;
             loadingMessage.css('opacity', 1).find('p').html('loading addresses...');
@@ -239,7 +247,7 @@ var MLT = (function (MLT, $) {
 
     MLT.showInfo = function (newInfo, selected) {
         var mapped_toIDs, i, already_mapped,
-            selectedAddresses = addressContainer.find('.address input[id^="select"]:checked');
+            selectedAddresses = addressContainer.find('.address .item-select:checked');
         if (mapinfoTimeout) {
             clearTimeout(mapinfoTimeout);
             mapinfoTimeout = null;
@@ -438,7 +446,7 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.addressPopups = function () {
-        addressContainer.on('change', '.address input[id^="select"]', function () {
+        addressContainer.on('change', '.address .item-select', function () {
             var input, mapped_toIDs, i, already_mapped,
                 thisAddress = $(this).closest('.address'),
                 id = thisAddress.data('id'),
@@ -488,7 +496,7 @@ var MLT = (function (MLT, $) {
                                     refreshButton.addClass('expired');
 
                                     if (address.geocoded && address.geocoded.latitude && address.geocoded.longitude) {
-                                        input = updatedAddress.find('input[id^="select"]').get(0);
+                                        input = updatedAddress.find('.item-select').get(0);
                                         input.popup = new L.Popup({ autoPan: false });
                                         input.popup.setLatLng(new L.LatLng(address.geocoded.latitude, address.geocoded.longitude));
                                         input.popup.setContent(popupContent);
@@ -523,7 +531,7 @@ var MLT = (function (MLT, $) {
             mapped_toIDs = mapinfo.find('.mapped-addresses ul li').map(function () {
                 return $(this).data('id');
             }).get();
-            addressContainer.find('.address input[id^="select"]:checked').each(function () {
+            addressContainer.find('.address .item-select:checked').each(function () {
                 var this_is_mapped;
                 for (i = 0; i < mapped_toIDs.length; i = i + 1) {
                     if ($(this).closest('.address').data('id') === mapped_toIDs[i]) {
@@ -534,7 +542,7 @@ var MLT = (function (MLT, $) {
                     already_mapped = false;
                 }
             });
-            if (addressContainer.find('.address input[id^="select"]:checked').length && already_mapped === false) {
+            if (addressContainer.find('.address .item-select:checked').length && already_mapped === false) {
                 mapinfo.find('.mapit').show();
             } else {
                 mapinfo.find('.mapit').hide();
@@ -547,7 +555,7 @@ var MLT = (function (MLT, $) {
         mapinfo.on('click', '.mapit', function () {
             var options,
                 notID,
-                selectedAddressInput = addressContainer.find('.address input[id^="select"]:checked'),
+                selectedAddressInput = addressContainer.find('.address .item-select:checked'),
                 selectedAddressID = selectedAddressInput.map(function () {
                     return $(this).closest('.address').data('id');
                 }).get(),
@@ -565,11 +573,11 @@ var MLT = (function (MLT, $) {
                             thisAddress = addressContainer.find('.address[data-id="' + id + '"]'),
                             index = thisAddress.find('.mapkey').html();
 
-                        if (thisAddress.length && thisAddress.find('input[id^="select"]:checked').length) {
+                        if (thisAddress.length && thisAddress.find('.item-select').is(':checked')) {
                             address.index = index;
                             updatedAddress = ich.address(address);
 
-                            thisAddress.find('input[id^="select"]').click();
+                            thisAddress.find('.item-select').click();
                             thisAddress.replaceWith(updatedAddress);
                             updatedAddress.find('.details').html5accordion();
                             refreshButton.addClass('expired');
@@ -586,8 +594,8 @@ var MLT = (function (MLT, $) {
                         selectedLayer.unselect();
                     }
 
-                    if ($('#addressform .actions .bulkselect').data('selectall')) {
-                        $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
+                    if (bulkSelect.data('selectall')) {
+                        bulkSelect.data('selectall', false).find('#select_all_none').prop('checked', false);
                     }
                     if (addressContainer.data('trusted') !== 'trusted') {
                         addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
@@ -596,10 +604,10 @@ var MLT = (function (MLT, $) {
 
             selectedAddressInput.each(function () { $(this).closest('.address').loadingOverlay(); });
 
-            if ($('#addressform .actions .bulkselect').data('selectall')) {
+            if (bulkSelect.data('selectall')) {
                 options = $.extend({}, filters, { maptopl: pl, aid: selectedAddressID });
-                if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
-                    notID = addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
+                if (addressContainer.find('.address .item-select').not(':checked').length) {
+                    notID = addressContainer.find('.address .item-select').not(':checked').map(function () {
                         return $(this).closest('.address').data('id');
                     }).get();
                     $.extend(options, { notid: notID });
@@ -709,7 +717,7 @@ var MLT = (function (MLT, $) {
     MLT.addressSelect = function () {
         addressContainer.on('click', '.address .content', function (event) {
             if (!$(event.target).is('button, a, label, input, .summary, .adr, .street-address, .street-number, .street-prefix, .street-name, .street-type, .street-suffix, .locality, .region, .mapkey, .error, [contenteditable]')) {
-                $(this).closest('.address').find('input[id^="select"]').click();
+                $(this).closest('.address').find('.item-select').click();
             }
         });
     };
@@ -718,7 +726,7 @@ var MLT = (function (MLT, $) {
         addressContainer.on('click', '.address .content .mapkey', function (event) {
             var lat, lng,
                 thisAddress = $(this).closest('.address');
-            if (thisAddress.find('input[name="select"]:checked').length) {
+            if (thisAddress.find('.item-select').is(':checked')) {
                 lat = thisAddress.data('latitude') || thisAddress.data('geocode-latitude');
                 lng = thisAddress.data('longitude') || thisAddress.data('geocode-longitude');
                 if (lat && lng) {
@@ -728,7 +736,7 @@ var MLT = (function (MLT, $) {
                     }
                 }
             } else {
-                thisAddress.find('input[name="select"]').click();
+                thisAddress.find('.item-select').click();
             }
         });
     };
@@ -931,7 +939,7 @@ var MLT = (function (MLT, $) {
 
         $('#addressform .actions .bools .addremove .action-delete').click(function () {
             var number = addressContainer.find('.address').length,
-                selectedAddressInput = addressContainer.find('.address input[id^="select"]:checked'),
+                selectedAddressInput = addressContainer.find('.address .item-select:checked'),
                 selectedAddressID = selectedAddressInput.map(function () {
                     return $(this).closest('.address').data('id');
                 }).get(),
@@ -942,10 +950,10 @@ var MLT = (function (MLT, $) {
                 notID;
             if (number < 20) { number = 20; }
             selectedAddressInput.each(function () { $(this).closest('.address').loadingOverlay(); });
-            if ($('#addressform .actions .bulkselect').data('selectall')) {
+            if (bulkSelect.data('selectall')) {
                 options = $.extend({}, filters, { aid: selectedAddressID, action: "delete" });
-                if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
-                    notID = addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
+                if (addressContainer.find('.address .item-select').not(':checked').length) {
+                    notID = addressContainer.find('.address .item-select').not(':checked').map(function () {
                         return $(this).closest('.address').data('id');
                     }).get();
                     $.extend(options, { notid: notID });
@@ -994,7 +1002,7 @@ var MLT = (function (MLT, $) {
 
         $('#addressform .actions .bools .approval button').click(function () {
             var action,
-                selectedAddressInput = addressContainer.find('.address input[id^="select"]:checked'),
+                selectedAddressInput = addressContainer.find('.address .item-select:checked'),
                 selectedAddressID = selectedAddressInput.map(function () {
                     return $(this).closest('.address').data('id');
                 }).get(),
@@ -1003,6 +1011,7 @@ var MLT = (function (MLT, $) {
                 }).get(),
                 options,
                 notID,
+                removePopup = false,
                 number = addressContainer.find('.address').length;
             selectedAddressInput.each(function () { $(this).closest('.address').loadingOverlay(); });
             if (number < 20) { number = 20; }
@@ -1012,18 +1021,19 @@ var MLT = (function (MLT, $) {
                 return false;
             }
             if ($(this).hasClass('action-flag')) {
-                action = "flag";
+                action = 'flag';
             }
             if ($(this).hasClass('action-approve')) {
-                action = "approve";
+                action = 'approve';
             }
             if ($(this).hasClass('action-reject')) {
-                action = "reject";
+                action = 'reject';
+                removePopup = true;
             }
-            if ($('#addressform .actions .bulkselect').data('selectall')) {
+            if (bulkSelect.data('selectall')) {
                 options = $.extend({}, filters, { aid: selectedAddressID, action: action });
-                if (addressContainer.find('.address input[id^="select"]').not(':checked').length) {
-                    notID = addressContainer.find('.address input[id^="select"]').not(':checked').map(function () {
+                if (addressContainer.find('.address .item-select').not(':checked').length) {
+                    notID = addressContainer.find('.address .item-select').not(':checked').map(function () {
                         return $(this).closest('.address').data('id');
                     }).get();
                     $.extend(options, { notid: notID });
@@ -1031,7 +1041,7 @@ var MLT = (function (MLT, $) {
                 $.post(url, options, function (data) {
                     selectedAddressInput.each(function () { $(this).closest('.address').loadingOverlay('remove'); });
                     if (data.success) {
-                        MLT.addressLoading.replaceAddresses(data);
+                        MLT.addressLoading.replaceAddresses(data, removePopup);
                         if (selectedLayer) {
                             selectedLayer.unselect();
                         }
@@ -1043,7 +1053,7 @@ var MLT = (function (MLT, $) {
                 $.post(url, { aid: selectedAddressID, action: action }, function (data) {
                     selectedAddressInput.each(function () { $(this).closest('.address').loadingOverlay('remove'); });
                     if (data.success) {
-                        MLT.addressLoading.replaceAddresses(data);
+                        MLT.addressLoading.replaceAddresses(data, removePopup);
                         if (action === 'flag' || action === 'approve') {
                             $.each(data.addresses, function (i, address) {
                                 MLT.updateParcelMapping('update', true, selectedAddressPL, address.id, 'flag-approve', address);
@@ -1090,14 +1100,14 @@ var MLT = (function (MLT, $) {
         });
 
         addressContainer.on('click', '.address .action-reject', function (e) {
-            var action = "reject",
+            var action = 'reject',
                 selectedAddress = $(this).closest('.address'),
                 selectedAddressID = selectedAddress.data('id'),
                 selectedAddressPL = selectedAddress.data('pl');
             selectedAddress.loadingOverlay();
             $.post(url, { aid: selectedAddressID, action: action }, function (data) {
                 selectedAddress.loadingOverlay('remove');
-                MLT.addressLoading.replaceAddresses(data);
+                MLT.addressLoading.replaceAddresses(data, true);
                 if (data.success) {
                     MLT.updateParcelMapping('remove', false, selectedAddressPL, selectedAddressID, true);
                 }
@@ -1106,7 +1116,7 @@ var MLT = (function (MLT, $) {
         });
 
         mapinfo.on('click', '.mapped-addresses .action-reject', function (e) {
-            var action = "reject",
+            var action = 'reject',
                 thisMapping = $(this).closest('li'),
                 selectedAddressID = thisMapping.data('id'),
                 pl = mapinfo.find('.id').text(),
@@ -1114,7 +1124,7 @@ var MLT = (function (MLT, $) {
             thisMapping.loadingOverlay();
             $.post(url, { aid: selectedAddressID, action: action }, function (data) {
                 thisMapping.loadingOverlay('remove');
-                MLT.addressLoading.replaceAddresses(data);
+                MLT.addressLoading.replaceAddresses(data, true);
                 if (data.success) {
                     MLT.updateParcelMapping('remove', false, pl, selectedAddressID, true);
                 }
@@ -1389,10 +1399,10 @@ var MLT = (function (MLT, $) {
         $('#addressform .actions .bulkselect #select_all_none').change(function () {
             if ($(this).is(':checked')) {
                 $(this).closest('.bulkselect').data('selectall', true);
-                addressContainer.find('.address input[id^="select"]').prop('checked', true);
+                addressContainer.find('.address .item-select').prop('checked', true);
             } else {
                 $(this).closest('.bulkselect').data('selectall', false);
-                addressContainer.find('.address input[id^="select"]').prop('checked', false);
+                addressContainer.find('.address .item-select').prop('checked', false);
             }
         });
     };
