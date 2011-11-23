@@ -1,4 +1,9 @@
+from cStringIO import StringIO
 from datetime import datetime
+import shutil
+import tempfile
+import os
+import zipfile
 
 from mock import patch
 
@@ -10,7 +15,7 @@ from .utils import create_user, create_address, create_address_batch
 
 
 
-__all__ = ["AddressFormTest", "AddressImportFormTest"]
+__all__ = ["AddressFormTest", "AddressImportFormTest", "LoadParcelsFormTest"]
 
 
 
@@ -272,3 +277,145 @@ class AddressFormTest(TestCase):
         self.assertFalse(f.is_valid())
         self.assertEqual(
             f.errors, {'__all__': [u'Please enter a street address.']})
+
+
+
+def zipstream(files):
+    """
+    Given a dictionary mapping file names to content buffers, return a StringIO
+    instance containing a zipfile made up of those contents.
+
+    """
+    stream = StringIO()
+    z = zipfile.ZipFile(stream, 'w', zipfile.ZIP_DEFLATED)
+    for filename, contents in files.items():
+        z.writestr(filename, contents)
+    z.close()
+    stream.seek(0)
+    return stream
+
+
+
+class LoadParcelsFormTest(TestCase):
+    @property
+    def form(self):
+        from mlt.map.forms import LoadParcelsForm
+        return LoadParcelsForm
+
+
+    def setUp(self):
+        self.target_dir = tempfile.mkdtemp(prefix="-mlt-load-parcel-test")
+        self.addCleanup(self._remove_target_dir)
+
+
+    def _remove_target_dir(self):
+        if os.path.exists(self.target_dir):
+            shutil.rmtree(self.target_dir)
+
+
+    def _is_valid(self, form):
+        with patch("mlt.map.forms.tempfile.mkdtemp") as mock_mkdtemp:
+            mock_mkdtemp.return_value = self.target_dir
+            return form.is_valid()
+
+
+    def test_bad_zipfile(self):
+        f = self.form(
+            data={},
+            files={"shapefile": SimpleUploadedFile(
+                    "some.zip", "not really a zip file", "application/zip")})
+
+        self.assertFalse(self._is_valid(f))
+
+        self.assertEqual(
+            f.errors,
+            {"shapefile": ["Uploaded file is not a valid zip file."]}
+            )
+
+
+    def test_no_shp_in_zipfile(self):
+
+        f = self.form(
+            data={},
+            files={
+                "shapefile": SimpleUploadedFile(
+                    "parcels.zip",
+                    zipstream({"parcels/parcels.prj": ""}).read(),
+                    "application/zip"
+                    )
+                }
+            )
+
+        self.assertFalse(self._is_valid(f))
+
+        self.assertEqual(
+            f.errors,
+            {"shapefile": ["Unable to find a .shp file in uploaded zip file."]})
+        # form cleans up after itself
+        self.assertFalse(os.path.exists(self.target_dir))
+
+
+    def test_absolute_path_in_zipfile(self):
+        f = self.form(
+            data={},
+            files={
+                "shapefile": SimpleUploadedFile(
+                    "parcels.zip",
+                    zipstream({"/parcels/parcels.prj": ""}).read(),
+                    "application/zip"
+                    )
+                }
+            )
+
+        self.assertFalse(self._is_valid(f))
+
+        self.assertEqual(
+            f.errors,
+            {"shapefile": [
+                    "Zip file contains unsafe paths (absolute or with ..)."]})
+        # form cleans up after itself
+        self.assertFalse(os.path.exists(self.target_dir))
+
+
+    def test_valid(self):
+        f = self.form(
+            data={},
+            files={
+                "shapefile": SimpleUploadedFile(
+                    "parcels.zip",
+                    zipstream({"parcels/parcels.shp": ""}).read(),
+                    "application/zip"
+                    )
+                }
+            )
+
+        self.assertTrue(self._is_valid(f))
+
+        self.assertEqual(f.cleaned_data["target_dir"], self.target_dir)
+        shapefile_path = os.path.join(self.target_dir, "parcels/parcels.shp")
+        self.assertEqual(f.cleaned_data["shapefile_path"], shapefile_path)
+
+        self.assertTrue(os.path.isdir(self.target_dir))
+        self.assertTrue(os.path.isfile(shapefile_path))
+
+
+    def test_save(self):
+        f = self.form(
+            data={},
+            files={
+                "shapefile": SimpleUploadedFile(
+                    "parcels.zip",
+                    zipstream({"parcels/parcels.shp": ""}).read(),
+                    "application/zip"
+                    )
+                }
+            )
+
+        self.assertTrue(self._is_valid(f))
+
+        with patch("mlt.map.forms.tasks.load_parcels_task.delay") as task_delay:
+            ret = f.save()
+
+        task_delay.assert_called_with(
+            f.cleaned_data["target_dir"], f.cleaned_data["shapefile_path"])
+        self.assertIs(ret, task_delay.return_value)

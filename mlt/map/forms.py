@@ -1,11 +1,15 @@
 from datetime import datetime
+import shutil
+import tempfile
+import os
+import zipfile
 
 import floppyforms as forms
 
 from ..core.conf import conf
 from ..core.forms import BareTextarea
 from .importer import CSVAddressImporter
-from . import models
+from . import models, tasks
 
 
 
@@ -67,3 +71,45 @@ class AddressImportForm(forms.Form):
             tag=self.cleaned_data["tag"])
 
         return i.process_file(self.cleaned_data["file"])
+
+
+
+class LoadParcelsForm(forms.Form):
+    shapefile = forms.FileField()
+
+
+    def clean_shapefile(self):
+        try:
+            z = zipfile.ZipFile(self.cleaned_data["shapefile"], 'r')
+        except zipfile.BadZipfile:
+            raise forms.ValidationError(
+                "Uploaded file is not a valid zip file.")
+
+        shapefile_path = None
+        target_dir = tempfile.mkdtemp(suffix="-mlt-parcel-shapefile")
+        try:
+            for name in z.namelist():
+                if name.startswith(os.path.sep) or os.path.pardir in name:
+                    raise forms.ValidationError(
+                        "Zip file contains unsafe paths (absolute or with ..).")
+                z.extract(name, target_dir)
+                if name.endswith(".shp"):
+                    shapefile_path = os.path.join(target_dir, name)
+
+            if shapefile_path is None:
+                raise forms.ValidationError(
+                    "Unable to find a .shp file in uploaded zip file.")
+        except forms.ValidationError:
+            shutil.rmtree(target_dir)
+            raise
+
+        self.cleaned_data["target_dir"] = target_dir
+        self.cleaned_data["shapefile_path"] = shapefile_path
+
+        return self.cleaned_data["shapefile"]
+
+
+    def save(self):
+        return tasks.load_parcels_task.delay(
+            self.cleaned_data["target_dir"],
+            self.cleaned_data["shapefile_path"])
