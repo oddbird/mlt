@@ -168,6 +168,9 @@ var MLT = (function (MLT, $) {
                     mapped_timestamp: address.mapped_timestamp
                 });
 
+                if (thisAddress.find('.info.details').hasClass('open')) {
+                    updatedAddress.find('.info.details').addClass('open');
+                }
                 thisAddress.replaceWith(updatedAddress);
                 updatedAddress.find('.details').html5accordion();
                 refreshButton.addClass('expired');
@@ -227,6 +230,9 @@ var MLT = (function (MLT, $) {
                             mapped_timestamp: address.mapped_timestamp
                         });
 
+                        if (thisAddress.find('.info.details').hasClass('open')) {
+                            updatedAddress.find('.info.details').addClass('open');
+                        }
                         thisAddress.replaceWith(updatedAddress);
                         updatedAddress.find('.details').html5accordion();
                     }
