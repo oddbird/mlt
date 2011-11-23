@@ -252,6 +252,8 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
         self.assertEqual(addy["mapped_timestamp"], date_format(
                 utc_to_local(a.mapped_timestamp), "DATETIME_FORMAT"))
         self.assertEqual(addy["needs_review"], True)
+        self.assertEqual(addy["has_parcel"], True)
+        self.assertEqual(addy["longitude"], res.json["longitude"])
 
 
     def test_associate_trusted(self):

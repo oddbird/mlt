@@ -49,13 +49,19 @@ class UIAddressSerializer(UIDateSerializerMixin, serializers.AddressSerializer):
 
 
 
-class UIParcelSerializer(serializers.ParcelSerializer):
+class UIFullAddressParcelSerializer(serializers.ParcelSerializer):
     default_fields = serializers.ParcelSerializer.default_fields + [
         "mapped_to", "mapped"]
 
+    address_serializer = UIAddressSerializer()
+
+    def encode_mapped_to(self, addresses):
+        return self.address_serializer.many(addresses)
+
+
+class UIParcelSerializer(UIFullAddressParcelSerializer):
     address_serializer = UIAddressSerializer(
         exclude=[
-            "edit_url",
             "has_parcel",
             "latitude",
             "longitude",
@@ -63,10 +69,6 @@ class UIParcelSerializer(serializers.ParcelSerializer):
             "batch_tags",
             ]
         )
-
-
-    def encode_mapped_to(self, addresses):
-        return self.address_serializer.many(addresses)
 
 
 
@@ -152,12 +154,12 @@ def associate(request):
         messages.error(request, "No parcel with PL '%s'" % pl)
 
     addresses = AddressFilter().apply(Address.objects.all(), request.POST)
-    if not addresses:
+    count = addresses.count()
+    if not count:
         messages.error(
             request, "No addresses selected.")
 
-    if parcel and addresses:
-        count = addresses.count()
+    if parcel and count:
         addresses.update(
             user=request.user,
             pl=pl,
@@ -165,7 +167,7 @@ def associate(request):
             mapped_timestamp=datetime.datetime.utcnow(),
             needs_review=not request.user.has_perm(
                 "map.mappings_trusted"))
-        ret = UIParcelSerializer().one(parcel)
+        ret = UIFullAddressParcelSerializer().one(parcel)
         messages.success(
             request,
             "Mapped %s address%s to PL %s"
