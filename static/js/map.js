@@ -53,46 +53,7 @@ var MLT = (function (MLT, $) {
         newAddresses: function (data) {
             if (data.addresses && data.addresses.length) {
                 $.each(data.addresses, function (i, address) {
-                    var lat, lng, geolat, geolng, addressHTML;
-
-                    if (address.parcel) {
-                        lat = address.parcel.latitude;
-                        lng = address.parcel.longitude;
-                    }
-                    if (address.latitude && address.longitude && !lat && !lng) {
-                        geolat = address.latitude;
-                        geolng = address.longitude;
-                    }
-
-                    addressHTML = ich.address({
-                        id: address.id,
-                        pl: address.pl,
-                        has_parcel: address.has_parcel,
-                        latitude: lat,
-                        longitude: lng,
-                        geocoded: address.geocoded,
-                        geolat: geolat,
-                        geolng: geolng,
-                        index: address.index,
-                        edit_url: address.edit_url,
-                        add_tag_url: address.add_tag_url,
-                        street: address.street,
-                        street_is_parsed: address.street_is_parsed,
-                        street_number: address.street_number,
-                        street_prefix: address.street_prefix,
-                        street_name: address.street_name,
-                        street_type: address.street_type,
-                        street_suffix: address.street_suffix,
-                        city: address.city,
-                        state: address.state,
-                        complex_name: address.complex_name,
-                        needs_review: address.needs_review,
-                        multi_units: address.multi_units,
-                        notes: address.notes,
-                        batch_tags: address.batch_tags,
-                        mapped_by: address.mapped_by,
-                        mapped_timestamp: address.mapped_timestamp
-                    });
+                    var addressHTML = ich.address(address);
 
                     if (!(addressContainer.find('.address[data-id="' + address.id + '"]').length)) {
                         loadingMessage.before(addressHTML);
@@ -121,7 +82,7 @@ var MLT = (function (MLT, $) {
             MLT.addressLoading.scroll = false;
         },
         replaceAddress: function (data) {
-            var thisAddress, lat, lng, geolat, geolng, updatedAddress, address, id, index;
+            var thisAddress, updatedAddress, address, id, index;
             if (data.success && data.address) {
                 address = data.address;
                 id = address.id;
@@ -130,43 +91,8 @@ var MLT = (function (MLT, $) {
 
                 thisAddress.find('input[id^="select"]:checked').click();
 
-                if (address.has_parcel) {
-                    lat = address.latitude;
-                    lng = address.longitude;
-                } else {
-                    geolat = address.latitude;
-                    geolng = address.longitude;
-                }
-
-                updatedAddress = ich.address({
-                    id: id,
-                    pl: address.pl,
-                    has_parcel: address.has_parcel,
-                    latitude: lat,
-                    longitude: lng,
-                    geolat: geolat,
-                    geolng: geolng,
-                    geocoded: address.geocoded,
-                    index: index,
-                    edit_url: address.edit_url,
-                    add_tag_url: address.add_tag_url,
-                    street: address.street,
-                    street_is_parsed: address.street_is_parsed,
-                    street_number: address.street_number,
-                    street_prefix: address.street_prefix,
-                    street_name: address.street_name,
-                    street_type: address.street_type,
-                    street_suffix: address.street_suffix,
-                    city: address.city,
-                    state: address.state,
-                    complex_name: address.complex_name,
-                    needs_review: address.needs_review,
-                    multi_units: address.multi_units,
-                    notes: address.notes,
-                    batch_tags: address.batch_tags,
-                    mapped_by: address.mapped_by,
-                    mapped_timestamp: address.mapped_timestamp
-                });
+                address.index = index;
+                updatedAddress = ich.address(address);
 
                 if (thisAddress.find('.info.details').hasClass('open')) {
                     updatedAddress.find('.info.details').addClass('open');
@@ -186,49 +112,14 @@ var MLT = (function (MLT, $) {
             if (data.addresses && data.addresses.length) {
                 addressContainer.find('.address input[id^="select"]:checked').click();
                 $.each(data.addresses, function (i, address) {
-                    var lat, lng, geolat, geolng, updatedAddress,
+                    var updatedAddress,
                         id = address.id,
                         thisAddress = addressContainer.find('.address[data-id="' + id + '"]'),
                         index = thisAddress.find('.mapkey').text();
 
                     if (thisAddress.length) {
-                        if (address.has_parcel) {
-                            lat = address.latitude;
-                            lng = address.longitude;
-                        } else {
-                            geolat = address.latitude;
-                            geolng = address.longitude;
-                        }
-
-                        updatedAddress = ich.address({
-                            id: id,
-                            pl: address.pl,
-                            has_parcel: address.has_parcel,
-                            latitude: lat,
-                            longitude: lng,
-                            geolat: geolat,
-                            geolng: geolng,
-                            geocoded: address.geocoded,
-                            index: index,
-                            edit_url: address.edit_url,
-                            add_tag_url: address.add_tag_url,
-                            street: address.street,
-                            street_is_parsed: address.street_is_parsed,
-                            street_number: address.street_number,
-                            street_prefix: address.street_prefix,
-                            street_name: address.street_name,
-                            street_type: address.street_type,
-                            street_suffix: address.street_suffix,
-                            city: address.city,
-                            state: address.state,
-                            complex_name: address.complex_name,
-                            needs_review: address.needs_review,
-                            multi_units: address.multi_units,
-                            notes: address.notes,
-                            batch_tags: address.batch_tags,
-                            mapped_by: address.mapped_by,
-                            mapped_timestamp: address.mapped_timestamp
-                        });
+                        address.index = index;
+                        updatedAddress = ich.address(address);
 
                         if (thisAddress.find('.info.details').hasClass('open')) {
                             updatedAddress.find('.info.details').addClass('open');
@@ -579,47 +470,12 @@ var MLT = (function (MLT, $) {
                             thisAddress.loadingOverlay();
                             $.get(geoURL, {id: id}, function (data) {
                                 if (data.address) {
-                                    var updatedAddress, newlat, newlng,
-                                        index = thisAddress.find('.mapkey').html();
+                                    var updatedAddress,
+                                        index = thisAddress.find('.mapkey').html(),
+                                        address = data.address;
 
-                                    if (data.address.has_parcel) {
-                                        newlat = data.address.latitude;
-                                        newlng = data.address.longitude;
-                                    } else {
-                                        geolat = data.address.latitude;
-                                        geolng = data.address.longitude;
-                                    }
-
-                                    updatedAddress = ich.address({
-                                        id: id,
-                                        pl: data.address.pl,
-                                        has_parcel: data.address.has_parcel,
-                                        checked: true,
-                                        latitude: newlat,
-                                        longitude: newlng,
-                                        geolat: geolat,
-                                        geolng: geolng,
-                                        geocoded: data.address.geocoded,
-                                        index: index,
-                                        edit_url: data.address.edit_url,
-                                        add_tag_url: data.address.add_tag_url,
-                                        street: data.address.street,
-                                        street_is_parsed: data.address.street_is_parsed,
-                                        street_number: data.address.street_number,
-                                        street_prefix: data.address.street_prefix,
-                                        street_name: data.address.street_name,
-                                        street_type: data.address.street_type,
-                                        street_suffix: data.address.street_suffix,
-                                        city: data.address.city,
-                                        state: data.address.state,
-                                        complex_name: data.address.complex_name,
-                                        needs_review: data.address.needs_review,
-                                        multi_units: data.address.multi_units,
-                                        notes: data.address.notes,
-                                        batch_tags: data.address.batch_tags,
-                                        mapped_by: data.address.mapped_by,
-                                        mapped_timestamp: data.address.mapped_timestamp
-                                    });
+                                    $.extend(address, {'index': index, 'checked': true});
+                                    updatedAddress = ich.address(address);
 
                                     thisAddress.replaceWith(updatedAddress);
                                     updatedAddress.find('.details').html5accordion();
@@ -627,10 +483,10 @@ var MLT = (function (MLT, $) {
 
                                     input = updatedAddress.find('input[id^="select"]').get(0);
                                     input.popup = new L.Popup({ autoPan: false });
-                                    input.popup.setLatLng(new L.LatLng(geolat, geolng));
+                                    input.popup.setLatLng(new L.LatLng(address.latitude, address.longitude));
                                     input.popup.setContent(popupContent);
                                     MLT.map.addLayer(input.popup);
-                                    MLT.map.panTo(new L.LatLng(geolat, geolng));
+                                    MLT.map.panTo(new L.LatLng(address.latitude, address.longitude));
                                     if (MLT.map.getZoom() < MIN_PARCEL_ZOOM) {
                                         MLT.map.setZoom(MIN_PARCEL_ZOOM);
                                     }
@@ -701,33 +557,8 @@ var MLT = (function (MLT, $) {
                             index = thisAddress.find('.mapkey').html();
 
                         if (thisAddress.length && thisAddress.find('input[id^="select"]:checked').length) {
-                            updatedAddress = ich.address({
-                                id: id,
-                                pl: address.pl,
-                                has_parcel: address.has_parcel,
-                                latitude: lat,
-                                longitude: lng,
-                                geocoded: address.geocoded,
-                                index: index,
-                                edit_url: address.edit_url,
-                                add_tag_url: address.add_tag_url,
-                                street: address.street,
-                                street_is_parsed: address.street_is_parsed,
-                                street_number: address.street_number,
-                                street_prefix: address.street_prefix,
-                                street_name: address.street_name,
-                                street_type: address.street_type,
-                                street_suffix: address.street_suffix,
-                                city: address.city,
-                                state: address.state,
-                                complex_name: address.complex_name,
-                                needs_review: address.needs_review,
-                                multi_units: address.multi_units,
-                                notes: address.notes,
-                                batch_tags: address.batch_tags,
-                                mapped_by: address.mapped_by,
-                                mapped_timestamp: address.mapped_timestamp
-                            });
+                            address.index = index;
+                            updatedAddress = ich.address(address);
 
                             thisAddress.find('input[id^="select"]').click();
                             thisAddress.replaceWith(updatedAddress);
