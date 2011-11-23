@@ -3,11 +3,12 @@ import json, datetime
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.response import TemplateResponse
 from django.utils.formats import date_format
 from django.views.decorators.http import require_POST
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 from vectorformats.Formats import GeoJSON
 from vectorformats.Feature import Feature
@@ -17,11 +18,11 @@ from ..dt import utc_to_local
 from .encoder import IterEncoder
 from .export import EXPORT_FORMATS, EXPORT_WRITERS
 from .filters import AddressFilter, AddressChangeFilter
-from .forms import AddressForm, AddressImportForm
+from .forms import AddressForm, AddressImportForm, LoadParcelsForm
 from .importer import ImporterError
 from .models import Parcel, Address, AddressChange, AddressBatch
 from .utils import letter_key
-from . import serializers, sort, paging, geocoder
+from . import serializers, sort, tasks, paging, geocoder
 
 
 
@@ -573,6 +574,37 @@ def revert_change(request, change_id):
             )
 
     return json_response({"success": success})
+
+
+@user_passes_test(lambda u: u.is_authenticated() and u.is_staff and u.is_active)
+def load_parcels(request):
+    if request.method == "POST":
+        form = LoadParcelsForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            result = form.save()
+            return redirect("map_load_parcels_status", task_id=result.task_id)
+    else:
+        form = LoadParcelsForm()
+
+    return TemplateResponse(request, "load_parcels/form.html", {"form": form})
+
+
+
+@user_passes_test(lambda u: u.is_authenticated() and u.is_staff and u.is_active)
+def load_parcels_status(request, task_id):
+    result = tasks.load_parcels_task.AsyncResult(task_id)
+    if request.is_ajax():
+        return json_response(
+            {
+                "ready": result.ready(),
+                "successful": result.successful(),
+                "status": result.status,
+                "info": result.info,
+                }
+            )
+    return TemplateResponse(
+        request, "load_parcels/status.html", {"result": result})
+
 
 
 

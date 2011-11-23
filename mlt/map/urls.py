@@ -23,4 +23,7 @@ urlpatterns = patterns(
     url(r"^_action/$", "address_actions", name="map_address_actions"),
     url(r"^_revert/(?P<change_id>\d+)/$",
         "revert_change", name="map_revert_change"),
+    url(r"^load_parcels/$", "load_parcels", name="map_load_parcels"),
+    url(r"^load_parcels/status/(?P<task_id>.+)/$",
+        "load_parcels_status", name="map_load_parcels_status"),
     )

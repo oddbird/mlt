@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Status | Load Parcel Layer | {{ block.super }}{% endblock %}
+
+{% block content %}
+<article id="load-parcels-status" class="{% if result.ready %}ready {% if not result.successful %}failed{% endif %}{% endif %}">
+  <h3>Parcel Layer Loading Status</h3>
+
+  <h4>{{ result.status }} <a class="try-again" href="{% url map_load_parcels %}">(try again)</a></h4>
+
+  <ul class="progress">
+    {% if result.status == "PROGRESS" %}
+    <li>{{ result.info }}</li>
+    {% endif %}
+  </ul>
+
+</article>
+{% endblock %}

@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load range %}
 
+{% block navigation %}
+  <a href="{% url history %}" class="history">History</a>
+{% endblock navigation %}
+
 {% block content %}
 <section id="addresstable">
   <h2>Address Table</h2>

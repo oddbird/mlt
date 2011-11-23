@@ -87,7 +87,7 @@
     <h2 class="navhead">Primary Navigation</h2>
     {% if user.is_authenticated %}
       {% block navigation %}
-        <a href="/history/" class="history">History</a>
+        <a href="{% url home %}" rel="home" class="home">Home</a>
       {% endblock navigation %}
     {% endif %}
   </nav>

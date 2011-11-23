@@ -30,6 +30,7 @@ __all__ = [
     "AddressActionsViewTest",
     "RevertChangeViewTest",
     "AddTagViewTest",
+    "LoadParcelsViewTest",
     ]
 
 
@@ -2350,3 +2351,30 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
                            "tags": "error"}],
              "success": False}
             )
+
+
+class LoadParcelsViewTest(CSRFAuthenticatedWebTest):
+    url_name = "map_load_parcels"
+
+
+    def setUp(self):
+        self.user = create_user(is_staff=True)
+
+
+    def test_staff_required(self):
+        # clear any previous logged-in session
+        self.app.reset()
+
+        response = self.app.get(self.url, user=create_user(is_staff=False))
+
+        self.assertEqual(response.status_int, 302)
+
+
+    def test_active_required(self):
+        # clear any previous logged-in session
+        self.app.reset()
+
+        response = self.app.get(
+            self.url, user=create_user(is_staff=True, is_active=False))
+
+        self.assertEqual(response.status_int, 302)

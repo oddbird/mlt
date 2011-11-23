@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load mltforms %}
+
+{% block title %}Load Parcel Layer | {{ block.super }}{% endblock %}
+
+{% block content %}
+<article id="load-parcels-form">
+  <h3>Load Parcel Layer</h3>
+
+  <form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <ul>
+    <li class="shapefile">
+      {{ form.shapefile.errors }}
+      {{ form.shapefile|label:"select parcel shapefile" }}
+      {{ form.shapefile }}
+      <p class="help">
+        Upload a zip file containing the components of an ESRI shapefile (.shp,
+        .dbf, .shx, .prj, etc.). Shapefile components may be in a subdirectory
+        in the zipfile. Records should have fields "PL", "ADD", "FIRST_OWNE",
+        and "CLASSCODE".
+      </p>
+    </li>
+  </ul>
+  <div class="form-actions">
+    <button title="load parcels" type="submit">upload</button>
+  </div>
+
+  </form>
+
+</article>
+{% endblock %}
