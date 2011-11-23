@@ -77,6 +77,18 @@ class ParcelTest(TestCase):
         self.assertFalse(parcel2.mapped)
 
 
+    def test_mapped_to_presets_address_parcel(self):
+        parcel = create_parcel(pl="1234")
+        create_address(pl="1234", needs_review=False)
+        create_address(pl="12345")
+        create_address(pl="1234", needs_review=True)
+        create_parcel(pl="4321")
+
+        with self.assertNumQueries(1):
+            for address in parcel.mapped_to:
+                address.parcel
+
+
     def test_prefetch_mapped(self):
         create_address(pl="1")
         create_address(pl="2")

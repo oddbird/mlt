@@ -60,11 +60,7 @@ class ParcelQuerySet(GeoQuerySet):
 
 
         for p in self._result_cache:
-            p._mapped_to = addresses_by_pl.get(p.pl, [])
-            p._mapped_fetched = True
-            for address in p._mapped_to:
-                address._parcel = p
-                address._parcel_fetched = True
+            p._set_mapped_to(addresses_by_pl.get(p.pl, []))
 
         self._mapped_fetched = True
 
@@ -122,6 +118,14 @@ class Parcel(models.Model):
         return self.geom.centroid.x
 
 
+    def _set_mapped_to(self, addresses):
+        self._mapped_to = addresses
+        self._mapped_fetched = True
+        for address in self._mapped_to:
+            address._parcel = self
+            address._parcel_fetched = True
+
+
     @property
     def mapped_to(self):
         """
@@ -129,8 +133,7 @@ class Parcel(models.Model):
 
         """
         if not self._mapped_fetched:
-            self._mapped_to = list(Address.objects.filter(pl=self.pl))
-            self._mapped_fetched = True
+            self._set_mapped_to(Address.objects.filter(pl=self.pl))
 
         return self._mapped_to
 
