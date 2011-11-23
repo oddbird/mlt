@@ -82,15 +82,18 @@ var MLT = (function (MLT, $) {
             MLT.addressLoading.scroll = false;
         },
         replaceAddress: function (data) {
-            var thisAddress, updatedAddress, address, id, index;
+            var thisAddress, updatedAddress, address, id, index, checked, popup;
             if (data.success && data.address) {
                 address = data.address;
                 id = address.id;
                 thisAddress = addressContainer.find('.address[data-id="' + id + '"]');
                 index = thisAddress.find('.mapkey').text();
 
-                thisAddress.find('input[id^="select"]:checked').click();
-
+                if (thisAddress.find('input[id^="select"]:checked').length) {
+                    checked = true;
+                    address.checked = true;
+                    popup = thisAddress.find('input[id^="select"]').get(0).popup;
+                }
                 address.index = index;
                 updatedAddress = ich.address(address);
 
@@ -100,6 +103,9 @@ var MLT = (function (MLT, $) {
                 thisAddress.replaceWith(updatedAddress);
                 updatedAddress.find('.details').html5accordion();
                 refreshButton.addClass('expired');
+                if (checked && popup) {
+                    updatedAddress.find('input[id^="select"]').get(0).popup = popup;
+                }
                 if ($('#addressform .actions .bulkselect').data('selectall')) {
                     $('#addressform .actions .bulkselect').data('selectall', false).find('#select_all_none').prop('checked', false);
                 }
