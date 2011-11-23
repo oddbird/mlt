@@ -231,14 +231,14 @@ class AddressBase(models.Model):
     def latitude(self):
         if self.parcel:
             return self.parcel.latitude
-        return self.geocoded and self.geocoded.y or None
+        return None
 
 
     @property
     def longitude(self):
         if self.parcel:
             return self.parcel.longitude
-        return self.geocoded and self.geocoded.x or None
+        return None
 
 
     @property

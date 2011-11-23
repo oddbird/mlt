@@ -107,9 +107,9 @@ class AddressSerializer(Serializer):
 
 
     def encode_geocoded(self, geocoded):
-        # actual location data is in latitude/longitude, serialization only
-        # needs this as a "has it been geocoded" flag
-        return bool(geocoded)
+        if geocoded:
+            return {"latitude": geocoded.y, "longitude": geocoded.x}
+        return None
 
 
 

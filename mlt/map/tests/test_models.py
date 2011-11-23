@@ -116,15 +116,8 @@ class AddressTest(TestCase):
         return AddressSnapshot
 
 
-    def test_latlong(self):
-        a = create_address(geocoded="POINT(30 10)", pl="")
-
-        self.assertEqual(a.latitude, 10)
-        self.assertEqual(a.longitude, 30)
-
-
     def test_latlong_none(self):
-        a = create_address(geocoded=None, pl="")
+        a = create_address(pl="")
 
         self.assertEqual(a.latitude, None)
         self.assertEqual(a.longitude, None)
