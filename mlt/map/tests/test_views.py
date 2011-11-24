@@ -646,6 +646,61 @@ class AddressesViewTest(AuthenticatedWebTest):
         self.assertAddresses(res, [a1.id, a2.id])
 
 
+    def test_filter_date_range(self):
+        a1 = create_address(
+            mapped_timestamp=datetime.datetime(2011, 9, 10))
+        create_address(
+            mapped_timestamp=datetime.datetime(2011, 10, 10))
+
+        res = self.app.get(
+            self.url + "?mapped_timestamp=9/10/2011 to 9/10/2011",
+            user=self.user)
+
+        self.assertAddresses(res, [a1.id])
+
+
+    def test_filter_batch_date_range(self):
+        a1 = create_address()
+        a2 = create_address()
+
+        b1 = create_address_batch(
+            tag="one",
+            timestamp=datetime.datetime(2011, 9, 11))
+        b2 = create_address_batch(
+            tag="two",
+            timestamp=datetime.datetime(2011, 9, 12, 1))
+
+        a1.batches.add(b1)
+        a2.batches.add(b2)
+
+        res = self.app.get(
+            self.url + "?batches__timestamp=9/10/2011 to 9/11/2011",
+            user=self.user)
+
+        self.assertAddresses(res, [a1.id])
+
+
+    def test_filter_multiple_date_ranges_same_field(self):
+        a1 = create_address(
+            mapped_timestamp=datetime.datetime(2011, 9, 10))
+        create_address(
+            mapped_timestamp=datetime.datetime(2011, 9, 5))
+
+        res = self.app.get(
+            self.url + "?mapped_timestamp=9/10/2011 to 9/11/2011&mapped_timestamp=9/5/2011 to 9/10/2011",
+            user=self.user)
+
+        self.assertAddresses(res, [a1.id])
+
+
+    def test_filter_bad_date_range(self):
+        res = self.app.get(
+            self.url + "?mapped_timestamp=foobar",
+            user=self.user)
+
+        self.assertAddresses(res, [])
+
+
     def test_filter_status(self):
         create_address(
             pl="123",

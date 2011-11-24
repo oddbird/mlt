@@ -120,23 +120,25 @@ class Filter(object):
         return ret
 
 
-    # set of fields to filter raw (no case insensitivity) - usually FKs
+    # set of fields to filter raw (no case insensitivity) - usually FKs.
+    # should also be listed in "fields".
     raw_fields = set()
+
+
+    # date/datetime fields to be filtered on a date range. should also be
+    # listed in "fields".
+    date_fields = set()
 
 
     # fields whose values are handled with a custom Q object. maps field names
     # to dictionary mapping value to Q object, or to callable taking list of
-    # values and returning Q object
+    # values and returning Q object. these should not be in "fields".
     special_fields = {}
 
 
     # field filters that are ORed after all other filters, rather than ANDed.
-    # same format as special_fields
+    # same format as special_fields. these should not be in "fields".
     override_fields = {}
-
-
-    # date/datetime fields to be filtered on a date range.
-    date_fields = set()
 
 
     def autocomplete(self, qs, q):
@@ -194,6 +196,20 @@ class Filter(object):
                 if field in self.raw_fields:
                     filters = filters & Q(
                         **{"%s__in" % field: filter_data.getlist(field)})
+                elif field in self.date_fields:
+                    for q in filter_data.getlist(field):
+                        try:
+                            from_date, to_date = parse_date_range(q)
+                        except (ValueError, TypeError):
+                            pass
+                        else:
+                            filters = filters & Q(
+                                **{
+                                    "%s__gte" % field: from_date,
+                                    "%s__lte" % field:
+                                        to_date + datetime.timedelta(days=1),
+                                    }
+                                  )
                 else:
                     q = Q()
                     for val in filter_data.getlist(field):
@@ -244,6 +260,9 @@ class AddressFilter(Filter):
     raw_fields = set(["mapped_by", "batches"])
 
 
+    date_fields = set(["mapped_timestamp", "batches__timestamp"])
+
+
     special_fields = {
         "status": {
             "unmapped": Q(pl=""),
@@ -257,9 +276,6 @@ class AddressFilter(Filter):
     override_fields = {
         "aid": lambda vals: Q(id__in=vals)
         }
-
-
-    date_fields = set(["mapped_timestamp", "batches__timestamp"])
 
 
 
@@ -292,6 +308,9 @@ class AddressChangeFilter(Filter):
     raw_fields = set(["changed_by", "post__mapped_by", "address__batches"])
 
 
+    date_fields = set(["changed_timestamp", "post__mapped_timestamp"])
+
+
     special_fields = {
         "status": {
             "unmapped": Q(post__pl=""),
@@ -300,6 +319,3 @@ class AddressChangeFilter(Filter):
             },
         "address_id": lambda vals: Q(address__in=vals)
         }
-
-
-    date_fields = set(["changed_timestamp", "post__mapped_timestamp"])
