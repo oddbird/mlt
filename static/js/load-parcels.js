@@ -28,8 +28,7 @@ var MLT = (function (MLT, $) {
                     var failedInfo = ich.loading_parcels({
                         status: 'FAILURE',
                         ready: true,
-                        in_progress: false,
-                        info: null,
+                        info: 'Ajax error.',
                         successful: false
                     });
                     container.html(failedInfo).addClass('ready failed');
