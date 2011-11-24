@@ -1,3 +1,4 @@
+import datetime
 from itertools import chain, repeat
 import operator
 
@@ -53,6 +54,27 @@ def get_date_suggest(q):
     return date_suggest
 
 
+def parse_date(s):
+    """
+    Add special handling of "yesterday", "today", and "tomorrow" to dateutil's
+    parser.
+
+    """
+    today = datetime.datetime.now().replace(
+        hour=0, minute=0, second=0, microsecond=0)
+    one_day = datetime.timedelta(days=1)
+    special = {
+        "yesterday": today - one_day,
+        "today": today,
+        "tomorrow": today + one_day,
+        }
+
+    s = s.strip()
+    if s in special:
+        return special[s]
+
+    return parse(s)
+
 
 def parse_date_range(q):
     """
@@ -62,10 +84,10 @@ def parse_date_range(q):
     """
     ret = None
 
-    bits = q.split(" to ")
+    bits = (" " + q + " ").split(" to ")
     if len(bits) == 2:
         try:
-            ret = tuple([parse(d) for d in bits])
+            ret = tuple([parse_date(d) for d in bits])
         except ValueError:
             pass
 
