@@ -18,10 +18,23 @@ var MLT = (function (MLT, $) {
                     newInfo = ich.loading_parcels(data);
                     container.html(newInfo);
                     if (data.ready) {
+                        container.addClass('ready');
                         ready = true;
+                        if (!data.successful) {
+                            container.addClass('failed');
+                        }
                     }
-                })
-                .error(function () { ready = true; });
+                }).error(function () {
+                    var failedInfo = ich.loading_parcels({
+                        status: 'FAILURE',
+                        ready: true,
+                        in_progress: false,
+                        info: null,
+                        successful: false
+                    });
+                    container.html(failedInfo).addClass('ready failed');
+                    ready = true;
+                });
             },
             refreshStatus = function () {
                 updateLoadingStatus();
