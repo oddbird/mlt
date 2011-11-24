@@ -2475,6 +2475,7 @@ class LoadParcelsStatusViewTest(StaffOnlyWebTest):
                 "ready": False,
                 "status": "PROGRESS",
                 "successful": False,
+                "in_progress": True,
                 "info": "some info",
                 "messages": [],
                 }
