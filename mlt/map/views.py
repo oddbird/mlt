@@ -603,7 +603,7 @@ def load_parcels_status(request, task_id):
                 "successful": result.successful(),
                 "in_progress": result.status == "PROGRESS",
                 "status": result.status,
-                "info": result.info,
+                "info": unicode(result.info),
                 }
             )
     return TemplateResponse(

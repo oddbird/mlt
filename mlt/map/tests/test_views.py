@@ -2480,3 +2480,21 @@ class LoadParcelsStatusViewTest(StaffOnlyWebTest):
                 "messages": [],
                 }
             )
+
+
+    def test_ajax_get_exception(self, result_class):
+        result_class.return_value = MockResult("FAILURE", Exception("blah"))
+
+        res = self.get(ajax=True)
+
+        self.assertEqual(
+            res.json,
+            {
+                "ready": True,
+                "status": "FAILURE",
+                "successful": False,
+                "in_progress": False,
+                "info": "blah",
+                "messages": [],
+                }
+            )
