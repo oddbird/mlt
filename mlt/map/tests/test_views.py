@@ -1727,6 +1727,32 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
             {"q": "8/31 t", "full": "8/31 to [date]", "rest": "o [date]"})
 
 
+    def test_filter_date_option(self):
+        res = self.app.get(self.url + "?q=8-31-11+to+Sep+10+2011", user=self.user)
+
+        self.assertEqual(
+            res.json["options"],
+            [
+                {
+                    "desc": "mapped timestamp",
+                    "field": "mapped_timestamp",
+                    "name": "8/31/2011 to 9/10/2011",
+                    "value": "8/31/2011 to 9/10/2011",
+                    "q": "8-31-11 to Sep 10 2011",
+                    "rest": "",
+                    },
+                {
+                    "desc": "batch timestamp",
+                    "field": "batches__timestamp",
+                    "name": "8/31/2011 to 9/10/2011",
+                    "value": "8/31/2011 to 9/10/2011",
+                    "q": "8-31-11 to Sep 10 2011",
+                    "rest": "",
+                    },
+                ]
+            )
+
+
     def test_no_filter(self):
         res = self.app.get(
             self.url,
@@ -1845,6 +1871,41 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
                     "q": "prov",
                     "rest": "idence",
                     }]
+            )
+
+
+    def test_filter_date_suggest(self):
+        res = self.app.get(self.url + "?q=8/31+t", user=self.user)
+
+        self.assertEqual(
+            res.json["date_suggest"],
+            {"q": "8/31 t", "full": "8/31 to [date]", "rest": "o [date]"})
+
+
+    def test_filter_date_option(self):
+        res = self.app.get(
+            self.url + "?q=8-31-11+to+Sep+10+2011", user=self.user)
+
+        self.assertEqual(
+            res.json["options"],
+            [
+                {
+                    "desc": "changed timestamp",
+                    "field": "changed_timestamp",
+                    "name": "8/31/2011 to 9/10/2011",
+                    "value": "8/31/2011 to 9/10/2011",
+                    "q": "8-31-11 to Sep 10 2011",
+                    "rest": "",
+                    },
+                {
+                    "desc": "mapped timestamp",
+                    "field": "post__mapped_timestamp",
+                    "name": "8/31/2011 to 9/10/2011",
+                    "value": "8/31/2011 to 9/10/2011",
+                    "q": "8-31-11 to Sep 10 2011",
+                    "rest": "",
+                    },
+                ]
             )
 
 

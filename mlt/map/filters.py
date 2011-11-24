@@ -2,6 +2,7 @@ from itertools import chain, repeat
 import operator
 
 from django.db.models import Q
+from django.utils.dateformat import format
 
 from dateutil.parser import parse
 
@@ -53,6 +54,25 @@ def get_date_suggest(q):
 
 
 
+def parse_date_range(q):
+    """
+    Given a string query, attempt to parse it as "[date] to [date]". On failure
+    return None, on success return tuple of (fromdate, todate).
+
+    """
+    ret = None
+
+    bits = q.split(" to ")
+    if len(bits) == 2:
+        try:
+            ret = tuple([parse(d) for d in bits])
+        except ValueError:
+            pass
+
+    return ret
+
+
+
 class Filter(object):
     """
     An object that knows how to both provide autocomplete suggestions and
@@ -93,32 +113,50 @@ class Filter(object):
     override_fields = {}
 
 
+    # date/datetime fields to be filtered on a date range.
+    date_fields = set()
+
+
     def autocomplete(self, qs, q):
         options = []
         too_many = []
         seen = set()
+        date_range = parse_date_range(q)
         for field, (desc, display_field) in self.autocomplete_fields.items():
-            field_options = (qs.filter(
-                    **{"%s__istartswith" % display_field: q}).values_list(
-                    display_field, field).distinct())
-            if field_options.count() > MAX_AUTOCOMPLETE:
-                too_many.append(desc)
-                continue
-            for option in field_options:
-                display, submit = option
-                if hasattr(submit, "lower"):
-                    submit = submit.lower()
-                key = (field, submit)
-                if key not in seen:
-                    seen.add(key)
+            if field in self.date_fields:
+                if date_range:
+                    value = " to ".join([
+                            format(dt, "n/j/Y") for dt in date_range])
                     options.append({
                             "q": q,
-                            "name": display,
-                            "rest": display[len(q):],
-                            "value": submit,
+                            "name": value,
+                            "value": value,
+                            "rest": "",
                             "field": field,
-                            "desc": desc
+                            "desc": desc,
                             })
+            else:
+                field_options = (qs.filter(
+                        **{"%s__istartswith" % display_field: q}).values_list(
+                        display_field, field).distinct())
+                if field_options.count() > MAX_AUTOCOMPLETE:
+                    too_many.append(desc)
+                    continue
+                for option in field_options:
+                    display, submit = option
+                    if hasattr(submit, "lower"):
+                        submit = submit.lower()
+                    key = (field, submit)
+                    if key not in seen:
+                        seen.add(key)
+                        options.append({
+                                "q": q,
+                                "name": display,
+                                "rest": display[len(q):],
+                                "value": submit,
+                                "field": field,
+                                "desc": desc
+                                })
 
         return {
             "options": options,
@@ -162,11 +200,13 @@ class Filter(object):
 class AddressFilter(Filter):
     fields = [
         "batches",
+        "batches__timestamp",
         "street",
         "city",
         "state",
         "pl",
         "mapped_by",
+        "mapped_timestamp",
         "complex_name",
         ]
 
@@ -175,6 +215,7 @@ class AddressFilter(Filter):
         ret = super(AddressFilter, self).get_autocomplete_fields()
         ret["mapped_by"] = ("mapped by", "mapped_by__username")
         ret["batches"] = ("batch", "batches__tag")
+        ret["batches__timestamp"] = ("batch timestamp", "batches__timestamp")
         return ret
 
 
@@ -196,16 +237,21 @@ class AddressFilter(Filter):
         }
 
 
+    date_fields = set(["mapped_timestamp", "batches__timestamp"])
+
+
 
 class AddressChangeFilter(Filter):
     fields = [
         "address__batches",
         "changed_by",
+        "changed_timestamp",
         "post__street",
         "post__city",
         "post__state",
         "post__pl",
         "post__mapped_by",
+        "post__mapped_timestamp",
         "post__complex_name",
         ]
 
@@ -232,3 +278,6 @@ class AddressChangeFilter(Filter):
             },
         "address_id": lambda vals: Q(address__in=vals)
         }
+
+
+    date_fields = set(["changed_timestamp", "post__mapped_timestamp"])
