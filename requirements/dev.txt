@@ -3,7 +3,7 @@
 -r base.txt
 
 mock==0.7.0rc1
-coverage==3.4
+coverage==3.5.1
 
 Fabric==1.0.1
 pycrypto==2.3
