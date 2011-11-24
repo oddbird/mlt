@@ -11,7 +11,7 @@ from mock import patch
 
 from .utils import (
     create_address, create_parcel, create_mpolygon, create_user,
-    create_address_batch, refresh)
+    create_address_batch, refresh, zip_shapefile)
 
 
 
@@ -31,6 +31,7 @@ __all__ = [
     "RevertChangeViewTest",
     "AddTagViewTest",
     "LoadParcelsViewTest",
+    "LoadParcelsStatusViewTest",
     ]
 
 
@@ -48,11 +49,14 @@ class AuthenticatedWebTest(WebTest):
         return reverse(self.url_name)
 
 
-    def get(self):
-        return self.app.get(self.url, user=self.user)
+    def get(self, ajax=False):
+        env = {}
+        if ajax:
+            env["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest"
+        return self.app.get(self.url, user=self.user, extra_environ=env)
 
-
-    def test_login_required(self):
+    # accept *args so subclasses can use class-level mock-patching
+    def test_login_required(self, *args):
         # clear any previous logged-in session
         self.app.reset()
 
@@ -67,9 +71,7 @@ class ImportViewTest(AuthenticatedWebTest):
 
 
     def test_get_form_ajax(self):
-        res = self.app.get(
-            self.url, user=self.user,
-            extra_environ={"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"})
+        res = self.get(ajax=True)
 
         self.assertTrue("html" in res.json)
         self.assertTrue("multipart/form-data" in res.json["html"])
@@ -1834,10 +1836,7 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
 
 
     def test_no_filter(self):
-        res = self.app.get(
-            self.url,
-            extra_environ={"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
-            user=self.user)
+        res = self.get(ajax=True)
 
         self.assertEqual(
             res.json["messages"],
@@ -1929,10 +1928,7 @@ class GeocodeViewTest(AuthenticatedWebTest):
 
 
     def test_geocode_no_id(self):
-        res = self.app.get(
-            self.url,
-            extra_environ={"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"},
-            user=self.user)
+        res = self.get(ajax=True)
 
         self.assertEqual(
             res.json["messages"],
@@ -2353,15 +2349,12 @@ class AddressActionsViewTest(CSRFAuthenticatedWebTest):
             )
 
 
-class LoadParcelsViewTest(CSRFAuthenticatedWebTest):
-    url_name = "map_load_parcels"
-
-
+class StaffOnlyWebTest(CSRFAuthenticatedWebTest):
     def setUp(self):
         self.user = create_user(is_staff=True)
 
 
-    def test_staff_required(self):
+    def test_staff_required(self, *args):
         # clear any previous logged-in session
         self.app.reset()
 
@@ -2370,7 +2363,7 @@ class LoadParcelsViewTest(CSRFAuthenticatedWebTest):
         self.assertEqual(response.status_int, 302)
 
 
-    def test_active_required(self):
+    def test_active_required(self, *args):
         # clear any previous logged-in session
         self.app.reset()
 
@@ -2378,3 +2371,102 @@ class LoadParcelsViewTest(CSRFAuthenticatedWebTest):
             self.url, user=create_user(is_staff=True, is_active=False))
 
         self.assertEqual(response.status_int, 302)
+
+
+
+class LoadParcelsViewTest(StaffOnlyWebTest):
+    url_name = "map_load_parcels"
+
+
+    def test_get_form(self):
+        res = self.get()
+
+        self.assertIn("multipart/form-data", res.body)
+        self.assertEqual(res.templates[0].name, "load_parcels/form.html")
+
+
+    def test_post_form_with_form_errors(self):
+        res = self.get()
+
+        res = res.forms[0].submit()
+
+        self.assertEqual(
+            [u.li.text for u in res.html.findAll("ul", "errorlist")],
+            ["This field is required."])
+
+
+    def test_post_form_with_success(self):
+        from mlt.map.models import Parcel
+
+        res = self.get()
+
+        p1 = create_parcel(commit=False, pl="1")
+        p2 = create_parcel(commit=False, pl="2")
+
+        form = res.forms[0]
+        form["shapefile"] = ("parcels.zip", zip_shapefile([p1, p2]).read())
+
+        res = form.submit().follow()
+
+        self.assertEqual(res.status, "200 OK")
+
+        self.assertEqual(Parcel.objects.count(), 2)
+
+
+
+
+class MockResult(object):
+    def __init__(self, status="PENDING", info=None):
+        self.status = status
+        self.info = info
+
+
+    def ready(self):
+        return self.status in ["SUCCESS", "FAILURE"]
+
+
+    def successful(self):
+        return self.status == "SUCCESS"
+
+
+    def failed(self):
+        return self.status == "FAILURE"
+
+
+
+@patch("mlt.map.views.tasks.load_parcels_task.AsyncResult")
+class LoadParcelsStatusViewTest(StaffOnlyWebTest):
+    url_name = "map_load_parcels_status"
+
+
+    def setUp(self):
+        super(LoadParcelsStatusViewTest, self).setUp()
+
+
+    @property
+    def url(self):
+        return reverse(self.url_name, kwargs={"task_id": "mock-task-id"})
+
+
+    def test_get(self, result_class):
+        result_class.return_value = MockResult()
+        res = self.get()
+
+        self.assertEqual(res.templates[0].name, "load_parcels/status.html")
+
+
+    def test_ajax_get(self, result_class):
+        result_class.return_value = MockResult("PROGRESS", "some info")
+
+        res = self.get(ajax=True)
+
+        self.assertEqual(
+            res.json,
+            {
+                "ready": False,
+                "status": "PROGRESS",
+                "successful": False,
+                "info": "some info",
+                "messages": [],
+                }
+            )
