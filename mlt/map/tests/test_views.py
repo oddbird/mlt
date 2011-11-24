@@ -1642,7 +1642,7 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
                     "desc": "city",
                     "field": "city",
                     "name": "Albuquerque",
-                    "value": "albuquerque",
+                    "value": "Albuquerque",
                     "q": "alb",
                     "rest": "uquerque",
                     }]
@@ -1688,8 +1688,8 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
             input_street="123 N Main St",
             city="Providence")
         create_address(
-            input_street="456 N Main St",
-            city="providence")
+            input_street="125 N Main St",
+            city="Providence")
         create_address(
             input_street="123 N Main St",
             city="Albuquerque")
@@ -1701,8 +1701,8 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
             [{
                     "desc": "city",
                     "field": "city",
-                    "name": "providence",
-                    "value": "providence",
+                    "name": "Providence",
+                    "value": "Providence",
                     "q": "prov",
                     "rest": "idence",
                     }]
@@ -1762,7 +1762,7 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
                     "desc": "city",
                     "field": "post__city",
                     "name": "Albuquerque",
-                    "value": "albuquerque",
+                    "value": "Albuquerque",
                     "q": "alb",
                     "rest": "uquerque",
                     }]
@@ -1819,9 +1819,6 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
             input_street="123 N Main St",
             city="Providence")
         create_address(
-            input_street="456 N Main St",
-            city="providence")
-        create_address(
             input_street="123 N Main St",
             city="Albuquerque")
 
@@ -1832,8 +1829,8 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
             [{
                     "desc": "city",
                     "field": "post__city",
-                    "name": "providence",
-                    "value": "providence",
+                    "name": "Providence",
+                    "value": "Providence",
                     "q": "prov",
                     "rest": "idence",
                     }]

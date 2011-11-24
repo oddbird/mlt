@@ -9,6 +9,7 @@ from django.contrib.gis.db import models
 from django.contrib.gis.db.models.query import GeoQuerySet
 from django.contrib.localflavor.us.models import USStateField
 
+from .fields import CICharField
 from .tasks import (
     record_address_change, record_bulk_changes, record_bulk_delete)
 
@@ -174,25 +175,25 @@ class AddressBase(models.Model):
 
     """
     # unmodified input data
-    input_street = models.CharField(max_length=200, db_index=True)
+    input_street = CICharField(max_length=200, db_index=True)
 
     # edited full street, only used if unparsed addresses are edited
-    edited_street = models.CharField(max_length=200, blank=True)
+    edited_street = CICharField(max_length=200, blank=True)
 
     # core address info
-    street_prefix = models.CharField(max_length=20, blank=True)
-    street_number = models.CharField(max_length=50, blank=True)
-    street_name = models.CharField(max_length=100, blank=True)
-    street_type = models.CharField(max_length=20, blank=True)
-    street_suffix = models.CharField(max_length=20, blank=True)
+    street_prefix = CICharField(max_length=20, blank=True)
+    street_number = CICharField(max_length=50, blank=True)
+    street_name = CICharField(max_length=100, blank=True)
+    street_type = CICharField(max_length=20, blank=True)
+    street_suffix = CICharField(max_length=20, blank=True)
     multi_units = models.BooleanField(default=False)
-    city = models.CharField(max_length=200, db_index=True)
+    city = CICharField(max_length=200, db_index=True)
     state = USStateField(db_index=True)
-    complex_name = models.CharField(max_length=250, blank=True)
+    complex_name = CICharField(max_length=250, blank=True)
     notes = models.TextField(blank=True)
 
     # denormalized street address for sorting and matching with incoming
-    street = models.CharField(
+    street = CICharField(
         max_length=200, blank=True, db_index=True)
 
     # lat/lon data from geocoding
@@ -497,11 +498,11 @@ class AddressManager(models.GeoManager):
         if None not in [street, city, state]:
             addresses = self.filter(
                 (
-                    models.Q(input_street__iexact=street) |
-                    models.Q(street__iexact=street)
+                    models.Q(input_street=street) |
+                    models.Q(street=street)
                     ) &
-                models.Q(city__iexact=city) &
-                models.Q(state__iexact=state)
+                models.Q(city=city) &
+                models.Q(state=state)
                 )
         else:
             addresses = None

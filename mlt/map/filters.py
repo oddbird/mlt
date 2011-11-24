@@ -50,7 +50,6 @@ class Filter(object):
     def autocomplete(self, qs, q):
         options = []
         too_many = []
-        seen = set()
         for field, (desc, display_field) in self.autocomplete_fields.items():
             field_options = (qs.filter(
                     **{"%s__istartswith" % display_field: q}).values_list(
@@ -60,19 +59,14 @@ class Filter(object):
                 continue
             for option in field_options:
                 display, submit = option
-                if hasattr(submit, "lower"):
-                    submit = submit.lower()
-                key = (field, submit)
-                if key not in seen:
-                    seen.add(key)
-                    options.append({
-                            "q": q,
-                            "name": display,
-                            "rest": display[len(q):],
-                            "value": submit,
-                            "field": field,
-                            "desc": desc
-                            })
+                options.append({
+                        "q": q,
+                        "name": display,
+                        "rest": display[len(q):],
+                        "value": submit,
+                        "field": field,
+                        "desc": desc
+                        })
 
         return {"options": options, "too_many": too_many}
 
@@ -87,7 +81,7 @@ class Filter(object):
                 else:
                     q = Q()
                     for val in filter_data.getlist(field):
-                        q = q | Q(**{"%s__iexact" % field: val})
+                        q = q | Q(**{field: val})
                     filters = filters & q
 
         for op, (field, data) in chain(
