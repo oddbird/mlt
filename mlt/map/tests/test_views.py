@@ -1719,6 +1719,14 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
         self.assertEqual(res.json["too_many"], ["street"])
 
 
+    def test_filter_date_suggest(self):
+        res = self.app.get(self.url + "?q=8/31+t", user=self.user)
+
+        self.assertEqual(
+            res.json["date_suggest"],
+            {"q": "8/31 t", "full": "8/31 to [date]", "rest": "o [date]"})
+
+
     def test_no_filter(self):
         res = self.app.get(
             self.url,

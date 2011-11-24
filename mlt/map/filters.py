@@ -3,8 +3,54 @@ import operator
 
 from django.db.models import Q
 
+from dateutil.parser import parse
+
 
 MAX_AUTOCOMPLETE = 12
+
+
+def get_date_suggest(q):
+    """
+    Given a string which begins with anything that parses as a datetime, and is
+    followed by any of " ", " t", " to", or " to ", return a dictionary with
+    the following keys:
+
+    q: The original query string
+    full: "<typed datetime> to [date]"
+    rest: portion of full that is not in q
+
+    If the given string does not parse according to those criteria, return
+    None.
+
+    """
+    if not q:
+        return None
+
+    date_suggest = None
+
+    bare = q.rstrip()
+    found = False
+    for char in reversed(" to"):
+        if bare.endswith(char):
+            bare = bare[:-1]
+            found = True
+        elif found:
+            break
+
+    try:
+        parse(bare)
+    except ValueError:
+        pass
+    else:
+        full = bare + " to [date]"
+        date_suggest = {
+            "q": q,
+            "full": full,
+            "rest": full[len(q):]
+            }
+
+    return date_suggest
+
 
 
 class Filter(object):
@@ -74,7 +120,11 @@ class Filter(object):
                             "desc": desc
                             })
 
-        return {"options": options, "too_many": too_many}
+        return {
+            "options": options,
+            "too_many": too_many,
+            "date_suggest": get_date_suggest(q),
+            }
 
 
     def apply(self, qs, filter_data):
