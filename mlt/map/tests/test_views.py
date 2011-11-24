@@ -2482,6 +2482,24 @@ class LoadParcelsStatusViewTest(StaffOnlyWebTest):
             )
 
 
+    def test_ajax_get_pending(self, result_class):
+        result_class.return_value = MockResult("PENDING", None)
+
+        res = self.get(ajax=True)
+
+        self.assertEqual(
+            res.json,
+            {
+                "ready": False,
+                "status": "PENDING",
+                "successful": False,
+                "in_progress": False,
+                "info": None,
+                "messages": [],
+                }
+            )
+
+
     def test_ajax_get_exception(self, result_class):
         result_class.return_value = MockResult("FAILURE", Exception("blah"))
 
