@@ -68,7 +68,7 @@ def record_address_change(address_id, pre_data, post_data, user_id, timestamp):
 def load_parcels_task(temp_dir, shapefile_path):
     from .load import load_parcels
 
-    load_parcels(
+    count = load_parcels(
         shapefile_path,
         progress=1000,
         verbose=False,
@@ -76,7 +76,7 @@ def load_parcels_task(temp_dir, shapefile_path):
         stream=UpdateProgress())
 
     shutil.rmtree(temp_dir)
-    return True
+    return "Loaded %s parcels." % count
 
 
 

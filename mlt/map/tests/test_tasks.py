@@ -16,9 +16,12 @@ class LoadParcelsTaskTest(TestCase):
 
     def test_basic(self):
         with patch("mlt.map.load.load_parcels") as load_parcels:
+            load_parcels.return_value = 7
             with patch("mlt.map.tasks.shutil.rmtree") as rmtree:
-                self.task.delay("target-dir", "shapefile-path")
+                result = self.task.delay("target-dir", "shapefile-path")
 
+        self.assertEqual(result.status, "SUCCESS")
+        self.assertEqual(result.info, "Loaded 7 parcels.")
         rmtree.assert_called_with("target-dir")
         args, kwargs = load_parcels.call_args
         self.assertEqual(args, ("shapefile-path",))

@@ -47,12 +47,13 @@ class LoadParcelsTest(TestCase):
         shapefile = self.write_shapefile([p])
 
         stdout = Mock()
-        self.func(shapefile, stream=stdout, verbose=True)
+        count = self.func(shapefile, stream=stdout, verbose=True)
 
         stdout.write.assert_called_with("Saved: 123 45\n")
 
         parcels = self.model.objects.all()
 
+        self.assertEqual(count, 1)
         self.assertEqual(len(parcels), 1)
         parcel = parcels[0]
         self.assertEqual(parcel.geom.coords, p.geom.coords)

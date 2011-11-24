@@ -27,6 +27,8 @@ def load_parcels(shapefile_path,
 
     Raises IntegrityError on a duplicate PL, and rolls back the load.
 
+    Returns number of parcels loaded.
+
     """
     # monkeypatch no-op transaction handling into LayerMapping, as we
     # wrap it in a transaction including more operations.
@@ -46,6 +48,8 @@ def load_parcels(shapefile_path,
         progress=progress,
         silent=silent,
         stream=stream or sys.stdout)
+
+    return Parcel.objects.count()
 
 
 
