@@ -1,0 +1,7 @@
+<h3>Parcel Layer Loading Status</h3>
+
+<h4>{{ status }}{{# ready }}{{^ successful }} <a class="try-again" href="{{ url }}">(try again)</a>{{/ successful }}{{/ ready }}</h4>
+
+<ul class="progress">
+  {{# in_progress }}<li>{{ info }}</li>{{/ in_progress }}
+</ul>

@@ -44,6 +44,11 @@ var MLT = (function (MLT, $) {
             MLT.filterByAddress();
             MLT.revertChange();
         }
+
+        // load-parcels.js
+        if ($('#load-parcels-status').length) {
+            MLT.loadNewParcels();
+        }
     });
 
     return MLT;
