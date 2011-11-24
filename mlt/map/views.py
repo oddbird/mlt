@@ -41,7 +41,7 @@ class UIAddressBatchSerializer(
 
 class UIAddressSerializer(UIDateSerializerMixin, serializers.AddressSerializer):
     default_fields = serializers.AddressSerializer.default_fields + [
-        "edit_url", "add_tag_url", "has_parcel", "batch_tags"]
+        "edit_url", "add_tag_url", "has_parcel", "batch_tags", "geocode_failed"]
     batch_serializer = UIAddressBatchSerializer()
 
 
@@ -425,6 +425,9 @@ def geocode(request):
     if not data:
         messages.info(
             request, "Unable to geocode '%s'." % as_string)
+        address.geocode_failed = True
+        # bypass history-tracking
+        super(Address, address).save()
         return json_response({"success": False})
 
     geocoder.update(address, data)

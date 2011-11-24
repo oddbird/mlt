@@ -632,6 +632,18 @@ class AddressTest(TestCase):
         self.assertEqual(flags, {})
 
 
+    def test_revert_resets_geocode_failed(self):
+        u = create_user()
+        a = create_address(city="Providence", geocode_failed=True)
+        a.city = "Albuquerque"
+        a.save(user=u)
+
+        c = a.address_changes.get(pre__isnull=False)
+        c.revert(u)
+
+        self.assertEqual(refresh(a).geocode_failed, False)
+
+
     def test_revert_create(self):
         a = create_address()
 

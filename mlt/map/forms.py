@@ -46,6 +46,8 @@ class AddressForm(forms.ModelForm):
             address.input_street = (
                 address.parsed_street or address.edited_street)
 
+        # default for new addresses, should be reset when an address is edited.
+        address.geocode_failed = False
         address.save(user=user)
 
         return address

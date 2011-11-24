@@ -456,7 +456,7 @@ var MLT = (function (MLT, $) {
                 geolat = thisAddress.data('geocode-latitude'),
                 geolng = thisAddress.data('geocode-longitude'),
                 geoURL = addressContainer.data('geocode-url'),
-                geocoding_failed = thisAddress.data('geocoding-failed');
+                geocode_failed = thisAddress.data('geocode-failed');
             if ($(this).is(':checked')) {
                 if (lat && lng) {
                     this.popup = new L.Popup({ autoPan: false });
@@ -481,7 +481,7 @@ var MLT = (function (MLT, $) {
                             MLT.map.setZoom(MIN_PARCEL_ZOOM);
                         }
                     } else {
-                        if (geoURL && id && !geocoding_failed) {
+                        if (geoURL && id && !geocode_failed) {
                             thisAddress.loadingOverlay();
                             $.get(geoURL, {id: id}, function (data) {
                                 if (data.address) {
@@ -515,7 +515,7 @@ var MLT = (function (MLT, $) {
                                         addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
                                     }
                                 } else {
-                                    thisAddress.data('geocoding-failed', true).loadingOverlay('remove');
+                                    thisAddress.data('geocode-failed', true).loadingOverlay('remove');
                                 }
                             });
                         }

@@ -491,6 +491,8 @@ class AddressesViewTest(AuthenticatedWebTest):
 
 
     def test_address_serialization(self):
+        self.maxDiff = None
+
         now = datetime.datetime(2011, 11, 21)
         a = create_address(
             pl="1",
@@ -520,6 +522,7 @@ class AddressesViewTest(AuthenticatedWebTest):
               "edit_url": a.edit_url,
               "id": a.id,
               "index": "A",
+              "geocode_failed": False,
               "geocoded": None,
               "has_parcel": False,
               "latitude": None,
@@ -1323,7 +1326,7 @@ class AddTagViewTest(CSRFAuthenticatedWebTest):
 class EditAddressViewTest(CSRFAuthenticatedWebTest):
     def setUp(self):
         super(EditAddressViewTest, self).setUp()
-        self.address = create_address(city="Albuquerque")
+        self.address = create_address(city="Albuquerque", geocode_failed=True)
 
 
     @property
@@ -1355,6 +1358,8 @@ class EditAddressViewTest(CSRFAuthenticatedWebTest):
         a = refresh(self.address)
 
         self.assertEqual(a.city, "Providence")
+        # editing an address resets its geocode-failed flag
+        self.assertEqual(a.geocode_failed, False)
 
 
     def test_errors(self):
@@ -1551,10 +1556,10 @@ class RevertChangeViewTest(CSRFAuthenticatedWebTest):
                     ]
                 }
             )
-        self.assertEqual(
-            self.address.__class__._base_manager.get(
-                pk=self.address.pk).deleted,
-            True)
+
+        a = refresh(self.address)
+
+        self.assertEqual(a.deleted, True)
 
 
     def test_revert_noop(self):
@@ -1897,6 +1902,7 @@ class GeocodeViewTest(AuthenticatedWebTest):
                     "city": "Providence",
                     "complex_name": "",
                     "edit_url": "/map/_edit_address/%s/" % a.id,
+                    "geocode_failed": False,
                     "geocoded": {
                         "latitude": 41.823991,
                         "longitude": -71.406619,
@@ -1997,6 +2003,9 @@ class GeocodeViewTest(AuthenticatedWebTest):
         self.assertFalse(res.json["success"])
 
         geocode.assert_called_with("123 S Main St, Providence, RI")
+
+        a = refresh(a)
+        self.assertEqual(a.geocode_failed, True)
 
 
 

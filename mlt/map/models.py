@@ -526,6 +526,7 @@ class AddressVersioningError(Exception):
 
 class Address(AddressBase):
     deleted = models.BooleanField(default=False, db_index=True)
+    geocode_failed = models.BooleanField(default=False)
 
     batches = models.ManyToManyField(AddressBatch, related_name="addresses")
 
@@ -783,6 +784,7 @@ class AddressChange(models.Model):
                     setattr(address, field, data["pre"])
                     changed = True
             if changed:
+                address.geocode_failed = False
                 address.save(user=user)
 
         flags = {}
