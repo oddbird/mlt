@@ -11,19 +11,21 @@ var MLT = (function (MLT, $) {
             ajax_url = window.location.pathname,
             try_again_url = container.data('load-parcels-url'),
             ready = false,
+            jqxhr = null,
             updateLoadingStatus = function () {
-                var jqxhr = $.get(ajax_url, function (data) {
+                jqxhr = $.get(ajax_url, function (data) {
                     var newInfo;
                     data.url = try_again_url;
                     newInfo = ich.loading_parcels(data);
                     container.html(newInfo);
                     if (data.ready) {
-                        container.addClass('ready');
+                        container.removeClass('loading-parcels').addClass('ready');
                         ready = true;
                         if (!data.successful) {
                             container.addClass('failed');
                         }
                     }
+                    jqxhr = null;
                 }).error(function () {
                     var failedInfo = ich.loading_parcels({
                         status: 'FAILURE',
@@ -31,15 +33,17 @@ var MLT = (function (MLT, $) {
                         info: 'Ajax error.',
                         successful: false
                     });
-                    container.html(failedInfo).addClass('ready failed');
+                    container.html(failedInfo).removeClass('loading-parcels').addClass('ready failed');
                     ready = true;
                 });
             },
             refreshStatus = function () {
                 updateLoadingStatus();
-                $.doTimeout(3000, function () {
+                $.doTimeout(1000, function () {
                     if (!ready) {
-                        updateLoadingStatus();
+                        if (!jqxhr) {
+                            updateLoadingStatus();
+                        }
                     } else {
                         return false;
                     }

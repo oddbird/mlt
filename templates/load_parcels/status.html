@@ -5,7 +5,7 @@
 {% block title %}Status | Load Parcel Layer | {{ block.super }}{% endblock %}
 
 {% block content %}
-  <article id="load-parcels-status" data-load-parcels-url="{% url map_load_parcels %}">
+  <article id="load-parcels-status" class="loading-parcels" data-load-parcels-url="{% url map_load_parcels %}">
     {% icanhaz "loading_parcels" %}
   </article>
 {% endblock %}
