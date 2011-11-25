@@ -1,6 +1,6 @@
 {{# options }}
 <li>
-  <a href="#" data-field="{{ field }}" data-desc="{{ desc }}" data-value="{{ value }}" data-name="{{ name }}">{{# rest }}<b>{{ q }}</b>{{ rest }}{{/ rest }}{{^ rest }}<b>{{ name }}</b>{{/ rest }} <i>[{{ desc }}]</i></a>
+  <a href="#" data-field="{{ field }}" data-display-field="{{ display_field }}" data-value="{{ value }}" data-display-value="{{ display_value }}">{{^ replace }}<b>{{ q }}</b>{{ display_value_rest }}{{/ replace }}{{# replace }}{{ display_value }}{{/ replace }} <i>[{{ display_field }}]</i></a>
 </li>
 {{/ options }}
 

@@ -1330,8 +1330,8 @@ var MLT = (function (MLT, $) {
                 var newFilter,
                     field = $(this).data('field'),
                     value = $(this).data('value'),
-                    desc = $(this).data('desc'),
-                    name = $(this).data('name');
+                    display_field = $(this).data('display-field'),
+                    display_value = $(this).data('display-value');
                 if (field && value) {
                     if (filterList.find('input[type="checkbox"][name="' + field + '_' + value + '"]').length) {
                         if (filterList.find('input[type="checkbox"][name="' + field + '_' + value + '"]').not(':checked').length) {
@@ -1342,8 +1342,8 @@ var MLT = (function (MLT, $) {
                         newFilter = ich.filter_applied({
                             field: field,
                             value: value,
-                            desc: desc,
-                            name: name
+                            display_field: display_field,
+                            display_value: display_value
                         });
                         if (newFilter.length) {
                             filterList.append(newFilter);
