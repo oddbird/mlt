@@ -904,6 +904,7 @@ var MLT = (function (MLT, $) {
         success = function (data) {
             var number = addressContainer.find('.address').length;
             if (number < 20) { number = 20; }
+            target.loadingOverlay('remove');
             if (data.success) {
                 target.find('a[title*="close"]').click();
                 MLT.addressLoading.reloadList({num: number}, true);
@@ -920,6 +921,9 @@ var MLT = (function (MLT, $) {
 
         bootstrapForm = function () {
             var form = target.find('form').ajaxForm({
+                beforeSubmit: function (arr, $form, options) {
+                    target.loadingOverlay();
+                },
                 success: success
             });
         };
