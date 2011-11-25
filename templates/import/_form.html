@@ -1,6 +1,6 @@
 {% load mltforms %}
 
-<h3>import addresses</h3>
+<h2>import addresses</h2>
 <form method="POST" action="{% url map_import_addresses %}" id="import-address-form" enctype="multipart/form-data">
   {% csrf_token %}
   <ul>
