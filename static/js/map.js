@@ -1446,6 +1446,7 @@ var MLT = (function (MLT, $) {
         var link = $('a[href=#lightbox-import-addresses]'),
             target = $("#lightbox-import-addresses"),
             url = target.data('import-addresses-url'),
+            form = $("#lightbox-import-addresses"),
             success = function (data) {
                 target.find('> div').html(data.html);
                 $(document).on('keydown.closeImportLightbox', function (event) {
@@ -1457,6 +1458,10 @@ var MLT = (function (MLT, $) {
 
         link.click(function () {
             $.get(url, success);
+        });
+
+        form.submit(function () {
+            target.loadingOverlay();
         });
 
         target.on('click', 'a[title*="close"]', function () {
