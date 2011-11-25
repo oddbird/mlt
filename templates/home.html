@@ -30,6 +30,12 @@
 
 {% endblock content %}
 
+{% block body-end %}
+<div id="lightboxes">
+  {% include "includes/lightbox.html" %}
+</div>
+{% endblock %}
+
 {% block jstemplates %}
   {% load icanhaz %}
   {% icanhaz "parcelinfo" %}
