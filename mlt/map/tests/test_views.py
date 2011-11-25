@@ -238,8 +238,6 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
 
 
     def test_associate_one(self):
-        from mlt.dt import utc_to_local
-
         create_parcel(pl="1234")
         a = create_address()
 
@@ -253,7 +251,7 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
         addy = res.json["mapped_to"][0]
         self.assertEqual(addy["id"], a.id)
         self.assertEqual(addy["mapped_timestamp"], date_format(
-                utc_to_local(a.mapped_timestamp), "DATETIME_FORMAT"))
+                a.mapped_timestamp, "DATETIME_FORMAT"))
         self.assertEqual(addy["needs_review"], True)
         self.assertEqual(addy["has_parcel"], True)
         self.assertEqual(addy["longitude"], res.json["longitude"])
@@ -284,8 +282,6 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
 
 
     def test_associate_another(self):
-        from mlt.dt import utc_to_local
-
         create_parcel(pl="1234")
         create_address(pl="1234")
         a2 = create_address()
@@ -300,13 +296,11 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
         addy = [a for a in res.json["mapped_to"] if a["id"] == a2.id][0]
         self.assertEqual(addy["id"], a2.id)
         self.assertEqual(addy["mapped_timestamp"], date_format(
-                utc_to_local(a2.mapped_timestamp), "DATETIME_FORMAT"))
+                a2.mapped_timestamp, "DATETIME_FORMAT"))
         self.assertEqual(addy["needs_review"], True)
 
 
     def test_associate_multiple(self):
-        from mlt.dt import utc_to_local
-
         create_parcel(pl="1234")
         a1 = create_address()
         a2 = create_address()
@@ -325,15 +319,12 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
         self.assertEqual(set([a["id"] for a in mt]), set([a1.id, a2.id]))
         self.assertEqual(
             set([a["mapped_timestamp"] for a in mt]),
-            set([date_format(utc_to_local(a1.mapped_timestamp),
-                             "DATETIME_FORMAT")])
+            set([date_format(a1.mapped_timestamp, "DATETIME_FORMAT")])
             )
         self.assertTrue(all([a["needs_review"] for a in mt]))
 
 
     def test_associate_by_filter(self):
-        from mlt.dt import utc_to_local
-
         create_parcel(pl="1234")
         a1 = create_address(city="Providence")
         a2 = create_address(city="Providence")
@@ -355,8 +346,7 @@ class AssociateViewTest(CSRFAuthenticatedWebTest):
         self.assertEqual(set([a["id"] for a in mt]), set([a1.id, a2.id]))
         self.assertEqual(
             set([a["mapped_timestamp"] for a in mt]),
-            set([date_format(utc_to_local(a1.mapped_timestamp),
-                             "DATETIME_FORMAT")])
+            set([date_format(a1.mapped_timestamp, "DATETIME_FORMAT")])
             )
         self.assertTrue(all([a["needs_review"] for a in mt]))
 
@@ -504,7 +494,6 @@ class AddressesViewTest(AuthenticatedWebTest):
         res = self.get()
 
         from django.utils.formats import date_format
-        from mlt.dt import utc_to_local
 
         self.assertEqual(
             res.json["addresses"],
@@ -513,7 +502,7 @@ class AddressesViewTest(AuthenticatedWebTest):
                         {
                             "user": b.user.username,
                             "timestamp": date_format(
-                                utc_to_local(b.timestamp), "DATETIME_FORMAT"),
+                                b.timestamp, "DATETIME_FORMAT"),
                             "tag": b.tag,
                             }
                         ],
@@ -528,8 +517,7 @@ class AddressesViewTest(AuthenticatedWebTest):
               "latitude": None,
               "longitude": None,
               "mapped_by": self.user.username,
-              "mapped_timestamp": date_format(
-                        utc_to_local(now), "DATETIME_FORMAT"),
+              "mapped_timestamp": date_format(now, "DATETIME_FORMAT"),
               "multi_units": a.multi_units,
               "needs_review": a.needs_review,
               "notes": a.notes,
@@ -975,7 +963,6 @@ class HistoryViewTest(AuthenticatedWebTest):
         res = self.get()
 
         from django.utils.formats import date_format
-        from mlt.dt import utc_to_local
         self.maxDiff = None
         self.assertEqual(
             res.json["changes"],
@@ -985,7 +972,7 @@ class HistoryViewTest(AuthenticatedWebTest):
                     "address_id": a.id,
                     "changed_by": c.changed_by.username,
                     "changed_timestamp": date_format(
-                        utc_to_local(c.changed_timestamp), "DATETIME_FORMAT"),
+                        c.changed_timestamp, "DATETIME_FORMAT"),
                     "pre": None,
                     "revert_url": "/map/_revert/%s/" % c.id,
                     "post": {

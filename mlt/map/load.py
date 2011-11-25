@@ -38,7 +38,7 @@ def load_parcels(shapefile_path,
     Parcel.objects.all().delete()
 
     lm = LayerMapping(
-        get_parcel_proxy(datetime.datetime.utcnow()),
+        get_parcel_proxy(datetime.datetime.now()),
         shapefile_path, parcel_mapping, transform=True,
         transaction_mode='none')
 

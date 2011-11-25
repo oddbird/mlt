@@ -25,7 +25,7 @@ class Migration(SchemaMigration):
             ('mapped_timestamp', self.gf('django.db.models.fields.DateTimeField')(null=True)),
             ('needs_review', self.gf('django.db.models.fields.BooleanField')(default=True, db_index=True)),
             ('imported_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='addresses_imported', to=orm['auth.User'])),
-            ('import_timestamp', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.utcnow)),
+            ('import_timestamp', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
             ('import_source', self.gf('django.db.models.fields.CharField')(max_length=100, db_index=True)),
         ))
         db.send_create_signal('map', ['Address'])
@@ -111,7 +111,7 @@ class Migration(SchemaMigration):
             'complex': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['map.Complex']", 'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'import_source': ('django.db.models.fields.CharField', [], {'max_length': '100', 'db_index': 'True'}),
-            'import_timestamp': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.utcnow'}),
+            'import_timestamp': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'imported_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'addresses_imported'", 'to': "orm['auth.User']"}),
             'mapped_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'addresses_mapped'", 'null': 'True', 'to': "orm['auth.User']"}),
             'mapped_timestamp': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),

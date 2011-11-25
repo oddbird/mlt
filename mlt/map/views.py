@@ -13,8 +13,6 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from vectorformats.Formats import GeoJSON
 from vectorformats.Feature import Feature
 
-from ..dt import utc_to_local
-
 from .encoder import IterEncoder
 from .export import EXPORT_FORMATS, EXPORT_WRITERS
 from .filters import AddressFilter, AddressChangeFilter
@@ -29,7 +27,7 @@ from . import serializers, sort, tasks, paging, geocoder
 class UIDateSerializerMixin(object):
     def _encode_datetime(self, dt):
         if dt:
-            return date_format(utc_to_local(dt), "DATETIME_FORMAT")
+            return date_format(dt, "DATETIME_FORMAT")
         return dt
 
 
@@ -165,7 +163,7 @@ def associate(request):
             user=request.user,
             pl=pl,
             mapped_by=request.user,
-            mapped_timestamp=datetime.datetime.utcnow(),
+            mapped_timestamp=datetime.datetime.now(),
             needs_review=not request.user.has_perm(
                 "map.mappings_trusted"))
         ret = UIFullAddressParcelSerializer().one(parcel)
@@ -280,7 +278,7 @@ def add_tag(request, address_id):
         tag=tag,
         defaults={
             "user": request.user,
-            "timestamp": datetime.datetime.utcnow()
+            "timestamp": datetime.datetime.now()
             }
         )
 

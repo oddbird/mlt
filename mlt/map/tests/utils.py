@@ -56,7 +56,7 @@ def create_parcel(**kwargs):
             ("-71.4059226139629004", "41.7884699426220294"),
             ("-71.4057922808270291", "41.7882712655665784"),
             ]),
-        "import_timestamp": datetime.utcnow(),
+        "import_timestamp": datetime.now(),
         }
     defaults.update(kwargs)
 
@@ -102,7 +102,7 @@ def create_address(**kwargs):
 
 def create_address_batch(**kwargs):
     defaults = {
-        "timestamp": datetime.utcnow(),
+        "timestamp": datetime.now(),
         "tag": "testing",
         }
 

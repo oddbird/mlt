@@ -77,7 +77,7 @@ class Migration(SchemaMigration):
             'complex_name': ('django.db.models.fields.CharField', [], {'max_length': '250', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'import_source': ('django.db.models.fields.CharField', [], {'max_length': '100', 'db_index': 'True'}),
-            'import_timestamp': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.utcnow'}),
+            'import_timestamp': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'imported_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'addresses_imported'", 'to': "orm['auth.User']"}),
             'mapped_by': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'addresses_mapped'", 'null': 'True', 'to': "orm['auth.User']"}),
             'mapped_timestamp': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),

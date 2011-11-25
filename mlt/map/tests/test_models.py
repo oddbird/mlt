@@ -420,7 +420,7 @@ class AddressTest(TestCase):
     def test_create_address_change(self):
         fake_now = datetime.datetime(2011, 11, 4, 17, 0, 5)
         with patch("mlt.map.models.datetime") as mock_dt:
-            mock_dt.utcnow.return_value = fake_now
+            mock_dt.now.return_value = fake_now
             a = create_address(city="Albuquerque")
 
         changes = self.change_model.objects.all()
@@ -441,7 +441,7 @@ class AddressTest(TestCase):
 
         fake_now = datetime.datetime(2011, 11, 4, 17, 0, 5)
         with patch("mlt.map.models.datetime") as mock_dt:
-            mock_dt.utcnow.return_value = fake_now
+            mock_dt.now.return_value = fake_now
             a.city = "Providence"
             a.save(user=user)
 
@@ -464,7 +464,7 @@ class AddressTest(TestCase):
 
         fake_now = datetime.datetime(2011, 11, 4, 17, 0, 5)
         with patch("mlt.map.models.datetime") as mock_dt:
-            mock_dt.utcnow.return_value = fake_now
+            mock_dt.now.return_value = fake_now
             a.delete(user=user)
 
         changes = self.change_model.objects.all()
@@ -488,7 +488,7 @@ class AddressTest(TestCase):
 
         fake_now = datetime.datetime(2011, 11, 4, 17, 0, 5)
         with patch("mlt.map.models.datetime") as mock_dt:
-            mock_dt.utcnow.return_value = fake_now
+            mock_dt.now.return_value = fake_now
             qs.update(needs_review=False, user=user)
 
         changes = self.change_model.objects.filter(pre__isnull=False)
@@ -511,7 +511,7 @@ class AddressTest(TestCase):
 
         fake_now = datetime.datetime(2011, 11, 4, 17, 0, 5)
         with patch("mlt.map.models.datetime") as mock_dt:
-            mock_dt.utcnow.return_value = fake_now
+            mock_dt.now.return_value = fake_now
             qs.delete(user=user)
 
         changes = self.change_model.objects.filter(pre__isnull=False)

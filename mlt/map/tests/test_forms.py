@@ -45,7 +45,7 @@ class AddressImportFormTest(TestCase):
 
         self.assertTrue(f.is_valid(), f.errors)
         with patch("mlt.map.forms.datetime") as mock:
-            mock.utcnow.return_value = datetime(2011, 7, 8, 1, 2, 3)
+            mock.now.return_value = datetime(2011, 7, 8, 1, 2, 3)
             self.assertEqual(f.save(self.user), (1, 0))
         from mlt.map.models import Address
         self.assertEqual(Address.objects.count(), 1)
@@ -128,7 +128,7 @@ class AddressFormTest(TestCase):
         self.assertTrue(f.is_valid())
 
         with patch("mlt.map.forms.datetime") as mockdt:
-            mockdt.utcnow.return_value = datetime(2011, 6, 17, 10, 14, 25)
+            mockdt.now.return_value = datetime(2011, 6, 17, 10, 14, 25)
             a = f.save(u)
 
         self.assertEqual(a.street_number, "3635")

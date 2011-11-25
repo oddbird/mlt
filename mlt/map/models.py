@@ -401,7 +401,7 @@ class AddressQuerySet(PrefetchQuerySet):
             raise AddressVersioningError(
                 "Cannot update addresses without providing user.")
 
-        now = datetime.utcnow()
+        now = datetime.now()
 
         # save current values for recording changes
         address_data = {}
@@ -424,7 +424,7 @@ class AddressQuerySet(PrefetchQuerySet):
             raise AddressVersioningError(
                 "Cannot delete addresses without providing user.")
 
-        now = datetime.utcnow()
+        now = datetime.now()
 
         record_bulk_delete.delay(
             address_ids=[a.id for a in self],
@@ -568,7 +568,7 @@ class Address(AddressBase):
                 address_id=self.id,
                 user_id=user.id,
                 pre_data=pre, post_data=post,
-                timestamp=datetime.utcnow())
+                timestamp=datetime.now())
             )
 
         return ret
@@ -590,7 +590,7 @@ class Address(AddressBase):
                 address_id=self.id,
                 user_id=user.id,
                 pre_data=pre, post_data=None,
-                timestamp=datetime.utcnow())
+                timestamp=datetime.now())
             )
 
 
@@ -610,7 +610,7 @@ class Address(AddressBase):
                 address_id=self.id,
                 user_id=user.id,
                 pre_data=None, post_data=post,
-                timestamp=datetime.utcnow())
+                timestamp=datetime.now())
             )
 
 

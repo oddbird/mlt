@@ -18,7 +18,7 @@ class Command(BaseCommand):
         users = list(User.objects.all())
         batch = AddressBatch.objects.create(
             user=random.choice(users),
-            timestamp=datetime.datetime.utcnow(),
+            timestamp=datetime.datetime.now(),
             tag="test-data",
             )
 
@@ -31,7 +31,7 @@ class Command(BaseCommand):
             if not random.randint(0, 1):
                 a.pl = p.pl
                 a.mapped_by = random.choice(users)
-                a.mapped_timestamp = datetime.datetime.utcnow()
+                a.mapped_timestamp = datetime.datetime.now()
                 if not random.randint(0, 1):
                     a.needs_review = False
             if not random.randint(0, 9):
