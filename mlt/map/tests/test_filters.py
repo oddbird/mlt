@@ -4,7 +4,45 @@ from django.utils.unittest import TestCase
 
 
 
-__all__ = ["ParseDateRangeTest"]
+__all__ = ["ParseDateTest", "ParseDateRangeTest"]
+
+
+
+class ParseDateTest(TestCase):
+    @property
+    def func(self):
+        from mlt.map.filters import parse_date
+        return parse_date
+
+
+    @property
+    def today(self):
+        return datetime.now().replace(
+            hour=0, minute=0, second=0, microsecond=0)
+
+
+    def test_trailing_slash(self):
+        self.assertEqual(
+            self.func("8/11/"), self.today.replace(day=11, month=8))
+
+
+    def test_trailing_dash(self):
+        self.assertEqual(
+            self.func("8-11-"), self.today.replace(day=11, month=8))
+
+
+    def test_today(self):
+        self.assertEqual(self.func("today"), self.today)
+
+
+    def test_yesterday(self):
+        self.assertEqual(
+            self.func("yesterday "), self.today - timedelta(days=1))
+
+
+    def test_tomorrow(self):
+        self.assertEqual(
+            self.func(" tomorrow"), self.today + timedelta(days=1))
 
 
 
@@ -14,10 +52,12 @@ class ParseDateRangeTest(TestCase):
         from mlt.map.filters import parse_date_range
         return parse_date_range
 
+
     @property
     def today(self):
         return datetime.now().replace(
             hour=0, minute=0, second=0, microsecond=0)
+
 
     def test_empty(self):
         self.assertEqual(self.func(""), None)
@@ -57,39 +97,4 @@ class ParseDateRangeTest(TestCase):
         self.assertEqual(
             self.func("9/5/11 to"),
             (datetime(2011, 9, 5), self.today)
-            )
-
-
-    def test_today(self):
-        self.assertEqual(
-            self.func("today to 9/5/11"),
-            (self.today, datetime(2011, 9, 5))
-            )
-        self.assertEqual(
-            self.func("9/5/11 to today"),
-            (datetime(2011, 9, 5), self.today)
-            )
-
-
-    def test_yesterday(self):
-        yest = self.today - timedelta(days=1)
-        self.assertEqual(
-            self.func("yesterday to 9/5/11"),
-            (yest, datetime(2011, 9, 5))
-            )
-        self.assertEqual(
-            self.func("9/5/11 to  yesterday"),
-            (datetime(2011, 9, 5), yest)
-            )
-
-
-    def test_tomorrow(self):
-        tomorrow = self.today + timedelta(days=1)
-        self.assertEqual(
-            self.func("tomorrow  to 9/5/11"),
-            (tomorrow, datetime(2011, 9, 5))
-            )
-        self.assertEqual(
-            self.func("9/5/11 to tomorrow"),
-            (datetime(2011, 9, 5), tomorrow)
             )

@@ -26,7 +26,7 @@ def parse_date(s):
         "tomorrow": today + one_day,
         }
 
-    s = s.strip()
+    s = s.strip(" ./-")
     if s in special:
         return special[s]
 
