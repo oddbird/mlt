@@ -3,6 +3,8 @@ from cStringIO import StringIO
 
 from django.test import TransactionTestCase
 
+from mock import patch
+
 from .utils import create_user, create_address
 
 
@@ -130,6 +132,23 @@ class AddressImporterTest(GetImporterMixin, TransactionTestCase):
                 ]
             )
         self.assertEqual(self.model.objects.count(), 0)
+
+
+    def test_unexpected_error(self):
+        """
+        An unexpected error rolls back the transaction and is re-raised.
+
+        """
+        i = self.get_importer()
+
+        with patch("mlt.map.importer.Address.objects.create_from_input") as ci:
+            class SomeError(Exception):
+                pass
+            def raise_someerror(*args, **kwargs):
+                raise SomeError()
+            ci.side_effect = raise_someerror
+            with self.assertRaises(SomeError):
+                i.process([{}])
 
 
 

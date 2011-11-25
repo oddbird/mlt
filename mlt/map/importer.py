@@ -38,6 +38,9 @@ class AddressImporter(object):
             except ValidationError as e:
                 # 1-based numbering for rows
                 errors.append((i + 1, e.message_dict))
+            except:
+                transaction.rollback()
+                raise
 
         if errors:
             transaction.rollback()
