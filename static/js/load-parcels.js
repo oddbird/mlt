@@ -19,9 +19,11 @@ var MLT = (function (MLT, $) {
                     newInfo = ich.loading_parcels(data);
                     container.html(newInfo);
                     if (data.ready) {
-                        container.removeClass('loading-parcels').addClass('ready');
+                        container.removeClass('loading-parcels');
                         ready = true;
-                        if (!data.successful) {
+                        if (data.successful) {
+                            container.addClass('ready');
+                        } else {
                             container.addClass('failed');
                         }
                     }
@@ -33,7 +35,7 @@ var MLT = (function (MLT, $) {
                         info: 'Ajax error.',
                         successful: false
                     });
-                    container.html(failedInfo).removeClass('loading-parcels').addClass('ready failed');
+                    container.html(failedInfo).removeClass('loading-parcels').addClass('failed');
                     ready = true;
                 });
             },
