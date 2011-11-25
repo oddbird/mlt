@@ -36,8 +36,10 @@ class KMLWriterTest(TestCase):
         writer = self.writer_class([a1, a2])
 
         stream = StringIO()
-        writer.save(stream)
+        count = writer.save(stream)
         stream.seek(0)
+
+        self.assertEqual(count, 2)
 
         kml = stream.read()
 

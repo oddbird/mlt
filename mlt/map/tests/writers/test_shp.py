@@ -57,7 +57,7 @@ class SHPWriterTest(TestCase):
                     (1.0, 10.0),
                     ]))
 
-        a1 = create_address(pl=p1.pl, multi_units=True)
+        a1 = create_address(pl=p1.pl, multi_units=True, geocoded="POINT(1 2)")
         a2 = create_address()
 
         writer = self.writer_class([a1, a2])

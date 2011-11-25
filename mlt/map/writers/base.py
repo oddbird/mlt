@@ -37,4 +37,5 @@ class BaseWriter(object):
 
 
 class AddressWriter(BaseWriter):
-    serializer = serializers.AddressSerializer(extra=["input_street"])
+    serializer = serializers.AddressSerializer(
+        extra=["input_street"], exclude=["geocoded"])

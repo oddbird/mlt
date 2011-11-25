@@ -28,7 +28,7 @@ class XLSWriterTest(TestCase):
 
 
     def test_save(self):
-        a1 = create_address()
+        a1 = create_address(geocoded="POINT(1 2)")
         a2 = create_address()
 
         writer = self.writer_class([a1, a2])
@@ -49,4 +49,4 @@ class XLSWriterTest(TestCase):
 
         self.assertEqual(sheet.name, "Addresses")
         self.assertEqual(sheet.nrows, 3)
-        self.assertEqual(sheet.ncols, 21)
+        self.assertEqual(sheet.ncols, 20)

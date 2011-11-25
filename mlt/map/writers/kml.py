@@ -18,3 +18,5 @@ class KMLWriter(AddressWriter):
         stream.write(
             render_to_string(
                 "kml/base.kml", {"addresses": addresses(self.objects)}))
+
+        return len(self.objects)

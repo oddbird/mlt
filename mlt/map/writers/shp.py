@@ -19,7 +19,6 @@ from .base import AddressWriter
 DBF_FIELDS = {
     "id": ("N", 32),
     "street_is_parsed": ("L", 1),
-    "geocoded": ("L", 1),
     "latitude": ("D", 32),
     "longitude": ("D", 32),
     }
@@ -68,17 +67,13 @@ class ShapefileAddressSerializer(AddressSerializer):
         return self._encode_boolean(val)
 
 
-    def encode_geocoded(self, val):
-        return self._encode_boolean(
-            super(ShapefileAddressSerializer, self).encode_geocoded(val))
-
-
 
 class SHPWriter(AddressWriter):
     mimetype = "application/zip"
     extension = "zip"
 
-    serializer = ShapefileAddressSerializer()
+    serializer = ShapefileAddressSerializer(
+        fields=AddressWriter.serializer.fields)
 
 
     def save(self, stream):
