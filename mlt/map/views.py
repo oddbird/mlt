@@ -133,7 +133,11 @@ def export_addresses(request):
     response['Content-Disposition'] = (
         'attachment; filename=addresses.%s' % writer.extension)
 
-    writer.save(response)
+    count = writer.save(response)
+
+    if not count:
+        messages.error(request, "No exportable addresses selected.")
+        return redirect("home")
 
     return response
 

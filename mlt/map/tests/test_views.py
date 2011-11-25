@@ -134,6 +134,7 @@ class MockWriter(object):
             a.mapped_by
             a.parcel
         stream.write(",".join([str(a.id) for a in self.addresses]))
+        return len(self.addresses)
 
 
 
@@ -187,6 +188,12 @@ class ExportViewTest(AuthenticatedWebTest):
         res = self._basic_test("?export_format=mock&city=Providence")
 
         self.assertEqual(res.body, str(a1.id))
+
+
+    def test_no_addresses(self):
+        res = self.get()
+
+        self.assertEqual(res.status_int, 302)
 
 
 

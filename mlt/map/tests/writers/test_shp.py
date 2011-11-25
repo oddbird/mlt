@@ -37,6 +37,16 @@ class SHPWriterTest(TestCase):
             dbf_field("geocoded")
 
 
+    def test_save_no_mapped_addresses(self):
+        a1 = create_address()
+
+        writer = self.writer_class([a1])
+
+        count = writer.save(StringIO())
+
+        self.assertEqual(count, 0)
+
+
     def test_save(self):
         p1 = create_parcel(
             geom=create_mpolygon([
@@ -53,8 +63,10 @@ class SHPWriterTest(TestCase):
         writer = self.writer_class([a1, a2])
 
         stream = StringIO()
-        writer.save(stream)
+        count = writer.save(stream)
         stream.seek(0)
+
+        self.assertEqual(count, 1)
 
         z = zipfile.ZipFile(stream, "r")
 

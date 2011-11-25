@@ -94,35 +94,40 @@ class SHPWriter(AddressWriter):
             w.field(field_name, field_type, size, decimal)
 
         # for each mapped address, create polygon and record
+        count = 0
         for address in self.objects:
             if address.parcel:
+                count += 1
                 serialized = self.serializer.one(address)
                 w.poly(parts=sum(address.parcel.geom.coords, ()))
                 w.record(**serialized)
 
-        # get SRS info for writing prj file
-        srs = SpatialRefSys.objects.get(
-            srid=Parcel._meta.get_field("geom").srid)
+        if count:
+            # get SRS info for writing prj file
+            srs = SpatialRefSys.objects.get(
+                srid=Parcel._meta.get_field("geom").srid)
 
-        shp = StringIO()
-        shx = StringIO()
-        dbf = StringIO()
-        prj = StringIO()
+            shp = StringIO()
+            shx = StringIO()
+            dbf = StringIO()
+            prj = StringIO()
 
-        w.save(shp=shp, shx=shx, dbf=dbf)
+            w.save(shp=shp, shx=shx, dbf=dbf)
 
-        prj.write("".join(str(srs).split()))
+            prj.write("".join(str(srs).split()))
 
-        shp.seek(0)
-        shx.seek(0)
-        dbf.seek(0)
-        prj.seek(0)
+            shp.seek(0)
+            shx.seek(0)
+            dbf.seek(0)
+            prj.seek(0)
 
-        z = zipfile.ZipFile(stream, "w", zipfile.ZIP_DEFLATED)
+            z = zipfile.ZipFile(stream, "w", zipfile.ZIP_DEFLATED)
 
-        z.writestr("addresses/addresses.shp", shp.read())
-        z.writestr("addresses/addresses.shx", shx.read())
-        z.writestr("addresses/addresses.dbf", dbf.read())
-        z.writestr("addresses/addresses.prj", prj.read())
+            z.writestr("addresses/addresses.shp", shp.read())
+            z.writestr("addresses/addresses.shx", shx.read())
+            z.writestr("addresses/addresses.dbf", dbf.read())
+            z.writestr("addresses/addresses.prj", prj.read())
 
-        z.close()
+            z.close()
+
+        return count

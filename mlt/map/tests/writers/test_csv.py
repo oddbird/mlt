@@ -34,7 +34,9 @@ class CSVWriterTest(TestCase):
 
         stream = StringIO()
 
-        writer.save(stream)
+        count = writer.save(stream)
+
+        self.assertEqual(count, 2)
 
         stream.seek(0)
 

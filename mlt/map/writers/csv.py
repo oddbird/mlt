@@ -16,5 +16,7 @@ class CSVWriter(AddressWriter):
 
         writer.writerow(self.field_names)
 
-        for row in self.serialized():
+        for i, row in enumerate(self.serialized(), 1):
             writer.writerow([row[fn] for fn in self.field_names])
+
+        return i

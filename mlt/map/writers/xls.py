@@ -21,3 +21,5 @@ class XLSWriter(AddressWriter):
                 sheet.write(row, col, row_data[fn])
 
         workbook.save(stream)
+
+        return row
