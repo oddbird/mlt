@@ -80,6 +80,13 @@ class ParseDateRangeTest(TestCase):
             )
 
 
+    def test_single_day(self):
+        self.assertEqual(
+            self.func("8/31/11"),
+            (datetime(2011, 8, 31), datetime(2011, 8, 31))
+            )
+
+
     def test_blank_today(self):
         self.assertEqual(
             self.func("to 9/5/11"),

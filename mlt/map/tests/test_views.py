@@ -1770,7 +1770,6 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
 
         res = self.app.get(self.url + "?q=1", user=self.user)
 
-        self.assertEqual(res.json["options"], [])
         self.assertEqual(res.json["too_many"], ["street"])
 
 

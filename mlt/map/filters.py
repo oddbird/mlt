@@ -81,17 +81,26 @@ def parse_date_range(q):
     Given a string query, attempt to parse it as "[date] to [date]". On failure
     return None, on success return tuple of (fromdate, todate).
 
+    Just "[date]" is also allowed, and parses as the same day for fromdate and
+    todate.
+
     """
-    ret = None
+    fromto = None
+
+    if not q.strip():
+        return None
 
     bits = (" " + q + " ").split(" to ")
-    if len(bits) == 2:
+    if len(bits) in (1, 2):
         try:
-            ret = tuple([parse_date(d) for d in bits])
+            fromto = tuple([parse_date(d) for d in bits])
         except ValueError:
             pass
+        else:
+            if len(fromto) == 1:
+                fromto = (fromto[0], fromto[0])
 
-    return ret
+    return fromto
 
 
 
