@@ -1681,12 +1681,13 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
         self.assertEqual(
             res.json["options"],
             [{
-                    "desc": "city",
+                    "display_field": "city",
                     "field": "city",
-                    "name": "Albuquerque",
+                    "display_value": "Albuquerque",
                     "value": "albuquerque",
                     "q": "alb",
-                    "rest": "uquerque",
+                    "display_value_rest": "uquerque",
+                    "replace": False,
                     }]
             )
 
@@ -1696,10 +1697,11 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
             res.json["options"],
             [{      "q": "b",
                     "field": "mapped_by",
-                    "name": "blametern",
+                    "display_value": "blametern",
                     "value": blametern.id,
-                    "rest": "lametern",
-                    "desc": "mapped by"
+                    "display_value_rest": "lametern",
+                    "display_field": "mapped by",
+                    "replace": False,
                     }]
             )
 
@@ -1715,12 +1717,13 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
         self.assertEqual(
             res.json["options"],
             [{
-                    "desc": "batch",
+                    "display_field": "batch",
                     "field": "batches",
-                    "name": "two",
+                    "display_value": "two",
                     "value": b2.id,
                     "q": "tw",
-                    "rest": "o",
+                    "display_value_rest": "o",
+                    "replace": False,
                     }]
             )
 
@@ -1741,12 +1744,13 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
         self.assertEqual(
             res.json["options"],
             [{
-                    "desc": "city",
+                    "display_field": "city",
                     "field": "city",
-                    "name": "providence",
+                    "display_value": "providence",
                     "value": "providence",
                     "q": "prov",
-                    "rest": "idence",
+                    "display_value_rest": "idence",
+                    "replace": False,
                     }]
             )
 
@@ -1775,20 +1779,22 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
             res.json["options"],
             [
                 {
-                    "desc": "mapped timestamp",
+                    "display_field": "mapped timestamp",
                     "field": "mapped_timestamp",
-                    "name": "8/31/2011 to 9/10/2011",
+                    "display_value": "8/31/2011 to 9/10/2011",
                     "value": "8/31/2011 to 9/10/2011",
                     "q": "8-31-11 to Sep 10 2011",
-                    "rest": "",
+                    "display_value_rest": "",
+                    "replace": True,
                     },
                 {
-                    "desc": "batch timestamp",
+                    "display_field": "batch timestamp",
                     "field": "batches__timestamp",
-                    "name": "8/31/2011 to 9/10/2011",
+                    "display_value": "8/31/2011 to 9/10/2011",
                     "value": "8/31/2011 to 9/10/2011",
                     "q": "8-31-11 to Sep 10 2011",
-                    "rest": "",
+                    "display_value_rest": "",
+                    "replace": True,
                     },
                 ]
             )
@@ -1834,12 +1840,13 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
         self.assertEqual(
             res.json["options"],
             [{
-                    "desc": "city",
+                    "display_field": "city",
                     "field": "post__city",
-                    "name": "Albuquerque",
+                    "display_value": "Albuquerque",
                     "value": "albuquerque",
                     "q": "alb",
-                    "rest": "uquerque",
+                    "display_value_rest": "uquerque",
+                    "replace": False,
                     }]
             )
 
@@ -1851,18 +1858,20 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
                 {
                     "q": "b",
                     "field": "changed_by",
-                    "name": "blametern",
+                    "display_value": "blametern",
                     "value": blametern.id,
-                    "rest": "lametern",
-                    "desc": "changed by"
+                    "display_value_rest": "lametern",
+                    "display_field": "changed by",
+                    "replace": False,
                     },
                 {
                     "q": "b",
                     "field": "post__mapped_by",
-                    "name": "blametern",
+                    "display_value": "blametern",
                     "value": blametern.id,
-                    "rest": "lametern",
-                    "desc": "mapped by"
+                    "display_value_rest": "lametern",
+                    "display_field": "mapped by",
+                    "replace": False,
                     },
              ]
             )
@@ -1879,12 +1888,13 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
         self.assertEqual(
             res.json["options"],
             [{
-                    "desc": "batch",
+                    "display_field": "batch",
                     "field": "address__batches",
-                    "name": "two",
+                    "display_value": "two",
                     "value": b2.id,
                     "q": "tw",
-                    "rest": "o",
+                    "display_value_rest": "o",
+                    "replace": False,
                     }]
             )
 
@@ -1905,12 +1915,13 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
         self.assertEqual(
             res.json["options"],
             [{
-                    "desc": "city",
+                    "display_field": "city",
                     "field": "post__city",
-                    "name": "providence",
+                    "display_value": "providence",
                     "value": "providence",
                     "q": "prov",
-                    "rest": "idence",
+                    "display_value_rest": "idence",
+                    "replace": False,
                     }]
             )
 
@@ -1931,20 +1942,22 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
             res.json["options"],
             [
                 {
-                    "desc": "changed timestamp",
+                    "display_field": "changed timestamp",
                     "field": "changed_timestamp",
-                    "name": "8/31/2011 to 9/10/2011",
+                    "display_value": "8/31/2011 to 9/10/2011",
                     "value": "8/31/2011 to 9/10/2011",
                     "q": "8-31-11 to Sep 10 2011",
-                    "rest": "",
+                    "display_value_rest": "",
+                    "replace": True,
                     },
                 {
-                    "desc": "mapped timestamp",
+                    "display_field": "mapped timestamp",
                     "field": "post__mapped_timestamp",
-                    "name": "8/31/2011 to 9/10/2011",
+                    "display_value": "8/31/2011 to 9/10/2011",
                     "value": "8/31/2011 to 9/10/2011",
                     "q": "8-31-11 to Sep 10 2011",
-                    "rest": "",
+                    "display_value_rest": "",
+                    "replace": True,
                     },
                 ]
             )

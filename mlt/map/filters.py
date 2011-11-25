@@ -155,40 +155,42 @@ class Filter(object):
         too_many = []
         seen = set()
         date_range = parse_date_range(q)
-        for field, (desc, display_field) in self.autocomplete_fields.items():
+        for field, (display_field, full_field) in self.autocomplete_fields.items():
             if field in self.date_fields:
                 if date_range:
                     value = " to ".join([
                             format(dt, "n/j/Y") for dt in date_range])
                     options.append({
                             "q": q,
-                            "name": value,
+                            "display_value": value,
                             "value": value,
-                            "rest": "",
+                            "display_value_rest": "",
                             "field": field,
-                            "desc": desc,
+                            "display_field": display_field,
+                            "replace": True,
                             })
             else:
                 field_options = (qs.filter(
-                        **{"%s__istartswith" % display_field: q}).values_list(
-                        display_field, field).distinct())
+                        **{"%s__istartswith" % full_field: q}).values_list(
+                        full_field, field).distinct())
                 if field_options.count() > MAX_AUTOCOMPLETE:
-                    too_many.append(desc)
+                    too_many.append(display_field)
                     continue
                 for option in field_options:
-                    display, submit = option
-                    if hasattr(submit, "lower"):
-                        submit = submit.lower()
-                    key = (field, submit)
+                    display_value, value = option
+                    if hasattr(value, "lower"):
+                        value = value.lower()
+                    key = (field, value)
                     if key not in seen:
                         seen.add(key)
                         options.append({
                                 "q": q,
-                                "name": display,
-                                "rest": display[len(q):],
-                                "value": submit,
+                                "display_value": display_value,
+                                "display_value_rest": display_value[len(q):],
+                                "value": value,
                                 "field": field,
-                                "desc": desc
+                                "display_field": display_field,
+                                "replace": False,
                                 })
 
         return {
