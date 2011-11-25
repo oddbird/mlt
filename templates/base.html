@@ -86,12 +86,12 @@
   <nav role="navigation">
     <h2 class="navhead">Primary Navigation</h2>
     {% if user.is_authenticated %}
-      {% if request.user.is_staff %}
-        <a href="{% url map_load_parcels %}">Load Parcels</a>
-      {% endif %}
       {% block navigation %}
         <a href="{% url home %}" rel="home" class="home">Home</a>
       {% endblock navigation %}
+      {% if request.user.is_staff %}
+        <a href="{% url map_load_parcels %}" class="parcels" title="upload parcels">Upload Parcels</a>
+      {% endif %}
     {% endif %}
   </nav>
 

@@ -13,3 +13,17 @@
   +float(left)
   width: fixed($n)
   margin-right: $gutter-width
+
+.simplepage
+  +full(29)
+  +pad(8,8,29)
+  +padding-leader
+  +padding-trailer
+  max-width: fixed(12)
+  h2
+    +trailer
+  label
+    +bold
+  li
+    +trailer(.5)
+    position: relative

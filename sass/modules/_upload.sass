@@ -1,0 +1,17 @@
+#load-parcels-form, #load-parcels-status
+  @extend .simplepage
+  label
+    display: block
+  &.loading-parcels
+    strong
+      position: relative
+      &::before
+        content: image-url('ui/load.gif')
+        position: absolute
+        right: 105%
+  &.failed
+    strong
+      color: $accent
+  &.ready
+    strong
+      color: $green

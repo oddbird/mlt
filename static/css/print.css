@@ -32,6 +32,11 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 @font-face { font-family: "CambridgeRoundCond"; src: url('../fonts/cambridgeround_semiboldcondensed_macroman/cambridge_round_semibold_cond-webfont.woff') format('woff'), url('../fonts/cambridgeround_semiboldcondensed_macroman/cambridge_round_semibold_cond-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_semiboldcondensed_macroman/cambridge_round_semibold_cond-webfont.svg#CambridgeRoundBoldCondensed') format('svg'); font-weight: 500; font-style: normal; }
 
 /* ! Web Fonts from fontspring.com  All OpenType features and all extended glyphs have been removed. Fully installable fonts can be purchased at http://www.fontspring.com  The fonts included in this stylesheet are subject to the End User License you purchased from Fontspring. The fonts are protected under domestic and international trademark and copyright law. You are prohibited from modifying, reverse engineering, duplicating, or distributing this font software.  (c) 2010-2011 Fontspring     The fonts included are copyrighted by the vendor listed below.  Vendor:      Aviation Partners License URL: http://www.fontspring.com/fflicense/aviation-partners   */
+.simplepage { clear: both; padding-left: 27.778%; padding-right: 27.778%; padding-top: 1.618em; padding-bottom: 1.618em; max-width: 59em; }
+.simplepage h2 { margin-bottom: 1.618em; }
+.simplepage label { font-weight: 700; }
+.simplepage li { margin-bottom: 0.809em; position: relative; }
+
 /* Typography ---------------------------------------------------------------- */
 .serif { font-family: Cambria, Georgia, serif; }
 

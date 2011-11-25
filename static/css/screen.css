@@ -32,6 +32,11 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 @font-face { font-family: "CambridgeRoundCond"; src: url('../fonts/cambridgeround_semiboldcondensed_macroman/cambridge_round_semibold_cond-webfont.woff') format('woff'), url('../fonts/cambridgeround_semiboldcondensed_macroman/cambridge_round_semibold_cond-webfont.ttf') format('truetype'), url('../fonts/cambridgeround_semiboldcondensed_macroman/cambridge_round_semibold_cond-webfont.svg#CambridgeRoundBoldCondensed') format('svg'); font-weight: 500; font-style: normal; }
 
 /* ! Web Fonts from fontspring.com  All OpenType features and all extended glyphs have been removed. Fully installable fonts can be purchased at http://www.fontspring.com  The fonts included in this stylesheet are subject to the End User License you purchased from Fontspring. The fonts are protected under domestic and international trademark and copyright law. You are prohibited from modifying, reverse engineering, duplicating, or distributing this font software.  (c) 2010-2011 Fontspring     The fonts included are copyrighted by the vendor listed below.  Vendor:      Aviation Partners License URL: http://www.fontspring.com/fflicense/aviation-partners   */
+.simplepage, #login, #password_change, #password_reset, #password_reset_confirm, #load-parcels-form, #load-parcels-status { clear: both; padding-left: 27.778%; padding-right: 27.778%; padding-top: 1.618em; padding-bottom: 1.618em; max-width: 59em; }
+.simplepage h2, #login h2, #password_change h2, #password_reset h2, #password_reset_confirm h2, #load-parcels-form h2, #load-parcels-status h2 { margin-bottom: 1.618em; }
+.simplepage label, #login label, #password_change label, #password_reset label, #password_reset_confirm label, #load-parcels-form label, #load-parcels-status label { font-weight: 700; }
+.simplepage li, #login li, #password_change li, #password_reset li, #password_reset_confirm li, #load-parcels-form li, #load-parcels-status li { margin-bottom: 0.809em; position: relative; }
+
 /* Typography ---------------------------------------------------------------- */
 .serif { font-family: Cambria, Georgia, serif; }
 
@@ -258,18 +263,20 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 #messages .warning { background: rgba(250, 250, 200, 0.95); }
 #messages .error { background: rgba(250, 200, 200, 0.95); }
 
-[role="navigation"] { display: inline; float: left; width: 6.164%; margin-right: 0.685%; display: inline; float: right; margin-right: 0.685%; #margin-left: -0.809em; }
-[role="navigation"] a:link, [role="navigation"] a:visited { -moz-border-radius: 0.382em; -webkit-border-radius: 0.382em; -o-border-radius: 0.382em; -ms-border-radius: 0.382em; -khtml-border-radius: 0.382em; border-radius: 0.382em; padding-top: 0.405em; padding-bottom: 0.405em; padding-left: 12px; padding-right: 12px; display: block; text-align: center; background: rgba(221, 221, 221, 0.382) no-repeat scroll 12px; }
+[role="navigation"] { display: inline; float: left; width: 9.589%; margin-right: 0.685%; display: inline; float: right; margin-right: 0.685%; #margin-left: -0.809em; white-space: nowrap; text-align: right; }
+[role="navigation"] a:link, [role="navigation"] a:visited { -moz-border-radius: 0.382em; -webkit-border-radius: 0.382em; -o-border-radius: 0.382em; -ms-border-radius: 0.382em; -khtml-border-radius: 0.382em; border-radius: 0.382em; padding-top: 0.405em; padding-bottom: 0.405em; padding-left: 12px; padding-right: 12px; display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; text-align: center; background: rgba(221, 221, 221, 0.382) no-repeat scroll 12px; }
+[role="navigation"] a:link, [role="navigation"] a:visited { *display: inline; }
 [role="navigation"] a:focus, [role="navigation"] a:hover, [role="navigation"] a:active, [role="navigation"] a.active { background-color: rgba(221, 221, 221, 0.618); }
 [role="navigation"] .history:link, [role="navigation"] .history:visited { padding-left: 28.584px; background-image: url('../images/ui/history.png?1317931604'); }
 [role="navigation"] .home:link, [role="navigation"] .home:visited { padding-left: 28.584px; background-image: url('../images/ui/pin_target.png?1320960900'); }
+[role="navigation"] .parcels:link, [role="navigation"] .parcels:visited { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/upload.png?1322254993'); background-repeat: no-repeat; background-position: 50% 50%; }
 
 .meta { display: inline; float: left; width: 23.288%; margin-right: 0.685%; display: inline; float: right; padding-top: 0.405em; padding-bottom: 0.405em; text-align: right; }
 
 [role="main"] { overflow: hidden; *zoom: 1; position: relative; background: white; }
 
 [role="contentinfo"] { -moz-border-radius-topright: 5px; -webkit-border-top-right-radius: 5px; -o-border-top-right-radius: 5px; -ms-border-top-right-radius: 5px; -khtml-border-top-right-radius: 5px; border-top-right-radius: 5px; -moz-transition-property: width 300ms; -webkit-transition-property: width 300ms; -o-transition-property: width 300ms; transition-property: width 300ms; -moz-transition-duration: 1s; -webkit-transition-duration: 1s; -o-transition-duration: 1s; transition-duration: 1s; position: fixed; left: 33.169em; bottom: 0; padding: 0.405em 0.809em; background: rgba(162, 208, 245, 0.85); overflow: hidden; width: 1.214em; white-space: nowrap; z-index: 900; }
-.section-history [role="contentinfo"], .section-account [role="contentinfo"] { left: 0; }
+.section-history [role="contentinfo"], .section-account [role="contentinfo"], .section-load [role="contentinfo"] { left: 0; }
 [role="contentinfo"]:hover { width: auto; min-width: 50%; }
 [role="contentinfo"]:hover .author { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 [role="contentinfo"] .copy { font-size: 1.618em; line-height: 1em; font-weight: 700; margin-right: 0.405em; }
@@ -333,11 +340,14 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 .action-reject:focus, .action-reject:hover, .action-reject:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; background-image: url('../images/ui/thumb_down.png?1317931604'); }
 
 /* Login --------------------------------------------------------------------- */
-#login, #password_change, #password_reset, #password_reset_confirm { clear: both; padding-left: 27.778%; padding-right: 27.778%; padding-top: 1.618em; padding-bottom: 1.618em; max-width: 47.731em; }
-#login form, #password_change form, #password_reset form, #password_reset_confirm form { margin-top: 1.618em; }
-#login label, #password_change label, #password_reset label, #password_reset_confirm label { font-weight: 700; position: absolute; top: 0.405em; right: 101.563%; width: 60.938%; text-align: right; }
-#login li, #password_change li, #password_reset li, #password_reset_confirm li { margin-bottom: 0.809em; position: relative; }
+#login label, #password_change label, #password_reset label, #password_reset_confirm label { position: absolute; top: 0.405em; right: 101.563%; width: 60.938%; text-align: right; }
 #login .errorlist:not(.nonfield), #password_change .errorlist:not(.nonfield), #password_reset .errorlist:not(.nonfield), #password_reset_confirm .errorlist:not(.nonfield) { position: absolute; top: 0.405em; left: 101.563%; width: 60.938%; }
+
+#load-parcels-form label, #load-parcels-status label { display: block; }
+#load-parcels-form.loading-parcels strong, #load-parcels-status.loading-parcels strong { position: relative; }
+#load-parcels-form.loading-parcels strong::before, #load-parcels-status.loading-parcels strong::before { content: url('../images/ui/load.gif?1322257880'); position: absolute; right: 105%; }
+#load-parcels-form.failed strong, #load-parcels-status.failed strong { color: #984400; }
+#load-parcels-form.ready strong, #load-parcels-status.ready strong { color: #266619; }
 
 /* Filtering ----------------------------------------------------------------- */
 #filter { background-image: -webkit-gradient(linear, 100% 50%, 0% 50%, color-stop(0%, rgba(221, 221, 221, 0.5)), color-stop(4.854em, rgba(221, 221, 221, 0)), color-stop(100%, rgba(221, 221, 221, 0))); background-image: -webkit-linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0) 4.854em, rgba(221, 221, 221, 0)); background-image: -moz-linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0) 4.854em, rgba(221, 221, 221, 0)); background-image: -o-linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0) 4.854em, rgba(221, 221, 221, 0)); background-image: linear-gradient(right, rgba(221, 221, 221, 0.5), rgba(221, 221, 221, 0) 4.854em, rgba(221, 221, 221, 0)); position: relative; height: 2.427em; }
@@ -347,7 +357,7 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 #history #filter .textual { margin-right: 17.544%; }
 #filter .textual label { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
 #filter .textual input { clear: both; margin: 0; background: rgba(255, 255, 255, 0.125); }
-#filter .textual input.loading { background-image: url('../images/ui/load.gif?1321904968'); background-position: 98%; background-repeat: no-repeat; }
+#filter .textual input.loading { background-image: url('../images/ui/load.gif?1322257880'); background-position: 98%; background-repeat: no-repeat; }
 #filter .suggest { display: none; position: absolute; left: 0; right: 0; top: 2.427em; background: white; z-index: 800; }
 #filter .suggest a, #filter .suggest .too-many-results { padding-top: 0.405em; border-bottom-style: solid; border-bottom-width: 0.083em; padding-bottom: 0.321em; overflow: hidden; *zoom: 1; padding-left: 1em; padding-right: 1em; display: block; color: #4c4c4c; border: 1px solid #dddddd; border-color: transparent #949494 #dddddd; border-width: 0 1px 1px; }
 #filter .suggest a.selected, #filter .suggest .too-many-results.selected { background: #dddddd; }
