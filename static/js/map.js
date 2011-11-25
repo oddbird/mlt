@@ -745,7 +745,16 @@ var MLT = (function (MLT, $) {
     MLT.exportAddresses = function () {
         var form = $('#export-address-form'),
             url = form.attr('action'),
+            link = $('a[href=#lightbox-export-addresses]'),
             closeLink = form.find('.form-actions a[title="close"]');
+
+        link.click(function () {
+            $(document).on('keydown.closeExportLightbox', function (event) {
+                if (event.keyCode === 27) {
+                    closeLink.click();
+                }
+            });
+        });
 
         form.submit(function () {
             var input, i;
@@ -768,6 +777,10 @@ var MLT = (function (MLT, $) {
                 }
             });
             closeLink.click();
+        });
+
+        closeLink.click(function () {
+            $(document).off('keydown.closeExportLightbox');
         });
     };
 
