@@ -13,7 +13,7 @@
     // defaults, which you can override per application as needed:
 
     var lightboxes = $('#lightboxes aside'),
-        closeLinks = $('#lightboxes a[title*="close"]'),
+        closeLinkSelector = 'a[title*="close"]',
         showClass = 'active',
         hideClass = 'hidden';
 
@@ -21,7 +21,7 @@
     // Call this function to implement lightbox bootstrapping
     // on any given lightboxes:
 
-    function lightboxBootstrap(boxes, close, sClass, hClass) {
+    function lightboxBootstrap(boxes, close_sel, sClass, hClass) {
 
         $(boxes).not('.' + sClass).addClass(hClass);
 
@@ -41,7 +41,7 @@
             });
         });
 
-        closeLinks.live('click', function () {
+        boxes.on('click', close_sel, function () {
             lightboxClose($(this).parents(boxes));
             return false;
         });
@@ -49,7 +49,7 @@
 
     // Application ---------------------------------------------------------------
     $(function () {
-        lightboxBootstrap(lightboxes, closeLinks, showClass, hideClass);
+        lightboxBootstrap(lightboxes, closeLinkSelector, showClass, hideClass);
     });
 
 }(jQuery));
