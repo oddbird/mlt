@@ -46,6 +46,12 @@ class AddressImporterTest(GetImporterMixin, TransactionTestCase):
         return AddressImporter
 
 
+    @property
+    def ImporterError(self):
+        from mlt.map.importer import ImporterError
+        return ImporterError
+
+
     def test_import(self):
         """
         Given  an iterable  of dictionaries,  the process()  method  saves each
@@ -100,11 +106,9 @@ class AddressImporterTest(GetImporterMixin, TransactionTestCase):
         attribute is a list of (row-number, error-dict) tuples.
 
         """
-        from mlt.map.importer import ImporterError
-
         i = self.get_importer()
 
-        with self.assertRaises(ImporterError) as cm:
+        with self.assertRaises(self.ImporterError) as cm:
             i.process(
                 [
                     {
@@ -132,6 +136,52 @@ class AddressImporterTest(GetImporterMixin, TransactionTestCase):
                 ]
             )
         self.assertEqual(self.model.objects.count(), 0)
+
+
+    def test_bad_field_name(self):
+        i = self.get_importer()
+
+        with self.assertRaises(self.ImporterError) as cm:
+            i.process(
+                [
+                    {
+                        "street": "123 Main St",
+                        "city": "Providence",
+                        "state": "RI",
+                        "foo": "bar",
+                        }
+                    ]
+                )
+
+        self.assertEqual(
+            cm.exception.errors,
+            [
+                (1, {"?": [u"Extra or unknown columns in input."]})
+                ]
+            )
+
+
+    def test_none_in_data(self):
+        i = self.get_importer()
+
+        with self.assertRaises(self.ImporterError) as cm:
+            i.process(
+                [
+                    {
+                        "street": "123 Main St",
+                        "city": "Providence",
+                        "state": "RI",
+                        None: ["yo"],
+                        }
+                    ]
+                )
+
+        self.assertEqual(
+            cm.exception.errors,
+            [
+                (1, {"?": [u"Extra or unknown columns in input."]})
+                ]
+            )
 
 
     def test_unexpected_error(self):
@@ -188,6 +238,18 @@ class CSVAddressImporterTest(AddressImporterTest):
         self.assertEqual(
             [a.pl for a in self.model.objects.all()],
             ["123 51", "123 52"])
+
+
+    def test_extra_fields(self):
+        i = self.get_importer()
+
+        fh = StringIO(
+            "123 N Main St, Rapid City, SD, some, extra, columns\n"
+            "3815 Brookside, Rapid City, SD, more, extra, data")
+
+        count, dupes = i.process_file(fh)
+
+        self.assertEqual(count, 2)
 
 
     def test_header(self):

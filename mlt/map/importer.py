@@ -25,22 +25,26 @@ class AddressImporter(object):
         errors = []
         saved = 0
         dupes = 0
-        for i, r in enumerate(rows):
+        for i, r in enumerate(rows, 1):
             data = self.extra_data.copy()
             data.update(r)
             try:
                 created, addresses = Address.objects.create_from_input(**data)
-                self.batch.addresses.add(*addresses)
                 if created:
                     saved += 1
                 else:
                     dupes += 1
             except ValidationError as e:
-                # 1-based numbering for rows
-                errors.append((i + 1, e.message_dict))
+                errors.append((i, e.message_dict))
+            except TypeError:
+                transaction.rollback()
+                raise ImporterError(
+                    [(i, {"?": [u"Extra or unknown columns in input."]})])
             except:
                 transaction.rollback()
                 raise
+            else:
+                self.batch.addresses.add(*addresses)
 
         if errors:
             transaction.rollback()
@@ -59,7 +63,14 @@ class CSVAddressImporter(AddressImporter):
 
 
     def process_file(self, fh):
-        reader = csv.DictReader(fh, fieldnames=self.fieldnames)
+        def filtered_reader():
+            for record in csv.DictReader(fh, fieldnames=self.fieldnames):
+                if None in record:
+                    del record[None]
+                yield record
+
+        reader = filtered_reader()
+
         if self.header:
             reader.next()
         return self.process(reader)
