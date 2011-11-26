@@ -1,6 +1,10 @@
 class Serializer(object):
     default_fields = []
 
+    # fields which don't actually exist as attributes on a model instance
+    # entire instance will be passed to encode_* func, which must exist
+    virtual_fields = set([])
+
 
     def __init__(self, fields=None, extra=None, exclude=None):
         exclude = set(exclude or [])
@@ -13,8 +17,13 @@ class Serializer(object):
     def one(self, obj):
         ret = {}
         for field in self.fields:
-            val = getattr(obj, field)
-            encode_func = getattr(self, "encode_%s" % field, lambda x: x)
+            if field in self.virtual_fields:
+                val = obj
+                default_encode = lambda x: None
+            else:
+                val = getattr(obj, field)
+                default_encode = lambda x: x
+            encode_func = getattr(self, "encode_%s" % field, default_encode)
             ret[field] = encode_func(val)
 
         return ret

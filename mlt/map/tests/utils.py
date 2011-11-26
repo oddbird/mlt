@@ -67,23 +67,6 @@ def create_parcel(**kwargs):
         return Parcel(**defaults)
 
 
-
-def create_suffix(suffix="St"):
-    from mlt.map.models import StreetSuffix
-    return StreetSuffix.objects.get_or_create(suffix=suffix)[0]
-
-
-
-def create_alias(alias="Street", suffix=None):
-    if suffix is None:
-        suffix = create_suffix("St")
-
-    from mlt.map.models import StreetSuffixAlias
-    return StreetSuffixAlias.objects.get_or_create(
-        alias=alias, suffix=suffix)[0]
-
-
-
 def create_address(**kwargs):
     defaults = {
         "input_street": "3635 Van Gordon St",

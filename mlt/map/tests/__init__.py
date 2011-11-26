@@ -1,4 +1,5 @@
 from .test_admin import *
+from .test_api import *
 from .test_encoder import *
 from .test_filters import *
 from .test_forms import *

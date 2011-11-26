@@ -77,6 +77,30 @@ class SerializerTest(TestCase):
         self.assertEqual(s.fields, ["one", "two", "three", "four"])
 
 
+    def test_virtual_fields(self):
+        from mlt.map.serializers import Serializer
+
+        class VirtSerializer(Serializer):
+            default_fields = ["real_field", "virtual_field"]
+            virtual_fields = set(["virtual_field"])
+
+
+        # if no encode func is defined, virtual field is None
+        m = Mock()
+        m.real_field = "real"
+
+        self.assertEqual(
+            VirtSerializer().one(m),
+            {"real_field": "real", "virtual_field": None})
+
+        class BetterVirtSerializer(VirtSerializer):
+            def encode_virtual_field(self, obj):
+                return "virtual " + obj.real_field
+
+        self.assertEqual(
+            BetterVirtSerializer().one(m),
+            {"real_field": "real", "virtual_field": "virtual real"})
+
 
 
 

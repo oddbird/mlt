@@ -2,16 +2,17 @@ DEFAULT_PAGE_LENGTH = 20
 
 
 
-def apply(qs, GET):
+def apply(qs, GET, index=False):
     start, num = get_start_and_num(GET)
     qs = qs[start-1:start+num-1]
 
-    # @@@ indexing on subsequent queries might break if addresses have been
-    # added/deleted?
-    ret = []
-    for i, address in enumerate(qs):
-        address.index = i + start
-        ret.append(address)
+    if index:
+        ret = []
+        for i, obj in enumerate(qs):
+            obj.index = i + start
+            ret.append(obj)
+    else:
+        ret = qs
 
     return ret
 

@@ -356,7 +356,7 @@ class AddressQuerySet(PrefetchQuerySet):
     def prefetch(self, *args):
         prefetch_types = args or ["parcels", "batches"]
         return self.select_related(
-            "mapped_by", "imported_by").prefetch_linked(*prefetch_types)
+            "mapped_by").prefetch_linked(*prefetch_types)
 
 
     def _prefetch_linked_objects(self):
@@ -800,3 +800,13 @@ class AddressChange(models.Model):
     @property
     def revert_url(self):
         return reverse("map_revert_change", kwargs={"change_id": self.id})
+
+
+
+class ApiKey(models.Model):
+    name = models.CharField(max_length=100)
+    key = models.CharField(max_length=36, db_index=True)
+
+
+    def __unicode__(self):
+        return self.name

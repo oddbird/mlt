@@ -205,17 +205,18 @@ def addresses(request):
         count = qs.count()
 
     try:
-        qs = sort.apply(qs, request.GET.getlist("sort") or ["import_timestamp"])
+        qs = sort.apply(
+            qs, request.GET.getlist("sort") or ["batches__timestamp"])
     except sort.BadSort as e:
         for field in e.bad_fields:
             messages.error(
                 request, "'%s' is not a valid sort field." % field)
 
-    qs = paging.apply(qs, request.GET)
+    addresses = paging.apply(qs, request.GET, index=True)
 
     data = {
         "addresses": IndexedAddressSerializer(
-            extra=["parcel"]).many(qs)
+            extra=["parcel"]).many(addresses)
         }
 
     if get_count:
@@ -614,7 +615,8 @@ def load_parcels_status(request, task_id):
 
 
 
-def json_response(data):
+def json_response(data, status=200):
     return HttpResponse(
         json.dumps(data, cls=IterEncoder),
-        content_type="application/json")
+        content_type="application/json",
+        status=status)

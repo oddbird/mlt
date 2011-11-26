@@ -1,7 +1,10 @@
+from uuid import uuid4
+
+from django import forms
+
 from django.contrib.gis import admin
 
 from . import models
-
 
 
 class AddressBatchAssociationInline(admin.TabularInline):
@@ -68,6 +71,41 @@ class AddressBatchAdmin(admin.ModelAdmin):
 
 
 
+class ApiKeyCreationForm(forms.ModelForm):
+    class Meta:
+        model = models.ApiKey
+        exclude = ["key"]
+
+
+    def save(self, commit=True):
+        instance = super(ApiKeyCreationForm, self).save(commit=False)
+        instance.key = uuid4()
+        if commit:
+            instance.save()
+        return instance
+
+
+
+class ApiKeyAdmin(admin.ModelAdmin):
+    list_display = ["__unicode__", "key"]
+    search_fields = ["name"]
+
+
+    def get_form(self, request, obj=None, **kwargs):
+        """
+        Use special form for API key creation.
+
+        """
+        defaults = {}
+        if obj is None:
+            defaults.update({
+                'form': ApiKeyCreationForm,
+            })
+        defaults.update(kwargs)
+        return super(ApiKeyAdmin, self).get_form(request, obj, **defaults)
+
+
 admin.site.register(models.Address, AddressAdmin)
 admin.site.register(models.Parcel, ParcelAdmin)
 admin.site.register(models.AddressBatch, AddressBatchAdmin)
+admin.site.register(models.ApiKey, ApiKeyAdmin)

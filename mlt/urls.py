@@ -12,6 +12,7 @@ urlpatterns = patterns(
 
     url(r"^account/", include("mlt.account.urls")),
     url(r"^map/", include("mlt.map.urls")),
+    url(r"^api/v1/", include("mlt.map.api.urls")),
 
     url(r"^admin/", include(admin.site.urls)),
 
