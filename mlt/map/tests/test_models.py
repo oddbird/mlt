@@ -752,6 +752,23 @@ class AddressTest(TestCase):
         self.assertEqual(flags, {"conflict": ["city"]})
 
 
+    def test_revert_deletion_conflict(self):
+        a = create_address(city="Providence")
+        a.city = "Albuquerque"
+        a.save(user=create_user())
+        a.delete(user=create_user())
+
+        c = a.address_changes.get(post__city="Albuquerque")
+
+        u = create_user()
+        flags = c.revert(u)
+
+        a = refresh(a)
+        self.assertEqual(a.city, "Providence")
+        self.assertEqual(a.deleted, False)
+        self.assertEqual(flags, {"conflict": ["deleted"]})
+
+
     def test_prefetch_parcels(self):
         create_address(pl="1")
         create_address(pl="2")

@@ -763,6 +763,10 @@ class AddressChange(models.Model):
         conflicting fields. If the reversion is a no-op (nothing needs to be
         changed), the "no-op" key will be set to ``True``.
 
+        Reverting a change to a since-deleted address will first revert the
+        deletion and then revert the change, and will show up in the "conflict"
+        key as "deleted".
+
         """
         changed = False
         conflict = []
@@ -784,6 +788,9 @@ class AddressChange(models.Model):
                         conflict.append(field)
                     setattr(address, field, data["pre"])
                     changed = True
+                if address.deleted:
+                    conflict.append("deleted")
+                    address.undelete(user=user)
             if changed:
                 address.geocode_failed = False
                 address.save(user=user)
