@@ -126,10 +126,12 @@ var MLT = (function (MLT, $) {
                         if (thisAddress.find('.item-select').is(':checked')) {
                             checked = true;
                             address.checked = true;
-                            if (removePopup) {
-                                MLT.map.removeLayer(thisAddress.find('.item-select').get(0).popup);
-                            } else {
-                                popup = thisAddress.find('.item-select').get(0).popup;
+                            if (thisAddress.find('.item-select').get(0).popup) {
+                                if (removePopup) {
+                                    MLT.map.removeLayer(thisAddress.find('.item-select').get(0).popup);
+                                } else {
+                                    popup = thisAddress.find('.item-select').get(0).popup;
+                                }
                             }
                         }
                         address.index = index;
