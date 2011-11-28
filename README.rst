@@ -9,14 +9,20 @@ Python projects on your system, create a virtualenv and activate it.  Then
 run ``bin/install-reqs`` to install the dependencies for this project into
 your Python environment. Python 2.7 is required.
 
-You'll need a PostGIS-enabled PostgreSQL database available for this
-project; create it with a command like ``createdb -T template_postgis mlt``. 
-See the `GeoDjango installation documentation`_ for more details on setting
-up PostGIS and a PostGIS template database.
+You'll need a PostGIS-enabled PostgreSQL 9.0 database, with the ``citext``
+contrib module loaded into it, for this project. See the `GeoDjango
+installation documentation`_ for more details on setting up PostGIS and a
+PostGIS template database. To enable the ``citext`` module, connect to the
+``template_postgis`` database as the Postgres superuser and run ``\i
+/usr/share/postgresql/9.0/contrib/citext.sql`` (this is the location of the
+``citext.sql`` file on Ubuntu; will vary depending on your Postgres
+install). Once you have a PostGIS template database with ``citext`` enabled,
+create your database for MLT with a command like ``createdb -T template_postgis
+mlt``.
 
 You'll probably need to create an ``mlt/settings/local.py`` file with some
-details of your local configuration, including, most likely, your database
-name and user (unless they are both named "mlt").  See
+details of your local configuration, including, most likely, your database name
+and user (unless they are both named "mlt", the default).  See
 ``mlt/settings/local.sample.py`` for a sample that can be copied to
 ``mlt/settings/local.py`` and modified.
 

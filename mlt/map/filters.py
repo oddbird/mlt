@@ -110,7 +110,6 @@ class Filter(object):
     def autocomplete(self, qs, q):
         options = []
         too_many = []
-        seen = set()
         date_range = parse_date_range(q)
         for field, (display_field, full_field) in self.autocomplete_fields.items():
             if field in self.date_fields:
@@ -135,20 +134,15 @@ class Filter(object):
                     continue
                 for option in field_options:
                     display_value, value = option
-                    if hasattr(value, "lower"):
-                        value = value.lower()
-                    key = (field, value)
-                    if key not in seen:
-                        seen.add(key)
-                        options.append({
-                                "q": q,
-                                "display_value": display_value,
-                                "display_value_rest": display_value[len(q):],
-                                "value": value,
-                                "field": field,
-                                "display_field": display_field,
-                                "replace": False,
-                                })
+                    options.append({
+                            "q": q,
+                            "display_value": display_value,
+                            "display_value_rest": display_value[len(q):],
+                            "value": value,
+                            "field": field,
+                            "display_field": display_field,
+                            "replace": False,
+                            })
 
         return {
             "options": options,
@@ -180,7 +174,7 @@ class Filter(object):
                 else:
                     q = Q()
                     for val in filter_data.getlist(field):
-                        q = q | Q(**{"%s__iexact" % field: val})
+                        q = q | Q(**{field: val})
                     filters = filters & q
 
         for op, (field, data) in chain(

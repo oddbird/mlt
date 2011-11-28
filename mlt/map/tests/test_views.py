@@ -1691,7 +1691,7 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
                     "display_field": "city",
                     "field": "city",
                     "display_value": "Albuquerque",
-                    "value": "albuquerque",
+                    "value": "Albuquerque",
                     "q": "alb",
                     "display_value_rest": "uquerque",
                     "replace": False,
@@ -1740,8 +1740,8 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
             input_street="123 N Main St",
             city="Providence")
         create_address(
-            input_street="456 N Main St",
-            city="providence")
+            input_street="125 N Main St",
+            city="Providence")
         create_address(
             input_street="123 N Main St",
             city="Albuquerque")
@@ -1753,8 +1753,8 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
             [{
                     "display_field": "city",
                     "field": "city",
-                    "display_value": "providence",
-                    "value": "providence",
+                    "display_value": "Providence",
+                    "value": "Providence",
                     "q": "prov",
                     "display_value_rest": "idence",
                     "replace": False,
@@ -1842,7 +1842,7 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
                     "display_field": "city",
                     "field": "post__city",
                     "display_value": "Albuquerque",
-                    "value": "albuquerque",
+                    "value": "Albuquerque",
                     "q": "alb",
                     "display_value_rest": "uquerque",
                     "replace": False,
@@ -1903,9 +1903,6 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
             input_street="123 N Main St",
             city="Providence")
         create_address(
-            input_street="456 N Main St",
-            city="providence")
-        create_address(
             input_street="123 N Main St",
             city="Albuquerque")
 
@@ -1916,8 +1913,8 @@ class HistoryAutocompleteViewTest(AuthenticatedWebTest):
             [{
                     "display_field": "city",
                     "field": "post__city",
-                    "display_value": "providence",
-                    "value": "providence",
+                    "display_value": "Providence",
+                    "value": "Providence",
                     "q": "prov",
                     "display_value_rest": "idence",
                     "replace": False,
