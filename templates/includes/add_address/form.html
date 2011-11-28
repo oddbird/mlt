@@ -1,6 +1,6 @@
 {% load mltforms %}
 
-<h3>add an address</h3>
+<h2>add an address</h2>
 <form method="POST" action="{% url map_add_address %}" id="add-address-form">
   {% csrf_token %}
   {{ form.non_field_errors }}
