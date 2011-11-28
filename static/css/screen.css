@@ -494,8 +494,7 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 .address .geocoded:first-child { margin-left: 2.832em; }
 .revisionlist .address .geocoded:first-child { margin-left: 2.427em; }
 .address .flag { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
-.address .flag:checked + .action-flag { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
-.address .flag:checked + .action-flag:focus, .address .flag:checked + .action-flag:hover, .address .flag:checked + .action-flag:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; }
+.address .flag:checked + .action-flag { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; }
 .address .flag:checked[disabled] + .action-flag:focus, .address .flag:checked[disabled] + .action-flag:hover, .address .flag:checked[disabled] + .action-flag:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; cursor: inherit; }
 .address .content { padding-right: 0.809em; }
 .address .locality, .address .region, .address .postal-code, .address .complex-name { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; }
