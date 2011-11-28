@@ -8,7 +8,7 @@ from celery.task import task
 def record_bulk_delete(address_ids, user_id, timestamp):
     from .models import Address
 
-    for address in Address.objects.filter(id__in=address_ids):
+    for address in Address._base_manager.filter(id__in=address_ids):
         pre_data = address.snapshot_data(saved=True)
         record_address_change.delay(
             address_id=address.id,
