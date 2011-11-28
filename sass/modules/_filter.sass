@@ -89,16 +89,17 @@
       z-index: 900
     &:hover
       ul
-        +box-shadow
+        +box-shadow($mid 0px 3px 6px)
         display: block
 
   .visual
     +float(left)
-    +opacity(.5)
+    +opacity(.25)
     width: rhythm(1.5)
     background: image-url('ui/list.png') no-repeat scroll center
     &.active-filters
       +opacity(1)
+      background-color: $alt-hint
     ul
       right: 0
     label
