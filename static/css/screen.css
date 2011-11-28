@@ -543,7 +543,7 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 
 .loading { position: relative; }
 .loading > * { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=24)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=24); opacity: 0.236; }
-.loading .overlay { position: absolute; top: 0; bottom: 0; left: 0; right: 0; font-family: "CambridgeRoundCond", "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 700; padding-top: 0.405em; text-shadow: white 0 1px 0; display: block; color: rgba(76, 76, 76, 0.618); background: rgba(255, 255, 255, 0.618); text-align: center; z-index: 50; }
+.loading .overlay { position: absolute; top: 0; bottom: 0; left: 0; right: 0; font-family: "CambridgeRoundCond", "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 700; padding-top: 0.405em; text-shadow: white 0 1px 0; display: block; color: rgba(76, 76, 76, 0.618); background: rgba(252, 241, 232, 0.618); text-align: center; text-transform: uppercase; z-index: 50; }
 
 #addresstable { width: 33.169em; counter-reset: address; }
 #addresstable h2 { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
