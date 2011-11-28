@@ -35,11 +35,6 @@
   .open &
     background-image: image-url('ui/angle_down.png')
 
-.action-flag
-  .address &
-    +icon('ui/warning.png','ui/thumb_up.png')
-    +opacity(0)
-
 .action-delete
   @extend .actionbutton
   +icon('ui/trash.png')
@@ -60,3 +55,17 @@
 .action-reject
   @extend .actionbutton
   +icon('ui/thumb_down.png')
+
+.flag
+  +gone
+  + .action-flag
+    +opacity(0)
+  &:checked
+    + .action-flag
+      +icon('ui/warning.png','ui/thumb_up.png')
+      +opacity(1)
+    &[disabled]
+      + .action-flag
+        #{$focus}
+          +opacity(1)
+          cursor: inherit

@@ -314,9 +314,6 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 .action-info:focus, .action-info:hover, .action-info:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; background-image: url('../images/ui/angle_right.png?1317931604'); }
 .open .action-info { background-image: url('../images/ui/angle_down.png?1317931604'); }
 
-.address .action-flag { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/warning.png?1305750015'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 16.584px; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; }
-.address .action-flag:focus, .address .action-flag:hover, .address .action-flag:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; background-image: url('../images/ui/warning.png?1305750015'); background-image: url('../images/ui/thumb_up.png?1307644308'); }
-
 .action-delete { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/trash.png?1305749914'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 16.584px; }
 .action-delete:focus, .action-delete:hover, .action-delete:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; background-image: url('../images/ui/trash.png?1305749914'); }
 
@@ -337,6 +334,12 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 
 .action-reject { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/thumb_down.png?1317931604'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 16.584px; }
 .action-reject:focus, .action-reject:hover, .action-reject:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; background-image: url('../images/ui/thumb_down.png?1317931604'); }
+
+.flag { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
+.flag + .action-flag { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; }
+.flag:checked + .action-flag { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/warning.png?1305750015'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 16.584px; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
+.flag:checked + .action-flag:focus, .flag:checked + .action-flag:hover, .flag:checked + .action-flag:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; background-image: url('../images/ui/warning.png?1305750015'); background-image: url('../images/ui/thumb_up.png?1307644308'); }
+.flag:checked[disabled] + .action-flag:focus, .flag:checked[disabled] + .action-flag:hover, .flag:checked[disabled] + .action-flag:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; cursor: inherit; }
 
 /* Login --------------------------------------------------------------------- */
 #login label, #password_change label, #password_reset label, #password_reset_confirm label { position: absolute; top: 0.405em; right: 101.563%; width: 60.938%; text-align: right; }
@@ -493,9 +496,6 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 .address .geocoded { text-indent: -119988px; overflow: hidden; text-align: left; background-image: url('../images/ui/pin_target.png?1320960900'); background-repeat: no-repeat; background-position: 50% 50%; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; display: block; width: 16.584px; display: inline; float: left; }
 .address .geocoded:first-child { margin-left: 2.832em; }
 .revisionlist .address .geocoded:first-child { margin-left: 2.427em; }
-.address .flag { position: absolute; clip: rect(0 0 0 0); overflow: hidden; margin: -1px; padding: 0; height: 1px; width: 1px; border: 0; }
-.address .flag:checked + .action-flag { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; }
-.address .flag:checked[disabled] + .action-flag:focus, .address .flag:checked[disabled] + .action-flag:hover, .address .flag:checked[disabled] + .action-flag:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; cursor: inherit; }
 .address .content { padding-right: 0.809em; }
 .address .locality, .address .region, .address .postal-code, .address .complex-name { display: -moz-inline-box; -moz-box-orient: vertical; display: inline-block; vertical-align: middle; *vertical-align: auto; }
 .address .locality, .address .region, .address .postal-code, .address .complex-name { *display: inline; }
@@ -518,6 +518,7 @@ h1 a:focus, h1 a:hover, h1 a:active { color: #984400; }
 .address:hover .action-reject:focus, .address:hover .action-reject:hover, .address:hover .action-reject:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .address:hover .flag + .action-flag { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=75); opacity: 0.75; }
 .address:hover .flag + .action-flag:focus, .address:hover .flag + .action-flag:hover, .address:hover .flag + .action-flag:active { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
+.address:hover .flag:checked + .action-flag { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .address:hover .flag[disabled] + .action-flag { -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); opacity: 1; }
 .address:hover .flag[disabled]:not([checked]) + .action-flag { display: none; }
 .address:hover::before { color: rgba(76, 76, 76, 0.5); }

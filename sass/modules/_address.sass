@@ -69,17 +69,6 @@
       .revisionlist &
         margin-left: rhythm(1.5)
 
-  .flag
-    +gone
-    &:checked
-      + .action-flag
-        +opacity(.75)
-      &[disabled]
-        + .action-flag
-          #{$focus}
-            +opacity(1)
-            cursor: inherit
-
   .content
     padding-right: $gutter-width
 
@@ -130,6 +119,9 @@
       + .action-flag
         +opacity(.75)
         #{$focus}
+          +opacity(1)
+      &:checked
+        + .action-flag
           +opacity(1)
       &[disabled]
         + .action-flag
