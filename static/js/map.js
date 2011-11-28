@@ -912,12 +912,13 @@ var MLT = (function (MLT, $) {
         var success, bootstrapForm,
             link = $('a[href=#lightbox-add-address]'),
             target = $("#lightbox-add-address"),
-            url = target.data('add-address-url');
+            url = target.data('add-address-url'),
+            wrapper = target.find('> div');
 
         success = function (data) {
             var number = addressContainer.find('.address').length;
             if (number < 20) { number = 20; }
-            target.loadingOverlay('remove');
+            wrapper.loadingOverlay('remove');
             if (data.success) {
                 target.find('a[title*="close"]').click();
                 MLT.addressLoading.reloadList({num: number}, true);
@@ -934,11 +935,11 @@ var MLT = (function (MLT, $) {
 
         bootstrapForm = function () {
             var form = target.find('form').ajaxForm({
-                beforeSubmit: function (arr, $form, options) {
-                    target.loadingOverlay();
-                },
-                success: success
-            });
+                    beforeSubmit: function (arr, $form, options) {
+                        wrapper.loadingOverlay();
+                    },
+                    success: success
+                });
         };
 
         link.click(function () {
@@ -1463,7 +1464,6 @@ var MLT = (function (MLT, $) {
         var link = $('a[href=#lightbox-import-addresses]'),
             target = $("#lightbox-import-addresses"),
             url = target.data('import-addresses-url'),
-            form = $("#lightbox-import-addresses"),
             success = function (data) {
                 target.find('> div').html(data.html);
                 $(document).on('keydown.closeImportLightbox', function (event) {
@@ -1477,8 +1477,8 @@ var MLT = (function (MLT, $) {
             $.get(url, success);
         });
 
-        form.submit(function () {
-            target.loadingOverlay();
+        target.on('submit', 'form', function () {
+            target.find('> div').loadingOverlay();
         });
 
         target.on('click', 'a[title*="close"]', function () {
