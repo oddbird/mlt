@@ -102,8 +102,8 @@ var MLT = (function (MLT, $) {
                 var newFilter = ich.filter_applied({
                         field: 'address_id',
                         value: id,
-                        desc: 'address id',
-                        name: id
+                        display_field: 'address id',
+                        display_value: id
                     });
 
                 if (newFilter.length) {
