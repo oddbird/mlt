@@ -28,7 +28,7 @@
         <button class="action-reject" type="submit" title="reject mapping">reject mapping</button>
 
         <input type="checkbox" name="flag_for_review" value="{{ id }}" id="flag_for_review_{{ id }}"{{# needs_review }} checked="checked"{{/ needs_review }} class="flag">
-        <label for="flag_for_review_{{ id }}" class="action-flag" title="flag for review">flag for review</label>
+        <label for="flag_for_review_{{ id }}" class="action-flag" title="{{# needs_review }}flagged for review - click to approve{{/ needs_review }}{{^ needs_review }}flag for review{{/ needs_review }}">{{# needs_review }}flagged for review - click to approve{{/ needs_review }}{{^ needs_review }}flag for review{{/ needs_review }}</label>
 
         {{# geocoded }}<span class="geocoded" title="geocoded">geocoded</span>{{/ geocoded }}
 
@@ -46,10 +46,10 @@
       <li><button type="submit" name="delete" value="{{ id }}" title="delete" class="action-delete">delete</button></li>
       <li>
         {{# multi_units }}
-          <button name="complex" type="submit" class="action-complex single" value="{{ id }}" title="set as single unit">single unit</button>
+          <button name="complex" type="submit" class="action-complex single" value="{{ id }}" title="multiple units - click to set as single unit">multiple units - click to set as single unit</button>
         {{/ multi_units }}
         {{^ multi_units }}
-          <button name="complex" type="submit" class="action-complex multiple" value="{{ id }}" title="set as multiple units">multiple units</button>
+          <button name="complex" type="submit" class="action-complex multiple" value="{{ id }}" title="single unit - click to set as multiple units">single unit - click to set as multiple units</button>
         {{/ multi_units }}
       </li>
     </ul>
