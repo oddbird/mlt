@@ -8,18 +8,19 @@
 {% block content %}
 <section id="addresstable">
   <h2>Address Table</h2>
-  <form id="addressform">
+  <div>
 
     {% include "includes/actions.html" %}
 
-    <div class="managelist" data-addresses-url="{% url map_addresses %}" data-geocode-url="{% url map_geocode %}" data-actions-url="{% url map_address_actions %}"{% if user_trusted %} data-trusted="trusted"{% endif %}>
+    <form id="addressform">
+      <div class="managelist" data-addresses-url="{% url map_addresses %}" data-geocode-url="{% url map_geocode %}" data-actions-url="{% url map_address_actions %}"{% if user_trusted %} data-trusted="trusted"{% endif %}>
+        <aside class="load">
+          <p>loading addresses...</p>
+        </aside>
+      </div>
+    </form>
 
-      <aside class="load">
-        <p>loading addresses...</p>
-      </aside>
-
-    </div>
-  </form>
+  </div>
 </section>
 
 <aside id="mapping" data-parcel-geojson-url="{% url map_geojson %}" data-associate-url="{% url map_associate %}">
