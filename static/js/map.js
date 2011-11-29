@@ -23,7 +23,7 @@ var MLT = (function (MLT, $) {
         loadingURL = addressContainer.data('addresses-url'),
         loadingMessage = addressContainer.find('.load'),
         refreshButton = $('#addresstable #filter .refresh'),
-        bulkSelect = $('#addressform .actions .bulkselect'),
+        bulkSelect = $('#addresstable .actions .bulkselect'),
         preserveSelectAll = null,
         parcelMap = {},
         listXHR = null,
@@ -74,7 +74,7 @@ var MLT = (function (MLT, $) {
                 MLT.addressLoading.moreAddresses = false;
             }
             if (data.count || data.count === 0) {
-                $('#addressform .actions .listlength').html(data.count);
+                $('#addresstable .actions .listlength').html(data.count);
             }
             if (addressContainer.data('trusted') !== 'trusted') {
                 addressContainer.find('.address input[name="flag_for_review"]:checked').attr('disabled', 'disabled');
@@ -960,7 +960,7 @@ var MLT = (function (MLT, $) {
     MLT.addressActions = function () {
         var url = addressContainer.data('actions-url');
 
-        $('#addressform .actions .bools .addremove .action-delete').click(function () {
+        $('#addresstable .actions .bools .addremove .action-delete').click(function () {
             var number = addressContainer.find('.address').length,
                 selectedAddressInput = addressContainer.find('.address .item-select:checked'),
                 selectedAddressID = selectedAddressInput.map(function () {
@@ -1023,7 +1023,7 @@ var MLT = (function (MLT, $) {
             return false;
         });
 
-        $('#addressform .actions .bools .approval button').click(function () {
+        $('#addresstable .actions .bools .approval button').click(function () {
             var action,
                 selectedAddressInput = addressContainer.find('.address .item-select:checked'),
                 selectedAddressID = selectedAddressInput.map(function () {
@@ -1173,7 +1173,7 @@ var MLT = (function (MLT, $) {
         });
 
         if (addressContainer.data('trusted') !== 'trusted') {
-            $('#addressform .actions .bools .approval .action-approve').addClass('disabled');
+            $('#addresstable .actions .bools .approval .action-approve').addClass('disabled');
         }
     };
 
@@ -1419,7 +1419,7 @@ var MLT = (function (MLT, $) {
     };
 
     MLT.selectAll = function () {
-        $('#addressform .actions .bulkselect #select_all_none').change(function () {
+        $('#addresstable .actions .bulkselect #select_all_none').change(function () {
             if ($(this).is(':checked')) {
                 $(this).closest('.bulkselect').data('selectall', true);
                 addressContainer.find('.address .item-select').prop('checked', true);

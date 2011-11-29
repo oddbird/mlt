@@ -14,10 +14,10 @@ var MLT = (function (MLT, $) {
 
         // map.js
         if ($('#addresstable').length) {
-            MLT.addressListHeight('#addressform', '.managelist');
+            MLT.addressListHeight('#addresstable > div > .actions', '#addressform > .managelist');
             MLT.addressPopups();
             MLT.mapAddress();
-            MLT.sorting('#addressform');
+            MLT.sorting('#addresstable');
             MLT.addressDetails();
             MLT.addressSelect();
             MLT.addressZoom();
