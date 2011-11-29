@@ -385,7 +385,7 @@ class AddressQuerySet(PrefetchQuerySet):
         through = self.model.batches.through
         qs = through.objects.filter(
             address__in=[a.id for a in self._result_cache]).select_related(
-            "addressbatch")
+            "addressbatch", "addressbatch__user")
         batches_by_aid = defaultdict(list)
         for through_record in qs:
             batches_by_aid[through_record.address_id].append(

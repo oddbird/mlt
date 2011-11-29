@@ -478,8 +478,9 @@ class AddressesViewTest(AuthenticatedWebTest):
 
     def test_queries(self):
         for i in range(50):
-            create_address(street_number=str(i+1), pl=i)
+            a = create_address(street_number=str(i+1), pl=i)
             create_parcel(pl=i)
+            create_address_batch(tag=i).addresses.add(a)
 
         # 1 for parcels, 1 for addresses, 1 for batches, 11 for sessions/auth
         with self.assertNumQueries(14):
