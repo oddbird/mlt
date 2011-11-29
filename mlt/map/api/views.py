@@ -59,7 +59,7 @@ def addresses(request):
 
     try:
         qs = sort.apply(
-            qs, request.GET.getlist("sort") or ["-batches__timestamp"])
+            qs, request.GET.getlist("sort") or ["-latest_batch_timestamp"])
     except sort.BadSort as e:
         return json_response(
             {

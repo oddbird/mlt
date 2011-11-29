@@ -599,6 +599,42 @@ class AddressesViewTest(AuthenticatedWebTest):
             )
 
 
+    def test_sort_batch_no_dupes(self):
+        a1 = create_address()
+
+        b1 = create_address_batch(tag="one")
+        b2 = create_address_batch(tag="two")
+
+        a1.batches.add(b1, b2)
+
+        res = self.app.get(
+            self.url + "?sort=latest_batch_timestamp",
+            user=self.user)
+
+        self.assertEqual(
+            [a["id"] for a in res.json["addresses"]],
+            [a1.id]
+            )
+
+
+    def test_filter_batch_no_dupes(self):
+        a1 = create_address()
+
+        b1 = create_address_batch(tag="one")
+        b2 = create_address_batch(tag="two")
+
+        a1.batches.add(b1, b2)
+
+        res = self.app.get(
+            self.url + "?batches__tag=one&batches__tag=two",
+            user=self.user)
+
+        self.assertEqual(
+            [a["id"] for a in res.json["addresses"]],
+            [a1.id]
+            )
+
+
     def assertAddresses(self, response, ids):
         self.assertEqual(
             set([a["id"] for a in response.json["addresses"]]),
@@ -670,7 +706,7 @@ class AddressesViewTest(AuthenticatedWebTest):
         a2.batches.add(b2)
 
         res = self.app.get(
-            self.url + "?batches__timestamp=9/10/2011 to 9/11/2011",
+            self.url + "?latest_batch_timestamp=9/10/2011 to 9/11/2011",
             user=self.user)
 
         self.assertAddresses(res, [a1.id])
@@ -1789,7 +1825,7 @@ class FilterAutocompleteViewTest(AuthenticatedWebTest):
                     },
                 {
                     "display_field": "batch timestamp",
-                    "field": "batches__timestamp",
+                    "field": "latest_batch_timestamp",
                     "display_value": "8/31/2011 to 9/10/2011",
                     "value": "8/31/2011 to 9/10/2011",
                     "q": "8-31-11 to Sep 10 2011",

@@ -181,6 +181,11 @@ keys. Addresses can be filtered by batch using ``batches__tag``, e.g.::
 
     /api/v1/addresses/?batches__tag=foo
 
+Addresses can be sorted by latest batch timestamp using
+``latest_batch_timestamp``::
+
+    /api/v1/addresses/?sort=latest_batch_timestamp
+
 
 Batches
 ~~~~~~~

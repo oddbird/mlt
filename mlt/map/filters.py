@@ -2,7 +2,7 @@ import datetime
 from itertools import chain, repeat
 import operator
 
-from django.db.models import Q
+from django.db.models import Q, Max
 from django.utils.dateformat import format
 
 from dateutil.parser import parse
@@ -192,14 +192,14 @@ class Filter(object):
 
         qs = qs.filter(filters)
 
-        return qs
+        return qs.distinct()
 
 
 
 class AddressFilter(Filter):
     fields = [
         "batches",
-        "batches__timestamp",
+        "latest_batch_timestamp",
         "street",
         "city",
         "state",
@@ -210,18 +210,25 @@ class AddressFilter(Filter):
         ]
 
 
+    def apply(self, qs, filter_data):
+        if "latest_batch_timestamp" in filter_data:
+            qs = qs.annotate(latest_batch_timestamp=Max("batches__timestamp"))
+        return super(AddressFilter, self).apply(qs, filter_data)
+
+
     def get_autocomplete_fields(self):
         ret = super(AddressFilter, self).get_autocomplete_fields()
         ret["mapped_by"] = ("mapped by", "mapped_by__username")
         ret["batches"] = ("batch", "batches__tag")
-        ret["batches__timestamp"] = ("batch timestamp", "batches__timestamp")
+        ret["latest_batch_timestamp"] = (
+            "batch timestamp", "latest_batch_timestamp")
         return ret
 
 
     raw_fields = set(["mapped_by", "batches"])
 
 
-    date_fields = set(["mapped_timestamp", "batches__timestamp"])
+    date_fields = set(["mapped_timestamp", "latest_batch_timestamp"])
 
 
     special_fields = {
