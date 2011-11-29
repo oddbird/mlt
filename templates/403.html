@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Forbidden | {{ block.super }}{% endblock %}
+{% block bodyclasses %}error{% endblock bodyclasses %}
+
+{% block content %}
+  <h2>403 Error: Forbidden.</h2>
+  <p>You don't have permission to access this page. Maybe try the <a href="/">home page</a>?</p>
+{% endblock %}
