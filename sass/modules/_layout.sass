@@ -34,7 +34,7 @@ h1
 
 #messages
   +no-style-list
-  +stretch-x(columns(6)+gutter(),columns(9)+gutter())
+  +stretch-x(columns(6)+gutter(),columns(11)+gutter())
   +border-radius
   +box-shadow($base 0 1px .25em)
   z-index: 999
@@ -71,9 +71,8 @@ h1
     background: rgba(250,200,200,.95)
 
 [role="navigation"]
-  +columns(3)
+  +columns(4)
   +omega
-  white-space: nowrap
   text-align: right
   a
     #{$link}
@@ -98,6 +97,10 @@ h1
   .parcels
     #{$link}
       +replace-text('ui/upload.png')
+      width: rhythm(1.25)
+      padding:
+        left: 0
+        right: 0
 
 .meta
   +columns(7)
