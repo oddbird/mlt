@@ -165,7 +165,8 @@ class ExportViewTest(AuthenticatedWebTest):
 
 
     def test_queries(self, querystring="?export_format=mock"):
-        create_address(mapped_by=create_user())
+        create_address(mapped_by=create_user(), pl="1")
+        create_parcel(pl="1")
         create_address()
 
         # 1 for addresses, 1 for parcels, 11 for misc sessions/auth

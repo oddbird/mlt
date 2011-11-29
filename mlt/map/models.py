@@ -368,11 +368,12 @@ class AddressQuerySet(PrefetchQuerySet):
 
 
     def _prefetch_parcels(self):
-        parcels_by_pl = dict(
-            (p.pl, p) for p in
-            Parcel.objects.filter(
-                pl__in=[a.pl for a in self._result_cache])
-            )
+        parcels_by_pl = {}
+        pls = [a.pl for a in self._result_cache if a.pl]
+        if pls:
+            parcels_by_pl = dict(
+                (p.pl, p) for p in Parcel.objects.filter(pl__in=pls)
+                )
 
         for a in self._result_cache:
             a._parcel = parcels_by_pl.get(a.pl)

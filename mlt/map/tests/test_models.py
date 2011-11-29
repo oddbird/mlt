@@ -785,6 +785,17 @@ class AddressTest(TestCase):
             [a.pl for a in qs]
 
 
+    def test_prefetch_parcels_none_to_fetch(self):
+        create_address(pl="")
+        create_address(pl="")
+
+        # one for addresses, no parcels query if all addresses have blank pl
+        with self.assertNumQueries(1):
+            qs = self.model.objects.all().prefetch_linked("parcels")
+            for address in qs:
+                self.assertEqual(address.parcel, None)
+
+
     def test_prefetch_batches(self):
         a1 = create_address()
         a2 = create_address()
