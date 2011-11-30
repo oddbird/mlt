@@ -1278,7 +1278,7 @@ var MLT = (function (MLT, $) {
                 }
             // If the suggestion list is already visible...
             } else {
-                var thisFilterName = suggestionList.find('.selected').data('value');
+                var thisFilterName = suggestionList.find('.selected').data('display-value');
                 // UP and DOWN move "active" suggestion
                 if (event.keyCode === MLT.keycodes.UP) {
                     event.preventDefault();
