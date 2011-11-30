@@ -29,7 +29,9 @@ var MLT = (function (MLT, $) {
         listXHR = null,
         listCounter = 0,
         parcelXHR = null,
-        parcelCounter = 0;
+        parcelCounter = 0,
+        autocompleteXHR = null,
+        autocompleteCounter = 0;
 
     MLT.keycodes = {
         SPACE: 32,
@@ -1181,6 +1183,7 @@ var MLT = (function (MLT, $) {
         var typedText,
             localFilters,
             updateFilters,
+            counter,
             textbox = $('#filter_input'),
             url = textbox.data('autocomplete-url'),
             filterList = $('#filter .visual > ul'),
@@ -1253,8 +1256,16 @@ var MLT = (function (MLT, $) {
                 if (textbox.val() !== typedText) {
                     typedText = $(this).val();
                     if (typedText.length && typedText.trim() !== '') {
+                        if (autocompleteXHR) { autocompleteXHR.abort(); }
+                        autocompleteCounter = autocompleteCounter + 1;
+                        counter = autocompleteCounter;
                         textbox.addClass('loading');
-                        $.get(url, {q: typedText}, updateSuggestions);
+                        autocompleteXHR = $.get(url, {q: typedText}, function (data) {
+                            if (counter === autocompleteCounter) {
+                                updateSuggestions(data);
+                                autocompleteXHR = null;
+                            }
+                        });
                     } else {
                         suggestionList.empty().hide();
                     }
