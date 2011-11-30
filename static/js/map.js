@@ -1183,7 +1183,6 @@ var MLT = (function (MLT, $) {
         var typedText,
             localFilters,
             updateFilters,
-            counter,
             textbox = $('#filter_input'),
             url = textbox.data('autocomplete-url'),
             filterList = $('#filter .visual > ul'),
@@ -1252,6 +1251,7 @@ var MLT = (function (MLT, $) {
 
         textbox.keyup(function () {
             $(this).doTimeout('autocomplete', 250, function () {
+                var counter;
                 // Updates suggestion-list if typed-text has changed
                 if (textbox.val() !== typedText) {
                     typedText = $(this).val();
@@ -1261,7 +1261,7 @@ var MLT = (function (MLT, $) {
                         counter = autocompleteCounter;
                         textbox.addClass('loading');
                         autocompleteXHR = $.get(url, {q: typedText}, function (data) {
-                            if (counter === autocompleteCounter) {
+                            if (counter === autocompleteCounter && autocompleteXHR) {
                                 updateSuggestions(data);
                                 autocompleteXHR = null;
                             }
@@ -1389,6 +1389,10 @@ var MLT = (function (MLT, $) {
                 textbox.val(null);
                 typedText = null;
                 suggestionList.empty().hide();
+                if (autocompleteXHR) {
+                    autocompleteXHR.abort();
+                    autocompleteXHR = null;
+                }
             }
         }, 'a');
 
