@@ -38,6 +38,29 @@ To install the necessary Ruby Gems for Compass/Sass development, run
 ``requirements/gems.txt`` if newer gems should be used.
 
 
+Importing initial addresses
+---------------------------
+
+The MLT includes a user interface for importing batches of addresses from a CSV
+file, but this interface can't be used for initially populating the MLT, as the
+number of addresses in the initial import is likely too large to complete
+within a reasonable time for a web request. In order to manually populate
+initial addresses, run ``python manage.py shell`` and then the following
+commands in the shell.
+
+This assumes a four-column CSV file, with a header row, with columns for
+``pl``, ``street``, ``city``, ``state``. A user is necessary so that the
+addresses appear in the changelog as "created"; swap out the username below for
+an actual user that you've already created::
+
+    >>> from django.contrib.auth.models import User
+    >>> user = User.objects.get(username="example")
+    >>> from mlt.map.importer import CSVAddressImporter
+    >>> importer = CSVAddressImporter(
+    ...     user, fieldnames=["pl", "street", "city", "state"], header=True)
+    >>> importer.process_file("/path/to/addresses.csv")
+
+
 Deployment
 ----------
 
