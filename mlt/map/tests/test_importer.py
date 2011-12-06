@@ -100,6 +100,60 @@ class AddressImporterTest(GetImporterMixin, TransactionTestCase):
             )
 
 
+    def test_import_no_timestamp(self):
+        """
+        If batch tag is given without timestamp, current time is used.
+
+        """
+        now = datetime.datetime(2007, 8, 11)
+        with patch("mlt.map.importer.datetime.datetime") as mock_dt:
+            mock_dt.now.return_value = now
+            i = self.importer(user=self.user, tag="somebatch")
+
+        count, dupes = i.process(
+            [
+                {
+                    "street": "3815 Brookside Dr",
+                    "city": "Rapid City",
+                    "state": "SD"
+                    },
+                ]
+            )
+
+        batches = self.model._meta.get_field("batches").rel.to.objects.all()
+        self.assertEqual(len(batches), 1)
+        batch = batches[0]
+        self.assertEqual(batch.timestamp, now)
+
+        a = self.model.objects.all()[0]
+        self.assertEqual(list(a.batches.all()), [batch])
+
+
+    def test_import_no_tag(self):
+        """
+        If batch tag is not given, no batch is created.
+
+        """
+
+        i = self.importer(user=self.user)
+
+        count, dupes = i.process(
+            [
+                {
+                    "street": "3815 Brookside Dr",
+                    "city": "Rapid City",
+                    "state": "SD"
+                    },
+                ]
+            )
+
+        a = self.model.objects.all()[0]
+        self.assertEqual(list(a.batches.all()), [])
+
+        batches = self.model._meta.get_field("batches").rel.to.objects.all()
+        self.assertEqual(len(batches), 0)
+
+
     def test_import_errors(self):
         """
         Errors, if any, are raised as an ImporterError whose ``errors``

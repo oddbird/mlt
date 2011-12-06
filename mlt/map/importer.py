@@ -1,4 +1,5 @@
 import csv
+import datetime
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -14,14 +15,21 @@ class ImporterError(Exception):
 
 
 class AddressImporter(object):
-    def __init__(self, timestamp, user, tag):
-        self.batch = AddressBatch.objects.create(
-            timestamp=timestamp, user=user, tag=tag)
+    def __init__(self, user, timestamp=None, tag=None):
+        if tag is None:
+            self.batch = None
+        else:
+            if timestamp is None:
+                timestamp = datetime.datetime.now()
+            self.batch = AddressBatch(timestamp=timestamp, user=user, tag=tag)
         self.extra_data = {"user": user}
 
 
     @transaction.commit_manually
     def process(self, rows):
+        if self.batch is not None:
+            self.batch.save()
+
         errors = []
         saved = 0
         dupes = 0
@@ -44,7 +52,8 @@ class AddressImporter(object):
                 transaction.rollback()
                 raise
             else:
-                self.batch.addresses.add(*addresses)
+                if self.batch is not None:
+                    self.batch.addresses.add(*addresses)
 
         if errors:
             transaction.rollback()

@@ -68,8 +68,8 @@ class AddressImportForm(forms.Form):
 
     def save(self, user):
         i = CSVAddressImporter(
-            timestamp=datetime.now(),
             user=user,
+            timestamp=datetime.now(),
             tag=self.cleaned_data["tag"])
 
         return i.process_file(self.cleaned_data["file"])
