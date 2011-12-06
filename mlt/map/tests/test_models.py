@@ -234,6 +234,21 @@ class AddressTest(TestCase):
         self.assertEqual(addresses[0].input_street, "321 S Little St")
 
 
+    def test_create_with_pl(self):
+        now = datetime.datetime(2007, 9, 11)
+        with patch("mlt.map.models.datetime") as mock_dt:
+            mock_dt.now.return_value = now
+            (created, addresses) = self.create_from_input(
+                street="321 Min St", city="Rapid City", state="SD", pl="123")
+
+        self.assertTrue(created)
+        self.assertEqual(len(addresses), 1)
+        a = addresses[0]
+        self.assertEqual(a.pl, "123")
+        self.assertEqual(a.mapped_by, self._import_user)
+        self.assertEqual(a.mapped_timestamp, now)
+
+
     def test_create_dupe(self):
         a = create_address(
             input_street="123 N Main St", city="Rapid City", state="SD")

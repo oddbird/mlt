@@ -510,6 +510,9 @@ class AddressManager(models.GeoManager):
 
         created = False
         if not addresses:
+            if kwargs.get("pl"):
+                kwargs["mapped_by"] = user
+                kwargs["mapped_timestamp"] = datetime.now()
             obj = self.model(**kwargs)
             obj.full_clean()
             obj.save(user=user)
