@@ -69,7 +69,23 @@ entire app should be served exclusively over HTTPS (since almost all use of the
 site is authenticated, and serving authenticated pages over HTTP invites
 session hijacking attacks). Ideally, the non-HTTP URLs should redirect to the
 HTTPS version. The ``SESSION_COOKIE_SECURE`` setting should be set to ``True``
-in ``settings_local.py`` when the app is being served over HTTPS.
+when the app is served over HTTPS.
+
+There is an alternate settings file available, ``mlt/settings/prod.py`` which
+pre-sets some settings that are generally appropriate for a production
+deployment. Set the ``DJANGO_SETTINGS_MODULE`` environment variable to
+``mlt.settings.prod`` in order to use this settings file (overrides in
+``mlt/settings/local.py`` will still be respected).
+
+The production settings also require a Celery daemon process, ``celeryd``, to
+be running, in order to handle some tasks asynchronously and speed up the user
+experience (if ``celeryd`` is not running, parcel-loading will not work, and
+bulk address changes will not be recorded in the change history). For quick
+testing and debugging, you can simply run ``python manage.py celeryd -l info``
+in a terminal. For real deployment, you'll want to daemonize it and run it in
+the background; see the documentation on `running celeryd as a daemon`_. You
+may also want to read the `Celery monitoring and management guide`_ for more
+in-depth information about monitoring and managing your Celery instance.
 
 This app also uses the new `staticfiles contrib app`_ in Django 1.3 for
 collecting static assets from reusable components into a single directory
@@ -79,6 +95,8 @@ all static assets into the ``collected-assets`` directory (or whatever
 ``STATIC_ROOT`` is set to in ``settings_local.py``), and make those
 collected assets available by HTTP at the ``STATIC_URL`` setting.
 
+.. _running celeryd as a daemon: http://celery.readthedocs.org/en/latest/cookbook/daemonizing.html
+.. _Celery monitoring and management guide: http://celery.readthedocs.org/en/latest/userguide/monitoring.html
 .. _staticfiles contrib app: http://docs.djangoproject.com/en/1.3/howto/static-files/
 
 

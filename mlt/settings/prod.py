@@ -1,6 +1,8 @@
 from .base import *
 
 CELERY_ALWAYS_EAGER = False
+CELERY_RESULT_BACKEND = "cache"
+CELERY_CACHE_BACKEND = "default"
 
 SESSION_COOKIE_SECURE = True
 # http://en.wikipedia.org/wiki/Strict_Transport_Security
