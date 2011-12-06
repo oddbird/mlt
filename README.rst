@@ -60,6 +60,9 @@ an actual user that you've already created::
     ...     user, fieldnames=["pl", "street", "city", "state"], header=True)
     >>> importer.process_file("/path/to/addresses.csv")
 
+Note that this will take quite a while depending on the number of addresses;
+possibly as long as several hours.
+
 
 Deployment
 ----------
