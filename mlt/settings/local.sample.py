@@ -57,6 +57,11 @@ Copy settings/local.sample.py to settings/local.py and modify as needed.
 #SESSION_COOKIE_SECURE = True
 # http://en.wikipedia.org/wiki/Strict_Transport_Security
 #HTTPS_STS_SECONDS = 86400
+# Necessary if a front-end loadbalancer or proxy server (e.g. nginx) is
+# handling the actual SSL connection: see
+# http://django-secure.readthedocs.org/en/latest/settings.html#secure-proxy-ssl-header
+# Exact correct setting will vary depending on the loadbalancer / proxy
+#SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "https")
 
 # A unique (and secret) key for this deployment.
 #SECRET_KEY = ""
